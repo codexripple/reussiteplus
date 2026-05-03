@@ -1,0 +1,421 @@
+<?php
+require_once __DIR__ . '/includes/config.php';
+require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/helpers.php';
+
+// Stats publiques pour la landing
+try {
+    $totalUsers    = dbRow("SELECT COUNT(*) as c FROM utilisateurs WHERE is_active=1")['c'] ?? 0;
+    $totalArchives = dbRow("SELECT COUNT(*) as c FROM archives WHERE status='PUBLIE'")['c'] ?? 0;
+    $totalQuestions = dbRow("SELECT COUNT(*) as c FROM question_bank WHERE status='PUBLIE'")['c'] ?? 0;
+    $totalExamens  = dbRow("SELECT COUNT(*) as c FROM exam_sessions WHERE statut='TERMINE'")['c'] ?? 0;
+} catch (Exception $e) {
+    $totalUsers = 12400; $totalArchives = 3200; $totalQuestions = 15000; $totalExamens = 48000;
+}
+
+$user = is_logged() ? current_user() : null;
+?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RÉUSSITE+ | La plateforme de référence pour réussir en RDC</title>
+<meta name="description" content="Préparez l'ENAFEP, TENASOSP, Tests diocésains et Examen d'État avec les archives officielles, QCM et plans de révision IA. Rejoignez +12 000 élèves en RDC.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #007A5E; --primary-dark: #005A45; --primary-light: #00A97F; --primary-subtle: #E8F5F1;
+  --gold: #C9972A; --gold-light: #F5E6C0; --rouge: #C9342A; --bleu: #1E5FAD; --bleu-light: #EEF4FD;
+  --noir: #0D1117; --gris-900: #1C2433; --gris-800: #2E3A4A; --gris-700: #4A5568; --gris-600: #6B7280;
+  --gris-200: #E2E8F0; --gris-100: #F1F5F9; --gris-50: #F8FAFC; --blanc: #FFFFFF;
+  --font-display: 'Syne', sans-serif; --font-body: 'DM Sans', sans-serif;
+  --radius: 10px; --radius-lg: 16px; --radius-xl: 24px;
+  --shadow: 0 4px 16px rgba(0,0,0,0.08); --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --shadow-glow: 0 0 40px rgba(0,122,94,0.25); --transition: 200ms cubic-bezier(0.4,0,0.2,1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); color: var(--gris-900); line-height: 1.6; overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+
+/* NAV */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(13,17,23,0.95); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  padding: 0 40px; height: 68px; display: flex; align-items: center; gap: 32px;
+}
+.nav-logo { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: white; }
+.nav-logo span { color: var(--gold); }
+.nav-links { display: flex; gap: 28px; flex: 1; margin-left: 32px; }
+.nav-link { font-size: 14px; color: rgba(255,255,255,0.65); transition: var(--transition); }
+.nav-link:hover { color: white; }
+.nav-actions { display: flex; gap: 12px; align-items: center; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; border-radius: var(--radius); font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: var(--transition); font-family: var(--font-body); }
+.btn-outline { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.25); }
+.btn-outline:hover { background: rgba(255,255,255,0.08); }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-dark); box-shadow: var(--shadow-glow); }
+.btn-gold { background: var(--gold); color: white; }
+.btn-gold:hover { background: #a07820; }
+.btn-lg { padding: 14px 32px; font-size: 16px; border-radius: var(--radius-lg); }
+
+/* HERO */
+.hero {
+  min-height: 100vh; background: var(--noir);
+  display: flex; align-items: center; justify-content: center;
+  padding: 100px 40px 60px; text-align: center; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,122,94,0.2) 0%, transparent 60%),
+              radial-gradient(ellipse 60% 40% at 80% 80%, rgba(201,151,42,0.1) 0%, transparent 60%);
+}
+.hero-content { position: relative; max-width: 820px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(0,122,94,0.15); border: 1px solid rgba(0,122,94,0.4);
+  padding: 6px 16px; border-radius: 50px; font-size: 13px; color: var(--primary-light);
+  font-weight: 500; margin-bottom: 28px;
+}
+.hero-title {
+  font-family: var(--font-display); font-size: clamp(36px, 6vw, 72px);
+  font-weight: 900; color: white; line-height: 1.05; letter-spacing: -1px; margin-bottom: 20px;
+}
+.hero-title span { color: var(--gold); }
+.hero-sub { font-size: 18px; color: rgba(255,255,255,0.6); max-width: 540px; margin: 0 auto 36px; line-height: 1.7; }
+.hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 56px; }
+.hero-stats { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; }
+.hero-stat-num { font-family: var(--font-display); font-size: 28px; font-weight: 800; color: white; }
+.hero-stat-label { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+.hero-divider { width: 1px; background: rgba(255,255,255,0.15); height: 36px; align-self: center; }
+
+/* LOGOS EXAMS */
+.exams-strip {
+  background: var(--gris-50); padding: 20px 40px; display: flex; align-items: center;
+  justify-content: center; gap: 12px; flex-wrap: wrap; border-bottom: 1px solid var(--gris-200);
+}
+.exam-tag {
+  padding: 8px 18px; border-radius: 50px; font-size: 13px; font-weight: 600;
+  display: flex; align-items: center; gap: 6px;
+}
+
+/* FEATURES */
+.features { padding: 100px 40px; background: white; }
+.container { max-width: 1200px; margin: 0 auto; }
+.section-label { font-size: 12px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+.section-title { font-family: var(--font-display); font-size: clamp(28px, 4vw, 44px); font-weight: 800; color: var(--gris-900); margin-bottom: 16px; line-height: 1.15; }
+.section-sub { font-size: 17px; color: var(--gris-600); max-width: 540px; line-height: 1.7; }
+.features-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 56px; }
+.feature-card {
+  background: var(--gris-50); border-radius: var(--radius-xl); padding: 32px;
+  border: 1px solid var(--gris-200); transition: var(--transition);
+}
+.feature-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); border-color: var(--primary); }
+.feature-icon { font-size: 36px; margin-bottom: 16px; }
+.feature-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+.feature-desc { font-size: 14px; color: var(--gris-600); line-height: 1.7; }
+
+/* PRICING */
+.pricing { padding: 100px 40px; background: var(--gris-50); }
+.pricing-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-top: 56px; }
+.plan-card {
+  background: white; border-radius: var(--radius-xl); padding: 28px 24px;
+  border: 2px solid var(--gris-200); transition: var(--transition); position: relative;
+}
+.plan-card.popular {
+  border-color: var(--gold); box-shadow: 0 0 0 4px rgba(201,151,42,0.1);
+}
+.plan-popular-badge {
+  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  background: var(--gold); color: white; padding: 4px 16px; border-radius: 50px;
+  font-size: 11px; font-weight: 700; white-space: nowrap;
+}
+.plan-icon { font-size: 32px; margin-bottom: 12px; }
+.plan-name { font-family: var(--font-display); font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+.plan-price { font-family: var(--font-display); font-size: 28px; font-weight: 800; color: var(--gris-900); margin: 12px 0 4px; }
+.plan-price-sub { font-size: 12px; color: var(--gris-600); margin-bottom: 20px; }
+.plan-features { list-style: none; margin-bottom: 24px; }
+.plan-features li { font-size: 13px; color: var(--gris-700); padding: 6px 0; display: flex; align-items: flex-start; gap: 8px; border-bottom: 1px solid var(--gris-100); }
+.plan-features li:last-child { border-bottom: none; }
+.check { color: var(--primary); font-weight: 700; }
+.cross { color: var(--gris-400); }
+
+/* TESTIMONIALS */
+.testimonials { padding: 100px 40px; background: white; }
+.testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 56px; }
+.testimonial-card { background: var(--gris-50); border-radius: var(--radius-xl); padding: 28px; border: 1px solid var(--gris-200); }
+.testimonial-stars { color: var(--gold); font-size: 16px; margin-bottom: 14px; }
+.testimonial-text { font-size: 14px; color: var(--gris-700); line-height: 1.8; font-style: italic; margin-bottom: 16px; }
+.testimonial-author { display: flex; align-items: center; gap: 10px; }
+.testimonial-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: white; }
+.testimonial-name { font-size: 13px; font-weight: 600; }
+.testimonial-school { font-size: 11px; color: var(--gris-500); }
+
+/* CTA Final */
+.cta-section {
+  padding: 100px 40px; background: var(--noir);
+  text-align: center; position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(0,122,94,0.2) 0%, transparent 70%);
+}
+.cta-title { font-family: var(--font-display); font-size: clamp(32px,5vw,56px); font-weight: 900; color: white; margin-bottom: 16px; position: relative; }
+.cta-sub { font-size: 18px; color: rgba(255,255,255,0.6); margin-bottom: 36px; position: relative; }
+
+/* FOOTER */
+.footer { background: var(--noir); padding: 40px; border-top: 1px solid rgba(255,255,255,0.07); }
+.footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+.footer-logo { font-family: var(--font-display); font-size: 18px; font-weight: 800; color: white; }
+.footer-logo span { color: var(--gold); }
+.footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+.footer-link { font-size: 13px; color: rgba(255,255,255,0.4); transition: var(--transition); }
+.footer-link:hover { color: rgba(255,255,255,0.8); }
+.footer-copy { font-size: 12px; color: rgba(255,255,255,0.3); }
+
+@media (max-width: 1024px) {
+  .pricing-grid { grid-template-columns: repeat(2,1fr); }
+  .features-grid { grid-template-columns: repeat(2,1fr); }
+  .testimonials-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 90px 20px 50px; }
+  .features, .pricing, .testimonials, .cta-section { padding: 60px 20px; }
+  .pricing-grid, .features-grid, .testimonials-grid { grid-template-columns: 1fr; }
+  .hero-stats { gap: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav class="nav">
+  <div class="nav-logo">RÉUSSITE<span>+</span></div>
+  <div class="nav-links">
+    <a href="#fonctionnalites" class="nav-link">Fonctionnalités</a>
+    <a href="#tarifs" class="nav-link">Tarifs</a>
+    <a href="#temoignages" class="nav-link">Témoignages</a>
+    <a href="archives.php" class="nav-link">Archives</a>
+  </div>
+  <div class="nav-actions">
+    <?php if ($user): ?>
+      <a href="/reussiteplus/dashboard.php" class="btn btn-primary">Mon tableau de bord →</a>
+    <?php else: ?>
+      <a href="/reussiteplus/connexion.php" class="btn btn-outline">Connexion</a>
+      <a href="/reussiteplus/inscription.php" class="btn btn-primary">Commencer gratuitement</a>
+    <?php endif; ?>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🇨🇩 Fait pour les élèves de la RDC</div>
+    <h1 class="hero-title">
+      Réussir vos examens<br>n'a jamais été aussi<br><span>accessible</span>
+    </h1>
+    <p class="hero-sub">Archives officielles, QCM interactifs, plans de révision IA — tout ce qu'il faut pour décrocher votre diplôme.</p>
+    <div class="hero-cta">
+      <a href="/reussiteplus/inscription.php" class="btn btn-primary btn-lg">Commencer gratuitement →</a>
+      <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-lg">⭐ Voir les offres Premium</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num"><?= number_format($totalUsers, 0, ',', ' ') ?>+</div>
+        <div class="hero-stat-label">Élèves inscrits</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div>
+        <div class="hero-stat-num"><?= number_format($totalArchives, 0, ',', ' ') ?>+</div>
+        <div class="hero-stat-label">Archives officielles</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div>
+        <div class="hero-stat-num"><?= number_format($totalQuestions, 0, ',', ' ') ?>+</div>
+        <div class="hero-stat-label">Questions en banque</div>
+      </div>
+      <div class="hero-divider"></div>
+      <div>
+        <div class="hero-stat-num"><?= number_format($totalExamens, 0, ',', ' ') ?>+</div>
+        <div class="hero-stat-label">Examens passés</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXAM TYPES -->
+<div class="exams-strip">
+  <span style="font-size:13px;color:var(--gris-600);font-weight:600;margin-right:8px">Préparation pour :</span>
+  <span class="exam-tag" style="background:#E8F5F1;color:#005A45">📚 ENAFEP</span>
+  <span class="exam-tag" style="background:#EEF4FD;color:#1E5FAD">🎓 TENASOSP</span>
+  <span class="exam-tag" style="background:#F5E6C0;color:#8C6A1A">🏛 Examen d'État</span>
+  <span class="exam-tag" style="background:#FEF0EF;color:#C9342A">⛪ Tests Diocésains</span>
+</div>
+
+<!-- FONCTIONNALITÉS -->
+<section class="features" id="fonctionnalites">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:12px">
+      <div class="section-label" style="display:inline-block">Pourquoi RÉUSSITE+ ?</div>
+    </div>
+    <h2 class="section-title" style="text-align:center">Tout ce dont vous avez besoin<br>pour réussir</h2>
+    <p class="section-sub" style="text-align:center;margin:0 auto">Une plateforme complète adaptée au système éducatif de la RDC.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📁</div>
+        <div class="feature-title">Archives officielles complètes</div>
+        <div class="feature-desc">Tous les anciens sujets et corrigés officiels depuis 1990. ENAFEP, TENASOSP, Examen d'État, Tests diocésains — classés par matière, année et province.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✏️</div>
+        <div class="feature-title">Examens blancs chronométrés</div>
+        <div class="feature-desc">Simulez les conditions réelles d'examen avec un minuteur, des QCM officiel et un score instantané à la fin. Répétez autant de fois que nécessaire.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <div class="feature-title">Banque de 15 000+ questions</div>
+        <div class="feature-desc">Questions triées par matière, chapitre et niveau de difficulté. Chaque question avec explication détaillée et taux de réussite des élèves.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📈</div>
+        <div class="feature-title">Suivi de progression détaillé</div>
+        <div class="feature-desc">Visualisez vos forces et vos faiblesses par matière. Graphiques d'évolution, séries de jours consécutifs et classement provincial.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <div class="feature-title">Plan de révision IA (Premium)</div>
+        <div class="feature-desc">Un algorithme analyse vos résultats et génère un plan de révision personnalisé semaine par semaine selon votre objectif et la date de l'examen.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📶</div>
+        <div class="feature-title">Mode hors-ligne (PWA)</div>
+        <div class="feature-desc">Continuez à réviser même sans connexion Internet. Les archives et questions téléchargées restent disponibles dans le cache de votre téléphone.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TARIFS -->
+<section class="pricing" id="tarifs">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:12px">
+      <div class="section-label" style="display:inline-block">Nos offres</div>
+    </div>
+    <h2 class="section-title" style="text-align:center">Des tarifs adaptés à<br>chaque situation</h2>
+    <p class="section-sub" style="text-align:center;margin:0 auto">Payez en CDF via M-Pesa, Airtel Money ou Orange Money.</p>
+
+    <div class="pricing-grid" style="margin-top:56px">
+      <?php foreach (PLANS as $planKey => $plan): ?>
+      <div class="plan-card <?= ($plan['populaire'] ?? false) ? 'popular' : '' ?>">
+        <?php if ($plan['populaire'] ?? false): ?>
+          <div class="plan-popular-badge">⭐ Le plus populaire</div>
+        <?php endif; ?>
+        <div class="plan-icon"><?= $plan['icone'] ?></div>
+        <div class="plan-name"><?= e($plan['nom']) ?></div>
+        <div class="plan-price"><?= $plan['prix'] === 0 ? 'Gratuit' : number_format($plan['prix'], 0, ',', ' ') . ' CDF' ?></div>
+        <div class="plan-price-sub"><?= $plan['prix'] === 0 ? 'Pour toujours' : 'par mois' ?></div>
+        <ul class="plan-features">
+          <li>
+            <?= $plan['examens_mois'] === -1 ? '<span class="check">✓</span> Examens illimités' : '<span class="check">✓</span> ' . $plan['examens_mois'] . ' examens/mois' ?>
+          </li>
+          <li>
+            <?= $plan['archives'] ? '<span class="check">✓</span> Archives officielles' : '<span class="cross">✗</span> Archives officielles' ?>
+          </li>
+          <li>
+            <?= $plan['corrige'] ? '<span class="check">✓</span> Corrigés détaillés' : '<span class="cross">✗</span> Corrigés détaillés' ?>
+          </li>
+          <li>
+            <?= $plan['ia'] ? '<span class="check">✓</span> Plan de révision IA' : '<span class="cross">✗</span> Plan de révision IA' ?>
+          </li>
+          <li><span class="check">✓</span> Suivi de progression</li>
+          <?php if (isset($plan['eleves_max'])): ?>
+          <li><span class="check">✓</span> Jusqu'à <?= $plan['eleves_max'] ?> élèves</li>
+          <?php endif; ?>
+        </ul>
+        <?php if ($planKey === 'GRATUIT'): ?>
+          <a href="/reussiteplus/inscription.php" class="btn" style="width:100%;justify-content:center;background:var(--gris-100);color:var(--gris-700)">Commencer gratuitement</a>
+        <?php elseif ($planKey === 'ECOLE'): ?>
+          <a href="mailto:contact@reussiteplus.cd?subject=Abonnement École" class="btn btn-primary" style="width:100%;justify-content:center">Nous contacter</a>
+        <?php else: ?>
+          <a href="/reussiteplus/paiement.php?plan=<?= $planKey ?>" class="btn <?= ($plan['populaire'] ?? false) ? 'btn-gold' : 'btn-primary' ?>" style="width:100%;justify-content:center">
+            <?= ($plan['populaire'] ?? false) ? '⭐ ' : '' ?>Choisir ce plan
+          </a>
+        <?php endif; ?>
+      </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+
+<!-- TÉMOIGNAGES -->
+<section class="testimonials" id="temoignages">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:12px">
+      <div class="section-label" style="display:inline-block">Témoignages</div>
+    </div>
+    <h2 class="section-title" style="text-align:center">Ils ont réussi grâce<br>à RÉUSSITE+</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"J'ai obtenu 87% à l'Examen d'État grâce aux archives et aux QCM. Le plan de révision IA m'a vraiment aidé à m'organiser."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">KM</div>
+          <div><div class="testimonial-name">Kala Muamba</div><div class="testimonial-school">Lycée Bosangani, Kinshasa</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Les corrigés détaillés m'ont permis de comprendre mes erreurs. J'ai réussi le TENASOSP du premier coup cette année !"</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">BN</div>
+          <div><div class="testimonial-name">Bénédicte Nzuzi</div><div class="testimonial-school">Institut Kikesa, Lubumbashi</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★☆</div>
+        <p class="testimonial-text">"En tant que répétiteur, j'utilise la banque de questions pour créer mes interros. Mes élèves ont progressé de 30% en 3 mois."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">EM</div>
+          <div><div class="testimonial-name">Emmanuel Mbuyi</div><div class="testimonial-school">Répétiteur, Mbuji-Mayi</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-section">
+  <div style="position:relative">
+    <h2 class="cta-title">Prêt à décrocher votre diplôme ?</h2>
+    <p class="cta-sub">Rejoignez +12 000 élèves qui se préparent déjà avec RÉUSSITE+</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="/reussiteplus/inscription.php" class="btn btn-primary btn-lg">Créer mon compte gratuitement →</a>
+      <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-lg">⭐ Voir le Premium</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">RÉUSSITE<span>+</span></div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:4px">© <?= date('Y') ?> — Plateforme EdTech RDC</div>
+    </div>
+    <div class="footer-links">
+      <a href="/reussiteplus/tarifs.php" class="footer-link">Tarifs</a>
+      <a href="/reussiteplus/archives.php" class="footer-link">Archives</a>
+      <a href="/reussiteplus/inscription.php" class="footer-link">Inscription</a>
+      <a href="mailto:contact@reussiteplus.cd" class="footer-link">Contact</a>
+    </div>
+    <div class="footer-copy">Paiement via 💚 M-Pesa · 🔴 Airtel Money · 🟠 Orange Money</div>
+  </div>
+</footer>
+
+</body>
+</html>
