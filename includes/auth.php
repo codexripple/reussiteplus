@@ -91,6 +91,11 @@ function current_user(): ?array {
     return $_SESSION['user'] ?? null;
 }
 
+// Alias pour compatibilité
+function get_user(): ?array {
+    return current_user();
+}
+
 function is_logged(): bool {
     return isset($_SESSION['user']);
 }
@@ -102,6 +107,14 @@ function is_admin(): bool {
 
 function require_login(string $redirect = '/reussiteplus/connexion.php'): array {
     if (!is_logged()) {
+        header('Location: ' . $redirect . '?redirect=' . urlencode($_SERVER['REQUEST_URI']));
+        exit;
+    }
+    // Vérifier que l'utilisateur existe toujours en base
+    $dbUser = dbRow("SELECT id FROM utilisateurs WHERE id = ? AND is_active = 1", [$_SESSION['user']['id']]);
+    if (!$dbUser) {
+        session_unset();
+        session_destroy();
         header('Location: ' . $redirect . '?redirect=' . urlencode($_SERVER['REQUEST_URI']));
         exit;
     }
