@@ -272,22 +272,26 @@ function revealWithChoice(card, wrap, opts, selectedId) {
          </div>`
       : `<div style="display:flex;gap:10px;align-items:center;padding:10px 14px;background:#FEF0EF;border-radius:10px;border:1px solid rgba(201,52,42,.15)">
            <i class="bi bi-x-circle-fill" style="color:var(--rouge);font-size:18px;flex-shrink:0"></i>
-           <div><strong style="color:var(--rouge)">Mauvaise réponse.</strong> <span style="font-size:13px;color:var(--gris-700)">La bonne réponse était <strong>${correctOpt.lettre})</strong>.</span></div>
+           <div><strong style="color:var(--rouge)">Mauvaise réponse.</strong> <span style="font-size:13px;color:var(--gris-700)">La bonne réponse était <strong>${correctOpt.lettre}) ${escHtml(correctOpt.texte)}</strong>.</span></div>
          </div>`;
 
-    // Explication si dispo
+    // Explication (bonne ou mauvaise réponse)
     if (correctOpt.expl) {
-      feedback.innerHTML += `<div style="margin-top:8px;padding:8px 12px;background:var(--gris-50);border-radius:8px;font-size:12px;color:var(--gris-600);border-left:3px solid var(--primary)">
-        <i class="bi bi-lightbulb-fill" style="color:var(--primary)"></i> ${escHtml(correctOpt.expl)}
+      feedback.innerHTML += `<div style="margin-top:8px;padding:10px 14px;background:var(--gris-50);border-radius:8px;font-size:13px;color:var(--gris-700);border-left:3px solid var(--primary)">
+        <i class="bi bi-lightbulb-fill" style="color:var(--primary)"></i> <strong style="color:var(--primary-dark)">Explication :</strong> ${escHtml(correctOpt.expl)}
       </div>`;
     }
   } else {
-    // Juste révéler sans feedback de score
+    // Révéler directement sans avoir choisi
     feedback.style.display = '';
-    feedback.innerHTML = `<div style="padding:8px 12px;background:var(--primary-subtle);border-radius:8px;font-size:12px;color:var(--primary-dark)">
-      <i class="bi bi-info-circle"></i> La réponse correcte est <strong>${correctOpt.lettre})</strong> ${escHtml(correctOpt.texte)}.
-      ${correctOpt.expl ? '<br><i class="bi bi-lightbulb-fill"></i> ' + escHtml(correctOpt.expl) : ''}
+    feedback.innerHTML = `<div style="padding:10px 14px;background:var(--primary-subtle);border-radius:10px;border:1px solid rgba(0,122,94,.2);font-size:13px;color:var(--primary-dark)">
+      <i class="bi bi-info-circle"></i> <strong>Réponse correcte :</strong> <strong>${correctOpt.lettre})</strong> ${escHtml(correctOpt.texte)}
     </div>`;
+    if (correctOpt.expl) {
+      feedback.innerHTML += `<div style="margin-top:8px;padding:10px 14px;background:var(--gris-50);border-radius:8px;font-size:13px;color:var(--gris-700);border-left:3px solid var(--primary)">
+        <i class="bi bi-lightbulb-fill" style="color:var(--primary)"></i> <strong style="color:var(--primary-dark)">Explication :</strong> ${escHtml(correctOpt.expl)}
+      </div>`;
+    }
   }
 
   // Masquer / réorganiser les boutons

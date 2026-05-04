@@ -15,7 +15,7 @@ require_once __DIR__ . '/icons.php';
 <title><?= e($pageTitle) ?> — RÉUSSITE+</title>
 <link rel="icon" type="image/svg+xml" href="/reussiteplus/assets/img/favicon.svg">
 <link rel="stylesheet" href="/reussiteplus/assets/css/fonts.css">
-<link rel="stylesheet" href="/reussiteplus/assets/css/bootstrap-icons.css">
+<link rel="stylesheet" href="/reussiteplus/assets/css/bootstrap-icons.css?v=2">
 <link rel="stylesheet" href="/reussiteplus/assets/css/app.css">
 <?= isset($extraHead) ? $extraHead : '' ?>
 </head>

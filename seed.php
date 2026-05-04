@@ -285,14 +285,18 @@ $pdo->exec("TRUNCATE TABLE question_options");
 $pdo->exec("TRUNCATE TABLE question_bank");
 
 $stQ = $pdo->prepare("INSERT INTO question_bank (id,matiere_id,enonce,difficulte,exam_type,status) VALUES (UUID(),?,?,?,?,?)");
-$stO = $pdo->prepare("INSERT INTO question_options (id,question_id,lettre,texte,est_correcte) VALUES (UUID(),?,?,?,?)");
+$stO = $pdo->prepare("INSERT INTO question_options (id,question_id,lettre,texte,est_correcte,explication) VALUES (UUID(),?,?,?,?,?)");
 
 function insert_question($pdo, $stQ, $stO, $matId, $enonce, $diff, $src, $opts) {
     $stQ->execute([$matId, $enonce, $diff, $src, 'PUBLIE']);
     $row = $pdo->prepare("SELECT id FROM question_bank WHERE enonce=? ORDER BY created_at DESC LIMIT 1");
     $row->execute([$enonce]);
     $qId = $row->fetchColumn();
-    foreach ($opts as [$l,$t,$ok]) $stO->execute([$qId, $l, $t, (int)$ok]);
+    foreach ($opts as $opt) {
+        [$l, $t, $ok] = $opt;
+        $expl = $opt[3] ?? null;
+        $stO->execute([$qId, $l, $t, (int)$ok, $expl ?: null]);
+    }
     return $qId;
 }
 
