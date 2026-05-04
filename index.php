@@ -233,6 +233,88 @@ a { text-decoration: none; color: inherit; }
   .hero-stats { gap: 20px; }
   .who-block { margin-bottom: 60px; }
 }
+
+/* ── HERO PHOTO CAROUSEL ───────────────────────────────── */
+.hero-carousel {
+  position: relative; width: 100%; max-width: 540px;
+  border-radius: 22px; overflow: hidden;
+  box-shadow: 0 28px 72px rgba(0,0,0,0.55);
+  aspect-ratio: 4/3;
+}
+.hero-carousel-slide {
+  position: absolute; inset: 0;
+  opacity: 0; transition: opacity 1s cubic-bezier(0.4,0,0.2,1);
+}
+.hero-carousel-slide.active { opacity: 1; }
+.hero-carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-carousel-slide::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+}
+.hero-carousel-label {
+  position: absolute; top: 14px; left: 14px; z-index: 3;
+  background: rgba(0,0,0,0.4); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white; font-size: 11px; font-weight: 600;
+  padding: 4px 12px; border-radius: 50px; letter-spacing: .4px;
+}
+.hero-carousel-caption {
+  position: absolute; bottom: 46px; left: 14px; right: 50px; z-index: 2;
+  font-size: 11px; color: rgba(255,255,255,0.85); font-weight: 500;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+.hero-carousel-dots {
+  position: absolute; bottom: 14px; left: 14px; z-index: 3;
+  display: flex; gap: 5px; align-items: center;
+}
+.hero-carousel-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(255,255,255,0.4); cursor: pointer; transition: all .35s;
+  border: none; padding: 0;
+}
+.hero-carousel-dot.active { background: white; width: 24px; border-radius: 4px; }
+.hero-carousel-counter {
+  position: absolute; bottom: 10px; right: 14px; z-index: 3;
+  font-size: 11px; color: rgba(255,255,255,0.55); font-weight: 600;
+}
+
+/* ── GALERIE PHOTOS (scroll infini) ─────────────────────── */
+.gallery-section { padding: 72px 0; background: #08111a; overflow: hidden; }
+.gallery-header { padding: 0 40px; text-align: center; margin-bottom: 36px; }
+.gallery-row { overflow: hidden; margin-bottom: 14px; }
+.gallery-row:last-child { margin-bottom: 0; }
+.gallery-track {
+  display: flex; gap: 14px;
+  animation: galleryScroll 42s linear infinite;
+  width: max-content;
+}
+.gallery-track.reverse { animation: galleryScrollReverse 38s linear infinite; }
+.gallery-track:hover { animation-play-state: paused; }
+.gallery-item {
+  width: 290px; height: 200px; border-radius: 14px;
+  overflow: hidden; flex-shrink: 0; cursor: pointer;
+  position: relative;
+}
+.gallery-item img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .5s ease;
+}
+.gallery-item:hover img { transform: scale(1.06); }
+.gallery-item-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 60%);
+  opacity: 0; transition: opacity .3s;
+}
+.gallery-item:hover .gallery-item-overlay { opacity: 1; }
+@keyframes galleryScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes galleryScrollReverse { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+/* ── TÉMOIGNAGES ─────────────────────────────────────────── */
+.testimonial-stars { color: var(--gold); font-size: 13px; margin-bottom: 14px; display: flex; gap: 2px; }
+.testimonial-avatar-img {
+  width: 44px; height: 44px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+  border: 2px solid var(--primary);
+}
 </style>
 </head>
 <body>
@@ -294,10 +376,52 @@ a { text-decoration: none; color: inherit; }
       </div>
     </div>
   </div>
-  <!-- Mockup dashboard -->
+  <!-- Carousel de photos étudiants -->
   <div class="hero-visual">
-    <img src="/reussiteplus/assets/img/dashboard-mockup.svg" alt="Tableau de bord RÉUSSITE+" class="hero-mockup">
-    <!-- Badge flottant -->
+    <div class="hero-carousel" id="heroCarousel">
+
+      <div class="hero-carousel-slide active">
+        <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=800&auto=format&q=80" alt="Élèves qui révisent ensemble" loading="eager">
+        <div class="hero-carousel-label"><i class="bi bi-geo-alt-fill"></i> RDC</div>
+        <div class="hero-carousel-caption">Des élèves qui révisent ensemble pour l’ENAFEP</div>
+      </div>
+
+      <div class="hero-carousel-slide">
+        <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=800&auto=format&q=80" alt="Étudiants avec livres" loading="lazy">
+        <div class="hero-carousel-label"><i class="bi bi-book"></i> Archives officielles</div>
+        <div class="hero-carousel-caption">Accès aux sujets officiels depuis 2010</div>
+      </div>
+
+      <div class="hero-carousel-slide">
+        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&auto=format&q=80" alt="Salle de classe" loading="lazy">
+        <div class="hero-carousel-label"><i class="bi bi-mortarboard"></i> Examen d’État</div>
+        <div class="hero-carousel-caption">Préparation dans les vraies conditions d’examen</div>
+      </div>
+
+      <div class="hero-carousel-slide">
+        <img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?w=800&auto=format&q=80" alt="Étudiant qui écrit" loading="lazy">
+        <div class="hero-carousel-label"><i class="bi bi-pencil-square"></i> QCM interactifs</div>
+        <div class="hero-carousel-caption">Des milliers de questions avec corrections détaillées</div>
+      </div>
+
+      <div class="hero-carousel-slide">
+        <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?w=800&auto=format&q=80" alt="Étudiant avec téléphone" loading="lazy">
+        <div class="hero-carousel-label"><i class="bi bi-phone"></i> Mobile-first</div>
+        <div class="hero-carousel-caption">Accessible depuis votre téléphone, même hors-ligne</div>
+      </div>
+
+      <!-- Dots navigation -->
+      <div class="hero-carousel-dots" id="heroDots">
+        <button class="hero-carousel-dot active" onclick="goSlide(0)"></button>
+        <button class="hero-carousel-dot" onclick="goSlide(1)"></button>
+        <button class="hero-carousel-dot" onclick="goSlide(2)"></button>
+        <button class="hero-carousel-dot" onclick="goSlide(3)"></button>
+        <button class="hero-carousel-dot" onclick="goSlide(4)"></button>
+      </div>
+      <div class="hero-carousel-counter" id="heroCounter">1 / 5</div>
+    </div>
+
+    <!-- Badges flottants -->
     <div class="hero-float-badge hero-float-1">
       <i class="bi bi-trophy-fill" style="color:var(--gold);font-size:18px"></i>
       <div>
@@ -308,8 +432,8 @@ a { text-decoration: none; color: inherit; }
     <div class="hero-float-badge hero-float-2">
       <i class="bi bi-patch-check-fill" style="color:var(--primary);font-size:18px"></i>
       <div>
-        <div style="font-size:12px;font-weight:700;color:var(--gris-900)">Examen d'État</div>
-        <div style="font-size:10px;color:var(--gris-500)">Score : <strong style="color:var(--primary)">87%</strong></div>
+        <div style="font-size:12px;font-weight:700;color:var(--gris-900)">Examen d’État</div>
+        <div style="font-size:10px;color:var(--gris-500)">Score : <strong style="color:var(--primary)">87%</strong></div>
       </div>
     </div>
   </div>
@@ -336,7 +460,7 @@ a { text-decoration: none; color: inherit; }
     <!-- Bloc 1 : Élèves -->
     <div class="who-block">
       <div class="who-img-wrap">
-        <img src="/reussiteplus/assets/img/hero-students.jpg" alt="Élèves révisant ensemble" class="who-img" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=900&auto=format&q=82" alt="Élèves révisant ensemble" class="who-img" loading="lazy">
       </div>
       <div class="who-text">
         <div class="section-label" style="margin-bottom:12px">Élèves & Étudiants</div>
@@ -354,7 +478,7 @@ a { text-decoration: none; color: inherit; }
     <!-- Bloc 2 : Enseignants / Répétiteurs -->
     <div class="who-block who-block-reverse">
       <div class="who-img-wrap">
-        <img src="/reussiteplus/assets/img/section-teacher.jpg" alt="Enseignant avec élèves" class="who-img" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=900&auto=format&q=82" alt="Enseignant avec élèves" class="who-img" loading="lazy">
       </div>
       <div class="who-text">
         <div class="section-label" style="margin-bottom:12px">Enseignants & Répétiteurs</div>
@@ -372,7 +496,7 @@ a { text-decoration: none; color: inherit; }
     <!-- Bloc 3 : Parents -->
     <div class="who-block">
       <div class="who-img-wrap">
-        <img src="/reussiteplus/assets/img/section-student.jpg" alt="Élève qui étudie" class="who-img" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?w=900&auto=format&q=82" alt="Élève qui étudie" class="who-img" loading="lazy">
       </div>
       <div class="who-text">
         <div class="section-label" style="margin-bottom:12px">Parents & Familles</div>
@@ -429,6 +553,55 @@ a { text-decoration: none; color: inherit; }
         <div class="feature-title">Fonctionne sans connexion</div>
         <div class="feature-desc">Pas de wifi ? Pas de problème. Les archives et les QCM téléchargés restent disponibles sur ton téléphone même hors-ligne.</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERIE PHOTOS — Scroll infini ————————————————————————————— -->
+<section class="gallery-section">
+  <div class="gallery-header">
+    <div class="section-label" style="color:var(--primary-light)">La communauté RÉUSSITE+</div>
+    <h2 style="font-family:var(--font-display);font-size:clamp(24px,3vw,38px);font-weight:800;color:white;margin-top:8px;line-height:1.2">
+      Des milliers d’élèves qui préparent leur avenir
+    </h2>
+    <p style="font-size:14px;color:rgba(255,255,255,0.4);margin-top:8px">ENAFEP &bull; TENASOSP &bull; Examen d’État &bull; Tests Diocésains</p>
+  </div>
+
+  <!-- Rangée 1 — gauche → droite -->
+  <div class="gallery-row">
+    <div class="gallery-track">
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=580&auto=format&q=72" alt="Élèves" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=580&auto=format&q=72" alt="Étudiants" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?w=580&auto=format&q=72" alt="Révision" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=580&auto=format&q=72" alt="Livres" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=580&auto=format&q=72" alt="Diplôme" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=580&auto=format&q=72" alt="Groupe" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <!-- Doublon pour loop seamless -->
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=580&auto=format&q=72" alt="Élèves" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=580&auto=format&q=72" alt="Étudiants" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?w=580&auto=format&q=72" alt="Révision" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=580&auto=format&q=72" alt="Livres" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=580&auto=format&q=72" alt="Diplôme" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=580&auto=format&q=72" alt="Groupe" loading="lazy"><div class="gallery-item-overlay"></div></div>
+    </div>
+  </div>
+
+  <!-- Rangée 2 — droite → gauche (inverse) -->
+  <div class="gallery-row">
+    <div class="gallery-track reverse">
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=580&auto=format&q=72" alt="Classe" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1588072432836-e10032774350?w=580&auto=format&q=72" alt="Téléphone" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1434030216411-0b5816edd9fb?w=580&auto=format&q=72" alt="Écriture" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=580&auto=format&q=72" alt="Tablette" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=580&auto=format&q=72" alt="Livres empilés" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=580&auto=format&q=72" alt="Étudiants campus" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <!-- Doublon -->
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=580&auto=format&q=72" alt="Classe" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1588072432836-e10032774350?w=580&auto=format&q=72" alt="Téléphone" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1434030216411-0b5816edd9fb?w=580&auto=format&q=72" alt="Écriture" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=580&auto=format&q=72" alt="Tablette" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=580&auto=format&q=72" alt="Livres empilés" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=580&auto=format&q=72" alt="Étudiants campus" loading="lazy"><div class="gallery-item-overlay"></div></div>
     </div>
   </div>
 </section>
@@ -494,26 +667,32 @@ a { text-decoration: none; color: inherit; }
     <h2 class="section-title" style="text-align:center">Ils l'ont fait.<br>À ton tour.</h2>
     <div class="testimonials-grid">
       <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-stars">
+          <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+        </div>
         <p class="testimonial-text">"J'ai tout trouvé ici — les sujets depuis des années, les corrigés, les QCM. 87% à l'Examen d'État. Mes parents n'en revenaient pas."</p>
         <div class="testimonial-author">
-          <div class="testimonial-avatar">KM</div>
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=88&h=88&fit=crop&auto=format&q=80" alt="Kala Muamba" class="testimonial-avatar-img">
           <div><div class="testimonial-name">Kala Muamba</div><div class="testimonial-school">Lycée Bosangani, Kinshasa</div></div>
         </div>
       </div>
       <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-stars">
+          <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+        </div>
         <p class="testimonial-text">"Avant je séchais sur les corrigés parce que je n'avais personne pour m'expliquer. Là j'ai tout compris toute seule. TENASOSP réussi du premier coup."</p>
         <div class="testimonial-author">
-          <div class="testimonial-avatar">BN</div>
+          <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=88&h=88&fit=crop&auto=format&q=80" alt="Bénédicte Nzuzi" class="testimonial-avatar-img">
           <div><div class="testimonial-name">Bénédicte Nzuzi</div><div class="testimonial-school">Institut Kikesa, Lubumbashi</div></div>
         </div>
       </div>
       <div class="testimonial-card">
-        <div class="testimonial-stars">★★★★☆</div>
+        <div class="testimonial-stars">
+          <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i>
+        </div>
         <p class="testimonial-text">"Je prépare mes interros avec la banque de questions. Mes élèves travaillent aussi tout seuls sur la plateforme entre les séances. Ils ont clairement progressé."</p>
         <div class="testimonial-author">
-          <div class="testimonial-avatar">EM</div>
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=88&h=88&fit=crop&auto=format&q=80" alt="Emmanuel Mbuyi" class="testimonial-avatar-img">
           <div><div class="testimonial-name">Emmanuel Mbuyi</div><div class="testimonial-school">Répétiteur, Mbuji-Mayi</div></div>
         </div>
       </div>
@@ -549,6 +728,51 @@ a { text-decoration: none; color: inherit; }
     <div class="footer-copy">Paiement via <i class="bi bi-phone-fill" style="color:#4CAF50"></i> M-Pesa · <i class="bi bi-phone-fill" style="color:#e2000f"></i> Airtel Money · <i class="bi bi-phone-fill" style="color:#FF8C00"></i> Orange Money</div>
   </div>
 </footer>
+
+<script>
+// ── HERO PHOTO CAROUSEL ────────────────────────────────────────
+(function() {
+  const slides  = document.querySelectorAll('.hero-carousel-slide');
+  const dots    = document.querySelectorAll('.hero-carousel-dot');
+  const counter = document.getElementById('heroCounter');
+  if (!slides.length) return;
+  let cur = 0, timer;
+
+  function show(n) {
+    slides[cur].classList.remove('active');
+    dots[cur].classList.remove('active');
+    cur = (n + slides.length) % slides.length;
+    slides[cur].classList.add('active');
+    dots[cur].classList.add('active');
+    if (counter) counter.textContent = (cur + 1) + ' / ' + slides.length;
+  }
+
+  function next() { show(cur + 1); }
+
+  // Autoplay 4.5s
+  function start() { timer = setInterval(next, 4500); }
+  function stop()  { clearInterval(timer); }
+
+  start();
+
+  // Pause on hover
+  const carousel = document.getElementById('heroCarousel');
+  if (carousel) {
+    carousel.addEventListener('mouseenter', stop);
+    carousel.addEventListener('mouseleave', start);
+    // Swipe support
+    let sx = 0;
+    carousel.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, {passive:true});
+    carousel.addEventListener('touchend',   e => {
+      const dx = e.changedTouches[0].clientX - sx;
+      if (Math.abs(dx) > 50) { stop(); show(cur + (dx < 0 ? 1 : -1)); start(); }
+    }, {passive:true});
+  }
+
+  // Expose dot click globally (called from inline onclick)
+  window.goSlide = function(n) { stop(); show(n); start(); };
+})();
+</script>
 
 </body>
 </html>
