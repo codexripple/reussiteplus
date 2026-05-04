@@ -133,7 +133,7 @@ include __DIR__ . '/includes/header_app.php';
     <div style="margin-bottom:14px">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
         <span style="font-size:13px;color:var(--gris-800);font-weight:500">
-          <?= e($pm['icone']??'📚') ?> <?= e($pm['nom']) ?>
+          <?= e($pm['icone']??'bi bi-book') ?> <?= e($pm['nom']) ?>
         </span>
         <div style="display:flex;gap:8px;align-items:center">
           <span style="font-size:11px;color:var(--gris-500)"><?= number_format($pm['questions_vues']) ?> q.</span>
@@ -145,39 +145,39 @@ include __DIR__ . '/includes/header_app.php';
       </div>
     </div>
     <?php endforeach; ?>
-    <a href="/reussiteplus/questions.php" class="btn btn-primary btn-full" style="margin-top:8px">🧠 S'entraîner maintenant</a>
+    <a href="/reussiteplus/questions.php" class="btn btn-primary btn-full" style="margin-top:8px"><i class="bi bi-brain"></i> S'entraîner maintenant</a>
   </div>
 
   <!-- Radar chart simulé par tableau -->
   <div class="card">
     <div class="card-header">
-      <div class="card-title">📊 Analyse des forces</div>
+      <div class="card-title"><i class="bi bi-bar-chart-line"></i> Analyse des forces</div>
     </div>
     <?php
     $top = array_slice($progressMatieres, 0, 3);
     $low = array_slice(array_reverse($progressMatieres), 0, 3);
     ?>
     <div style="margin-bottom:16px">
-      <div style="font-size:12px;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">💪 Points forts</div>
+      <div style="font-size:12px;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px"><i class="bi bi-trophy"></i> Points forts</div>
       <?php foreach ($top as $t): ?>
       <div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid var(--gris-100)">
-        <span><?= e($t['icone']??'📚') ?> <?= e($t['nom']) ?></span>
+        <span><?= e($t['icone']??'bi bi-book') ?> <?= e($t['nom']) ?></span>
         <span style="color:var(--primary);font-weight:600"><?= number_format((float)$t['score_moyen'],1) ?>%</span>
       </div>
       <?php endforeach; ?>
     </div>
     <div>
-      <div style="font-size:12px;font-weight:600;color:var(--rouge);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">📉 À renforcer</div>
+      <div style="font-size:12px;font-weight:600;color:var(--rouge);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px"><i class="bi bi-graph-down"></i> À renforcer</div>
       <?php foreach ($low as $l): ?>
       <div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid var(--gris-100)">
-        <span><?= e($l['icone']??'📚') ?> <?= e($l['nom']) ?></span>
+        <span><?= e($l['icone']??'bi bi-book') ?> <?= e($l['nom']) ?></span>
         <span style="color:var(--rouge);font-weight:600"><?= number_format((float)$l['score_moyen'],1) ?>%</span>
       </div>
       <?php endforeach; ?>
     </div>
     <?php if ($user['plan'] === 'GRATUIT'): ?>
     <div style="margin-top:12px;background:var(--gold-light);border-radius:8px;padding:10px;font-size:12px;color:var(--gold-dark);text-align:center">
-      ⭐ <a href="/reussiteplus/tarifs.php" style="color:var(--gold-dark);font-weight:600">Premium</a> : Plan de révision IA personnalisé
+      <i class="bi bi-star-fill"></i> <a href="/reussiteplus/tarifs.php" style="color:var(--gold-dark);font-weight:600">Premium</a> : Plan de révision IA personnalisé
     </div>
     <?php endif; ?>
   </div>
@@ -186,7 +186,7 @@ include __DIR__ . '/includes/header_app.php';
 
 <!-- Historique des examens -->
 <div class="section-header">
-  <div class="section-title">📋 Historique des examens</div>
+  <div class="section-title"><i class="bi bi-clock-history"></i> Historique des examens</div>
   <div style="font-size:13px;color:var(--gris-500)"><?= count($historique) ?> examens passés</div>
 </div>
 
@@ -225,10 +225,10 @@ include __DIR__ . '/includes/header_app.php';
 </div>
 <?php else: ?>
 <div class="card" style="text-align:center;padding:40px">
-  <div style="font-size:48px;margin-bottom:12px">📊</div>
+  <div style="font-size:48px;margin-bottom:12px;color:var(--gris-300)"><i class="bi bi-bar-chart"></i></div>
   <div style="font-size:15px;font-weight:600;margin-bottom:8px">Aucun examen passé</div>
   <div style="font-size:13px;color:var(--gris-500);margin-bottom:20px">Commencez par passer votre premier examen !</div>
-  <a href="/reussiteplus/examen.php" class="btn btn-primary">✏️ Passer un examen maintenant</a>
+  <a href="/reussiteplus/examen.php" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Passer un examen maintenant</a>
 </div>
 <?php endif; ?>
 

@@ -253,7 +253,7 @@ if ($sessionId) {
         <div style="display:flex;gap:10px">
           <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Suivant →</button>
           <button class="btn btn-gold" id="submitBtn" style="display:none" onclick="submitExam()">
-            ✅ Soumettre l'examen
+            <i class="bi bi-check2-square"></i> Soumettre l'examen
           </button>
         </div>
       </div>
@@ -407,7 +407,7 @@ if ($sessionId) {
       clearInterval(timerInterval);
 
       const btn = document.getElementById('submitBtn');
-      if (btn) { btn.disabled = true; btn.textContent = '⏳ Envoi en cours...'; }
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Envoi en cours...'; }
 
       const temps = Math.floor((Date.now() - timeStart) / 1000);
       const fd = new FormData();
@@ -423,11 +423,11 @@ if ($sessionId) {
         .then(r => r.json())
         .then(data => {
           if (data.redirect) window.location = data.redirect;
-          else { submitted = false; alert(data.error || 'Erreur inconnue.'); if (btn) { btn.disabled=false; btn.textContent='✅ Soumettre l\'examen'; } }
+          else { submitted = false; alert(data.error || 'Erreur inconnue.'); if (btn) { btn.disabled=false; btn.innerHTML='<i class="bi bi-check2-square"></i> Soumettre l\'examen'; } }
         })
         .catch(() => {
           submitted = false;
-          if (btn) { btn.disabled=false; btn.textContent='✅ Soumettre l\'examen'; }
+          if (btn) { btn.disabled=false; btn.innerHTML='<i class="bi bi-check2-square"></i> Soumettre l\'examen'; }
           alert('Erreur réseau. Vérifiez votre connexion et réessayez.');
         });
     }
@@ -504,7 +504,7 @@ include __DIR__ . '/includes/header_app.php';
 <div style="max-width:680px;margin:0 auto">
   <?php if ($user['plan'] === 'GRATUIT'): ?>
   <div class="alert alert-warning" style="margin-bottom:24px">
-    📊 Plan Gratuit : <?= $user['examens_mois'] ?? 0 ?>/<?= FREE_EXAMS_PER_MONTH ?> examens ce mois.
+    <i class="bi bi-bar-chart-fill" style="margin-right:4px"></i> Plan Gratuit : <?= $user['examens_mois'] ?? 0 ?>/<?= FREE_EXAMS_PER_MONTH ?> examens ce mois.
     <a href="/reussiteplus/tarifs.php" style="font-weight:600;color:var(--gold-dark)">Passer à Premium →</a>
   </div>
   <?php endif; ?>
@@ -590,7 +590,7 @@ include __DIR__ . '/includes/header_app.php';
 <style>
 .matiere-card:hover { border-color: var(--primary); background: var(--primary-subtle); }
 .matiere-card.selected { border-color: var(--primary); background: var(--primary-subtle); }
-.matiere-card.selected::after { content:'✓'; position:absolute; top:6px; right:8px; color:var(--primary); font-weight:700; font-size:14px; }
+.matiere-card.selected::after { content:'\F26E'; font-family:'bootstrap-icons'; position:absolute; top:6px; right:8px; color:var(--primary); font-weight:700; font-size:14px; }
 </style>
 
 <?php include __DIR__ . '/includes/footer_app.php'; ?>

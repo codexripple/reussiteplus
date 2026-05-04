@@ -120,7 +120,7 @@ include __DIR__ . '/../includes/header_app.php';
         </td>
         <td style="font-size:11px;color:var(--gris-500)"><?= date('d/m/Y', strtotime($u['created_at'])) ?></td>
         <td>
-          <button class="btn btn-ghost btn-sm" onclick="openModal('<?= e($u['id']) ?>','<?= e($u['plan']) ?>','<?= e($u['role']) ?>','<?= (int)$u['is_active'] ?>')">⚙️</button>
+          <button class="btn btn-ghost btn-sm" onclick="openModal('<?= e($u['id']) ?>','<?= e($u['plan']) ?>','<?= e($u['role']) ?>','<?= (int)$u['is_active'] ?>')"><i class="bi bi-gear-fill"></i></button>
         </td>
       </tr>
       <?php endforeach; ?>
@@ -141,7 +141,7 @@ include __DIR__ . '/../includes/header_app.php';
 <!-- Modal gestion utilisateur -->
 <div id="user-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center">
   <div style="background:white;border-radius:var(--radius-xl);padding:28px;width:100%;max-width:420px;margin:16px">
-    <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:20px">⚙️ Gérer l'utilisateur</div>
+    <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:20px"><i class="bi bi-gear-fill"></i> Gérer l'utilisateur</div>
 
     <form method="POST" id="modal-form">
       <?= csrf_field() ?>
@@ -185,7 +185,7 @@ function openModal(uid, plan, role, active) {
   document.getElementById('modal-uid').value = uid;
   document.getElementById('modal-plan').value = plan;
   document.getElementById('modal-role').value = role;
-  document.getElementById('toggle-btn').textContent = active == 1 ? '🚫 Désactiver le compte' : '✅ Activer le compte';
+  document.getElementById('toggle-btn').innerHTML = active == 1 ? '<i class="bi bi-slash-circle"></i> Désactiver le compte' : '<i class="bi bi-check-circle"></i> Activer le compte';
   document.getElementById('user-modal').style.display = 'flex';
 }
 function closeModal() {

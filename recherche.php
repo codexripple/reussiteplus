@@ -85,7 +85,7 @@ include __DIR__ . '/includes/header_app.php';
   <?php if (!$q): ?>
   <!-- État vide — barre de recherche prominente -->
   <div style="text-align:center;padding:60px 20px">
-    <div style="font-size:56px;margin-bottom:16px">🔍</div>
+    <div style="font-size:56px;margin-bottom:16px;color:var(--gris-300)"><i class="bi bi-search"></i></div>
     <div style="font-family:var(--font-display);font-size:26px;font-weight:800;color:var(--gris-900);margin-bottom:8px">
       Recherche globale
     </div>

@@ -56,7 +56,7 @@ include __DIR__ . '/includes/header_app.php';
 <!-- Filtres -->
 <form method="GET" style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:flex-end">
   <div style="flex:1;min-width:200px">
-    <input class="form-control" name="q" value="<?= e($search) ?>" placeholder="🔍 Chercher une question...">
+    <input class="form-control" name="q" value="<?= e($search) ?>" placeholder="Chercher une question...">
   </div>
   <div>
     <select class="form-control" name="matiere">
@@ -69,22 +69,22 @@ include __DIR__ . '/includes/header_app.php';
   <div>
     <select class="form-control" name="diff">
       <option value="">Toute difficulté</option>
-      <option value="DEBUTANT" <?= $diffF==='DEBUTANT'?'selected':'' ?>>🟢 Débutant</option>
-      <option value="ELEMENTAIRE" <?= $diffF==='ELEMENTAIRE'?'selected':'' ?>>🔵 Élémentaire</option>
-      <option value="INTERMEDIAIRE" <?= $diffF==='INTERMEDIAIRE'?'selected':'' ?>>🟡 Intermédiaire</option>
-      <option value="AVANCE" <?= $diffF==='AVANCE'?'selected':'' ?>>🟠 Avancé</option>
-      <option value="EXPERT" <?= $diffF==='EXPERT'?'selected':'' ?>>🔴 Expert</option>
+      <option value="DEBUTANT" <?= $diffF==='DEBUTANT'?'selected':'' ?>>Débutant</option>
+      <option value="ELEMENTAIRE" <?= $diffF==='ELEMENTAIRE'?'selected':'' ?>>Élémentaire</option>
+      <option value="INTERMEDIAIRE" <?= $diffF==='INTERMEDIAIRE'?'selected':'' ?>>Intermédiaire</option>
+      <option value="AVANCE" <?= $diffF==='AVANCE'?'selected':'' ?>>Avancé</option>
+      <option value="EXPERT" <?= $diffF==='EXPERT'?'selected':'' ?>>Expert</option>
     </select>
   </div>
   <button type="submit" class="btn btn-primary">Filtrer</button>
   <?php if ($search || $matiereF || $diffF): ?>
-  <a href="/reussiteplus/questions.php" class="btn btn-ghost">✕ Reset</a>
+  <a href="/reussiteplus/questions.php" class="btn btn-ghost"><i class="bi bi-x-lg"></i> Reset</a>
   <?php endif; ?>
 </form>
 
 <div class="section-header">
-  <div class="section-title">🧠 <?= number_format($total) ?> questions disponibles</div>
-  <a href="/reussiteplus/examen.php" class="btn btn-primary btn-sm">✏️ Passer un examen</a>
+  <div class="section-title"><i class="bi bi-lightbulb"></i> <?= number_format($total) ?> questions disponibles</div>
+  <a href="/reussiteplus/examen.php" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Passer un examen</a>
 </div>
 
 <?php if ($questions): ?>
@@ -176,7 +176,7 @@ include __DIR__ . '/includes/header_app.php';
 
 <?php else: ?>
 <div class="card" style="text-align:center;padding:48px">
-  <div style="font-size:48px;margin-bottom:12px">🧠</div>
+  <div style="font-size:48px;margin-bottom:12px;color:var(--gris-300)"><i class="bi bi-lightbulb"></i></div>
   <div style="font-size:16px;font-weight:600;margin-bottom:8px">Aucune question trouvée</div>
   <div style="color:var(--gris-500);margin-bottom:20px">Modifiez vos critères ou revenez plus tard.</div>
   <a href="/reussiteplus/questions.php" class="btn btn-ghost">Voir toutes les questions</a>

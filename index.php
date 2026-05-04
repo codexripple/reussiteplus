@@ -302,7 +302,7 @@ a { text-decoration: none; color: inherit; }
       <i class="bi bi-trophy-fill" style="color:var(--gold);font-size:18px"></i>
       <div>
         <div style="font-size:12px;font-weight:700;color:var(--gris-900)">+24 pts ce mois</div>
-        <div style="font-size:10px;color:var(--gris-500)">Meilleure série 🔥 7j</div>
+        <div style="font-size:10px;color:var(--gris-500)">Meilleure série <i class="bi bi-fire" style="color:var(--gold)"></i> 7j</div>
       </div>
     </div>
     <div class="hero-float-badge hero-float-2">
@@ -446,7 +446,7 @@ a { text-decoration: none; color: inherit; }
       <?php foreach (PLANS as $planKey => $plan): ?>
       <div class="plan-card <?= ($plan['populaire'] ?? false) ? 'popular' : '' ?>">
         <?php if ($plan['populaire'] ?? false): ?>
-          <div class="plan-popular-badge">⭐ Le plus populaire</div>
+          <div class="plan-popular-badge"><i class="bi bi-star-fill"></i> Le plus populaire</div>
         <?php endif; ?>
         <div class="plan-icon"><?= $plan['icone'] ?></div>
         <div class="plan-name"><?= e($plan['nom']) ?></div>
@@ -454,20 +454,20 @@ a { text-decoration: none; color: inherit; }
         <div class="plan-price-sub"><?= $plan['prix'] === 0 ? 'Pour toujours' : 'par mois' ?></div>
         <ul class="plan-features">
           <li>
-            <?= $plan['examens_mois'] === -1 ? '<span class="check">✓</span> Examens illimités' : '<span class="check">✓</span> ' . $plan['examens_mois'] . ' examens/mois' ?>
+            <?= $plan['examens_mois'] === -1 ? '<span class="check"><i class="bi bi-check-lg"></i></span> Examens illimités' : '<span class="check"><i class="bi bi-check-lg"></i></span> ' . $plan['examens_mois'] . ' examens/mois' ?>
           </li>
           <li>
-            <?= $plan['archives'] ? '<span class="check">✓</span> Archives officielles' : '<span class="cross">✗</span> Archives officielles' ?>
+            <?= $plan['archives'] ? '<span class="check"><i class="bi bi-check-lg"></i></span> Archives officielles' : '<span class="cross"><i class="bi bi-x-lg"></i></span> Archives officielles' ?>
           </li>
           <li>
-            <?= $plan['corrige'] ? '<span class="check">✓</span> Corrigés détaillés' : '<span class="cross">✗</span> Corrigés détaillés' ?>
+            <?= $plan['corrige'] ? '<span class="check"><i class="bi bi-check-lg"></i></span> Corrigés détaillés' : '<span class="cross"><i class="bi bi-x-lg"></i></span> Corrigés détaillés' ?>
           </li>
           <li>
-            <?= $plan['ia'] ? '<span class="check">✓</span> Plan de révision IA' : '<span class="cross">✗</span> Plan de révision IA' ?>
+            <?= $plan['ia'] ? '<span class="check"><i class="bi bi-check-lg"></i></span> Plan de révision IA' : '<span class="cross"><i class="bi bi-x-lg"></i></span> Plan de révision IA' ?>
           </li>
-          <li><span class="check">✓</span> Suivi de progression</li>
+          <li><span class="check"><i class="bi bi-check-lg"></i></span> Suivi de progression</li>
           <?php if (isset($plan['eleves_max'])): ?>
-          <li><span class="check">✓</span> Jusqu'à <?= $plan['eleves_max'] ?> élèves</li>
+          <li><span class="check"><i class="bi bi-check-lg"></i></span> Jusqu'à <?= $plan['eleves_max'] ?> élèves</li>
           <?php endif; ?>
         </ul>
         <?php if ($planKey === 'GRATUIT'): ?>
@@ -476,7 +476,7 @@ a { text-decoration: none; color: inherit; }
           <a href="mailto:contact@reussiteplus.cd?subject=Abonnement École" class="btn btn-primary" style="width:100%;justify-content:center">Nous contacter</a>
         <?php else: ?>
           <a href="/reussiteplus/paiement.php?plan=<?= $planKey ?>" class="btn <?= ($plan['populaire'] ?? false) ? 'btn-gold' : 'btn-primary' ?>" style="width:100%;justify-content:center">
-            <?= ($plan['populaire'] ?? false) ? '⭐ ' : '' ?>Choisir ce plan
+            <?= ($plan['populaire'] ?? false) ? '<i class="bi bi-star-fill"></i> ' : '' ?>Choisir ce plan
           </a>
         <?php endif; ?>
       </div>
@@ -528,7 +528,7 @@ a { text-decoration: none; color: inherit; }
     <p class="cta-sub">Plus de 12 000 élèves en RDC sont déjà dessus. Commence maintenant, c'est gratuit.</p>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
       <a href="/reussiteplus/inscription.php" class="btn btn-primary btn-lg">Créer mon compte gratuitement →</a>
-      <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-lg">⭐ Voir le Premium</a>
+      <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-lg"><i class="bi bi-star-fill"></i> Voir le Premium</a>
     </div>
   </div>
 </section>
@@ -546,7 +546,7 @@ a { text-decoration: none; color: inherit; }
       <a href="/reussiteplus/inscription.php" class="footer-link">Inscription</a>
       <a href="/reussiteplus/contact.php" class="footer-link">Contact</a>
     </div>
-    <div class="footer-copy">Paiement via 💚 M-Pesa · 🔴 Airtel Money · 🟠 Orange Money</div>
+    <div class="footer-copy">Paiement via <i class="bi bi-phone-fill" style="color:#4CAF50"></i> M-Pesa · <i class="bi bi-phone-fill" style="color:#e2000f"></i> Airtel Money · <i class="bi bi-phone-fill" style="color:#FF8C00"></i> Orange Money</div>
   </div>
 </footer>
 

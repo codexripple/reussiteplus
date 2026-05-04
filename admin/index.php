@@ -139,8 +139,8 @@ include __DIR__ . '/../includes/header_app.php';
         <td style="font-size:12px"><?= e(METHODES_PAIEMENT[$p['methode_paiement']]['nom'] ?? $p['methode_paiement']) ?></td>
         <td style="font-size:12px;color:var(--gris-500)"><?= date('d/m H:i', strtotime($p['created_at'])) ?></td>
         <td>
-          <a href="/reussiteplus/admin/paiements.php?action=confirmer&id=<?= e($p['id']) ?>" class="btn btn-primary btn-sm" onclick="return confirm('Confirmer ce paiement ?')">✓</a>
-          <a href="/reussiteplus/admin/paiements.php?action=refuser&id=<?= e($p['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Refuser ce paiement ?')">✗</a>
+          <a href="/reussiteplus/admin/paiements.php?action=confirmer&id=<?= e($p['id']) ?>" class="btn btn-primary btn-sm" onclick="return confirm('Confirmer ce paiement ?')"><i class="bi bi-check-lg"></i></a>
+          <a href="/reussiteplus/admin/paiements.php?action=refuser&id=<?= e($p['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Refuser ce paiement ?')"><i class="bi bi-x-lg"></i></a>
         </td>
       </tr>
       <?php endforeach; ?>

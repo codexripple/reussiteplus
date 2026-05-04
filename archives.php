@@ -122,17 +122,17 @@ include __DIR__ . '/includes/header_app.php';
           <?= csrf_field() ?>
           <input type="hidden" name="toggle_signet" value="1">
           <button type="submit" class="btn btn-ghost btn-sm" title="<?= $isBookmarked ? 'Retirer des signets' : 'Ajouter aux signets' ?>">
-            <?= $isBookmarked ? '🔖' : '📎' ?> <?= $isBookmarked ? 'Sauvegardé' : 'Sauvegarder' ?>
+            <i class="bi <?= $isBookmarked ? 'bi-bookmark-fill' : 'bi-bookmark' ?>"></i> <?= $isBookmarked ? 'Sauvegardé' : 'Sauvegarder' ?>
           </button>
         </form>
       </div>
 
       <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:13px;color:var(--gris-600);margin-bottom:16px">
-        <span><?= e($detail['icone'] ?? '📚') ?> <?= e($detail['matiere_nom']) ?></span>
-        <?php if ($detail['province_nom']): ?><span>📍 <?= e($detail['province_nom']) ?></span><?php endif; ?>
-        <span>👁️ <?= number_format($detail['vues']) ?> vues</span>
-        <span>⬇️ <?= number_format($detail['telechargements']) ?> téléchargements</span>
-        <?php if ($detail['source']): ?><span>📋 <?= e($detail['source']) ?></span><?php endif; ?>
+        <span><i class="bi bi-book"></i> <?= e($detail['matiere_nom']) ?></span>
+        <?php if ($detail['province_nom']): ?><span><i class="bi bi-geo-alt"></i> <?= e($detail['province_nom']) ?></span><?php endif; ?>
+        <span><i class="bi bi-eye"></i> <?= number_format($detail['vues']) ?> vues</span>
+        <span><i class="bi bi-download"></i> <?= number_format($detail['telechargements']) ?> téléchargements</span>
+        <?php if ($detail['source']): ?><span><i class="bi bi-card-text"></i> <?= e($detail['source']) ?></span><?php endif; ?>
       </div>
 
       <?php if ($detail['description']): ?>
@@ -143,17 +143,17 @@ include __DIR__ . '/includes/header_app.php';
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <?php if ($detail['sujet_url']): ?>
         <div class="card" style="border:2px solid var(--primary-subtle);padding:20px">
-          <div style="font-size:28px;margin-bottom:8px">📄</div>
+          <div style="font-size:32px;margin-bottom:8px;color:var(--primary)"><i class="bi bi-file-earmark-text"></i></div>
           <div style="font-weight:700;margin-bottom:4px">Sujet de l'examen</div>
           <div style="font-size:12px;color:var(--gris-500);margin-bottom:12px"><?= $detail['sujet_pages'] ? $detail['sujet_pages'] . ' pages' : 'PDF' ?></div>
           <a href="<?= e($detail['sujet_url']) ?>" target="_blank" class="btn btn-primary btn-sm btn-full"
              onclick="incrementDownload('<?= e($detail['id']) ?>')">
-            ⬇️ Télécharger le sujet
+            <i class="bi bi-download"></i> Télécharger le sujet
           </a>
         </div>
         <?php else: ?>
         <div class="card" style="background:var(--gris-50);padding:20px;text-align:center">
-          <div style="font-size:28px;margin-bottom:8px;opacity:.4">📄</div>
+          <div style="font-size:32px;margin-bottom:8px;opacity:.3;color:var(--gris-400)"><i class="bi bi-file-earmark-text"></i></div>
           <div style="font-size:13px;color:var(--gris-400)">Sujet non disponible</div>
         </div>
         <?php endif; ?>
@@ -166,24 +166,24 @@ include __DIR__ . '/includes/header_app.php';
         <div class="card <?= !$canCorrige ? 'premium-lock' : '' ?>" style="border:2px solid var(--gold-light);padding:20px">
           <?php if (!$canCorrige): ?>
           <div class="lock-overlay" style="border-radius:var(--radius-lg)">
-            <div style="font-size:32px;margin-bottom:8px">⭐</div>
+            <div style="font-size:32px;margin-bottom:8px;color:var(--gold)"><i class="bi bi-star-fill"></i></div>
             <div style="font-weight:700;margin-bottom:4px">Réservé Premium</div>
             <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-sm">Déverrouiller</a>
           </div>
           <?php endif; ?>
-          <div style="font-size:28px;margin-bottom:8px">✅</div>
+          <div style="font-size:32px;margin-bottom:8px;color:var(--primary)"><i class="bi bi-patch-check-fill"></i></div>
           <div style="font-weight:700;margin-bottom:4px">Corrigé officiel</div>
           <div style="font-size:12px;color:var(--gris-500);margin-bottom:12px"><?= $detail['corrige_pages'] ? $detail['corrige_pages'] . ' pages' : 'PDF' ?></div>
           <?php if ($canCorrige): ?>
           <a href="<?= e($detail['corrige_url']) ?>" target="_blank" class="btn btn-gold btn-sm btn-full"
              onclick="incrementDownload('<?= e($detail['id']) ?>')">
-            ⬇️ Télécharger le corrigé
+            <i class="bi bi-download"></i> Télécharger le corrigé
           </a>
           <?php endif; ?>
         </div>
         <?php else: ?>
         <div class="card" style="background:var(--gris-50);padding:20px;text-align:center">
-          <div style="font-size:28px;margin-bottom:8px;opacity:.4">✅</div>
+          <div style="font-size:32px;margin-bottom:8px;opacity:.3;color:var(--gris-400)"><i class="bi bi-patch-check"></i></div>
           <div style="font-size:13px;color:var(--gris-400)">Corrigé non disponible</div>
         </div>
         <?php endif; ?>
@@ -194,16 +194,16 @@ include __DIR__ . '/includes/header_app.php';
   <!-- Sidebar détail -->
   <div>
     <div class="card" style="margin-bottom:16px">
-      <div class="card-title" style="margin-bottom:16px">🎯 S'entraîner avec cet examen</div>
+      <div class="card-title" style="margin-bottom:16px"><i class="bi bi-bullseye"></i> S'entraîner avec cet examen</div>
       <a href="/reussiteplus/examen.php?archive=<?= e($detail['id']) ?>" class="btn btn-primary btn-full">
-        ✏️ Passer l'examen en ligne
+        <i class="bi bi-pencil-square"></i> Passer l'examen en ligne
       </a>
       <div style="font-size:11px;color:var(--gris-500);text-align:center;margin-top:8px">Questions interactives chronométrées</div>
     </div>
 
     <?php if ($user['plan'] === 'GRATUIT'): ?>
     <div class="card" style="background:linear-gradient(135deg,#F5E6C0,#FFF7E6);border:1px solid rgba(201,151,42,.3)">
-      <div style="font-size:24px;margin-bottom:8px">⭐</div>
+      <div style="font-size:28px;margin-bottom:8px;color:var(--gold)"><i class="bi bi-star-fill"></i></div>
       <div style="font-weight:700;color:var(--gold-dark);margin-bottom:6px">Accédez aux corrigés</div>
       <p style="font-size:13px;color:var(--gris-600);margin-bottom:12px">Déverrouillez tous les corrigés officiels avec un plan Basique ou Premium.</p>
       <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-sm btn-full">Voir les offres →</a>
@@ -219,7 +219,7 @@ include __DIR__ . '/includes/header_app.php';
 <div class="card" style="margin-bottom:24px;padding:20px">
   <form method="GET" action="" style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
     <div style="flex:2;min-width:200px">
-      <label class="form-label">🔍 Recherche</label>
+      <label class="form-label"><i class="bi bi-search"></i> Recherche</label>
       <input class="form-control" type="text" name="q" placeholder="Ex: mathématiques, géométrie..." value="<?= e($search) ?>">
     </div>
     <div style="min-width:140px">
@@ -265,7 +265,7 @@ include __DIR__ . '/includes/header_app.php';
   </div>
   <?php if ($user['plan'] === 'GRATUIT'): ?>
   <div style="font-size:12px;background:var(--gold-light);color:var(--gold-dark);padding:4px 12px;border-radius:20px">
-    ⭐ Contenus premium masqués — <a href="/reussiteplus/tarifs.php" style="font-weight:600;color:var(--gold-dark)">Déverrouiller</a>
+    <i class="bi bi-star-fill"></i> Contenus premium masqués — <a href="/reussiteplus/tarifs.php" style="font-weight:600;color:var(--gold-dark)">Déverrouiller</a>
   </div>
   <?php endif; ?>
 </div>
@@ -276,7 +276,7 @@ include __DIR__ . '/includes/header_app.php';
   <a href="/reussiteplus/archives.php?id=<?= e($arc['id']) ?>" style="text-decoration:none" class="exam-card">
     <div class="exam-card-header" style="background:linear-gradient(135deg,<?= e($arc['matiere_couleur'] ?? '#007A5E') ?>15,<?= e($arc['matiere_couleur'] ?? '#007A5E') ?>08)">
       <span class="badge" style="background:<?= e($arc['matiere_couleur'] ?? 'var(--primary)') ?>20;color:<?= e($arc['matiere_couleur'] ?? 'var(--primary)') ?>">
-        <?= e($arc['matiere_icone'] ?? '📚') ?> <?= e($arc['exam_type']) ?>
+        <i class="bi bi-book"></i> <?= e($arc['exam_type']) ?>
       </span>
       <div style="text-align:right">
         <div style="font-size:12px;font-weight:700;color:var(--gris-700)"><?= e($arc['annee']) ?></div>
@@ -286,17 +286,17 @@ include __DIR__ . '/includes/header_app.php';
     <div class="exam-card-body">
       <div class="exam-card-title"><?= e($arc['titre']) ?></div>
       <div class="exam-meta">
-        <span class="exam-meta-item">📚 <?= e($arc['matiere_nom']) ?></span>
+        <span class="exam-meta-item"><i class="bi bi-book"></i> <?= e($arc['matiere_nom']) ?></span>
         <?php if ($arc['province_nom']): ?>
-        <span class="exam-meta-item">📍 <?= e($arc['province_nom']) ?></span>
+        <span class="exam-meta-item"><i class="bi bi-geo-alt"></i> <?= e($arc['province_nom']) ?></span>
         <?php endif; ?>
-        <span class="exam-meta-item">👁️ <?= number_format($arc['vues']) ?></span>
+        <span class="exam-meta-item"><i class="bi bi-eye"></i> <?= number_format($arc['vues']) ?></span>
       </div>
     </div>
     <div class="exam-card-footer" style="justify-content:space-between">
       <div style="display:flex;gap:6px">
-        <?php if ($arc['sujet_url']): ?><span class="badge badge-green">📄 Sujet</span><?php endif; ?>
-        <?php if ($arc['corrige_url']): ?><span class="badge badge-gold">✅ Corrigé</span><?php endif; ?>
+        <?php if ($arc['sujet_url']): ?><span class="badge badge-green"><i class="bi bi-file-earmark-text"></i> Sujet</span><?php endif; ?>
+        <?php if ($arc['corrige_url']): ?><span class="badge badge-gold"><i class="bi bi-patch-check-fill"></i> Corrigé</span><?php endif; ?>
       </div>
       <span style="font-size:11px;color:var(--primary);font-weight:600">Voir →</span>
     </div>
@@ -324,7 +324,7 @@ include __DIR__ . '/includes/header_app.php';
 
 <?php else: ?>
 <div class="card" style="text-align:center;padding:60px">
-  <div style="font-size:48px;margin-bottom:16px">📂</div>
+  <div style="font-size:48px;margin-bottom:16px;color:var(--gris-300)"><i class="bi bi-folder2-open"></i></div>
   <div style="font-size:17px;font-weight:700;margin-bottom:8px">Aucune archive trouvée</div>
   <div style="font-size:14px;color:var(--gris-500);margin-bottom:20px">
     <?php if ($search): ?>Aucun résultat pour "<?= e($search) ?>". Essayez d'autres termes.

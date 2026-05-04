@@ -23,7 +23,7 @@ if (isset($_GET['action'], $_GET['id']) && !isset($_GET['confirm'])) {
         dbInsert('notifications', [
             'user_id' => $abon['uid'],
             'type'    => 'PAIEMENT',
-            'titre'   => '✅ Paiement confirmé — ' . (PLANS[$abon['plan']]['nom'] ?? $abon['plan']),
+            'titre'   => 'Paiement confirmé — ' . (PLANS[$abon['plan']]['nom'] ?? $abon['plan']),
             'message' => "Votre abonnement {$abon['plan']} a été activé jusqu'au " . date('d/m/Y', strtotime($abon['date_fin'])) . ". Bon apprentissage !",
             'lien'    => '/reussiteplus/abonnement.php',
         ]);
@@ -34,7 +34,7 @@ if (isset($_GET['action'], $_GET['id']) && !isset($_GET['confirm'])) {
         dbInsert('notifications', [
             'user_id' => $abon['uid'],
             'type'    => 'PAIEMENT',
-            'titre'   => '❌ Paiement refusé — réf. ' . $abon['reference_paiement'],
+            'titre'   => 'Paiement refusé — réf. ' . $abon['reference_paiement'],
             'message' => "Votre paiement n'a pas pu être vérifié. Contactez support@reussiteplus.cd.",
             'lien'    => '/reussiteplus/abonnement.php',
         ]);
@@ -76,7 +76,7 @@ include __DIR__ . '/../includes/header_app.php';
     $active = $statut === $s;
   ?>
   <a href="?statut=<?= $s ?>" class="btn <?= $active ? 'btn-primary' : 'btn-ghost' ?> btn-sm">
-    <?= $s === 'EN_ATTENTE' ? '⏳' : ($s === 'CONFIRME' ? '✅' : ($s === 'ECHEC' ? '❌' : ($s === 'REMBOURSE' ? '↩️' : '📋'))) ?>
+    <?= $s === 'EN_ATTENTE' ? '<i class="bi bi-hourglass-split"></i>' : ($s === 'CONFIRME' ? '<i class="bi bi-check-circle-fill"></i>' : ($s === 'ECHEC' ? '<i class="bi bi-x-circle-fill"></i>' : ($s === 'REMBOURSE' ? '<i class="bi bi-arrow-counterclockwise"></i>' : '<i class="bi bi-list-ul"></i>'))) ?>
     <?= $s ?> (<?= $cnt ?>)
   </a>
   <?php endforeach; ?>
@@ -84,7 +84,7 @@ include __DIR__ . '/../includes/header_app.php';
 
 <div class="card">
   <div class="card-header">
-    <div class="card-title">💳 Paiements — <?= $statut ?></div>
+    <div class="card-title"><i class="bi bi-credit-card-2-front"></i> Paiements — <?= $statut ?></div>
     <div style="font-size:12px;color:var(--gris-500)"><?= $total ?> résultat(s)</div>
   </div>
 
@@ -127,8 +127,8 @@ include __DIR__ . '/../includes/header_app.php';
         <td>
           <?php if ($p['statut'] === 'EN_ATTENTE'): ?>
           <div style="display:flex;gap:4px">
-            <a href="?action=confirmer&id=<?= e($p['id']) ?>&statut=<?= $statut ?>" class="btn btn-primary btn-sm" onclick="return confirm('Confirmer ce paiement de <?= e($p['prenom']) ?> ?')">✓</a>
-            <a href="?action=refuser&id=<?= e($p['id']) ?>&statut=<?= $statut ?>" class="btn btn-danger btn-sm" onclick="return confirm('Refuser ?')">&#10007;</a>
+            <a href="?action=confirmer&id=<?= e($p['id']) ?>&statut=<?= $statut ?>" class="btn btn-primary btn-sm" onclick="return confirm('Confirmer ce paiement de <?= e($p['prenom']) ?> ?')"><i class="bi bi-check-lg"></i></a>
+            <a href="?action=refuser&id=<?= e($p['id']) ?>&statut=<?= $statut ?>" class="btn btn-danger btn-sm" onclick="return confirm('Refuser ?')"><i class="bi bi-x-lg"></i></a>
           </div>
           <?php else: ?>
           <span style="font-size:11px;color:var(--gris-400)">—</span>
@@ -151,7 +151,7 @@ include __DIR__ . '/../includes/header_app.php';
 
   <?php else: ?>
   <div style="text-align:center;padding:40px;color:var(--gris-500)">
-    <div style="font-size:40px;margin-bottom:8px">💳</div>
+    <div style="font-size:40px;margin-bottom:8px;color:var(--gris-300)"><i class="bi bi-credit-card-2-front"></i></div>
     <div>Aucun paiement avec ce statut.</div>
   </div>
   <?php endif; ?>

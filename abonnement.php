@@ -22,7 +22,7 @@ include __DIR__ . '/includes/header_app.php';
   <div class="card" style="margin-bottom:24px;padding:28px">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
       <div style="display:flex;align-items:center;gap:16px">
-        <span style="font-size:48px"><?= PLANS[$user['plan']]['icone'] ?? '🎒' ?></span>
+        <span style="font-size:48px"><i class="<?= PLANS[$user['plan']]['icone'] ?? 'bi bi-backpack' ?>"></i></span>
         <div>
           <div style="font-size:12px;color:var(--gris-500);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Mon plan actuel</div>
           <div style="font-family:var(--font-display);font-size:26px;font-weight:800"><?= e(PLANS[$user['plan']]['nom']) ?></div>
@@ -31,8 +31,8 @@ include __DIR__ . '/includes/header_app.php';
               <?php $joursRestants = (int)floor((strtotime($user['plan_expire_at']) - time()) / 86400); ?>
               <div style="font-size:13px;color:<?= $joursRestants <= 7 ? 'var(--rouge)' : 'var(--gris-600)' ?>">
                 <?= $joursRestants > 0
-                    ? "⏳ Expire dans {$joursRestants} jour" . ($joursRestants > 1 ? 's' : '') . ' (' . date('d/m/Y', strtotime($user['plan_expire_at'])) . ')'
-                    : '⚠️ Plan expiré le ' . date('d/m/Y', strtotime($user['plan_expire_at'])) ?>
+                  ? 'Expire dans ' . $joursRestants . ' jour' . ($joursRestants > 1 ? 's' : '') . ' (' . date('d/m/Y', strtotime($user['plan_expire_at'])) . ')'
+                    : 'Plan expiré le ' . date('d/m/Y', strtotime($user['plan_expire_at'])) ?>
               </div>
             <?php endif; ?>
           <?php else: ?>
@@ -44,9 +44,9 @@ include __DIR__ . '/includes/header_app.php';
       </div>
       <div style="display:flex;gap:10px;flex-wrap:wrap">
         <?php if ($user['plan'] === 'GRATUIT'): ?>
-          <a href="/reussiteplus/tarifs.php" class="btn btn-gold">⭐ Passer à Premium</a>
+          <a href="/reussiteplus/tarifs.php" class="btn btn-gold"><i class="bi bi-star-fill"></i> Passer à Premium</a>
         <?php else: ?>
-          <a href="/reussiteplus/paiement.php?plan=<?= e($user['plan']) ?>" class="btn btn-primary">🔄 Renouveler</a>
+          <a href="/reussiteplus/paiement.php?plan=<?= e($user['plan']) ?>" class="btn btn-primary"><i class="bi bi-arrow-repeat"></i> Renouveler</a>
           <a href="/reussiteplus/tarifs.php" class="btn btn-ghost">Changer de plan</a>
         <?php endif; ?>
       </div>
@@ -55,21 +55,21 @@ include __DIR__ . '/includes/header_app.php';
 
   <!-- Avantages du plan actif -->
   <div class="card" style="margin-bottom:24px">
-    <div class="card-title" style="margin-bottom:16px">🎁 Inclus dans votre plan</div>
+    <div class="card-title" style="margin-bottom:16px"><i class="bi bi-gift"></i> Inclus dans votre plan</div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
       <?php $p = PLANS[$user['plan']]; ?>
       <div style="text-align:center;padding:14px;background:var(--gris-50);border-radius:var(--radius)">
-        <div style="font-size:22px;margin-bottom:4px">✏️</div>
+        <div style="font-size:22px;margin-bottom:4px;color:var(--primary)"><i class="bi bi-pencil-square"></i></div>
         <div style="font-size:20px;font-weight:800"><?= $p['examens_mois'] === -1 ? '∞' : $p['examens_mois'] ?></div>
         <div style="font-size:11px;color:var(--gris-500)">examens/mois</div>
       </div>
       <div style="text-align:center;padding:14px;background:var(--gris-50);border-radius:var(--radius)">
-        <div style="font-size:22px;margin-bottom:4px"><?= ($p['ia'] ?? false) ? '🤖' : '📚' ?></div>
+        <div style="font-size:22px;margin-bottom:4px;color:var(--primary)"><?= ($p['ia'] ?? false) ? '<i class="bi bi-cpu"></i>' : '<i class="bi bi-book"></i>' ?></div>
         <div style="font-size:14px;font-weight:700"><?= ($p['ia'] ?? false) ? 'IA active' : 'Standard' ?></div>
         <div style="font-size:11px;color:var(--gris-500)"><?= ($p['ia'] ?? false) ? 'Plan personnalisé' : 'Révision guidée' ?></div>
       </div>
       <div style="text-align:center;padding:14px;background:var(--gris-50);border-radius:var(--radius)">
-        <div style="font-size:22px;margin-bottom:4px">📄</div>
+        <div style="font-size:22px;margin-bottom:4px;color:var(--primary)"><i class="bi bi-file-earmark-text"></i></div>
         <div style="font-size:14px;font-weight:700"><?= $user['plan'] !== 'GRATUIT' ? 'Corrigés inclus' : 'Corrigés verrouillés' ?></div>
         <div style="font-size:11px;color:var(--gris-500)"><?= $user['plan'] !== 'GRATUIT' ? 'Accès complet' : 'Passez à Premium' ?></div>
       </div>
@@ -79,7 +79,7 @@ include __DIR__ . '/includes/header_app.php';
   <!-- Historique des paiements -->
   <div class="card">
     <div class="card-header">
-      <div class="card-title">🧾 Historique des paiements</div>
+    <div class="card-title"><i class="bi bi-receipt"></i> Historique des paiements</div>
       <a href="/reussiteplus/tarifs.php" class="btn btn-primary btn-sm">+ Nouveau paiement</a>
     </div>
 
@@ -120,7 +120,7 @@ include __DIR__ . '/includes/header_app.php';
     </div>
     <?php else: ?>
     <div style="text-align:center;padding:32px;color:var(--gris-500)">
-      <div style="font-size:36px;margin-bottom:8px">🧾</div>
+      <div style="font-size:36px;margin-bottom:8px;color:var(--gris-300)"><i class="bi bi-receipt"></i></div>
       <div style="font-size:14px">Aucun historique de paiement</div>
     </div>
     <?php endif; ?>
