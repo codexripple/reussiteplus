@@ -108,9 +108,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     exit;
 }
 
-// Vérifier la limite du plan gratuit
-if ($user['plan'] === 'GRATUIT' && !can_take_exam()) {
-    redirect('/reussiteplus/tarifs.php', 'warning', 'Vous avez atteint la limite de ' . FREE_EXAMS_PER_MONTH . ' examens ce mois. Passez à Premium pour continuer.');
+// Vérifier la limite mensuelle du plan
+if (!can_take_exam()) {
+    $planData = PLANS[$user['plan']] ?? [];
+    $maxExams = $planData['examens_mois'] ?? FREE_EXAMS_PER_MONTH;
+    $planNom  = $planData['nom'] ?? $user['plan'];
+    $nextPlan = $user['plan'] === 'GRATUIT' ? 'Essentiel' : 'Excellence';
+    redirect('/reussiteplus/tarifs.php', 'warning', "Vous avez atteint la limite de {$maxExams} examens ce mois (plan {$planNom}). Passez au plan {$nextPlan} pour continuer.");
 }
 
 // Mode configuration ou mode examen
@@ -118,7 +122,11 @@ $sessionId  = $_GET['session'] ?? null;
 $archiveId  = $_GET['archive'] ?? null;
 $matiereId  = $_GET['matiere'] ?? null;
 $examType   = $_GET['type'] ?? null;
-$nbQ        = max(5, min(50, (int)($_GET['nb'] ?? 10)));
+// Limit questions per session by plan
+$planCfg   = PLANS[$user['plan']] ?? [];
+$maxQPlan  = $planCfg['questions'] ?? 20; // -1 = illimité
+$maxQCap   = ($maxQPlan === -1) ? 50 : min(50, $maxQPlan);
+$nbQ        = max(5, min($maxQCap, (int)($_GET['nb'] ?? 10)));
 
 // Charger une session en cours
 if ($sessionId) {
@@ -529,10 +537,27 @@ include __DIR__ . '/includes/header_app.php';
 ?>
 
 <div style="max-width:680px;margin:0 auto">
-  <?php if ($user['plan'] === 'GRATUIT'): ?>
-  <div class="alert alert-warning" style="margin-bottom:24px">
-    <i class="bi bi-bar-chart-fill" style="margin-right:4px"></i> Plan Gratuit : <?= $user['examens_mois'] ?? 0 ?>/<?= FREE_EXAMS_PER_MONTH ?> examens ce mois.
-    <a href="/reussiteplus/tarifs.php" style="font-weight:600;color:var(--gold-dark)">Passer à Premium →</a>
+  <?php
+  $planCfgBanner = PLANS[$user['plan']] ?? [];
+  $maxExamsBanner = $planCfgBanner['examens_mois'] ?? -1;
+  if ($maxExamsBanner !== -1):
+    $used = (int)($user['examens_mois'] ?? 0);
+    $pct  = $maxExamsBanner > 0 ? min(100, round($used / $maxExamsBanner * 100)) : 0;
+    $color = $pct >= 80 ? 'var(--rouge)' : ($pct >= 50 ? 'var(--gold-dark)' : 'var(--primary)');
+  ?>
+  <div class="alert alert-warning" style="margin-bottom:24px;display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+    <div style="flex:1;min-width:200px">
+      <div style="display:flex;align-items:center;gap:6px;font-weight:600;margin-bottom:6px">
+        <i class="bi bi-bar-chart-fill" style="color:<?= $color ?>"></i>
+        Plan <?= e($planCfgBanner['nom'] ?? $user['plan']) ?> : <?= $used ?>/<?= $maxExamsBanner ?> examens utilisés ce mois
+      </div>
+      <div class="progress-bar" style="height:5px">
+        <div class="progress-bar-fill" style="width:<?= $pct ?>%;background:<?= $color ?>"></div>
+      </div>
+    </div>
+    <?php if ($pct >= 80): ?>
+    <a href="/reussiteplus/tarifs.php" class="btn btn-sm btn-gold">Upgrader mon plan →</a>
+    <?php endif; ?>
   </div>
   <?php endif; ?>
 

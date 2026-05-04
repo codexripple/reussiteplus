@@ -162,14 +162,20 @@ function refresh_user(): void {
     $_SESSION['user'] = $user;
 }
 
-// ── Vérifier limite plan gratuit ───────────────────────────
+// ── Vérifier limite mensuelle (tous plans limités) ────────────
 function can_take_exam(): bool {
     $user = current_user();
     if (!$user) return false;
-    if ($user['plan'] !== 'GRATUIT') return true;
 
-    // Réinitialiser compteur mensuel si nouveau mois
-    $today = date('Y-m-d');
+    $plan     = $user['plan'];
+    $planData = PLANS[$plan] ?? [];
+    $maxExams = $planData['examens_mois'] ?? -1;
+
+    // Plans illimités (PREMIUM, ECOLE)
+    if ($maxExams === -1) return true;
+
+    // Réinitialiser compteur si nouveau mois
+    $today     = date('Y-m-d');
     $resetDate = $user['examens_mois_reset'] ?? null;
     if (!$resetDate || date('Y-m', strtotime($resetDate)) !== date('Y-m')) {
         dbQuery(
@@ -179,7 +185,7 @@ function can_take_exam(): bool {
         refresh_user();
         return true;
     }
-    return ($user['examens_mois'] ?? 0) < FREE_EXAMS_PER_MONTH;
+    return ($user['examens_mois'] ?? 0) < $maxExams;
 }
 
 // ── Changer le mot de passe ────────────────────────────────

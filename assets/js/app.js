@@ -3,6 +3,25 @@
  * Global JavaScript utilities
  */
 
+// ─── Dark / Light mode ────────────────────────────────────────
+(function initTheme() {
+  const saved = localStorage.getItem('rp-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = saved || (prefersDark ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+})();
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme') || 'light';
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('rp-theme', next);
+
+  // Feedback toast
+  showToast(next === 'dark' ? '🌙 Mode nuit activé' : '☀️ Mode jour activé', 'info', 2000);
+}
+
 // ─── Flash messages auto-hide ─────────────────────────────────
 document.querySelectorAll('.alert').forEach(el => {
   if (el.dataset.autohide !== 'false') {
@@ -100,3 +119,25 @@ document.querySelectorAll('.pwd-toggle').forEach(btn => {
 document.querySelectorAll('[data-autosubmit]').forEach(el => {
   el.addEventListener('change', () => el.closest('form')?.submit());
 });
+
+// ─── Toast utility ────────────────────────────────────────────
+function showToast(msg, type = 'success', duration = 4000) {
+  let container = document.querySelector('.toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.innerHTML = `<span style="flex:1">${msg}</span><button class="toast-close" onclick="this.parentElement.remove()">×</button>`;
+  container.appendChild(toast);
+  if (duration > 0) {
+    setTimeout(() => {
+      toast.style.transition = 'opacity .3s, transform .3s';
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(8px)';
+      setTimeout(() => toast.remove(), 300);
+    }, duration);
+  }
+}

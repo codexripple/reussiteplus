@@ -55,25 +55,47 @@ include __DIR__ . '/includes/header_app.php';
 
   <!-- Avantages du plan actif -->
   <div class="card" style="margin-bottom:24px">
-    <div class="card-title" style="margin-bottom:16px"><i class="bi bi-gift"></i> Inclus dans votre plan</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
-      <?php $p = PLANS[$user['plan']]; ?>
-      <div style="text-align:center;padding:14px;background:var(--gris-50);border-radius:var(--radius)">
-        <div style="font-size:22px;margin-bottom:4px;color:var(--primary)"><i class="bi bi-pencil-square"></i></div>
-        <div style="font-size:20px;font-weight:800"><?= $p['examens_mois'] === -1 ? '∞' : $p['examens_mois'] ?></div>
-        <div style="font-size:11px;color:var(--gris-500)">examens/mois</div>
+    <div class="card-title" style="margin-bottom:18px"><i class="bi bi-gift"></i> Ce que comprend votre plan <strong><?= e(PLANS[$user['plan']]['nom'] ?? $user['plan']) ?></strong></div>
+    <?php
+    $p = PLANS[$user['plan']];
+    $features = [
+        ['icon' => 'bi-pencil-square', 'color' => 'var(--primary)',  'label' => 'Examens par mois',       'val' => ($p['examens_mois'] === -1 ? 'Illimité' : $p['examens_mois']),     'ok' => true],
+        ['icon' => 'bi-question-circle','color'=> 'var(--bleu)',     'label' => 'Questions / session',    'val' => ($p['questions']    === -1 ? 'Illimité' : $p['questions']),         'ok' => true],
+        ['icon' => 'bi-archive',        'color' => 'var(--violet)', 'label' => 'Archives officielles',   'val' => ($p['archives'] ? 'Accès complet' : 'Archives de base'),           'ok' => ($p['archives'] ?? false)],
+        ['icon' => 'bi-file-text',      'color' => 'var(--gold)',   'label' => 'Corrigés détaillés',     'val' => ($p['corrige'] ? 'Inclus' : 'Non disponible'),                     'ok' => ($p['corrige'] ?? false)],
+        ['icon' => 'bi-cpu',            'color' => 'var(--rouge)',  'label' => 'Assistance IA',          'val' => (($p['ia'] ?? false) ? 'Plan de révision IA' : 'Non disponible'), 'ok' => ($p['ia'] ?? false)],
+        ['icon' => 'bi-award',          'color' => 'var(--primary)','label' => 'Certificats & brevets',  'val' => 'Inclus',                                                          'ok' => true],
+        ['icon' => 'bi-graph-up',       'color' => 'var(--bleu)',   'label' => 'Suivi de progression',  'val' => 'Inclus',                                                           'ok' => true],
+    ];
+    if (isset($p['eleves_max'])):
+        $features[] = ['icon' => 'bi-people', 'color' => 'var(--primary)', 'label' => 'Élèves gérés max', 'val' => $p['eleves_max'] . ' élèves', 'ok' => true];
+    endif;
+    ?>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px">
+      <?php foreach ($features as $f): ?>
+      <div style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--gris-50);border-radius:var(--radius);border:1px solid var(--gris-200)">
+        <div style="width:38px;height:38px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;background:<?= $f['ok'] ? $f['color'] . '18' : 'var(--gris-100)' ?>">
+          <i class="bi <?= $f['icon'] ?>" style="font-size:16px;color:<?= $f['ok'] ? $f['color'] : 'var(--gris-400)' ?>"></i>
+        </div>
+        <div style="min-width:0">
+          <div style="font-size:11px;color:var(--gris-500);text-transform:uppercase;letter-spacing:.4px"><?= $f['label'] ?></div>
+          <div style="font-size:13px;font-weight:700;color:<?= $f['ok'] ? 'var(--gris-900)' : 'var(--gris-400)' ?>"><?= $f['val'] ?></div>
+        </div>
+        <div style="margin-left:auto;flex-shrink:0">
+          <?php if ($f['ok']): ?><i class="bi bi-check-circle-fill" style="color:var(--primary);font-size:14px"></i><?php else: ?><i class="bi bi-lock-fill" style="color:var(--gris-300);font-size:13px"></i><?php endif; ?>
+        </div>
       </div>
-      <div style="text-align:center;padding:14px;background:var(--gris-50);border-radius:var(--radius)">
-        <div style="font-size:22px;margin-bottom:4px;color:var(--primary)"><?= ($p['ia'] ?? false) ? '<i class="bi bi-cpu"></i>' : '<i class="bi bi-book"></i>' ?></div>
-        <div style="font-size:14px;font-weight:700"><?= ($p['ia'] ?? false) ? 'IA active' : 'Standard' ?></div>
-        <div style="font-size:11px;color:var(--gris-500)"><?= ($p['ia'] ?? false) ? 'Plan personnalisé' : 'Révision guidée' ?></div>
-      </div>
-      <div style="text-align:center;padding:14px;background:var(--gris-50);border-radius:var(--radius)">
-        <div style="font-size:22px;margin-bottom:4px;color:var(--primary)"><i class="bi bi-file-earmark-text"></i></div>
-        <div style="font-size:14px;font-weight:700"><?= $user['plan'] !== 'GRATUIT' ? 'Corrigés inclus' : 'Corrigés verrouillés' ?></div>
-        <div style="font-size:11px;color:var(--gris-500)"><?= $user['plan'] !== 'GRATUIT' ? 'Accès complet' : 'Passez à Premium' ?></div>
-      </div>
+      <?php endforeach; ?>
     </div>
+    <?php if (in_array($user['plan'], ['GRATUIT', 'BASIQUE'])): ?>
+    <div style="margin-top:16px;padding:14px;background:linear-gradient(90deg,var(--gold-light),var(--primary-subtle));border-radius:var(--radius);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+      <div style="font-size:13px;color:var(--gris-700)">
+        <i class="bi bi-rocket-takeoff" style="color:var(--gold-dark)"></i>
+        <strong>Débloquez tout</strong> avec le plan Excellence — accès IA, archives illimitées, corrigés complets
+      </div>
+      <a href="/reussiteplus/tarifs.php" class="btn btn-sm btn-gold">Voir le plan Excellence →</a>
+    </div>
+    <?php endif; ?>
   </div>
 
   <!-- Historique des paiements -->

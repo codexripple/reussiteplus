@@ -71,16 +71,37 @@ include __DIR__ . '/includes/header_app.php';
 </div>
 <?php endif; ?>
 
+<?php
+$planCfgDash  = PLANS[$user['plan']] ?? [];
+$maxExamsDash = $planCfgDash['examens_mois'] ?? -1;
+$usedDash     = (int)($user['examens_mois'] ?? 0);
+$pctDash      = ($maxExamsDash > 0) ? min(100, round($usedDash / $maxExamsDash * 100)) : 0;
+?>
 <?php if ($user['plan'] === 'GRATUIT'): ?>
 <div style="background:linear-gradient(135deg,#F5E6C0,#FFF7E6);border:1px solid rgba(201,151,42,0.3);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
-  <div>
+  <div style="flex:1;min-width:200px">
     <strong style="color:var(--gold-dark)"><i class="bi bi-star-fill"></i> Passez à Premium pour un accès illimité</strong>
-    <div style="font-size:13px;color:var(--gris-600);margin-top:3px">
-      <?= $user['examens_mois'] ?? 0 ?>/<?= FREE_EXAMS_PER_MONTH ?> examens utilisés ce mois •
+    <div style="font-size:13px;color:var(--gris-600);margin-top:4px">
+      <?= $usedDash ?>/<?= $maxExamsDash ?> examens utilisés ce mois •
       Archives complètes • Corrigés détaillés • Plan de révision IA
+    </div>
+    <div class="progress-bar" style="margin-top:8px;height:4px">
+      <div class="progress-bar-fill gold" style="width:<?= $pctDash ?>%"></div>
     </div>
   </div>
   <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-sm">Voir les offres →</a>
+</div>
+<?php elseif ($maxExamsDash !== -1 && $pctDash >= 60): ?>
+<div style="background:var(--bleu-light);border:1px solid rgba(59,130,246,0.25);border-radius:var(--radius-lg);padding:14px 20px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+  <div style="flex:1">
+    <strong style="color:var(--bleu)"><i class="bi bi-graph-up"></i> Plan <?= e($planCfgDash['nom'] ?? $user['plan']) ?> — <?= $usedDash ?>/<?= $maxExamsDash ?> examens ce mois</strong>
+    <div class="progress-bar" style="margin-top:8px;height:4px">
+      <div class="progress-bar-fill bleu" style="width:<?= $pctDash ?>%"></div>
+    </div>
+  </div>
+  <?php if ($pctDash >= 85): ?>
+  <a href="/reussiteplus/tarifs.php" class="btn btn-sm btn-outline-primary">Upgrader →</a>
+  <?php endif; ?>
 </div>
 <?php elseif ($planJoursRestants !== null && $planJoursRestants <= 7): ?>
 <div class="alert alert-warning">

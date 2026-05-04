@@ -18,6 +18,14 @@ require_once __DIR__ . '/icons.php';
 <link rel="stylesheet" href="/reussiteplus/assets/css/bootstrap-icons.css?v=2">
 <link rel="stylesheet" href="/reussiteplus/assets/css/app.css">
 <?= isset($extraHead) ? $extraHead : '' ?>
+<!-- Appliquer le thème AVANT le rendu pour éviter le flash -->
+<script>
+(function(){
+  var t = localStorage.getItem('rp-theme');
+  var p = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  document.documentElement.setAttribute('data-theme', t || (p ? 'dark' : 'light'));
+})();
+</script>
 </head>
 <body>
 <div class="app-wrapper">
@@ -138,6 +146,10 @@ require_once __DIR__ . '/icons.php';
       <i class="bi bi-bell"></i>
       <?php if ($notifs > 0): ?><span class="notif-dot"></span><?php endif; ?>
     </a>
+    <button class="theme-toggle" id="themeToggle" title="Changer le thème" onclick="toggleTheme()">
+      <i class="bi bi-moon-stars-fill icon-moon"></i>
+      <i class="bi bi-sun-fill icon-sun"></i>
+    </button>
   </header>
 
   <!-- PAGE CONTENT -->
