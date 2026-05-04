@@ -90,6 +90,13 @@ define('METHODES_PAIEMENT', [
 // Limites plan gratuit
 define('FREE_EXAMS_PER_MONTH', 5);
 
+// ── Intelligence Artificielle (Groq API — gratuit) ──────────
+// Obtenez votre clé gratuite sur https://console.groq.com
+define('GROQ_API_KEY',   getenv('GROQ_API_KEY') ?: '');
+define('GROQ_API_URL',   'https://api.groq.com/openai/v1/chat/completions');
+define('GROQ_MODEL',     'llama-3.3-70b-versatile');
+define('GROQ_MAX_TOKENS', 1200);
+
 // Upload
 define('UPLOAD_DIR',  __DIR__ . '/../uploads/');
 define('UPLOAD_URL',  APP_URL . '/uploads/');

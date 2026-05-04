@@ -87,8 +87,16 @@ require_once __DIR__ . '/icons.php';
     <a href="/reussiteplus/progression.php" class="nav-item <?= $pageActive === 'progression' ? 'active' : '' ?>">
       <div class="nav-icon"><i class="bi bi-graph-up"></i></div>
       <span class="nav-label">Ma progression</span>
+    </a>    <?php $haIASidebar = PLANS[$userPlan]['ia'] ?? false; ?>
+    <a href="/reussiteplus/revision.php" class="nav-item <?= $pageActive === 'revision' ? 'active' : '' ?>">
+      <div class="nav-icon"><i class="bi bi-cpu"></i></div>
+      <span class="nav-label">Révision IA</span>
+      <?php if ($haIASidebar): ?>
+      <span class="nav-badge" style="background:linear-gradient(135deg,#7c3aed,var(--primary));font-size:9px;padding:1px 5px">IA</span>
+      <?php else: ?>
+      <span style="font-size:10px;margin-left:auto">🔒</span>
+      <?php endif; ?>
     </a>
-
     <a href="/reussiteplus/resultat.php" class="nav-item <?= $pageActive === 'resultat' ? 'active' : '' ?>">
       <div class="nav-icon"><i class="bi bi-trophy"></i></div>
       <span class="nav-label">Mes résultats</span>
