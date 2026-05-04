@@ -32,7 +32,7 @@ define('PLANS', [
         'corrige'      => false,
         'ia'           => false,
         'couleur'      => '#6B7280',
-        'icone'        => '🎒',
+        'icone'        => 'bi bi-backpack',
     ],
     'BASIQUE' => [
         'nom'          => 'Basique',
@@ -44,7 +44,7 @@ define('PLANS', [
         'corrige'      => true,
         'ia'           => false,
         'couleur'      => '#1E5FAD',
-        'icone'        => '📘',
+        'icone'        => 'bi bi-book',
         'populaire'    => false,
     ],
     'PREMIUM' => [
@@ -57,7 +57,7 @@ define('PLANS', [
         'corrige'      => true,
         'ia'           => true,
         'couleur'      => '#C9972A',
-        'icone'        => '⭐',
+        'icone'        => 'bi bi-star',
         'populaire'    => true,
     ],
     'ECOLE' => [
@@ -71,15 +71,15 @@ define('PLANS', [
         'ia'           => true,
         'eleves_max'   => 50,
         'couleur'      => '#007A5E',
-        'icone'        => '🏫',
+        'icone'        => 'bi bi-building',
     ],
 ]);
 
 // Méthodes de paiement Mobile Money
 define('METHODES_PAIEMENT', [
-    'MPESA'        => ['nom' => 'M-Pesa',       'numero' => '+243 81X XXX XXX', 'icone' => '💚'],
-    'AIRTEL_MONEY' => ['nom' => 'Airtel Money',  'numero' => '+243 99X XXX XXX', 'icone' => '🔴'],
-    'ORANGE_MONEY' => ['nom' => 'Orange Money',  'numero' => '+243 84X XXX XXX', 'icone' => '🟠'],
+    'MPESA'        => ['nom' => 'M-Pesa',       'numero' => '+243 81X XXX XXX', 'icone' => 'bi bi-phone'],
+    'AIRTEL_MONEY' => ['nom' => 'Airtel Money',  'numero' => '+243 99X XXX XXX', 'icone' => 'bi bi-phone'],
+    'ORANGE_MONEY' => ['nom' => 'Orange Money',  'numero' => '+243 84X XXX XXX', 'icone' => 'bi bi-phone'],
 ]);
 
 // Limites plan gratuit

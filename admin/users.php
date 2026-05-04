@@ -86,7 +86,7 @@ include __DIR__ . '/../includes/header_app.php';
       <?php endforeach; ?>
     </select>
   </div>
-  <button type="submit" class="btn btn-primary">🔍 Filtrer</button>
+  <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Filtrer</button>
   <?php if ($search || $filPlan): ?>
   <a href="/reussiteplus/admin/users.php" class="btn btn-ghost">Réinitialiser</a>
   <?php endif; ?>
@@ -94,7 +94,7 @@ include __DIR__ . '/../includes/header_app.php';
 
 <div class="card">
   <div class="card-header">
-    <div class="card-title">👥 Utilisateurs (<?= $total ?>)</div>
+    <div class="card-title"><i class="bi bi-people"></i> Utilisateurs (<?= $total ?>)</div>
     <div style="font-size:12px;color:var(--gris-500)">Page <?= $page ?>/<?= $pagination['pages'] ?></div>
   </div>
 

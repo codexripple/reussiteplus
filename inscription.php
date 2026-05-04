@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/auth.php';
@@ -10,7 +10,7 @@ $errors = [];
 $provinces = [];
 try { $provinces = dbAll("SELECT id, nom FROM provinces ORDER BY nom"); } catch (Exception $e) {}
 
-// Récupérer code referral depuis URL
+// RÃ©cupÃ©rer code referral depuis URL
 $refCode = trim($_GET['ref'] ?? '');
 $referralUser = null;
 if ($refCode) {
@@ -21,7 +21,7 @@ if ($refCode) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_verify()) {
-        $errors[] = 'Token de sécurité invalide.';
+        $errors[] = 'Token de sÃ©curitÃ© invalide.';
     } else {
         $nom    = trim($_POST['nom'] ?? '');
         $prenom = trim($_POST['prenom'] ?? '');
@@ -30,9 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $classe = trim($_POST['classe'] ?? '');
         $provId = $_POST['province_id'] ?? null;
 
-        if (empty($nom) || empty($prenom)) $errors[] = 'Le nom et prénom sont requis.';
+        if (empty($nom) || empty($prenom)) $errors[] = 'Le nom et prÃ©nom sont requis.';
         if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Email invalide.';
-        if (strlen($pass) < 8) $errors[] = 'Mot de passe : minimum 8 caractères.';
+        if (strlen($pass) < 8) $errors[] = 'Mot de passe : minimum 8 caractÃ¨res.';
         if ($_POST['password_confirm'] !== $pass) $errors[] = 'Les mots de passe ne correspondent pas.';
         if (empty($_POST['cgv'])) $errors[] = 'Veuillez accepter les conditions d\'utilisation.';
 
@@ -62,9 +62,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inscription gratuite — RÉUSSITE+</title>
+<title>Inscription gratuite â€” RÃ‰USSITE+</title>
 <link rel="icon" type="image/svg+xml" href="/reussiteplus/assets/img/favicon.svg">
 <link rel="stylesheet" href="/reussiteplus/assets/css/fonts.css">
+<link rel="stylesheet" href="/reussiteplus/assets/css/bootstrap-icons.css">
+<link rel="stylesheet" href="/reussiteplus/assets/css/bootstrap-icons.css">
 <style>
 :root{--primary:#007A5E;--primary-dark:#005A45;--primary-light:#00A97F;--primary-subtle:#E8F5F1;--gold:#C9972A;--rouge:#C9342A;--noir:#0D1117;--gris-900:#1C2433;--gris-700:#4A5568;--gris-600:#6B7280;--gris-400:#A0AEC0;--gris-200:#E2E8F0;--gris-100:#F1F5F9;--blanc:#FFFFFF;--font-display:'Poppins',sans-serif;--font-body:'Poppins',sans-serif;--radius:10px;--radius-lg:16px;--shadow-lg:0 8px 32px rgba(0,0,0,.12);--transition:200ms cubic-bezier(0.4,0,0.2,1);}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -104,30 +106,30 @@ select.form-control{cursor:pointer;}
 <body>
 <div class="auth-wrap">
   <div class="auth-logo">
-    <img src="/reussiteplus/assets/img/logo.svg" alt="RÉUSSITE+" height="52" style="display:block;margin:0 auto 8px">
-    <div style="font-size:13px;color:var(--gris-600);margin-top:4px">Examens officiels RDC — ENAFEP, TENASOSP, État</div>
+    <img src="/reussiteplus/assets/img/logo.svg" alt="RÃ‰USSITE+" height="52" style="display:block;margin:0 auto 8px">
+    <div style="font-size:13px;color:var(--gris-600);margin-top:4px">Examens officiels RDC â€” ENAFEP, TENASOSP, Ã‰tat</div>
   </div>
 
   <div class="auth-card">
-    <div class="auth-title">Créer mon compte</div>
-    <div class="auth-desc">Plus de 12 000 élèves préparent leurs examens ici. Rejoins-les, c'est gratuit.</div>
+    <div class="auth-title">CrÃ©er mon compte</div>
+    <div class="auth-desc">Plus de 12 000 Ã©lÃ¨ves prÃ©parent leurs examens ici. Rejoins-les, c'est gratuit.</div>
 
     <?php if ($referralUser): ?>
     <div class="referral-banner">
-      🎁 <strong><?= e($referralUser['prenom']) ?></strong> vous a invité ! Vous recevrez 1 mois de Basique offert.
+      ðŸŽ <strong><?= e($referralUser['prenom']) ?></strong> vous a invitÃ© ! Vous recevrez 1 mois de Basique offert.
     </div>
     <?php endif; ?>
 
     <div class="free-badge">
-      ✅ <strong>Compte gratuit</strong> — 5 examens par mois, sans carte bancaire
+      âœ… <strong>Compte gratuit</strong> â€” 5 examens par mois, sans carte bancaire
     </div>
 
     <?php if ($errors): ?>
     <div class="error-box">
       <?php if (count($errors) === 1): ?>
-        ⚠️ <?= e($errors[0]) ?>
+        âš ï¸ <?= e($errors[0]) ?>
       <?php else: ?>
-        ⚠️ Veuillez corriger les erreurs suivantes :
+        âš ï¸ Veuillez corriger les erreurs suivantes :
         <ul><?php foreach ($errors as $e2): ?><li><?= e($e2) ?></li><?php endforeach; ?></ul>
       <?php endif; ?>
     </div>
@@ -139,7 +141,7 @@ select.form-control{cursor:pointer;}
 
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label" for="prenom">Prénom *</label>
+          <label class="form-label" for="prenom">PrÃ©nom *</label>
           <input class="form-control" type="text" id="prenom" name="prenom"
                  placeholder="Jean" value="<?= e($_POST['prenom'] ?? '') ?>" required autocomplete="given-name">
         </div>
@@ -160,7 +162,7 @@ select.form-control{cursor:pointer;}
         <div class="form-group">
           <label class="form-label" for="province_id">Province</label>
           <select class="form-control" id="province_id" name="province_id">
-            <option value="">— Sélectionner —</option>
+            <option value="">â€” SÃ©lectionner â€”</option>
             <?php foreach ($provinces as $p): ?>
             <option value="<?= e($p['id']) ?>" <?= ($_POST['province_id'] ?? '') === $p['id'] ? 'selected' : '' ?>>
               <?= e($p['nom']) ?>
@@ -171,30 +173,30 @@ select.form-control{cursor:pointer;}
         <div class="form-group">
           <label class="form-label" for="classe">Classe</label>
           <select class="form-control" id="classe" name="classe">
-            <option value="">— Sélectionner —</option>
+            <option value="">â€” SÃ©lectionner â€”</option>
             <optgroup label="Primaire">
-              <option value="5ème primaire">5ème primaire</option>
-              <option value="6ème primaire">6ème primaire</option>
+              <option value="5Ã¨me primaire">5Ã¨me primaire</option>
+              <option value="6Ã¨me primaire">6Ã¨me primaire</option>
             </optgroup>
             <optgroup label="Secondaire">
-              <option value="1ère secondaire">1ère secondaire</option>
-              <option value="2ème secondaire">2ème secondaire</option>
-              <option value="3ème secondaire">3ème secondaire</option>
-              <option value="4ème secondaire">4ème secondaire</option>
-              <option value="5ème secondaire">5ème secondaire</option>
-              <option value="6ème secondaire">6ème secondaire</option>
+              <option value="1Ã¨re secondaire">1Ã¨re secondaire</option>
+              <option value="2Ã¨me secondaire">2Ã¨me secondaire</option>
+              <option value="3Ã¨me secondaire">3Ã¨me secondaire</option>
+              <option value="4Ã¨me secondaire">4Ã¨me secondaire</option>
+              <option value="5Ã¨me secondaire">5Ã¨me secondaire</option>
+              <option value="6Ã¨me secondaire">6Ã¨me secondaire</option>
             </optgroup>
           </select>
         </div>
       </div>
 
       <div class="form-group">
-        <label class="form-label" for="password">Mot de passe * <span style="font-size:11px;color:var(--gris-400)">(min. 8 caractères)</span></label>
+        <label class="form-label" for="password">Mot de passe * <span style="font-size:11px;color:var(--gris-400)">(min. 8 caractÃ¨res)</span></label>
         <div class="password-wrap">
           <input class="form-control" type="password" id="password" name="password"
                  placeholder="Choisissez un mot de passe fort" required autocomplete="new-password"
                  oninput="checkStrength(this.value)">
-          <button type="button" class="password-toggle" onclick="togglePassword('password')">👁️</button>
+          <button type="button" class="password-toggle" onclick="togglePassword('password')">ðŸ‘ï¸</button>
         </div>
         <div id="strength-bar" style="height:3px;border-radius:3px;margin-top:6px;background:var(--gris-200);transition:all .3s"></div>
         <div id="strength-text" style="font-size:11px;color:var(--gris-400);margin-top:3px"></div>
@@ -204,29 +206,29 @@ select.form-control{cursor:pointer;}
         <label class="form-label" for="password_confirm">Confirmer le mot de passe *</label>
         <div class="password-wrap">
           <input class="form-control" type="password" id="password_confirm" name="password_confirm"
-                 placeholder="Répétez votre mot de passe" required autocomplete="new-password">
-          <button type="button" class="password-toggle" onclick="togglePassword('password_confirm')">👁️</button>
+                 placeholder="RÃ©pÃ©tez votre mot de passe" required autocomplete="new-password">
+          <button type="button" class="password-toggle" onclick="togglePassword('password_confirm')">ðŸ‘ï¸</button>
         </div>
       </div>
 
       <div class="form-group">
         <label class="checkbox-wrap">
           <input type="checkbox" name="cgv" <?= isset($_POST['cgv']) ? 'checked' : '' ?> required>
-          <span>J'accepte les <a href="/reussiteplus/cgv.php" target="_blank" style="color:var(--primary)">conditions d'utilisation</a> et la <a href="/reussiteplus/confidentialite.php" target="_blank" style="color:var(--primary)">politique de confidentialité</a>.</span>
+          <span>J'accepte les <a href="/reussiteplus/cgv.php" target="_blank" style="color:var(--primary)">conditions d'utilisation</a> et la <a href="/reussiteplus/confidentialite.php" target="_blank" style="color:var(--primary)">politique de confidentialitÃ©</a>.</span>
         </label>
       </div>
 
       <button type="submit" class="btn btn-primary" id="submitBtn">
-        Créer mon compte gratuitement →
+        CrÃ©er mon compte gratuitement â†’
       </button>
     </form>
   </div>
 
   <div class="auth-footer">
-    Déjà un compte ? <a href="/reussiteplus/connexion.php">Se connecter</a>
+    DÃ©jÃ  un compte ? <a href="/reussiteplus/connexion.php">Se connecter</a>
   </div>
   <div class="auth-footer" style="margin-top:8px">
-    <a href="/reussiteplus/index.php" style="color:var(--gris-500)">← Retour à l'accueil</a>
+    <a href="/reussiteplus/index.php" style="color:var(--gris-500)">â† Retour Ã  l'accueil</a>
   </div>
 </div>
 
@@ -244,17 +246,18 @@ function checkStrength(val) {
   const bar = document.getElementById('strength-bar');
   const txt = document.getElementById('strength-text');
   const colors = ['#C9342A','#C9972A','#1E5FAD','#007A5E'];
-  const labels = ['Très faible','Moyen','Fort','Très fort'];
+  const labels = ['TrÃ¨s faible','Moyen','Fort','TrÃ¨s fort'];
   if (val.length === 0) { bar.style.width='0'; txt.textContent=''; return; }
   bar.style.background = colors[s-1] || '#C9342A';
   bar.style.width = (s * 25) + '%';
   txt.style.color = colors[s-1] || '#C9342A';
-  txt.textContent = labels[s-1] || 'Très faible';
+  txt.textContent = labels[s-1] || 'TrÃ¨s faible';
 }
 document.querySelector('form').addEventListener('submit', function() {
   document.getElementById('submitBtn').disabled = true;
-  document.getElementById('submitBtn').textContent = 'Création en cours...';
+  document.getElementById('submitBtn').textContent = 'CrÃ©ation en cours...';
 });
 </script>
 </body>
 </html>
+

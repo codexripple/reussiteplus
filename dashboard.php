@@ -66,7 +66,7 @@ include __DIR__ . '/includes/header_app.php';
 
 <?php if ($welcome): ?>
 <div class="alert alert-success" style="margin-bottom:24px">
-  🎉 Bienvenue sur RÉUSSITE+, <?= e($user['prenom']) ?> ! Votre compte est prêt. Commencez dès maintenant.
+  <i class="bi bi-balloon-heart" style="font-size:22px;margin-right:6px"></i> Bienvenue sur RÉUSSITE+, <?= e($user['prenom']) ?> ! Votre compte est prêt. Commencez dès maintenant.
   <a href="/reussiteplus/tarifs.php" style="font-weight:600;color:var(--primary-dark);margin-left:8px">Découvrir le Premium →</a>
 </div>
 <?php endif; ?>
@@ -74,7 +74,7 @@ include __DIR__ . '/includes/header_app.php';
 <?php if ($user['plan'] === 'GRATUIT'): ?>
 <div style="background:linear-gradient(135deg,#F5E6C0,#FFF7E6);border:1px solid rgba(201,151,42,0.3);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
   <div>
-    <strong style="color:var(--gold-dark)">⭐ Passez à Premium pour un accès illimité</strong>
+    <strong style="color:var(--gold-dark)"><i class="bi bi-star-fill"></i> Passez à Premium pour un accès illimité</strong>
     <div style="font-size:13px;color:var(--gris-600);margin-top:3px">
       <?= $user['examens_mois'] ?? 0 ?>/<?= FREE_EXAMS_PER_MONTH ?> examens utilisés ce mois •
       Archives complètes • Corrigés détaillés • Plan de révision IA
@@ -84,7 +84,7 @@ include __DIR__ . '/includes/header_app.php';
 </div>
 <?php elseif ($planJoursRestants !== null && $planJoursRestants <= 7): ?>
 <div class="alert alert-warning">
-  ⏰ Votre plan <?= e($user['plan']) ?> expire dans <strong><?= $planJoursRestants ?> jour(s)</strong>.
+  <i class="bi bi-clock-history" style="margin-right:4px"></i> Votre plan <?= e($user['plan']) ?> expire dans <strong><?= $planJoursRestants ?> jour(s)</strong>.
   <a href="/reussiteplus/abonnement.php" style="font-weight:600;margin-left:8px">Renouveler →</a>
 </div>
 <?php endif; ?>
@@ -92,24 +92,24 @@ include __DIR__ . '/includes/header_app.php';
 <!-- STATS -->
 <div class="stats-grid">
   <div class="stat-card green">
-    <div class="stat-label">📊 Score moyen</div>
+    <div class="stat-label"><i class="bi bi-bar-chart"></i> Score moyen</div>
     <div class="stat-value" style="color:<?= score_couleur((float)($user['score_moyen'] ?? 0)) ?>">
       <?= number_format((float)($user['score_moyen'] ?? 0), 1) ?>%
     </div>
     <div class="stat-sub"><?= score_label((float)($user['score_moyen'] ?? 0)) ?></div>
   </div>
   <div class="stat-card gold">
-    <div class="stat-label">✏️ Examens passés</div>
+    <div class="stat-label"><i class="bi bi-pencil-square"></i> Examens passés</div>
     <div class="stat-value"><?= number_format((int)($user['total_examens'] ?? 0)) ?></div>
     <div class="stat-sub">Total cumulé</div>
   </div>
   <div class="stat-card bleu">
-    <div class="stat-label">🧠 Questions répondues</div>
+    <div class="stat-label"><i class="bi bi-lightbulb"></i> Questions répondues</div>
     <div class="stat-value"><?= number_format((int)($user['total_questions'] ?? 0)) ?></div>
     <div class="stat-sub">Total cumulé</div>
   </div>
   <div class="stat-card rouge">
-    <div class="stat-label">🔥 Série actuelle</div>
+    <div class="stat-label"><i class="bi bi-fire"></i> Série actuelle</div>
     <div class="stat-value"><?= (int)($stats['streak_actuel'] ?? 0) ?></div>
     <div class="stat-sub">jours consécutifs</div>
   </div>
@@ -121,7 +121,7 @@ include __DIR__ . '/includes/header_app.php';
   <!-- Activité -->
   <div class="card">
     <div class="card-header">
-      <div class="card-title">📅 Activité (7 derniers jours)</div>
+      <div class="card-title"><i class="bi bi-calendar3"></i> Activité (7 derniers jours)</div>
     </div>
     <div id="activity-chart" style="display:flex;align-items:flex-end;gap:8px;height:80px">
       <?php
@@ -147,7 +147,7 @@ include __DIR__ . '/includes/header_app.php';
   <!-- Progression par matière -->
   <div class="card">
     <div class="card-header">
-      <div class="card-title">📚 Progression par matière</div>
+      <div class="card-title"><i class="bi bi-book"></i> Progression par matière</div>
       <a href="/reussiteplus/progression.php" class="section-link">Tout voir →</a>
     </div>
     <?php if ($progressMatieres): ?>
@@ -164,7 +164,7 @@ include __DIR__ . '/includes/header_app.php';
       <?php endforeach; ?>
     <?php else: ?>
       <div style="text-align:center;padding:20px;color:var(--gris-500);font-size:13px">
-        📊 Passez vos premiers examens pour voir votre progression
+        <i class="bi bi-bar-chart" style="margin-right:4px"></i> Passez vos premiers examens pour voir votre progression
       </div>
     <?php endif; ?>
   </div>
@@ -174,7 +174,7 @@ include __DIR__ . '/includes/header_app.php';
 <?php if ($recentSessions): ?>
 <div style="margin-bottom:24px">
   <div class="section-header">
-    <div class="section-title">🕐 Derniers examens passés</div>
+    <div class="section-title"><i class="bi bi-clock-history"></i> Derniers examens passés</div>
     <a href="/reussiteplus/progression.php" class="section-link">Historique complet →</a>
   </div>
   <div class="table-wrap">
@@ -216,7 +216,7 @@ include __DIR__ . '/includes/header_app.php';
 <!-- Archives recommandées -->
 <div>
   <div class="section-header">
-    <div class="section-title">📁 Archives recommandées</div>
+    <div class="section-title"><i class="bi bi-folder2-open"></i> Archives recommandées</div>
     <a href="/reussiteplus/archives.php" class="section-link">Toutes les archives →</a>
   </div>
   <?php if ($archivesRec): ?>
@@ -230,11 +230,11 @@ include __DIR__ . '/includes/header_app.php';
       <div class="exam-card-body">
         <div class="exam-card-title"><?= e($arc['titre']) ?></div>
         <div class="exam-meta">
-          <span class="exam-meta-item">📚 <?= e($arc['matiere_nom']) ?></span>
-          <span class="exam-meta-item">👁️ <?= number_format($arc['vues']) ?> vues</span>
+          <span class="exam-meta-item"><i class="bi bi-book"></i> <?= e($arc['matiere_nom']) ?></span>
+          <span class="exam-meta-item"><i class="bi bi-eye"></i> <?= number_format($arc['vues']) ?> vues</span>
         </div>
         <?php if ($arc['premium_only'] && $user['plan'] === 'GRATUIT'): ?>
-        <div style="margin-top:8px;font-size:11px;color:var(--gold-dark)">⭐ Réservé aux membres Premium</div>
+        <div style="margin-top:8px;font-size:11px;color:var(--gold-dark)"><i class="bi bi-star-fill"></i> Réservé aux membres Premium</div>
         <?php endif; ?>
       </div>
       <div class="exam-card-footer">
@@ -250,7 +250,7 @@ include __DIR__ . '/includes/header_app.php';
   </div>
   <?php else: ?>
   <div class="card" style="text-align:center;padding:40px">
-    <div style="font-size:48px;margin-bottom:12px">📚</div>
+    <div style="font-size:48px;margin-bottom:12px"><i class="bi bi-archive" style="font-size:48px;color:var(--gris-300)"></i></div>
     <div style="font-size:15px;font-weight:600;margin-bottom:8px">Aucune archive disponible</div>
     <div style="font-size:13px;color:var(--gris-500)">Les archives seront ajoutées prochainement par l'équipe.</div>
   </div>
@@ -260,17 +260,17 @@ include __DIR__ . '/includes/header_app.php';
 <!-- Actions rapides -->
 <div style="margin-top:24px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
   <a href="/reussiteplus/examen.php" class="card" style="text-align:center;cursor:pointer;text-decoration:none;transition:all .2s" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
-    <div style="font-size:36px;margin-bottom:10px">✏️</div>
+    <div style="font-size:36px;margin-bottom:10px"><i class="bi bi-pencil-square" style="font-size:36px;color:var(--primary)"></i></div>
     <div style="font-family:var(--font-display);font-weight:700;margin-bottom:4px">Passer un examen</div>
     <div style="font-size:12px;color:var(--gris-500)">Simuler les conditions réelles</div>
   </a>
   <a href="/reussiteplus/questions.php" class="card" style="text-align:center;cursor:pointer;text-decoration:none;transition:all .2s" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
-    <div style="font-size:36px;margin-bottom:10px">🧠</div>
+    <div style="font-size:36px;margin-bottom:10px"><i class="bi bi-lightbulb" style="font-size:36px;color:var(--gold)"></i></div>
     <div style="font-family:var(--font-display);font-weight:700;margin-bottom:4px">S'entraîner</div>
     <div style="font-size:12px;color:var(--gris-500)">Banque de 15 000+ questions</div>
   </a>
   <a href="/reussiteplus/archives.php" class="card" style="text-align:center;cursor:pointer;text-decoration:none;transition:all .2s" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform=''">
-    <div style="font-size:36px;margin-bottom:10px">📁</div>
+    <div style="font-size:36px;margin-bottom:10px"><i class="bi bi-folder2-open" style="font-size:36px;color:var(--bleu)"></i></div>
     <div style="font-family:var(--font-display);font-weight:700;margin-bottom:4px">Archives</div>
     <div style="font-size:12px;color:var(--gris-500)">Sujets & corrigés officiels</div>
   </a>

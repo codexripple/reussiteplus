@@ -16,10 +16,10 @@ function format_prix(int $montant, string $devise = 'CDF'): string {
 // ── Badge plan utilisateur ─────────────────────────────────
 function badge_plan(string $plan): string {
     $map = [
-        'GRATUIT' => ['🎒 Gratuit', '#6B7280'],
-        'BASIQUE' => ['📘 Basique', '#1E5FAD'],
-        'PREMIUM' => ['⭐ Premium', '#C9972A'],
-        'ECOLE'   => ['🏫 École',   '#007A5E'],
+        'GRATUIT' => ['<i class="bi bi-backpack"></i> Gratuit', '#6B7280'],
+        'BASIQUE' => ['<i class="bi bi-book"></i> Basique', '#1E5FAD'],
+        'PREMIUM' => ['<i class="bi bi-star-fill"></i> Premium', '#C9972A'],
+        'ECOLE'   => ['<i class="bi bi-building"></i> École',   '#007A5E'],
     ];
     [$label, $color] = $map[$plan] ?? ['Gratuit', '#6B7280'];
     return "<span style=\"background:{$color}20;color:{$color};padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600\">{$label}</span>";

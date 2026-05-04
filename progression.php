@@ -60,34 +60,34 @@ include __DIR__ . '/includes/header_app.php';
 <!-- Stats globales -->
 <div class="stats-grid" style="grid-template-columns:repeat(5,1fr);margin-bottom:24px">
   <div class="stat-card green">
-    <div class="stat-label">📊 Score moyen</div>
+    <div class="stat-label"><i class="bi bi-bar-chart"></i> Score moyen</div>
     <div class="stat-value" style="color:<?= score_couleur((float)($user['score_moyen']??0)) ?>"><?= number_format((float)($user['score_moyen']??0),1) ?>%</div>
     <div class="stat-sub"><?= score_label((float)($user['score_moyen']??0)) ?></div>
   </div>
   <div class="stat-card gold">
-    <div class="stat-label">✏️ Examens</div>
+    <div class="stat-label"><i class="bi bi-pencil-square"></i> Examens</div>
     <div class="stat-value"><?= number_format((int)($user['total_examens']??0)) ?></div>
     <div class="stat-sub">Au total</div>
   </div>
   <div class="stat-card bleu">
-    <div class="stat-label">🧠 Questions</div>
+    <div class="stat-label"><i class="bi bi-lightbulb"></i> Questions</div>
     <div class="stat-value"><?= number_format((int)($user['total_questions']??0)) ?></div>
     <div class="stat-sub">Répondues</div>
   </div>
   <div class="stat-card rouge">
-    <div class="stat-label">🔥 Série</div>
+    <div class="stat-label"><i class="bi bi-fire"></i> Série</div>
     <div class="stat-value"><?= (int)($stats['streak_actuel']??0) ?></div>
     <div class="stat-sub">jours consécutifs</div>
   </div>
   <?php if ($classement): ?>
   <div class="stat-card" style="--accent-color:var(--gold)">
-    <div class="stat-label">🏆 Classement</div>
+    <div class="stat-label"><i class="bi bi-trophy"></i> Classement</div>
     <div class="stat-value">#<?= (int)$classement['rang'] ?></div>
     <div class="stat-sub">Dans ma province</div>
   </div>
   <?php else: ?>
   <div class="stat-card">
-    <div class="stat-label">📅 Membre depuis</div>
+    <div class="stat-label"><i class="bi bi-calendar3"></i> Membre depuis</div>
     <div class="stat-value" style="font-size:18px"><?= date('m/Y', strtotime($user['created_at'])) ?></div>
     <div class="stat-sub"><?= floor((time()-strtotime($user['created_at']))/86400) ?> jours</div>
   </div>
@@ -97,7 +97,7 @@ include __DIR__ . '/includes/header_app.php';
 <!-- Calendrier activité 30j -->
 <div class="card" style="margin-bottom:24px">
   <div class="card-header">
-    <div class="card-title">📅 Activité — 30 derniers jours</div>
+      <div class="card-title"><i class="bi bi-calendar3"></i> Activité — 30 derniers jours</div>
     <div style="font-size:12px;color:var(--gris-500)"><?= count($activite30j) ?> jours actifs</div>
   </div>
   <div style="display:flex;gap:4px;align-items:flex-end;height:60px;overflow-x:auto;padding-bottom:4px">
@@ -125,7 +125,7 @@ include __DIR__ . '/includes/header_app.php';
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px">
   <div class="card">
     <div class="card-header">
-      <div class="card-title">📚 Progression par matière</div>
+      <div class="card-title"><i class="bi bi-book"></i> Progression par matière</div>
     </div>
     <?php foreach ($progressMatieres as $pm):
       $pct2 = (float)$pm['score_moyen'];

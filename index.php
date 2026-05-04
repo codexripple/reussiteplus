@@ -25,6 +25,7 @@ $user = is_logged() ? current_user() : null;
 <link rel="icon" type="image/svg+xml" href="/reussiteplus/assets/img/favicon.svg">
 <meta name="description" content="Préparez l'ENAFEP, TENASOSP, Tests diocésains et Examen d'État avec les archives officielles, QCM et plans de révision IA. Rejoignez +12 000 élèves en RDC.">
 <link rel="stylesheet" href="/reussiteplus/assets/css/fonts.css">
+<link rel="stylesheet" href="/reussiteplus/assets/css/bootstrap-icons.css">
 <style>
 :root {
   --primary: #007A5E; --primary-dark: #005A45; --primary-light: #00A97F; --primary-subtle: #E8F5F1;
@@ -270,32 +271,32 @@ a { text-decoration: none; color: inherit; }
 
     <div class="features-grid">
       <div class="feature-card">
-        <div class="feature-icon">📁</div>
+        <div class="feature-icon"><i class="bi bi-folder2-open"></i></div>
         <div class="feature-title">Sujets & corrigés officiels</div>
         <div class="feature-desc">ENAFEP, TENASOSP, Examen d'État, Tests diocésains — des centaines de sujets classés par matière, année et province. Exactement ce qui tombe aux examens.</div>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">✏️</div>
+        <div class="feature-icon"><i class="bi bi-pencil-square"></i></div>
         <div class="feature-title">Entraîne-toi dans les vraies conditions</div>
         <div class="feature-desc">Minuteur, QCM, score immédiat. Tu peux refaire le même examen autant de fois que tu veux — jusqu'à ce que tu le maîtrises vraiment.</div>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">🧠</div>
+        <div class="feature-icon"><i class="bi bi-lightbulb"></i></div>
         <div class="feature-title">Des milliers de questions classées</div>
         <div class="feature-desc">Par matière, par chapitre, par niveau. Chaque question a son explication. Tu sais exactement pourquoi tu t'es trompé, pas juste quelle réponse était bonne.</div>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">📈</div>
+        <div class="feature-icon"><i class="bi bi-graph-up-arrow"></i></div>
         <div class="feature-title">Tu vois où tu en es</div>
         <div class="feature-desc">Score par matière, jours consécutifs, classement provincial. Plus besoin de deviner si tu progresses — les chiffres te le disent.</div>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">🗓️</div>
+        <div class="feature-icon"><i class="bi bi-calendar-check"></i></div>
         <div class="feature-title">Plan de révision sur-mesure (Premium)</div>
         <div class="feature-desc">Tu entres la date de ton examen. On calcule ce qu'il faut réviser chaque semaine en fonction de tes points faibles. Pas de panique, juste un plan clair.</div>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">📶</div>
+        <div class="feature-icon"><i class="bi bi-wifi-off"></i></div>
         <div class="feature-title">Fonctionne sans connexion</div>
         <div class="feature-desc">Pas de wifi ? Pas de problème. Les archives et les QCM téléchargés restent disponibles sur ton téléphone même hors-ligne.</div>
       </div>

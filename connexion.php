@@ -1,17 +1,17 @@
-<?php
+﻿<?php
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/helpers.php';
 
-// Rediriger si déjà connecté
+// Rediriger si dÃ©jÃ  connectÃ©
 if (is_logged()) { header('Location: /reussiteplus/dashboard.php'); exit; }
 
 $errors = [];
 $redirect = $_GET['redirect'] ?? '/reussiteplus/dashboard.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!csrf_verify()) { $errors[] = 'Token de sécurité invalide. Rechargez la page.'; }
+    if (!csrf_verify()) { $errors[] = 'Token de sÃ©curitÃ© invalide. Rechargez la page.'; }
     else {
         $result = auth_login(
             trim($_POST['email'] ?? ''),
@@ -31,9 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Connexion — RÉUSSITE+</title>
+<title>Connexion â€” RÃ‰USSITE+</title>
 <link rel="icon" type="image/svg+xml" href="/reussiteplus/assets/img/favicon.svg">
 <link rel="stylesheet" href="/reussiteplus/assets/css/fonts.css">
+<link rel="stylesheet" href="/reussiteplus/assets/css/bootstrap-icons.css">
+<link rel="stylesheet" href="/reussiteplus/assets/css/bootstrap-icons.css">
 <style>
 :root {
   --primary:#007A5E;--primary-dark:#005A45;--primary-light:#00A97F;--primary-subtle:#E8F5F1;
@@ -78,16 +80,16 @@ body{font-family:var(--font-body);background:var(--gris-100);min-height:100vh;di
 <body>
 <div class="auth-wrap">
   <div class="auth-logo">
-    <img src="/reussiteplus/assets/img/logo.svg" alt="RÉUSSITE+" height="52" style="display:block;margin:0 auto 8px">
-    <div class="auth-sub">Bienvenue sur RÉUSSITE+ — RDC</div>
+    <img src="/reussiteplus/assets/img/logo.svg" alt="RÃ‰USSITE+" height="52" style="display:block;margin:0 auto 8px">
+    <div class="auth-sub">Bienvenue sur RÃ‰USSITE+ â€” RDC</div>
   </div>
 
   <div class="auth-card">
     <div class="auth-title">Content de te revoir</div>
-    <div class="auth-desc">Entre tes identifiants pour reprendre là où tu t'es arrêté.</div>
+    <div class="auth-desc">Entre tes identifiants pour reprendre lÃ  oÃ¹ tu t'es arrÃªtÃ©.</div>
 
     <?php if ($errors): ?>
-    <div class="error-box">⚠️ <?= e($errors[0]) ?></div>
+    <div class="error-box">âš ï¸ <?= e($errors[0]) ?></div>
     <?php endif; ?>
 
     <form method="POST" action="">
@@ -105,16 +107,16 @@ body{font-family:var(--font-body);background:var(--gris-100);min-height:100vh;di
         <div class="password-wrap">
           <input class="form-control" type="password" id="password" name="password"
                  placeholder="Votre mot de passe" required autocomplete="current-password">
-          <button type="button" class="password-toggle" onclick="togglePassword('password')">👁️</button>
+          <button type="button" class="password-toggle" onclick="togglePassword('password')">ðŸ‘ï¸</button>
         </div>
       </div>
 
       <div style="text-align:right;margin-bottom:20px">
-        <a href="/reussiteplus/mot-de-passe.php" style="font-size:13px;color:var(--primary);font-weight:500">Mot de passe oublié ?</a>
+        <a href="/reussiteplus/mot-de-passe.php" style="font-size:13px;color:var(--primary);font-weight:500">Mot de passe oubliÃ© ?</a>
       </div>
 
       <button type="submit" class="btn btn-primary" id="submitBtn">
-        Se connecter →
+        Se connecter â†’
       </button>
     </form>
 
@@ -125,15 +127,15 @@ body{font-family:var(--font-body);background:var(--gris-100);min-height:100vh;di
     </div>
 
     <div style="text-align:center;font-size:13px;color:var(--gris-600)">
-      Compte de démo : <strong>demo@reussiteplus.cd</strong> / <strong>Demo1234!</strong>
+      Compte de dÃ©mo : <strong>demo@reussiteplus.cd</strong> / <strong>Demo1234!</strong>
     </div>
   </div>
 
   <div class="auth-footer">
-    Pas encore de compte ? <a href="/reussiteplus/inscription.php">Créer un compte gratuit</a>
+    Pas encore de compte ? <a href="/reussiteplus/inscription.php">CrÃ©er un compte gratuit</a>
   </div>
   <div class="auth-footer" style="margin-top:8px">
-    <a href="/reussiteplus/index.php" style="color:var(--gris-500)">← Retour à l'accueil</a>
+    <a href="/reussiteplus/index.php" style="color:var(--gris-500)">â† Retour Ã  l'accueil</a>
   </div>
 </div>
 
@@ -149,3 +151,4 @@ document.querySelector('form').addEventListener('submit', function() {
 </script>
 </body>
 </html>
+

@@ -44,32 +44,32 @@ include __DIR__ . '/../includes/header_app.php';
 <!-- Stats overview -->
 <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:24px">
   <div class="stat-card green">
-    <div class="stat-label">👥 Utilisateurs actifs</div>
+    <div class="stat-label"><i class="bi bi-people"></i> Utilisateurs actifs</div>
     <div class="stat-value"><?= number_format((int)$adminStats['total_users']) ?></div>
     <div class="stat-sub">+<?= $adminStats['users_today'] ?> aujourd'hui</div>
   </div>
   <div class="stat-card gold">
-    <div class="stat-label">💰 Revenus ce mois</div>
+    <div class="stat-label"><i class="bi bi-cash-coin"></i> Revenus ce mois</div>
     <div class="stat-value"><?= number_format((float)$adminStats['revenus_mois'], 0, ',', ' ') ?></div>
     <div class="stat-sub">CDF confirmés</div>
   </div>
   <div class="stat-card rouge">
-    <div class="stat-label">⏳ Paiements en attente</div>
+    <div class="stat-label"><i class="bi bi-hourglass-split"></i> Paiements en attente</div>
     <div class="stat-value"><?= (int)$adminStats['paiements_att'] ?></div>
     <div class="stat-sub"><a href="/reussiteplus/admin/paiements.php" style="color:var(--rouge);font-weight:600">À confirmer →</a></div>
   </div>
   <div class="stat-card bleu">
-    <div class="stat-label">✏️ Examens aujourd'hui</div>
+    <div class="stat-label"><i class="bi bi-pencil-square"></i> Examens aujourd'hui</div>
     <div class="stat-value"><?= number_format((int)$adminStats['exams_today']) ?></div>
     <div class="stat-sub">Sessions lancées</div>
   </div>
   <div class="stat-card">
-    <div class="stat-label">📂 Archives</div>
+    <div class="stat-label"><i class="bi bi-archive"></i> Archives</div>
     <div class="stat-value"><?= number_format((int)$adminStats['total_archives']) ?></div>
     <div class="stat-sub"><a href="/reussiteplus/admin/archives.php" style="color:var(--primary);font-weight:600">Gérer →</a></div>
   </div>
   <div class="stat-card">
-    <div class="stat-label">📋 Sujets en banque</div>
+    <div class="stat-label"><i class="bi bi-list-check"></i> Sujets en banque</div>
     <div class="stat-value"><?= dbRow("SELECT COUNT(*) as n FROM question_bank")['n'] ?></div>
     <div class="stat-sub">Questions QCM</div>
   </div>
@@ -78,16 +78,16 @@ include __DIR__ . '/../includes/header_app.php';
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px">
   <!-- Répartition plans -->
   <div class="card">
-    <div class="card-title" style="margin-bottom:16px">📊 Répartition des plans</div>
+    <div class="card-title" style="margin-bottom:16px"><i class="bi bi-pie-chart"></i> Répartition des plans</div>
     <?php
     $total = max(1, array_sum(array_column($planStats, 'nb')));
     foreach ($planStats as $ps):
       $pct = ($ps['nb'] / $total) * 100;
-      $info = PLANS[$ps['plan']] ?? ['nom' => $ps['plan'], 'icone' => '🎒'];
+      $info = PLANS[$ps['plan']] ?? ['nom' => $ps['plan'], 'icone' => 'bi bi-circle'];
     ?>
     <div style="margin-bottom:12px">
       <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
-        <span><?= $info['icone'] ?> <?= e($info['nom']) ?></span>
+        <span><i class="<?= e($info['icone']) ?>"></i> <?= e($info['nom']) ?></span>
         <span style="font-weight:700"><?= $ps['nb'] ?> <span style="font-weight:400;color:var(--gris-500)">(<?= number_format($pct, 1) ?>%)</span></span>
       </div>
       <div class="progress-bar"><div class="progress-bar-fill" style="width:<?= $pct ?>%"></div></div>
@@ -97,7 +97,7 @@ include __DIR__ . '/../includes/header_app.php';
 
   <!-- Inscriptions 7j -->
   <div class="card">
-    <div class="card-title" style="margin-bottom:16px">📈 Inscriptions — 7 derniers jours</div>
+    <div class="card-title" style="margin-bottom:16px"><i class="bi bi-bar-chart"></i> Inscriptions — 7 derniers jours</div>
     <?php
     $inscMap = [];
     foreach ($inscriptions7j as $i) $inscMap[$i['jour']] = (int)$i['nb'];
@@ -123,7 +123,7 @@ include __DIR__ . '/../includes/header_app.php';
 <?php if ($paiementsAtt): ?>
 <div class="card" style="margin-bottom:24px;border:2px solid var(--gold)">
   <div class="card-header">
-    <div class="card-title">⏳ Paiements en attente de confirmation</div>
+    <div class="card-title"><i class="bi bi-hourglass-split"></i> Paiements en attente de confirmation</div>
     <a href="/reussiteplus/admin/paiements.php" class="btn btn-gold btn-sm">Voir tout</a>
   </div>
   <div class="table-wrap">

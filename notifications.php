@@ -55,20 +55,20 @@ include __DIR__ . '/includes/header_app.php';
   <div style="display:flex;flex-direction:column;gap:8px">
     <?php
     $icons = [
-      'PAIEMENT'    => '💳',
-      'ABONNEMENT'  => '⭐',
-      'EXAMEN'      => '✏️',
-      'PROGRESSION' => '📈',
-      'SYSTEME'     => 'ℹ️',
-      'PROMOTION'   => '🎁',
+      'PAIEMENT'    => 'bi bi-credit-card',
+      'ABONNEMENT'  => 'bi bi-star',
+      'EXAMEN'      => 'bi bi-pencil-square',
+      'PROGRESSION' => 'bi bi-graph-up',
+      'SYSTEME'     => 'bi bi-info-circle',
+      'PROMOTION'   => 'bi bi-gift',
     ];
     foreach ($notifications as $n):
-      $icon = $icons[$n['type']] ?? '🔔';
+      $icon = $icons[$n['type']] ?? 'bi bi-bell';
       $bgColor = $n['lu'] ? 'white' : 'var(--primary-subtle)';
       $borderColor = $n['lu'] ? 'var(--gris-200)' : 'var(--primary)';
     ?>
     <div style="background:<?= $bgColor ?>;border:1.5px solid <?= $borderColor ?>;border-radius:var(--radius-lg);padding:14px 16px;display:flex;gap:12px;align-items:flex-start;transition:.2s">
-      <span style="font-size:22px;flex-shrink:0;margin-top:2px"><?= $icon ?></span>
+      <i class="<?= e($icon) ?>" style="font-size:22px;flex-shrink:0;margin-top:2px;color:var(--primary)"></i>
       <div style="flex:1">
         <div style="font-size:14px;font-weight:<?= $n['lu'] ? '400' : '600' ?>;color:var(--gris-900);margin-bottom:3px">
           <?= e($n['titre']) ?>
