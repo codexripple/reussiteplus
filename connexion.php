@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   --primary:#007A5E;--primary-dark:#005A45;--primary-light:#00A97F;--primary-subtle:#E8F5F1;
   --gold:#C9972A;--rouge:#C9342A;--noir:#0D1117;--gris-900:#1C2433;--gris-700:#4A5568;
   --gris-600:#6B7280;--gris-400:#A0AEC0;--gris-200:#E2E8F0;--gris-100:#F1F5F9;--blanc:#FFFFFF;
-  --font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;
+  --font-display:'Poppins',sans-serif;--font-body:'Poppins',sans-serif;
   --radius:10px;--radius-lg:16px;--shadow-lg:0 8px 32px rgba(0,0,0,.12);
   --transition:200ms cubic-bezier(0.4,0,0.2,1);
 }

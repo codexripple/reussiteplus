@@ -31,7 +31,7 @@ $user = is_logged() ? current_user() : null;
   --gold: #C9972A; --gold-light: #F5E6C0; --rouge: #C9342A; --bleu: #1E5FAD; --bleu-light: #EEF4FD;
   --noir: #0D1117; --gris-900: #1C2433; --gris-800: #2E3A4A; --gris-700: #4A5568; --gris-600: #6B7280;
   --gris-200: #E2E8F0; --gris-100: #F1F5F9; --gris-50: #F8FAFC; --blanc: #FFFFFF;
-  --font-display: 'Syne', sans-serif; --font-body: 'DM Sans', sans-serif;
+  --font-display: 'Poppins', sans-serif; --font-body: 'Poppins', sans-serif;
   --radius: 10px; --radius-lg: 16px; --radius-xl: 24px;
   --shadow: 0 4px 16px rgba(0,0,0,0.08); --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
   --shadow-glow: 0 0 40px rgba(0,122,94,0.25); --transition: 200ms cubic-bezier(0.4,0,0.2,1);
