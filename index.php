@@ -65,16 +65,18 @@ a { text-decoration: none; color: inherit; }
 
 /* HERO */
 .hero {
-  min-height: 100vh; background: var(--noir);
-  display: flex; align-items: center; justify-content: center;
-  padding: 100px 40px 60px; text-align: center; position: relative; overflow: hidden;
+  min-height: 92vh; background: var(--noir);
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+  align-items: center; padding: 100px 80px 80px;
+  max-width: 1400px; margin: 0 auto; position: relative;
 }
 .hero::before {
   content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,122,94,0.2) 0%, transparent 60%),
-              radial-gradient(ellipse 60% 40% at 80% 80%, rgba(201,151,42,0.1) 0%, transparent 60%);
+  background: radial-gradient(ellipse 80% 60% at 30% 0%, rgba(0,122,94,0.2) 0%, transparent 60%),
+              radial-gradient(ellipse 60% 40% at 90% 80%, rgba(201,151,42,0.1) 0%, transparent 60%);
+  pointer-events: none;
 }
-.hero-content { position: relative; max-width: 820px; }
+.hero-content { position: relative; z-index: 1; }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 8px;
   background: rgba(0,122,94,0.15); border: 1px solid rgba(0,122,94,0.4);
@@ -82,16 +84,27 @@ a { text-decoration: none; color: inherit; }
   font-weight: 500; margin-bottom: 28px;
 }
 .hero-title {
-  font-family: var(--font-display); font-size: clamp(36px, 6vw, 72px);
+  font-family: var(--font-display); font-size: clamp(34px, 5vw, 62px);
   font-weight: 900; color: white; line-height: 1.05; letter-spacing: -1px; margin-bottom: 20px;
 }
 .hero-title span { color: var(--gold); }
-.hero-sub { font-size: 18px; color: rgba(255,255,255,0.6); max-width: 540px; margin: 0 auto 36px; line-height: 1.7; }
-.hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 56px; }
-.hero-stats { display: flex; gap: 40px; justify-content: center; flex-wrap: wrap; }
-.hero-stat-num { font-family: var(--font-display); font-size: 28px; font-weight: 800; color: white; }
-.hero-stat-label { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+.hero-sub { font-size: 17px; color: rgba(255,255,255,0.6); max-width: 480px; margin-bottom: 36px; line-height: 1.7; }
+.hero-cta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 56px; }
+.hero-stats { display: flex; gap: 32px; flex-wrap: wrap; }
+.hero-stat-num { font-family: var(--font-display); font-size: 26px; font-weight: 800; color: white; }
+.hero-stat-label { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 2px; }
 .hero-divider { width: 1px; background: rgba(255,255,255,0.15); height: 36px; align-self: center; }
+/* Hero visual side */
+.hero-visual { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; }
+.hero-mockup { width: 100%; max-width: 520px; filter: drop-shadow(0 24px 64px rgba(0,0,0,0.5)); border-radius: 16px; }
+.hero-float-badge {
+  position: absolute; display: flex; align-items: center; gap: 10px;
+  background: white; border-radius: 14px; padding: 10px 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18); animation: floatBadge 4s ease-in-out infinite;
+}
+.hero-float-1 { bottom: 14%; left: -5%; animation-delay: 0s; }
+.hero-float-2 { top: 12%; right: -2%; animation-delay: 2s; }
+@keyframes floatBadge { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
 
 /* LOGOS EXAMS */
 .exams-strip {
@@ -102,6 +115,30 @@ a { text-decoration: none; color: inherit; }
   padding: 8px 18px; border-radius: 50px; font-size: 13px; font-weight: 600;
   display: flex; align-items: center; gap: 6px;
 }
+
+/* POUR QUI — sections avec photos */
+.who-section { padding: 100px 40px; background: white; }
+.who-block {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center;
+  margin-bottom: 100px;
+}
+.who-block:last-child { margin-bottom: 0; }
+.who-block-reverse .who-img-wrap { order: -1; }
+.who-img-wrap {
+  border-radius: 20px; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.14);
+}
+.who-img { width: 100%; height: 380px; object-fit: cover; display: block; transition: transform 0.5s ease; }
+.who-img-wrap:hover .who-img { transform: scale(1.03); }
+.who-title {
+  font-family: var(--font-display); font-size: clamp(22px, 3vw, 34px);
+  font-weight: 800; color: var(--gris-900); line-height: 1.2; margin-bottom: 14px;
+}
+.who-desc { font-size: 16px; color: var(--gris-600); line-height: 1.75; margin-bottom: 20px; }
+.who-list { list-style: none; margin-bottom: 28px; }
+.who-list li { font-size: 14px; color: var(--gris-700); padding: 7px 0; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--gris-100); }
+.who-list li:last-child { border-bottom: none; }
+.who-list .bi-check-circle-fill { color: var(--primary); font-size: 16px; flex-shrink: 0; }
 
 /* FEATURES */
 .features { padding: 100px 40px; background: white; }
@@ -181,14 +218,20 @@ a { text-decoration: none; color: inherit; }
   .pricing-grid { grid-template-columns: repeat(2,1fr); }
   .features-grid { grid-template-columns: repeat(2,1fr); }
   .testimonials-grid { grid-template-columns: 1fr 1fr; }
+  .hero { grid-template-columns: 1fr; padding: 90px 40px 60px; }
+  .hero-visual { display: none; }
+  .who-block, .who-block-reverse { grid-template-columns: 1fr; gap: 40px; }
+  .who-block-reverse .who-img-wrap { order: 0; }
+  .who-img { height: 280px; }
 }
 @media (max-width: 768px) {
   .nav { padding: 0 20px; }
   .nav-links { display: none; }
   .hero { padding: 90px 20px 50px; }
-  .features, .pricing, .testimonials, .cta-section { padding: 60px 20px; }
+  .features, .pricing, .testimonials, .cta-section, .who-section { padding: 60px 20px; }
   .pricing-grid, .features-grid, .testimonials-grid { grid-template-columns: 1fr; }
   .hero-stats { gap: 20px; }
+  .who-block { margin-bottom: 60px; }
 }
 </style>
 </head>
@@ -216,6 +259,7 @@ a { text-decoration: none; color: inherit; }
 </nav>
 
 <!-- HERO -->
+<div style="background:var(--noir)">
 <section class="hero">
   <div class="hero-content">
     <div class="hero-badge">🇨🇩 Conçu pour les élèves de la RDC</div>
@@ -225,7 +269,7 @@ a { text-decoration: none; color: inherit; }
     <p class="hero-sub">Sujets officiels, QCM par matière, corrections détaillées — le tout en un seul endroit, accessible depuis votre téléphone.</p>
     <div class="hero-cta">
       <a href="/reussiteplus/inscription.php" class="btn btn-primary btn-lg">Commencer gratuitement →</a>
-      <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-lg">⭐ Voir les offres Premium</a>
+      <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-lg"><i class="bi bi-star-fill"></i> Voir les offres Premium</a>
     </div>
     <div class="hero-stats">
       <div>
@@ -249,16 +293,100 @@ a { text-decoration: none; color: inherit; }
       </div>
     </div>
   </div>
+  <!-- Mockup dashboard -->
+  <div class="hero-visual">
+    <img src="/reussiteplus/assets/img/dashboard-mockup.svg" alt="Tableau de bord RÉUSSITE+" class="hero-mockup">
+    <!-- Badge flottant -->
+    <div class="hero-float-badge hero-float-1">
+      <i class="bi bi-trophy-fill" style="color:var(--gold);font-size:18px"></i>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:var(--gris-900)">+24 pts ce mois</div>
+        <div style="font-size:10px;color:var(--gris-500)">Meilleure série 🔥 7j</div>
+      </div>
+    </div>
+    <div class="hero-float-badge hero-float-2">
+      <i class="bi bi-patch-check-fill" style="color:var(--primary);font-size:18px"></i>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:var(--gris-900)">Examen d'État</div>
+        <div style="font-size:10px;color:var(--gris-500)">Score : <strong style="color:var(--primary)">87%</strong></div>
+      </div>
+    </div>
+  </div>
 </section>
+</div><!-- /hero-wrapper -->
 
 <!-- EXAM TYPES -->
 <div class="exams-strip">
   <span style="font-size:13px;color:var(--gris-600);font-weight:600;margin-right:8px">Préparation pour :</span>
-  <span class="exam-tag" style="background:#E8F5F1;color:#005A45">📚 ENAFEP</span>
-  <span class="exam-tag" style="background:#EEF4FD;color:#1E5FAD">🎓 TENASOSP</span>
-  <span class="exam-tag" style="background:#F5E6C0;color:#8C6A1A">🏛 Examen d'État</span>
-  <span class="exam-tag" style="background:#FEF0EF;color:#C9342A">⛪ Tests Diocésains</span>
+  <span class="exam-tag" style="background:#E8F5F1;color:#005A45"><i class="bi bi-book"></i> ENAFEP</span>
+  <span class="exam-tag" style="background:#EEF4FD;color:#1E5FAD"><i class="bi bi-mortarboard"></i> TENASOSP</span>
+  <span class="exam-tag" style="background:#F5E6C0;color:#8C6A1A"><i class="bi bi-building-fill"></i> Examen d'État</span>
+  <span class="exam-tag" style="background:#FEF0EF;color:#C9342A"><i class="bi bi-shield-check"></i> Tests Diocésains</span>
 </div>
+
+<!-- POUR QUI — Section avec photos (style Schoolap) -->
+<section class="who-section" id="pour-qui">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:12px">
+      <div class="section-label" style="display:inline-block">Pour qui ?</div>
+    </div>
+    <h2 class="section-title" style="text-align:center">Une plateforme pour tous<br>ceux qui veulent réussir</h2>
+
+    <!-- Bloc 1 : Élèves -->
+    <div class="who-block">
+      <div class="who-img-wrap">
+        <img src="/reussiteplus/assets/img/hero-students.jpg" alt="Élèves révisant ensemble" class="who-img" loading="lazy">
+      </div>
+      <div class="who-text">
+        <div class="section-label" style="margin-bottom:12px">Élèves & Étudiants</div>
+        <h3 class="who-title">Révise efficacement, seul ou avec tes amis</h3>
+        <p class="who-desc">Accède à des centaines de sujets officiels classés par matière et par année. Entraîne-toi avec les QCM, suis ta progression semaine par semaine et prépare-toi dans les vraies conditions d'examen.</p>
+        <ul class="who-list">
+          <li><i class="bi bi-check-circle-fill"></i> ENAFEP, TENASOSP, Examen d'État, Tests Diocésains</li>
+          <li><i class="bi bi-check-circle-fill"></i> QCM avec corrections détaillées</li>
+          <li><i class="bi bi-check-circle-fill"></i> Suivi de progression par matière</li>
+        </ul>
+        <a href="/reussiteplus/inscription.php" class="btn btn-primary">Commencer gratuitement →</a>
+      </div>
+    </div>
+
+    <!-- Bloc 2 : Enseignants / Répétiteurs -->
+    <div class="who-block who-block-reverse">
+      <div class="who-img-wrap">
+        <img src="/reussiteplus/assets/img/section-teacher.jpg" alt="Enseignant avec élèves" class="who-img" loading="lazy">
+      </div>
+      <div class="who-text">
+        <div class="section-label" style="margin-bottom:12px">Enseignants & Répétiteurs</div>
+        <h3 class="who-title">Préparez vos cours avec les vrais sujets d'examens</h3>
+        <p class="who-desc">Retrouvez les archives officielles de toutes les provinces, créez des révisions ciblées et partagez les ressources avec vos élèves. La banque de questions couvre 8 matières avec 5 niveaux de difficulté.</p>
+        <ul class="who-list">
+          <li><i class="bi bi-check-circle-fill"></i> Archives par province et par année</li>
+          <li><i class="bi bi-check-circle-fill"></i> 600+ questions QCM prêtes à l'emploi</li>
+          <li><i class="bi bi-check-circle-fill"></i> Corrigés officiels téléchargeables</li>
+        </ul>
+        <a href="/reussiteplus/inscription.php" class="btn btn-primary">Créer un compte →</a>
+      </div>
+    </div>
+
+    <!-- Bloc 3 : Parents -->
+    <div class="who-block">
+      <div class="who-img-wrap">
+        <img src="/reussiteplus/assets/img/section-student.jpg" alt="Élève qui étudie" class="who-img" loading="lazy">
+      </div>
+      <div class="who-text">
+        <div class="section-label" style="margin-bottom:12px">Parents & Familles</div>
+        <h3 class="who-title">Suivez les progrès de votre enfant en temps réel</h3>
+        <p class="who-desc">Votre enfant a un examen dans 3 mois ? Inscrivez-le gratuitement dès aujourd'hui. Le plan de révision s'adapte à son niveau, ses points faibles et la date de son examen.</p>
+        <ul class="who-list">
+          <li><i class="bi bi-check-circle-fill"></i> Inscription gratuite en 2 minutes</li>
+          <li><i class="bi bi-check-circle-fill"></i> Tableau de bord de progression</li>
+          <li><i class="bi bi-check-circle-fill"></i> Plan de révision sur-mesure (Premium)</li>
+        </ul>
+        <a href="/reussiteplus/inscription.php" class="btn btn-primary">Inscrire mon enfant →</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- FONCTIONNALITÉS -->
 <section class="features" id="fonctionnalites">
