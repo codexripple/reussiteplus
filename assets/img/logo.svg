@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" fill="none">
+  <!-- Symbole carré arrondi (fond vert) -->
+  <rect x="0" y="4" width="40" height="40" rx="10" fill="#007A5E"/>
+  <!-- Casquette de diplômé stylisée -->
+  <polygon points="20,10 36,17 20,24 4,17" fill="white" opacity="0.95"/>
+  <rect x="31" y="17" width="2.5" height="9" rx="1.25" fill="white" opacity="0.7"/>
+  <ellipse cx="32.25" cy="26.5" rx="3" ry="2" fill="#C9972A"/>
+  <!-- Bande décorative en bas -->
+  <rect x="11" y="27" width="18" height="7" rx="3" fill="white" opacity="0.18"/>
+  <!-- Plus doré -->
+  <rect x="16" y="29" width="8" height="2.5" rx="1.25" fill="#C9972A"/>
+  <rect x="19" y="26.5" width="2.5" height="7.5" rx="1.25" fill="#C9972A"/>
+
+  <!-- Wordmark -->
+  <text x="52" y="20" font-family="Syne, sans-serif" font-size="15" font-weight="800" fill="#0D1117" letter-spacing="-0.3">RÉUSSITE</text>
+  <text x="157" y="20" font-family="Syne, sans-serif" font-size="15" font-weight="800" fill="#C9972A">+</text>
+  <text x="52" y="34" font-family="DM Sans, sans-serif" font-size="9" font-weight="500" fill="#6B7280" letter-spacing="1.5">PLATEFORME EDTECH · RDC</text>
+</svg>

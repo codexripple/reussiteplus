@@ -13,6 +13,7 @@ require_once __DIR__ . '/icons.php';
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= e($pageTitle) ?> — RÉUSSITE+</title>
+<link rel="icon" type="image/svg+xml" href="/reussiteplus/assets/img/favicon.svg">
 <link rel="stylesheet" href="/reussiteplus/assets/css/fonts.css">
 <link rel="stylesheet" href="/reussiteplus/assets/css/app.css">
 <?= isset($extraHead) ? $extraHead : '' ?>
@@ -26,13 +27,13 @@ require_once __DIR__ . '/icons.php';
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-logo">
-    <div class="logo-icon">
-      <svg viewBox="0 0 24 24" fill="white" width="20" height="20"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-    </div>
-    <div>
-      <div class="logo-text">RÉUSSITE<span>+</span></div>
-      <div class="logo-sub">Plateforme EdTech RDC</div>
-    </div>
+    <a href="/reussiteplus/dashboard.php" style="display:flex;align-items:center;gap:10px;text-decoration:none">
+      <img src="/reussiteplus/assets/img/logo-icon.svg" alt="RÉUSSITE+" width="36" height="36" style="flex-shrink:0">
+      <div>
+        <div class="logo-text">RÉUSSITE<span>+</span></div>
+        <div class="logo-sub">Plateforme EdTech RDC</div>
+      </div>
+    </a>
   </div>
 
   <div class="sidebar-user">

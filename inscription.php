@@ -63,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inscription gratuite — RÉUSSITE+</title>
+<link rel="icon" type="image/svg+xml" href="/reussiteplus/assets/img/favicon.svg">
 <link rel="stylesheet" href="/reussiteplus/assets/css/fonts.css">
 <style>
 :root{--primary:#007A5E;--primary-dark:#005A45;--primary-light:#00A97F;--primary-subtle:#E8F5F1;--gold:#C9972A;--rouge:#C9342A;--noir:#0D1117;--gris-900:#1C2433;--gris-700:#4A5568;--gris-600:#6B7280;--gris-400:#A0AEC0;--gris-200:#E2E8F0;--gris-100:#F1F5F9;--blanc:#FFFFFF;--font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;--radius:10px;--radius-lg:16px;--shadow-lg:0 8px 32px rgba(0,0,0,.12);--transition:200ms cubic-bezier(0.4,0,0.2,1);}
@@ -103,8 +104,7 @@ select.form-control{cursor:pointer;}
 <body>
 <div class="auth-wrap">
   <div class="auth-logo">
-    <div class="auth-logo-icon">🎓</div>
-    <div class="auth-logo-text">RÉUSSITE<span>+</span></div>
+    <img src="/reussiteplus/assets/img/logo.svg" alt="RÉUSSITE+" height="52" style="display:block;margin:0 auto 8px">
     <div style="font-size:13px;color:var(--gris-600);margin-top:4px">Examens officiels RDC — ENAFEP, TENASOSP, État</div>
   </div>
 

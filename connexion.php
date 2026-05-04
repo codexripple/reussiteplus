@@ -32,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Connexion — RÉUSSITE+</title>
+<link rel="icon" type="image/svg+xml" href="/reussiteplus/assets/img/favicon.svg">
 <link rel="stylesheet" href="/reussiteplus/assets/css/fonts.css">
 <style>
 :root {
@@ -77,8 +78,7 @@ body{font-family:var(--font-body);background:var(--gris-100);min-height:100vh;di
 <body>
 <div class="auth-wrap">
   <div class="auth-logo">
-    <div class="auth-logo-icon">🎓</div>
-    <div class="auth-logo-text">RÉUSSITE<span>+</span></div>
+    <img src="/reussiteplus/assets/img/logo.svg" alt="RÉUSSITE+" height="52" style="display:block;margin:0 auto 8px">
     <div class="auth-sub">Bienvenue sur RÉUSSITE+ — RDC</div>
   </div>
 

@@ -22,6 +22,7 @@ $user = is_logged() ? current_user() : null;
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RÉUSSITE+ | La plateforme de référence pour réussir en RDC</title>
+<link rel="icon" type="image/svg+xml" href="/reussiteplus/assets/img/favicon.svg">
 <meta name="description" content="Préparez l'ENAFEP, TENASOSP, Tests diocésains et Examen d'État avec les archives officielles, QCM et plans de révision IA. Rejoignez +12 000 élèves en RDC.">
 <link rel="stylesheet" href="/reussiteplus/assets/css/fonts.css">
 <style>
@@ -194,7 +195,9 @@ a { text-decoration: none; color: inherit; }
 
 <!-- NAVIGATION -->
 <nav class="nav">
-  <div class="nav-logo">RÉUSSITE<span>+</span></div>
+  <a href="/reussiteplus/index.php" style="display:flex;align-items:center;gap:8px;text-decoration:none">
+    <img src="/reussiteplus/assets/img/logo-white.svg" alt="RÉUSSITE+" height="36" style="display:block">
+  </a>
   <div class="nav-links">
     <a href="#fonctionnalites" class="nav-link">Fonctionnalités</a>
     <a href="#tarifs" class="nav-link">Tarifs</a>
@@ -404,7 +407,7 @@ a { text-decoration: none; color: inherit; }
 <footer class="footer">
   <div class="footer-inner">
     <div>
-      <div class="footer-logo">RÉUSSITE<span>+</span></div>
+      <img src="/reussiteplus/assets/img/logo-white.svg" alt="RÉUSSITE+" height="36" style="display:block;margin-bottom:8px;opacity:.9">
       <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:4px">© <?= date('Y') ?> — Plateforme EdTech RDC</div>
     </div>
     <div class="footer-links">
