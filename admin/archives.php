@@ -21,42 +21,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
         $examType    = $_POST['exam_type'] ?? '';
         $matiereId   = $_POST['matiere_id'] ?? null;
         $description = trim($_POST['description'] ?? '');
-        $urlSujet    = trim($_POST['url_sujet'] ?? '');
-        $urlCorrige  = trim($_POST['url_corrige'] ?? '');
+        $urlSujet    = trim($_POST['sujet_url'] ?? '');
+        $urlCorrige  = trim($_POST['corrige_url'] ?? '');
         $premium     = isset($_POST['premium_only']) ? 1 : 0;
         $editId      = $_POST['edit_id'] ?? null;
 
-        $validTypes = ['ENAFEP', 'TENASOSP', 'EXAMEN_ETAT', 'SERNAFOR', 'AUTRE'];
+        $validTypes = ['ENAFEP', 'TENASOSP', 'EXAMEN_ETAT', 'DIOCESAIN', 'AUTRE'];
         if (!$titre)                              $errors[] = 'Titre requis.';
         if ($annee < 1990 || $annee > 2100)       $errors[] = 'Année invalide.';
         if (!in_array($examType, $validTypes))    $errors[] = 'Type d\'examen invalide.';
+        if (!$matiereId)                          $errors[] = 'Matière requise.';
 
         if (!$errors) {
             $data = [
                 'titre'        => $titre,
                 'annee'        => $annee,
                 'exam_type'    => $examType,
-                'matiere_id'   => $matiereId ?: null,
+                'matiere_id'   => $matiereId,
                 'description'  => $description,
-                'url_sujet'    => $urlSujet,
-                'url_corrige'  => $urlCorrige,
+                'sujet_url'    => $urlSujet,
+                'corrige_url'  => $urlCorrige,
                 'premium_only' => $premium,
             ];
             if ($editId) {
                 dbUpdate('archives', $data, ['id' => $editId]);
                 $success = 'Archive mise à jour.';
-                dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'EDIT_ARCHIVE','details'=>"id=$editId"]);
+                dbInsert('admin_logs', ['user_id'=>$user['id'],'action'=>'EDIT_ARCHIVE','details'=>"id=$editId"]);
             } else {
+                $slug = preg_replace('/[^a-z0-9]+/', '-', strtolower(iconv('UTF-8','ASCII//TRANSLIT',$titre))) . '-' . time();
+                $data['slug']   = $slug;
+                $data['status'] = 'PUBLIE';
                 dbInsert('archives', $data);
                 $success = 'Archive créée avec succès.';
-                dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'CREATE_ARCHIVE','details'=>"titre=$titre"]);
+                dbInsert('admin_logs', ['user_id'=>$user['id'],'action'=>'CREATE_ARCHIVE','details'=>"titre=$titre"]);
             }
         }
     } elseif ($action === 'delete_archive') {
         $delId = $_POST['delete_id'] ?? '';
         if ($delId) {
             dbQuery("DELETE FROM archives WHERE id=?", [$delId]);
-            dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'DELETE_ARCHIVE','details'=>"id=$delId"]);
+            dbInsert('admin_logs', ['user_id'=>$user['id'],'action'=>'DELETE_ARCHIVE','details'=>"id=$delId"]);
             $success = 'Archive supprimée.';
         }
     }
@@ -87,7 +91,7 @@ $archives = dbAll(
     $params
 );
 
-$matieres = dbAll("SELECT id, nom FROM matieres WHERE is_active=1 ORDER BY nom ASC");
+$matieres = dbAll("SELECT id, nom FROM matieres WHERE actif=1 ORDER BY nom ASC");
 
 include __DIR__ . '/../includes/header_app.php';
 ?>
@@ -123,7 +127,7 @@ include __DIR__ . '/../includes/header_app.php';
             <td style="font-size:12px"><?= $a['annee'] ?></td>
             <td style="font-size:11px;color:var(--gris-500)"><?= e($a['matiere_nom'] ?? '—') ?></td>
             <td><?= $a['premium_only'] ? '<span style="color:var(--gold);font-size:12px">⭐</span>' : '<span style="font-size:12px;color:var(--gris-400)">—</span>' ?></td>
-            <td style="font-size:12px"><?= number_format((int)$a['nb_telechargements']) ?></td>
+            <td style="font-size:12px"><?= number_format((int)$a['telechargements']) ?></td>
             <td style="white-space:nowrap">
               <a href="?edit=<?= e($a['id']) ?>" class="btn btn-ghost btn-sm">✏️</a>
               <form method="POST" style="display:inline" onsubmit="return confirm('Supprimer cette archive ?')">
@@ -167,7 +171,7 @@ include __DIR__ . '/../includes/header_app.php';
         <div class="form-group">
           <label class="form-label">Type *</label>
           <select class="form-control" name="exam_type" required>
-            <?php foreach (['ENAFEP','TENASOSP','EXAMEN_ETAT','SERNAFOR','AUTRE'] as $t): ?>
+            <?php foreach (['ENAFEP','TENASOSP','EXAMEN_ETAT','DIOCESAIN','AUTRE'] as $t): ?>
             <option value="<?= $t ?>" <?= ($editArchive['exam_type']??'') === $t || ($_POST['exam_type']??'') === $t ? 'selected' : '' ?>><?= $t ?></option>
             <?php endforeach; ?>
           </select>
@@ -190,12 +194,12 @@ include __DIR__ . '/../includes/header_app.php';
 
       <div class="form-group">
         <label class="form-label">URL Sujet PDF</label>
-        <input class="form-control" type="url" name="url_sujet" value="<?= e($editArchive['url_sujet'] ?? '') ?>" placeholder="https://...">
+        <input class="form-control" type="url" name="sujet_url" value="<?= e($editArchive['sujet_url'] ?? '') ?>" placeholder="https://...">
       </div>
 
       <div class="form-group">
         <label class="form-label">URL Corrigé PDF</label>
-        <input class="form-control" type="url" name="url_corrige" value="<?= e($editArchive['url_corrige'] ?? '') ?>" placeholder="https://...">
+        <input class="form-control" type="url" name="corrige_url" value="<?= e($editArchive['corrige_url'] ?? '') ?>" placeholder="https://...">
       </div>
 
       <div class="form-group">

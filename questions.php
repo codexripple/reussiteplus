@@ -15,7 +15,7 @@ $diffF    = $_GET['diff'] ?? '';
 $page     = max(1, (int)($_GET['page'] ?? 1));
 $limit    = 15;
 
-$conditions = ['qb.is_active = 1'];
+$conditions = ["qb.status = 'PUBLIE'"];
 $params     = [];
 if ($search) {
     $conditions[] = "qb.enonce LIKE ?";
@@ -32,21 +32,22 @@ if ($diffF) {
 $where = implode(' AND ', $conditions);
 
 $total = dbRow("SELECT COUNT(*) as n FROM question_bank qb WHERE $where", $params)['n'];
+$offset = ($page - 1) * $limit;
 $questions = dbAll(
     "SELECT qb.*, m.nom as matiere_nom, m.couleur, m.icone
      FROM question_bank qb
      LEFT JOIN matieres m ON qb.matiere_id = m.id
      WHERE $where
      ORDER BY qb.created_at DESC
-     LIMIT $limit OFFSET " . (($page - 1) * $limit),
+     LIMIT $limit OFFSET $offset",
     $params
 );
-$pagination = paginate($total, $limit, $page);
+$pagination = paginate($total, $page, $limit);
 
-$matieres = dbAll("SELECT id, nom, icone FROM matieres WHERE is_active=1 ORDER BY nom");
+$matieres = dbAll("SELECT id, nom, icone FROM matieres WHERE actif=1 ORDER BY nom");
 
 // Signets de l'utilisateur
-$signets = dbAll("SELECT question_id FROM signets WHERE user_id=? AND type='QUESTION'", [$user['id']]);
+$signets = dbAll("SELECT question_id FROM signets WHERE user_id=? AND question_id IS NOT NULL", [$user['id']]);
 $signetIds = array_column($signets, 'question_id');
 
 include __DIR__ . '/includes/header_app.php';
@@ -68,9 +69,11 @@ include __DIR__ . '/includes/header_app.php';
   <div>
     <select class="form-control" name="diff">
       <option value="">Toute difficulté</option>
-      <option value="FACILE" <?= $diffF==='FACILE'?'selected':'' ?>>🟢 Facile</option>
-      <option value="MOYEN" <?= $diffF==='MOYEN'?'selected':'' ?>>🟡 Moyen</option>
-      <option value="DIFFICILE" <?= $diffF==='DIFFICILE'?'selected':'' ?>>🔴 Difficile</option>
+      <option value="DEBUTANT" <?= $diffF==='DEBUTANT'?'selected':'' ?>>🟢 Débutant</option>
+      <option value="ELEMENTAIRE" <?= $diffF==='ELEMENTAIRE'?'selected':'' ?>>🔵 Élémentaire</option>
+      <option value="INTERMEDIAIRE" <?= $diffF==='INTERMEDIAIRE'?'selected':'' ?>>🟡 Intermédiaire</option>
+      <option value="AVANCE" <?= $diffF==='AVANCE'?'selected':'' ?>>🟠 Avancé</option>
+      <option value="EXPERT" <?= $diffF==='EXPERT'?'selected':'' ?>>🔴 Expert</option>
     </select>
   </div>
   <button type="submit" class="btn btn-primary">Filtrer</button>
@@ -113,10 +116,14 @@ include __DIR__ . '/includes/header_app.php';
       <?php endforeach; ?>
     </div>
 
-    <?php if ($q['explication']): ?>
+    <?php
+    $explication = '';
+    foreach ($opts as $o) { if ($o['est_correcte'] && $o['explication']) { $explication = $o['explication']; break; } }
+    if ($explication):
+    ?>
     <?php if ($user['plan'] !== 'GRATUIT'): ?>
     <div style="margin-top:10px;padding:8px 12px;background:var(--gris-50);border-radius:8px;font-size:12px;color:var(--gris-600);border-left:3px solid var(--primary)">
-      💡 <?= e($q['explication']) ?>
+      💡 <?= e($explication) ?>
     </div>
     <?php else: ?>
     <div style="margin-top:10px;padding:8px 12px;background:var(--gold-light);border-radius:8px;font-size:12px;color:var(--gold-dark)">
@@ -129,9 +136,9 @@ include __DIR__ . '/includes/header_app.php';
 </div>
 
 <!-- Pagination -->
-<?php if ($pagination['total_pages'] > 1): ?>
+<?php if ($pagination['pages'] > 1): ?>
 <div style="display:flex;justify-content:center;gap:8px;padding:24px 0;flex-wrap:wrap">
-  <?php for ($i = 1; $i <= $pagination['total_pages']; $i++): ?>
+  <?php for ($i = 1; $i <= $pagination['pages']; $i++): ?>
   <a href="?q=<?= urlencode($search) ?>&matiere=<?= urlencode($matiereF) ?>&diff=<?= urlencode($diffF) ?>&page=<?= $i ?>" class="btn <?= $i == $page ? 'btn-primary' : 'btn-ghost' ?> btn-sm"><?= $i ?></a>
   <?php endfor; ?>
 </div>

@@ -25,12 +25,11 @@ $answers = dbAll(
     "SELECT ea.*, qb.enonce, qb.points, qb.difficulte,
             qo.texte as option_choisie_texte, qo.lettre as option_choisie_lettre,
             correct_opt.texte as bonne_reponse_texte, correct_opt.lettre as bonne_reponse_lettre,
-            exp.explication
+            correct_opt.explication
      FROM exam_answers ea
      JOIN question_bank qb ON ea.question_id = qb.id
      LEFT JOIN question_options qo ON ea.option_id = qo.id
      LEFT JOIN question_options correct_opt ON correct_opt.question_id = ea.question_id AND correct_opt.est_correcte = 1
-     LEFT JOIN question_explanations exp ON exp.question_id = ea.question_id
      WHERE ea.session_id = ?",
     [$sessionId]
 );

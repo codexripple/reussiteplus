@@ -10,23 +10,23 @@ $user = require_login();
 
 // Marquer tout comme lu
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'mark_all_read' && csrf_verify()) {
-    dbQuery("UPDATE notifications SET lu = 1, lu_at = NOW() WHERE user_id = ?", [$user['id']]);
-    redirect('/reussiteplus/notifications.php', ['success' => 'Toutes les notifications ont été lues.']);
+    dbQuery("UPDATE notifications SET lu = 1 WHERE user_id = ?", [$user['id']]);
+    redirect('/reussiteplus/notifications.php', 'success', 'Toutes les notifications ont été lues.');
 }
 
 // Marquer une seule comme lue
 if (isset($_GET['lu']) && $_GET['lu']) {
-    dbQuery("UPDATE notifications SET lu = 1, lu_at = NOW() WHERE id = ? AND user_id = ?", [$_GET['lu'], $user['id']]);
+    dbQuery("UPDATE notifications SET lu = 1 WHERE id = ? AND user_id = ?", [$_GET['lu'], $user['id']]);
 }
 
 $page   = max(1, (int)($_GET['page'] ?? 1));
 $limit  = 20;
 $total  = dbRow("SELECT COUNT(*) as n FROM notifications WHERE user_id=?", [$user['id']])['n'];
-$notifs = dbAll(
+$notifications = dbAll(
     "SELECT * FROM notifications WHERE user_id=? ORDER BY created_at DESC LIMIT $limit OFFSET " . (($page - 1) * $limit),
     [$user['id']]
 );
-$pagination = paginate($total, $limit, $page);
+$pagination = paginate($total, $page, $limit);
 $nonLues = dbRow("SELECT COUNT(*) as n FROM notifications WHERE user_id=? AND lu=0", [$user['id']])['n'];
 
 include __DIR__ . '/includes/header_app.php';
@@ -51,7 +51,7 @@ include __DIR__ . '/includes/header_app.php';
     <?php endif; ?>
   </div>
 
-  <?php if ($notifs): ?>
+  <?php if ($notifications): ?>
   <div style="display:flex;flex-direction:column;gap:8px">
     <?php
     $icons = [
@@ -62,7 +62,7 @@ include __DIR__ . '/includes/header_app.php';
       'SYSTEME'     => 'ℹ️',
       'PROMOTION'   => '🎁',
     ];
-    foreach ($notifs as $n):
+    foreach ($notifications as $n):
       $icon = $icons[$n['type']] ?? '🔔';
       $bgColor = $n['lu'] ? 'white' : 'var(--primary-subtle)';
       $borderColor = $n['lu'] ? 'var(--gris-200)' : 'var(--primary)';
@@ -93,9 +93,9 @@ include __DIR__ . '/includes/header_app.php';
   </div>
 
   <!-- Pagination -->
-  <?php if ($pagination['total_pages'] > 1): ?>
+  <?php if ($pagination['pages'] > 1): ?>
   <div style="display:flex;justify-content:center;gap:8px;padding:24px 0">
-    <?php for ($i = 1; $i <= $pagination['total_pages']; $i++): ?>
+    <?php for ($i = 1; $i <= $pagination['pages']; $i++): ?>
     <a href="?page=<?= $i ?>" class="btn <?= $i == $page ? 'btn-primary' : 'btn-ghost' ?> btn-sm"><?= $i ?></a>
     <?php endfor; ?>
   </div>

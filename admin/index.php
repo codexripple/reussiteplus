@@ -9,7 +9,7 @@ $pageActive = 'admin';
 $user = require_admin();
 
 // Statistiques générales
-$stats = [
+$adminStats = [
     'total_users'    => dbRow("SELECT COUNT(*) as n FROM utilisateurs WHERE is_active=1")['n'],
     'users_today'    => dbRow("SELECT COUNT(*) as n FROM utilisateurs WHERE DATE(created_at)=CURDATE()")['n'],
     'total_archives' => dbRow("SELECT COUNT(*) as n FROM archives")['n'],
@@ -45,27 +45,27 @@ include __DIR__ . '/../includes/header_app.php';
 <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:24px">
   <div class="stat-card green">
     <div class="stat-label">👥 Utilisateurs actifs</div>
-    <div class="stat-value"><?= number_format((int)$stats['total_users']) ?></div>
-    <div class="stat-sub">+<?= $stats['users_today'] ?> aujourd'hui</div>
+    <div class="stat-value"><?= number_format((int)$adminStats['total_users']) ?></div>
+    <div class="stat-sub">+<?= $adminStats['users_today'] ?> aujourd'hui</div>
   </div>
   <div class="stat-card gold">
     <div class="stat-label">💰 Revenus ce mois</div>
-    <div class="stat-value"><?= number_format((float)$stats['revenus_mois'], 0, ',', ' ') ?></div>
+    <div class="stat-value"><?= number_format((float)$adminStats['revenus_mois'], 0, ',', ' ') ?></div>
     <div class="stat-sub">CDF confirmés</div>
   </div>
   <div class="stat-card rouge">
     <div class="stat-label">⏳ Paiements en attente</div>
-    <div class="stat-value"><?= (int)$stats['paiements_att'] ?></div>
+    <div class="stat-value"><?= (int)$adminStats['paiements_att'] ?></div>
     <div class="stat-sub"><a href="/reussiteplus/admin/paiements.php" style="color:var(--rouge);font-weight:600">À confirmer →</a></div>
   </div>
   <div class="stat-card bleu">
     <div class="stat-label">✏️ Examens aujourd'hui</div>
-    <div class="stat-value"><?= number_format((int)$stats['exams_today']) ?></div>
+    <div class="stat-value"><?= number_format((int)$adminStats['exams_today']) ?></div>
     <div class="stat-sub">Sessions lancées</div>
   </div>
   <div class="stat-card">
     <div class="stat-label">📂 Archives</div>
-    <div class="stat-value"><?= number_format((int)$stats['total_archives']) ?></div>
+    <div class="stat-value"><?= number_format((int)$adminStats['total_archives']) ?></div>
     <div class="stat-sub"><a href="/reussiteplus/admin/archives.php" style="color:var(--primary);font-weight:600">Gérer →</a></div>
   </div>
   <div class="stat-card">

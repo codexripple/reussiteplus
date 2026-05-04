@@ -16,24 +16,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
         $newPlan = $_POST['plan'] ?? '';
         if (array_key_exists($newPlan, PLANS)) {
             dbQuery("UPDATE utilisateurs SET plan=? WHERE id=?", [$newPlan, $uid]);
-            dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => 'CHANGE_PLAN', 'details' => "uid=$uid plan=$newPlan"]);
-            redirect('/reussiteplus/admin/users.php', ['success' => 'Plan mis à jour.']);
+            dbInsert('admin_logs', ['user_id' => $user['id'], 'action' => 'CHANGE_PLAN', 'details' => "uid=$uid plan=$newPlan"]);
+            redirect('/reussiteplus/admin/users.php', 'success', 'Plan mis à jour.');
         }
     } elseif ($action === 'toggle_active' && $uid) {
         $current = dbRow("SELECT is_active FROM utilisateurs WHERE id=?", [$uid]);
         if ($current) {
             $newState = $current['is_active'] ? 0 : 1;
             dbQuery("UPDATE utilisateurs SET is_active=? WHERE id=?", [$newState, $uid]);
-            dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => $newState ? 'ACTIVER_USER' : 'DESACTIVER_USER', 'details' => "uid=$uid"]);
-            redirect('/reussiteplus/admin/users.php', ['success' => 'Statut utilisateur mis à jour.']);
+            dbInsert('admin_logs', ['user_id' => $user['id'], 'action' => $newState ? 'ACTIVER_USER' : 'DESACTIVER_USER', 'details' => "uid=$uid"]);
+            redirect('/reussiteplus/admin/users.php', 'success', 'Statut utilisateur mis à jour.');
         }
     } elseif ($action === 'change_role' && $uid) {
         $validRoles = ['ELEVE', 'ENSEIGNANT', 'ADMIN_ECOLE', 'MODERATEUR', 'SUPER_ADMIN'];
         $newRole = $_POST['role'] ?? '';
         if (in_array($newRole, $validRoles, true)) {
             dbQuery("UPDATE utilisateurs SET role=? WHERE id=?", [$newRole, $uid]);
-            dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => 'CHANGE_ROLE', 'details' => "uid=$uid role=$newRole"]);
-            redirect('/reussiteplus/admin/users.php', ['success' => 'Rôle mis à jour.']);
+            dbInsert('admin_logs', ['user_id' => $user['id'], 'action' => 'CHANGE_ROLE', 'details' => "uid=$uid role=$newRole"]);
+            redirect('/reussiteplus/admin/users.php', 'success', 'Rôle mis à jour.');
         }
     }
 }
@@ -64,7 +64,7 @@ $users = dbAll(
      FROM utilisateurs u WHERE $where ORDER BY u.created_at DESC LIMIT $limit OFFSET $offset",
     $params
 );
-$pagination = paginate($total, $limit, $page);
+$pagination = paginate($total, $page, $limit);
 
 include __DIR__ . '/../includes/header_app.php';
 ?>
@@ -95,7 +95,7 @@ include __DIR__ . '/../includes/header_app.php';
 <div class="card">
   <div class="card-header">
     <div class="card-title">👥 Utilisateurs (<?= $total ?>)</div>
-    <div style="font-size:12px;color:var(--gris-500)">Page <?= $page ?>/<?= $pagination['total_pages'] ?></div>
+    <div style="font-size:12px;color:var(--gris-500)">Page <?= $page ?>/<?= $pagination['pages'] ?></div>
   </div>
 
   <div class="table-wrap">
@@ -129,9 +129,9 @@ include __DIR__ . '/../includes/header_app.php';
   </div>
 
   <!-- Pagination -->
-  <?php if ($pagination['total_pages'] > 1): ?>
+  <?php if ($pagination['pages'] > 1): ?>
   <div style="display:flex;justify-content:center;gap:6px;padding:16px;flex-wrap:wrap">
-    <?php for ($i = 1; $i <= $pagination['total_pages']; $i++): ?>
+    <?php for ($i = 1; $i <= $pagination['pages']; $i++): ?>
     <a href="?q=<?= urlencode($search) ?>&plan=<?= urlencode($filPlan) ?>&page=<?= $i ?>" class="btn <?= $i == $page ? 'btn-primary' : 'btn-ghost' ?> btn-sm"><?= $i ?></a>
     <?php endfor; ?>
   </div>

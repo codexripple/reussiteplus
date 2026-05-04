@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'download') {
         $archiveId = $_POST['archive_id'] ?? '';
         if (!$archiveId) { echo json_encode(['ok' => false]); exit; }
-        dbQuery("UPDATE archives SET nb_telechargements = nb_telechargements + 1 WHERE id=?", [$archiveId]);
+        dbQuery("UPDATE archives SET telechargements = telechargements + 1 WHERE id=?", [$archiveId]);
         echo json_encode(['ok' => true]);
         exit;
     }

@@ -20,22 +20,30 @@ function getCsrfToken() {
 }
 
 // ─── Mobile sidebar toggle ────────────────────────────────────
-const sidebar  = document.querySelector('.sidebar');
-const menuBtn  = document.querySelector('.menu-toggle');
-const overlay  = document.querySelector('.sidebar-overlay');
+function toggleSidebar() {
+  const s = document.getElementById('sidebar');
+  const o = document.getElementById('sidebarOverlay');
+  if (!s) return;
+  s.classList.toggle('open');
+  if (o) o.classList.toggle('active');
+}
+function closeSidebar() {
+  const s = document.getElementById('sidebar');
+  const o = document.getElementById('sidebarOverlay');
+  if (s) s.classList.remove('open');
+  if (o) o.classList.remove('active');
+}
 
-if (menuBtn && sidebar) {
-  menuBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('open');
-    if (overlay) overlay.classList.toggle('active');
-  });
-}
-if (overlay) {
-  overlay.addEventListener('click', () => {
-    sidebar?.classList.remove('open');
-    overlay.classList.remove('active');
-  });
-}
+// Show mobile menu button on small screens
+(function() {
+  const btn = document.getElementById('menuToggle');
+  function checkWidth() {
+    if (!btn) return;
+    btn.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+  }
+  checkWidth();
+  window.addEventListener('resize', checkWidth);
+})();
 
 // ─── Notification badge polling (toutes les 60s) ──────────────
 async function refreshNotifBadge() {
