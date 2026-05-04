@@ -1166,6 +1166,190 @@ $qs_sc_ext = [
 ];
 foreach ($qs_sc_ext as [$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$mat,$e,$d,$s,$o); $total_q++; }
 
+/* ═══════════════════════════════════════════
+   MATHÉMATIQUES — PACK ENAFEP (15 questions primaire)
+═══════════════════════════════════════════ */
+$mat = $matiereMap['maths'];
+$qs_maths_enafep = [
+  ['Un marchand achète 20 mangues à 150 CDF chacune et les revend à 200 CDF. Quel est son bénéfice total ?','DEBUTANT','ENAFEP',[['A','1 000 CDF',1],['B','500 CDF',0],['C','4 000 CDF',0],['D','2 000 CDF',0]]],
+  ['Quelle est la valeur du chiffre 7 dans le nombre 7 452 ?',                             'DEBUTANT',  'ENAFEP',[['A','7 000',1],       ['B','700',0],      ['C','7',0],        ['D','70',0]]],
+  ['Un train part à 06h30 et arrive à 09h15. Combien de temps a duré le trajet ?',         'DEBUTANT',  'ENAFEP',[['A','2h45min',1],     ['B','3h15min',0],  ['C','2h15min',0],  ['D','3h45min',0]]],
+  ['Exprimer 3/4 en décimal.',                                                              'DEBUTANT',  'ENAFEP',[['A','0,75',1],        ['B','0,34',0],     ['C','0,43',0],     ['D','0,7',0]]],
+  ['Quel est le PPCM de 4 et 6 ?',                                                          'ELEMENTAIRE','ENAFEP',[['A','12',1],          ['B','24',0],       ['C','6',0],        ['D','4',0]]],
+  ['Un rectangle a un périmètre de 36 cm et une largeur de 8 cm. Quelle est sa longueur ?','ELEMENTAIRE','ENAFEP',[['A','10 cm',1],       ['B','18 cm',0],    ['C','28 cm',0],    ['D','4 cm',0]]],
+  ['Combien de centimètres y a-t-il dans 2,5 mètres ?',                                    'DEBUTANT',  'ENAFEP',[['A','250 cm',1],       ['B','25 cm',0],    ['C','2 500 cm',0], ['D','0,25 cm',0]]],
+  ['Un robinet remplit un réservoir de 60 litres en 3 heures. Débit par heure ?',          'ELEMENTAIRE','ENAFEP',[['A','20 L/h',1],      ['B','30 L/h',0],   ['C','180 L/h',0],  ['D','10 L/h',0]]],
+  ['Calculer l\'aire d\'un carré de côté 9 cm.',                                           'DEBUTANT',  'ENAFEP',[['A','81 cm²',1],       ['B','36 cm²',0],   ['C','18 cm²',0],   ['D','9 cm²',0]]],
+  ['Résoudre : 5x = 45',                                                                    'DEBUTANT',  'ENAFEP',[['A','9',1],            ['B','40',0],       ['C','50',0],       ['D','5',0]]],
+  ['Quelle fraction est équivalente à 0,6 ?',                                               'ELEMENTAIRE','ENAFEP',[['A','3/5',1],         ['B','6/10 simplifiée',0],['C','1/6',0],   ['D','6/100',0]]],
+  ['Un élève a 72 sur 100 en maths et 84 sur 100 en français. Quelle est sa moyenne ?',   'ELEMENTAIRE','ENAFEP',[['A','78',1],           ['B','72',0],       ['C','84',0],       ['D','76',0]]],
+  ['Combien de kg dans 3 500 g ?',                                                           'DEBUTANT',  'ENAFEP',[['A','3,5 kg',1],       ['B','35 kg',0],    ['C','0,35 kg',0],  ['D','350 kg',0]]],
+  ['Quel est le résultat de 12 × 15 ?',                                                     'DEBUTANT',  'ENAFEP',[['A','180',1],          ['B','170',0],      ['C','195',0],      ['D','162',0]]],
+  ['Dans une classe de 40 élèves, 30% sont des filles. Combien de filles y a-t-il ?',     'ELEMENTAIRE','ENAFEP',[['A','12',1],           ['B','30',0],       ['C','10',0],       ['D','20',0]]],
+];
+foreach ($qs_maths_enafep as [$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$mat,$e,$d,$s,$o); $total_q++; }
+
+/* ═══════════════════════════════════════════
+   FRANÇAIS — PACK ENAFEP orthographe/grammaire
+═══════════════════════════════════════════ */
+$mat = $matiereMap['francais'];
+$qs_fr_enafep = [
+  ['Choisir la bonne orthographe : "Il a acheté de ___ chaussures neuves."',               'DEBUTANT',   'ENAFEP',[['A','des',1],          ['B','de',0],       ['C','d\'',0],      ['D','les',0]]],
+  ['Accorder correctement : "Les filles sont ___." (beau)',                                 'DEBUTANT',   'ENAFEP',[['A','belles',1],       ['B','beaux',0],    ['C','belle',0],    ['D','beau',0]]],
+  ['Quel est le féminin du nom "acteur" ?',                                                 'DEBUTANT',   'ENAFEP',[['A','actrice',1],      ['B','acteure',0],  ['C','acteuse',0],  ['D','actress',0]]],
+  ['Dans quelle phrase le verbe est-il au futur simple ?',                                  'ELEMENTAIRE','ENAFEP',[['A','Il partira demain.',1],['B','Il est parti.',0],['C','Il part.',0],['D','Il partait.',0]]],
+  ['Quel est le sujet du verbe "aiment" dans : "Les chiens aiment jouer." ?',              'DEBUTANT',   'ENAFEP',[['A','Les chiens',1],   ['B','aiment',0],   ['C','jouer',0],    ['D','Les',0]]],
+  ['Conjuguer "aller" à l\'imparfait, 3e pers. plur. :',                                   'ELEMENTAIRE','ENAFEP',[['A','ils allaient',1],  ['B','ils vont',0], ['C','ils iront',0],['D','ils sont allés',0]]],
+  ['Quel est le pluriel de "travail" ?',                                                    'ELEMENTAIRE','ENAFEP',[['A','travaux',1],       ['B','travails',0], ['C','travailx',0], ['D','travailles',0]]],
+  ['Dans "Je mange rapidement.", quelle est la fonction de "rapidement" ?',                'ELEMENTAIRE','ENAFEP',[['A','Complément circonstanciel de manière',1],['B','COD',0],['C','Sujet',0],['D','Attribut',0]]],
+  ['Quel est l\'antonyme de "courageux" ?',                                                 'DEBUTANT',   'ENAFEP',[['A','peureux / lâche',1],['B','fort',0],    ['C','brave',0],    ['D','timide',0]]],
+  ['Choisir la forme correcte : "Elle s\'est ___ la main." (blesser)',                     'INTERMEDIAIRE','EXAMEN_ETAT',[['A','blessé',1],  ['B','blessée',0],  ['C','blessés',0],  ['D','blessées',0]]],
+  ['Identifier le complément d\'objet indirect dans : "Il téléphone à sa mère chaque soir."','INTERMEDIAIRE','EXAMEN_ETAT',[['A','à sa mère',1],['B','chaque soir',0],['C','Il',0],['D','téléphone',0]]],
+  ['Quelle est la définition d\'un homonyme ?',                                             'ELEMENTAIRE','ENAFEP',[['A','Mots de même prononciation mais de sens différent',1],['B','Mots de même sens',0],['C','Mots de même famille',0],['D','Mots contraires',0]]],
+  ['Quelle phrase contient une négation partielle ?',                                       'INTERMEDIAIRE','EXAMEN_ETAT',[['A','Il ne mange jamais de viande.',1],['B','Il ne mange pas.',0],['C','Il ne mange rien.',0],['D','Il ne vient pas.',0]]],
+  ['Quel est le mode du verbe "viens" dans : "Viens ici !" ?',                             'ELEMENTAIRE','ENAFEP',[['A','Impératif présent',1],['B','Indicatif présent',0],['C','Subjonctif présent',0],['D','Infinitif',0]]],
+  ['Quelle figure de style est employée dans : "Les étoiles me regardaient dormir." ?',   'INTERMEDIAIRE','EXAMEN_ETAT',[['A','Personnification',1],['B','Métaphore',0],['C','Hyperbole',0],['D','Comparaison',0]]],
+];
+foreach ($qs_fr_enafep as [$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$mat,$e,$d,$s,$o); $total_q++; }
+
+/* ═══════════════════════════════════════════
+   CHIMIE — PACK TENASOSP avancé
+═══════════════════════════════════════════ */
+$mat = $matiereMap['chimie'];
+$qs_ch_tenasosp = [
+  ['Lors de la réaction Mg + 2HCl → MgCl₂ + H₂, quel gaz est dégagé ?',                'ELEMENTAIRE','TENASOSP',[['A','Dihydrogène H₂',1],['B','Dioxygène O₂',0],['C','CO₂',0],['D','Cl₂',0]]],
+  ['La masse d\'une mole de glucose C₆H₁₂O₆ (C=12, H=1, O=16) vaut :',                  'INTERMEDIAIRE','TENASOSP',[['A','180 g/mol',1],   ['B','96 g/mol',0],  ['C','162 g/mol',0],['D','192 g/mol',0]]],
+  ['Les hydrocarbures aromatiques contiennent un noyau :',                                 'AVANCE',    'EXAMEN_ETAT',[['A','Benzénique',1],   ['B','Cyclohexane',0],['C','Éthylénique',0],['D','Acétylénique',0]]],
+  ['Quelle est la valeur du pH d\'une solution de NaOH à 0,1 mol/L ?',                   'AVANCE',    'EXAMEN_ETAT',[['A','13',1],          ['B','7',0],         ['C','1',0],        ['D','11',0]]],
+  ['La réaction de combustion du méthane : CH₄ + 2O₂ → CO₂ + 2H₂O. Le coefficient de O₂ est :','ELEMENTAIRE','TENASOSP',[['A','2',1],['B','1',0],['C','4',0],['D','3',0]]],
+  ['Qu\'est-ce qu\'un acide selon Brønsted-Lowry ?',                                      'AVANCE',    'EXAMEN_ETAT',[['A','Un donneur de proton H⁺',1],['B','Un accepteur d\'électrons',0],['C','Un donneur d\'électrons',0],['D','Un sel',0]]],
+  ['La formule de l\'hydroxyde de calcium (chaux éteinte) est :',                         'ELEMENTAIRE','TENASOSP',[['A','Ca(OH)₂',1],     ['B','CaO',0],       ['C','CaCO₃',0],    ['D','CaH₂',0]]],
+  ['Le charbon actif est utilisé pour :',                                                  'ELEMENTAIRE','ENAFEP',[['A','Adsorber les impuretés et toxines',1],['B','Catalyser des réactions',0],['C','Neutraliser les acides',0],['D','Précipiter les sels',0]]],
+  ['Quel est l\'état de l\'eau à −10°C et pression normale ?',                            'DEBUTANT',  'ENAFEP',[['A','Solide (glace)',1], ['B','Liquide',0],   ['C','Gazeux',0],   ['D','Plasma',0]]],
+  ['La réaction Fe₂O₃ + 3CO → 2Fe + 3CO₂ est utilisée dans :',                           'AVANCE',    'EXAMEN_ETAT',[['A','La production de fer en haut-fourneau',1],['B','La fabrication de plastique',0],['C','La synthèse de l\'ammoniac',0],['D','La production d\'aluminium',0]]],
+  ['Combien d\'électrons peut contenir la couche L (n=2) ?',                               'ELEMENTAIRE','TENASOSP',[['A','8',1],           ['B','2',0],         ['C','18',0],       ['D','32',0]]],
+  ['Les ions Na⁺ et Cl⁻ forment une liaison de type :',                                   'ELEMENTAIRE','TENASOSP',[['A','Ionique',1],      ['B','Covalente',0], ['C','Métallique',0],['D','Hydrogène',0]]],
+  ['La corrosion du fer est accélérée en présence de :',                                   'ELEMENTAIRE','ENAFEP',[['A','Eau et oxygène (milieu humide)',1],['B','Huile',0],['C','Peinture',0],['D','Azote',0]]],
+  ['La concentration massique C (g/L) se calcule par :',                                  'INTERMEDIAIRE','TENASOSP',[['A','C = masse soluté / volume solution',1],['B','C = volume / masse',0],['C','C = mol / L × MM',0],['D','C = masse totale / densité',0]]],
+  ['Dans la classification périodique, les éléments de même famille (colonne) ont :',     'AVANCE',    'EXAMEN_ETAT',[['A','Le même nombre d\'électrons de valence',1],['B','La même masse atomique',0],['C','Le même nombre de couches',0],['D','La même configuration électronique totale',0]]],
+];
+foreach ($qs_ch_tenasosp as [$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$mat,$e,$d,$s,$o); $total_q++; }
+
+/* ═══════════════════════════════════════════
+   PHYSIQUE — PACK mécanique / électricité
+═══════════════════════════════════════════ */
+$mat = $matiereMap['physique'];
+$qs_ph_meca = [
+  ['Un objet de 3 kg est soulevé de 2 m. L\'énergie potentielle gagnée (g=10) est :',    'ELEMENTAIRE','TENASOSP',[['A','60 J',1],        ['B','6 J',0],       ['C','30 J',0],     ['D','600 J',0]]],
+  ['La vitesse moyenne d\'un objet parcourant 150 m en 5 s est :',                        'DEBUTANT',  'ENAFEP',[['A','30 m/s',1],       ['B','15 m/s',0],    ['C','750 m/s',0],  ['D','0,03 m/s',0]]],
+  ['Quelle est l\'unité de la quantité de mouvement (p = mv) ?',                          'ELEMENTAIRE','TENASOSP',[['A','kg·m/s',1],      ['B','kg·m²/s',0],   ['C','N/m',0],      ['D','J',0]]],
+  ['La troisième loi de Newton (action-réaction) dit :',                                   'ELEMENTAIRE','ENAFEP',[['A','Toute force exercée sur A par B est opposée à celle de A sur B',1],['B','F = ma',0],['C','Un corps au repos reste au repos',0],['D','L\'énergie est conservée',0]]],
+  ['Un circuit électrique en série : si une lampe s\'éteint, les autres :',               'ELEMENTAIRE','ENAFEP',[['A','S\'éteignent aussi',1],['B','Brillent plus fort',0],['C','Ne changent pas',0],['D','Grillent',0]]],
+  ['La résistivité d\'un conducteur dépend de :',                                          'AVANCE',    'EXAMEN_ETAT',[['A','Sa nature (matériau) et sa température',1],['B','Sa couleur',0],['C','La tension appliquée',0],['D','Le courant circulant',0]]],
+  ['Quelle formule donne l\'énergie électrique consommée (P, t) ?',                       'ELEMENTAIRE','TENASOSP',[['A','E = P × t',1],   ['B','E = P / t',0], ['C','E = U × I²',0],['D','E = R × t',0]]],
+  ['Si on double la distance entre deux charges, la force électrostatique devient :',     'AVANCE',    'EXAMEN_ETAT',[['A','4 fois plus faible',1],['B','2 fois plus faible',0],['C','4 fois plus forte',0],['D','La même',0]]],
+  ['Un mouvement circulaire uniforme a une accélération :',                                'AVANCE',    'EXAMEN_ETAT',[['A','Centripète (dirigée vers le centre)',1],['B','Tangentielle',0],['C','Nulle',0],['D','Constante en direction',0]]],
+  ['La loi d\'Ampère décrit :',                                                            'AVANCE',    'EXAMEN_ETAT',[['A','La relation entre courant électrique et champ magnétique',1],['B','La loi d\'Ohm généralisée',0],['C','L\'induction électromagnétique',0],['D','La conservation de l\'énergie',0]]],
+  ['Un diode laisse passer le courant :',                                                  'ELEMENTAIRE','ENAFEP',[['A','Dans un seul sens (polarisation directe)',1],['B','Dans les deux sens',0],['C','Seulement en courant alternatif',0],['D','Jamais',0]]],
+  ['L\'indice de réfraction d\'un verre est n = 1,5. La lumière y va à :',               'AVANCE',    'EXAMEN_ETAT',[['A','2 × 10⁸ m/s',1], ['B','3 × 10⁸ m/s',0],['C','1 × 10⁸ m/s',0],['D','4,5 × 10⁸ m/s',0]]],
+  ['Dans un circuit RC, la constante de temps τ (tau) est :',                              'EXPERT',    'EXAMEN_ETAT',[['A','τ = R × C',1],   ['B','τ = R / C',0], ['C','τ = C / R',0], ['D','τ = R + C',0]]],
+  ['Un alternateur convertit l\'énergie :',                                                'ELEMENTAIRE','ENAFEP',[['A','Mécanique → Électrique',1],['B','Électrique → Mécanique',0],['C','Thermique → Lumineuse',0],['D','Chimique → Électrique',0]]],
+  ['La puissance d\'un moteur de 5 000 J effectuant un travail en 10 s est :',           'ELEMENTAIRE','TENASOSP',[['A','500 W',1],        ['B','50 000 W',0],  ['C','5 W',0],      ['D','50 W',0]]],
+];
+foreach ($qs_ph_meca as [$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$mat,$e,$d,$s,$o); $total_q++; }
+
+/* ═══════════════════════════════════════════
+   BIOLOGIE — PACK corps humain & génétique
+═══════════════════════════════════════════ */
+$mat = $matiereMap['biologie'];
+$qs_bio_corps = [
+  ['Le cerveau humain est protégé par :',                                                  'ELEMENTAIRE','ENAFEP',[['A','La boîte crânienne et les méninges',1],['B','Le cartilage',0],['C','La peau uniquement',0],['D','La colonne vertébrale',0]]],
+  ['Quel est le rôle de l\'insuline produite par le pancréas ?',                          'INTERMEDIAIRE','TENASOSP',[['A','Abaisser la glycémie (favoriser l\'entrée du glucose dans les cellules)',1],['B','Augmenter la glycémie',0],['C','Digérer les graisses',0],['D','Stimuler la thyroïde',0]]],
+  ['Combien de paires de chromosomes possède l\'être humain ?',                            'ELEMENTAIRE','TENASOSP',[['A','23 paires',1],   ['B','46 paires',0], ['C','23',0],       ['D','48 paires',0]]],
+  ['L\'ARN messager est synthétisé lors de la :',                                          'AVANCE',    'EXAMEN_ETAT',[['A','Transcription (dans le noyau)',1],['B','Traduction',0],['C','Réplication',0],['D','Mitose',0]]],
+  ['Quel est le rôle de l\'appareil de Golgi dans la cellule ?',                          'AVANCE',    'EXAMEN_ETAT',[['A','Trier, modifier et expédier les protéines',1],['B','Produire de l\'énergie',0],['C','Synthétiser les lipides',0],['D','Stocker l\'ADN',0]]],
+  ['La pression artérielle systolique correspond à :',                                     'AVANCE',    'EXAMEN_ETAT',[['A','La pression lors de la contraction du cœur (systole)',1],['B','La pression lors du relâchement',0],['C','La fréquence cardiaque',0],['D','Le débit sanguin',0]]],
+  ['La vitamine A est nécessaire pour :',                                                  'ELEMENTAIRE','ENAFEP',[['A','La vision (rétine) et la peau',1],['B','La coagulation du sang',0],['C','La calcification des os',0],['D','La synthèse de collagène',0]]],
+  ['Les nerfs crâniens sont des nerfs du :',                                               'AVANCE',    'EXAMEN_ETAT',[['A','Système nerveux central (encéphale)',1],['B','Système nerveux périphérique uniquement',0],['C','Moelle épinière uniquement',0],['D','Système endocrinien',0]]],
+  ['Le syndrome de Down (trisomie 21) résulte de :',                                      'EXPERT',    'EXAMEN_ETAT',[['A','La présence d\'un 3e chromosome 21',1],['B','La délétion du chromosome 21',0],['C','Une mutation du gène BRCA',0],['D','Une infection virale',0]]],
+  ['Quel type d\'immunité est transmis par la mère au fœtus via le placenta ?',           'AVANCE',    'EXAMEN_ETAT',[['A','Immunité passive (anticorps maternels)',1],['B','Immunité active',0],['C','Immunité cellulaire',0],['D','Immunité innée',0]]],
+  ['Le glucagon est sécrété par le pancréas pour :',                                      'AVANCE',    'EXAMEN_ETAT',[['A','Augmenter la glycémie (glycogénolyse hépatique)',1],['B','Baisser la glycémie',0],['C','Stimuler la digestion',0],['D','Réguler la pression artérielle',0]]],
+  ['La courbe de croissance humaine est caractérisée par deux pics : à la naissance et :','INTERMEDIAIRE','TENASOSP',[['A','À la puberté',1],['B','À 5 ans',0],    ['C','À 20 ans',0],  ['D','À 30 ans',0]]],
+  ['Le groupe sanguin AB est dit "receveur universel" car :',                              'INTERMEDIAIRE','EXAMEN_ETAT',[['A','Son plasma ne contient ni anticorps anti-A ni anti-B',1],['B','Ses hématies n\'ont pas d\'antigènes',0],['C','Il est le plus répandu',0],['D','Il peut donner à tous',0]]],
+  ['La production de gamètes (ovules/spermatozoïdes) implique la :',                      'INTERMEDIAIRE','TENASOSP',[['A','Méiose',1],       ['B','Mitose',0],    ['C','Amitose',0],  ['D','Cytodiérèse',0]]],
+  ['Quel est le rôle de la myéline autour des axones ?',                                  'AVANCE',    'EXAMEN_ETAT',[['A','Accélérer la conduction nerveuse',1],['B','Protéger le neurone des virus',0],['C','Produire les neurotransmetteurs',0],['D','Stocker l\'énergie',0]]],
+];
+foreach ($qs_bio_corps as [$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$mat,$e,$d,$s,$o); $total_q++; }
+
+/* ═══════════════════════════════════════════
+   HISTOIRE-GÉO — PACK RDC & Afrique approfond.
+═══════════════════════════════════════════ */
+$mat = $matiereMap['histgeo'];
+$qs_hg_rdc = [
+  ['Quel est le nom du premier gouverneur général du Congo belge ?',                      'AVANCE',    'EXAMEN_ETAT',[['A','Théophile Wahis',1],['B','Léopold Ier',0],['C','Henri Morton Stanley',0],['D','Albert Ier',0]]],
+  ['La RDC est traversée par la ligne de l\'équateur au niveau de :',                    'ELEMENTAIRE','ENAFEP',[['A','La province de l\'Équateur et Kisangani',1],['B','Kinshasa',0],['C','Lubumbashi',0],['D','Goma',0]]],
+  ['Quel est le nom du barrage hydroélectrique le plus puissant de la RDC ?',            'ELEMENTAIRE','ENAFEP',[['A','Inga',1],          ['B','Kariba',0],    ['C','Cahora Bassa',0],['D','Akosombo',0]]],
+  ['La guerre de l\'AFDL (1996-1997) a mené à :',                                        'INTERMEDIAIRE','EXAMEN_ETAT',[['A','La chute de Mobutu et l\'arrivée de L.-D. Kabila',1],['B','La partition du Congo',0],['C','L\'indépendance du Katanga',0],['D','L\'élection de Tshisekedi',0]]],
+  ['La province du Nord-Kivu est connue pour ses :',                                     'ELEMENTAIRE','ENAFEP',[['A','Volcans (Nyiragongo), minerais et conflits armés',1],['B','Déserts',0],['C','Pêcheries maritimes',0],['D','Cultures de blé',0]]],
+  ['Le parc national de la Garamba abrite :',                                              'INTERMEDIAIRE','ENAFEP',[['A','Le rhinocéros blanc du Nord (espèce en danger critique)',1],['B','Les gorilles',0],['C','Les éléphants de mer',0],['D','Les lions de mer',0]]],
+  ['Le fleuve Congo est le _____ plus profond du monde.',                                  'INTERMEDIAIRE','ENAFEP',[['A','Plus profond (270 m max)',1],['B','Plus long',0],['C','Plus large',0],['D','Plus rapide en débit',0]]],
+  ['Quelle est la principale langue nationale de la RDC parmi les quatre officielles ?', 'DEBUTANT',  'ENAFEP',[['A','Le lingala (à Kinshasa et dans l\'ouest)',1],['B','Le français',0],['C','L\'anglais',0],['D','Le swahili uniquement',0]]],
+  ['L\'Accord-Cadre d\'Addis-Abeba (2013) visait à :',                                   'AVANCE',    'EXAMEN_ETAT',[['A','Stabiliser l\'est de la RDC et réformer les groupes armés',1],['B','Créer une union douanière',0],['C','Organiser des élections panafricaines',0],['D','Délimiter les frontières de la RDC',0]]],
+  ['La ville de Kolwezi est connue pour l\'extraction de :',                               'ELEMENTAIRE','ENAFEP',[['A','Cobalt et cuivre',1],['B','Diamants',0],['C','Pétrole',0],['D','Or uniquement',0]]],
+  ['Le Nil Blanc prend sa source au :',                                                    'INTERMEDIAIRE','ENAFEP',[['A','Lac Victoria (Ouganda)',1],['B','Lac Tanganyika',0],['C','Mont Kilimandjaro',0],['D','Lac Tchad',0]]],
+  ['La CEPGL est une organisation régionale regroupant :',                                 'INTERMEDIAIRE','ENAFEP',[['A','RDC, Rwanda, Burundi',1],['B','RDC, Congo-Brazzaville, Gabon',0],['C','Kenya, Tanzanie, Ouganda',0],['D','RDC, Angola, Zambie',0]]],
+  ['Le principal exportateur mondial de cobalt est :',                                    'INTERMEDIAIRE','EXAMEN_ETAT',[['A','La RDC (plus de 70% de la production mondiale)',1],['B','La Chine',0],['C','L\'Australie',0],['D','Le Canada',0]]],
+  ['La ville historique de Mbanza-Kongo était la capitale de :',                          'AVANCE',    'EXAMEN_ETAT',[['A','L\'Ancien royaume du Kongo',1],['B','L\'Empire du Mali',0],['C','Le Royaume Luba',0],['D','L\'Empire du Monomotapa',0]]],
+  ['Quelle est la religion majoritaire en RDC ?',                                          'DEBUTANT',  'ENAFEP',[['A','Christianisme',1], ['B','Islam',0],     ['C','Animisme',0],  ['D','Bouddhisme',0]]],
+];
+foreach ($qs_hg_rdc as [$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$mat,$e,$d,$s,$o); $total_q++; }
+
+/* ═══════════════════════════════════════════
+   ANGLAIS — PACK vocabulaire & grammaire avancée
+═══════════════════════════════════════════ */
+$mat = $matiereMap['anglais'];
+$qs_en_vocab = [
+  ['What is the meaning of "ameliorate" ?',                                                'AVANCE',    'EXAMEN_ETAT',[['A','To improve or make better',1],['B','To worsen',0],   ['C','To destroy',0],   ['D','To duplicate',0]]],
+  ['Choose the correct sentence with "lay" vs "lie" :',                                   'AVANCE',    'EXAMEN_ETAT',[['A','Please lie down and rest.',1],['B','Please lay down.',0],['C','I laid down on the bed. (present)',0],['D','She lays in bed. (past)',0]]],
+  ['What does "albeit" mean ?',                                                             'EXPERT',    'EXAMEN_ETAT',[['A','Although',1],      ['B','Also',0],      ['C','Therefore',0],   ['D','Never',0]]],
+  ['Identify the phrasal verb meaning "to postpone" in: "They put off the meeting."',     'ELEMENTAIRE','ENAFEP',[['A','put off',1],       ['B','put out',0],   ['C','put up',0],    ['D','put on',0]]],
+  ['Which sentence correctly uses a relative clause ?',                                    'INTERMEDIAIRE','EXAMEN_ETAT',[['A','The student who works hard will succeed.',1],['B','The student that he works hard will succeed.',0],['C','The student works hard which will succeed.',0],['D','Who works hard the student will succeed.',0]]],
+  ['The word "dilapidated" means:',                                                        'AVANCE',    'EXAMEN_ETAT',[['A','Falling apart, in a state of disrepair',1],['B','Very beautiful',0],['C','Newly built',0],   ['D','Expensive',0]]],
+  ['What is "onomatopoeia" ?',                                                              'INTERMEDIAIRE','EXAMEN_ETAT',[['A','A word that imitates a sound (e.g. buzz, hiss)',1],['B','A comparison using "like"',0],['C','An exaggeration',0],['D','A play on words',0]]],
+  ['Choose the correct form: "She is used to ___ early." (wake)',                         'INTERMEDIAIRE','EXAMEN_ETAT',[['A','waking',1],      ['B','wake',0],     ['C','woke',0],     ['D','to wake',0]]],
+  ['What does "circumlocution" mean ?',                                                    'EXPERT',    'EXAMEN_ETAT',[['A','Using many words to express something that could be said briefly',1],['B','A direct statement',0],['C','A metaphor',0],['D','A concise summary',0]]],
+  ['"Time flies" is an example of:',                                                       'INTERMEDIAIRE','EXAMEN_ETAT',[['A','Personification / Metaphor',1],['B','Simile',0],['C','Hyperbole',0],['D','Alliteration',0]]],
+  ['Which preposition follows "depend"?',                                                   'ELEMENTAIRE','ENAFEP',[['A','on',1],            ['B','in',0],        ['C','at',0],       ['D','with',0]]],
+  ['The prefix "un-" in "unlikely" means:',                                                'DEBUTANT',  'ENAFEP',[['A','not',1],           ['B','very',0],      ['C','before',0],   ['D','again',0]]],
+  ['"She can swim, and so can he." This sentence uses:',                                   'INTERMEDIAIRE','EXAMEN_ETAT',[['A','Ellipsis (avoiding repetition)',1],['B','Parallelism',0],['C','Inversion',0],['D','A conditional',0]]],
+  ['What is the correct order of adjectives before a noun ?',                              'AVANCE',    'EXAMEN_ETAT',[['A','Opinion-Size-Age-Shape-Colour-Origin-Material',1],['B','Colour-Size-Opinion',0],['C','Material-Age-Origin',0],['D','No fixed order',0]]],
+  ['Identify the gerund phrase in: "Running every day keeps him fit."',                   'AVANCE',    'EXAMEN_ETAT',[['A','Running every day',1],['B','keeps him fit',0],['C','him fit',0],['D','every day keeps',0]]],
+];
+foreach ($qs_en_vocab as [$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$mat,$e,$d,$s,$o); $total_q++; }
+
+/* ═══════════════════════════════════════════
+   SCIENCES — PACK environnement / astronomie
+═══════════════════════════════════════════ */
+$mat = $matiereMap['sciences'];
+$qs_sc_env = [
+  ['Qu\'est-ce que la biodiversité ?',                                                     'ELEMENTAIRE','ENAFEP',[['A','La variété du vivant (gènes, espèces, écosystèmes)',1],['B','La diversité des minéraux',0],['C','La variété des paysages seulement',0],['D','L\'ensemble des fossiles',0]]],
+  ['Le polluant principal des pluies acides est :',                                        'INTERMEDIAIRE','TENASOSP',[['A','SO₂ et NOₓ (dioxyde de soufre et oxydes d\'azote)',1],['B','CO₂',0],['C','CH₄',0],['D','O₃',0]]],
+  ['Quelle est la principale cause de la destruction de la couche d\'ozone ?',            'ELEMENTAIRE','ENAFEP',[['A','Les CFC (chlorofluorocarbures)',1],['B','Le CO₂',0],   ['C','La vapeur d\'eau',0],['D','L\'azote',0]]],
+  ['La distance Terre-Soleil est d\'environ :',                                            'ELEMENTAIRE','TENASOSP',[['A','150 millions de km (1 UA)',1],['B','1 milliard de km',0],['C','1 million de km',0],['D','300 000 km',0]]],
+  ['La planète la plus grande du système solaire est :',                                   'DEBUTANT',  'ENAFEP',[['A','Jupiter',1],      ['B','Saturne',0],   ['C','Uranus',0],   ['D','Neptune',0]]],
+  ['La durée de révolution de la Terre autour du Soleil est de :',                        'DEBUTANT',  'ENAFEP',[['A','365,25 jours',1],['B','24 heures',0],  ['C','30 jours',0], ['D','366 jours exactement',0]]],
+  ['La gravité sur la Lune est environ ___ fois celle de la Terre.',                      'ELEMENTAIRE','ENAFEP',[['A','1/6',1],          ['B','1/3',0],       ['C','1/2',0],      ['D','Identique',0]]],
+  ['Qu\'est-ce qu\'une éclipse solaire ?',                                                 'ELEMENTAIRE','ENAFEP',[['A','La Lune passe devant le Soleil et cache la lumière',1],['B','La Terre passe devant le Soleil',0],['C','Le Soleil s\'éteint temporairement',0],['D','La Terre entre dans l\'ombre de la Lune',0]]],
+  ['Le recyclage des déchets contribue à :',                                               'DEBUTANT',  'ENAFEP',[['A','Réduire la pollution et économiser les ressources',1],['B','Augmenter les déchets',0],['C','Consommer plus d\'énergie',0],['D','Créer plus de CO₂',0]]],
+  ['Quel est le rôle principal des forêts pour la planète ?',                             'ELEMENTAIRE','ENAFEP',[['A','Absorber le CO₂, produire de l\'O₂, régulation du climat',1],['B','Produire du pétrole',0],['C','Stocker l\'eau des mers',0],['D','Filtrer les ultraviolets',0]]],
+  ['La photodégradation des plastiques produit des :',                                    'AVANCE',    'EXAMEN_ETAT',[['A','Microplastiques',1],['B','Polymères',0],  ['C','Minéraux',0],   ['D','Acides aminés',0]]],
+  ['Quel est le nom de la théorie sur l\'origine de l\'univers ?',                        'ELEMENTAIRE','TENASOSP',[['A','Le Big Bang',1],  ['B','La théorie du chaos',0],['C','La théorie de la relativité',0],['D','La théorie de l\'état stationnaire',0]]],
+  ['L\'eau douce ne représente que ___ de toute l\'eau sur Terre.',                       'ELEMENTAIRE','ENAFEP',[['A','3%',1],           ['B','30%',0],       ['C','10%',0],      ['D','50%',0]]],
+  ['Un écosystème aquatique est menacé par l\'eutrophisation quand :',                    'AVANCE',    'EXAMEN_ETAT',[['A','L\'excès de nitrates et phosphates provoque une prolifération d\'algues',1],['B','La température de l\'eau monte légèrement',0],['C','La salinité augmente',0],['D','Le pH devient acide',0]]],
+  ['L\'énergie géothermique provient de :',                                                'ELEMENTAIRE','TENASOSP',[['A','La chaleur interne de la Terre',1],['B','L\'énergie solaire stockée dans le sol',0],['C','La combustion des minéraux',0],['D','Les marées',0]]],
+];
+foreach ($qs_sc_env as [$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$mat,$e,$d,$s,$o); $total_q++; }
+
 seed_log("  ✓ $total_q questions insérées");
 
 /* ── 6. ABONNEMENT DÉMO ─────────────────────────────────────── */
