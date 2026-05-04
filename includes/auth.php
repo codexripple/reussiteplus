@@ -110,11 +110,9 @@ function require_login(string $redirect = '/reussiteplus/connexion.php'): array 
         header('Location: ' . $redirect . '?redirect=' . urlencode($_SERVER['REQUEST_URI']));
         exit;
     }
-    // Vérifier que l'utilisateur existe toujours en base
-    $dbUser = dbRow("SELECT id FROM utilisateurs WHERE id = ? AND is_active = 1", [$_SESSION['user']['id']]);
-    if (!$dbUser) {
-        session_unset();
-        session_destroy();
+    // Rafraîchir les données + gérer expiry à chaque requête
+    refresh_user();
+    if (!is_logged()) {
         header('Location: ' . $redirect . '?redirect=' . urlencode($_SERVER['REQUEST_URI']));
         exit;
     }
@@ -133,11 +131,35 @@ function require_admin(): array {
 // ── Rafraîchir les données utilisateur en session ──────────
 function refresh_user(): void {
     if (!is_logged()) return;
-    $user = dbRow("SELECT * FROM utilisateurs WHERE id = ?", [$_SESSION['user']['id']]);
-    if ($user) {
-        unset($user['password_hash']);
-        $_SESSION['user'] = $user;
+    $user = dbRow("SELECT * FROM utilisateurs WHERE id = ? AND is_active = 1", [$_SESSION['user']['id']]);
+    if (!$user) {
+        session_unset();
+        session_destroy();
+        return;
     }
+    // Auto-downgrade si plan expiré
+    if ($user['plan'] !== 'GRATUIT' && $user['plan_expire_at'] && strtotime($user['plan_expire_at']) < time()) {
+        $oldPlan = $user['plan'];
+        dbQuery("UPDATE utilisateurs SET plan='GRATUIT', plan_expire_at=NULL WHERE id=?", [$user['id']]);
+        // Notifier une seule fois (max 1 notif d'expiry par jour)
+        $alreadyNotif = dbRow(
+            "SELECT id FROM notifications WHERE user_id=? AND type='SYSTEME' AND titre='Abonnement expiré' AND created_at > DATE_SUB(NOW(), INTERVAL 1 DAY)",
+            [$user['id']]
+        );
+        if (!$alreadyNotif) {
+            dbInsert('notifications', [
+                'user_id' => $user['id'],
+                'type'    => 'SYSTEME',
+                'titre'   => 'Abonnement expiré',
+                'message' => "Votre abonnement " . (PLANS[$oldPlan]['nom'] ?? $oldPlan) . " a expiré. Renouvelez pour continuer à bénéficier de tous les avantages.",
+                'lien'    => '/reussiteplus/tarifs.php',
+            ]);
+        }
+        $user['plan']           = 'GRATUIT';
+        $user['plan_expire_at'] = null;
+    }
+    unset($user['password_hash'], $user['token_verification'], $user['token_reset']);
+    $_SESSION['user'] = $user;
 }
 
 // ── Vérifier limite plan gratuit ───────────────────────────

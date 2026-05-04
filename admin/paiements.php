@@ -12,19 +12,27 @@ $user = require_admin();
 if (isset($_GET['action'], $_GET['id']) && !isset($_GET['confirm'])) {
     $action = $_GET['action'];
     $id     = $_GET['id'];
-    $abon = dbRow("SELECT a.*, u.id as uid, u.plan as user_plan FROM abonnements a JOIN utilisateurs u ON a.user_id=u.id WHERE a.id=?", [$id]);
+    $abon = dbRow("SELECT a.*, u.id as uid, u.plan as user_plan, u.plan_expire_at as user_plan_expire FROM abonnements a JOIN utilisateurs u ON a.user_id=u.id WHERE a.id=?", [$id]);
     if (!$abon) {
         redirect('/reussiteplus/admin/paiements.php', 'error', 'Paiement introuvable.');
     }
     if ($action === 'confirmer' && $abon['statut'] === 'EN_ATTENTE') {
-        dbQuery("UPDATE abonnements SET statut='CONFIRME', confirmed_at=NOW() WHERE id=?", [$id]);
+        // Calculer la date de fin : prolonger depuis l'expiry actuelle si encore active
+        $duree     = max(1, (int)($abon['duree_mois'] ?? 1));
+        $baseDate  = ($abon['user_plan_expire'] && strtotime($abon['user_plan_expire']) > time())
+                     ? $abon['user_plan_expire']
+                     : date('Y-m-d');
+        $newExpiry = date('Y-m-d', strtotime("+{$duree} month", strtotime($baseDate)));
+
+        dbQuery("UPDATE abonnements SET statut='CONFIRME', confirmed_at=NOW(), confirmed_by=?, date_fin=? WHERE id=?",
+            [$user['id'], $newExpiry, $id]);
         dbQuery("UPDATE utilisateurs SET plan=?, plan_expire_at=? WHERE id=?",
-            [$abon['plan'], $abon['date_fin'], $abon['uid']]);
+            [$abon['plan'], $newExpiry, $abon['uid']]);
         dbInsert('notifications', [
             'user_id' => $abon['uid'],
             'type'    => 'PAIEMENT',
             'titre'   => 'Paiement confirmé — ' . (PLANS[$abon['plan']]['nom'] ?? $abon['plan']),
-            'message' => "Votre abonnement {$abon['plan']} a été activé jusqu'au " . date('d/m/Y', strtotime($abon['date_fin'])) . ". Bon apprentissage !",
+            'message' => "Votre abonnement {$abon['plan']} a été activé jusqu'au " . date('d/m/Y', strtotime($newExpiry)) . ". Bon apprentissage !",
             'lien'    => '/reussiteplus/abonnement.php',
         ]);
         dbInsert('admin_logs', ['user_id' => $user['id'], 'action' => 'CONFIRMER_PAIEMENT', 'details' => "ID=$id ref={$abon['reference_paiement']}"]);

@@ -94,8 +94,8 @@ include __DIR__ . '/includes/header_app.php';
           $statusColors = [
             'EN_ATTENTE' => ['bg'=>'#FEF3C7','c'=>'#92400E'],
             'CONFIRME'   => ['bg'=>'#D1FAE5','c'=>'#064E3B'],
-            'REFUSE'     => ['bg'=>'#FEE2E2','c'=>'#7F1D1D'],
-            'EXPIRE'     => ['bg'=>'#F3F4F6','c'=>'#6B7280'],
+            'ECHEC'      => ['bg'=>'#FEE2E2','c'=>'#7F1D1D'],
+            'REMBOURSE'  => ['bg'=>'#EDE9FE','c'=>'#5B21B6'],
           ];
           $sc = $statusColors[$ab['statut']] ?? $statusColors['EN_ATTENTE'];
           $methodNom = METHODES_PAIEMENT[$ab['methode_paiement']]['nom'] ?? $ab['methode_paiement'];

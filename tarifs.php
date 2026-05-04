@@ -124,7 +124,7 @@ include __DIR__ . '/includes/header_app.php';
     <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap">
       <?php foreach (METHODES_PAIEMENT as $m): ?>
       <div style="display:flex;align-items:center;gap:8px;background:var(--gris-50);border:1px solid var(--gris-200);padding:10px 20px;border-radius:var(--radius)">
-        <span style="font-size:20px"><?= $m['icone'] ?></span>
+        <span style="font-size:20px"><i class="<?= e($m['icone']) ?>"></i></span>
         <div>
           <div style="font-size:13px;font-weight:600"><?= e($m['nom']) ?></div>
           <div style="font-size:11px;color:var(--gris-500)"><?= e($m['numero']) ?></div>
