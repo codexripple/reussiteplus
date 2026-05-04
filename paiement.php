@@ -53,14 +53,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirmer_paiement'])
     if (!csrf_verify()) {
         $errors[] = 'Token invalide. Rechargez la page.';
     } else {
-        $methode   = $_POST['methode']   ?? '';
-        $telephone = trim($_POST['telephone'] ?? '');
-        $duree     = (int)($_POST['duree'] ?? 1);
-        $codePromo = strtoupper(trim($_POST['code_promo'] ?? ''));
+        $methode    = $_POST['methode']    ?? '';
+        $telephone  = trim($_POST['telephone']  ?? '');
+        $duree      = (int)($_POST['duree'] ?? 1);
+        $codePromo  = strtoupper(trim($_POST['code_promo'] ?? ''));
+        $isCard     = (METHODES_PAIEMENT[$methode]['type'] ?? '') === 'carte';
+
+        // Champs carte
+        $cardNum    = preg_replace('/\D/', '', $_POST['card_number'] ?? '');
+        $cardExpiry = trim($_POST['card_expiry'] ?? '');
+        $cardCvc    = trim($_POST['card_cvc']    ?? '');
 
         if (!array_key_exists($methode, METHODES_PAIEMENT)) $errors[] = 'M&eacute;thode de paiement invalide.';
-        if (empty($telephone))                               $errors[] = 'Num&eacute;ro de t&eacute;l&eacute;phone requis.';
-        if ($duree < 1 || $duree > 12)                      $errors[] = 'Dur&eacute;e invalide.';
+        if (!$isCard && empty($telephone))                   $errors[] = 'Num&eacute;ro de t&eacute;l&eacute;phone requis.';
+        if ($isCard && strlen($cardNum) < 13)                $errors[] = 'Num&eacute;ro de carte invalide.';
+        if ($isCard && !preg_match('/^(0[1-9]|1[0-2])\/\d{2}$/', $cardExpiry)) $errors[] = 'Date d&rsquo;expiration invalide (MM/AA).';
+        if ($isCard && (strlen($cardCvc) < 3))               $errors[] = 'Code CVC invalide.';
+        if ($duree < 1 || $duree > 12)                       $errors[] = 'Dur&eacute;e invalide.';
+        // Pour carte, le téléphone stocke les 4 derniers chiffres
+        if ($isCard && !$errors) $telephone = 'CARTE-****' . substr($cardNum, -4);
 
         if (!$errors) {
             $montant = $plan['prix'] * $duree;
@@ -474,6 +485,20 @@ include __DIR__ . '/includes/header_app.php';
   </p>
 
   <div class="pay-steps">
+    <?php if ($methode === 'CARTE'): ?>
+    <div class="pay-step">
+      <div class="pay-step-num">1</div>
+      <div>Votre demande de paiement par carte a bien &eacute;t&eacute; enregistr&eacute;e avec la r&eacute;f&eacute;rence <strong><?= e($successRef) ?></strong>.</div>
+    </div>
+    <div class="pay-step">
+      <div class="pay-step-num">2</div>
+      <div>Notre &eacute;quipe va vous contacter dans les <strong>24h</strong> pour finaliser le paiement par carte de mani&egrave;re s&eacute;curis&eacute;e.</div>
+    </div>
+    <div class="pay-step">
+      <div class="pay-step-num">3</div>
+      <div>En cas d&rsquo;urgence, &eacute;crivez &agrave; <a href="mailto:paiement@reussiteplus.cd" style="color:var(--primary);font-weight:600">paiement@reussiteplus.cd</a> en mentionnant votre r&eacute;f&eacute;rence.</div>
+    </div>
+    <?php else: ?>
     <div class="pay-step">
       <div class="pay-step-num">1</div>
       <div>Effectuez le virement Mobile Money du montant indiqu&eacute; via la m&eacute;thode choisie.</div>
@@ -490,6 +515,7 @@ include __DIR__ . '/includes/header_app.php';
       <div class="pay-step-num">4</div>
       <div>Activation de votre abonnement sous 24h apr&egrave;s v&eacute;rification.</div>
     </div>
+    <?php endif; ?>
   </div>
 
   <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
@@ -591,20 +617,21 @@ include __DIR__ . '/includes/header_app.php';
       <!-- M&eacute;thode -->
       <div class="form-group">
         <label class="form-label">
-          <i class="bi bi-phone" style="color:var(--primary)"></i>
+          <i class="bi bi-wallet2" style="color:var(--primary)"></i>
           M&eacute;thode de paiement <span style="color:var(--rouge)">*</span>
         </label>
         <div class="pay-method-grid">
           <?php foreach (METHODES_PAIEMENT as $mKey => $m): ?>
           <label class="pay-method-label">
-            <input type="radio" name="methode" value="<?= e($mKey) ?>" required
+            <input type="radio" name="methode" value="<?= e($mKey) ?>"
+                   onchange="togglePayFields(this.value)" required
                    onchange="recalc()">
             <div class="pay-method-icon">
               <i class="<?= e($m['icone']) ?>"></i>
             </div>
             <div>
               <div class="pay-method-nom"><?= e($m['nom']) ?></div>
-              <div class="pay-method-num">N&deg; RÉUSSITE+&nbsp;: <?= e($m['numero']) ?></div>
+              <div class="pay-method-num"><?= ($m['type'] ?? 'mobile') === 'carte' ? e($m['numero']) : 'N&deg; RÉUSSITE+&nbsp;: ' . e($m['numero']) ?></div>
             </div>
             <div class="pay-method-check"></div>
           </label>
@@ -612,18 +639,49 @@ include __DIR__ . '/includes/header_app.php';
         </div>
       </div>
 
-      <!-- T&eacute;l&eacute;phone -->
-      <div class="form-group">
+      <!-- T&eacute;l&eacute;phone (Mobile Money) -->
+      <div class="form-group" id="field-telephone">
         <label class="form-label">
           <i class="bi bi-telephone" style="color:var(--primary)"></i>
-          Votre num&eacute;ro de t&eacute;l&eacute;phone <span style="color:var(--rouge)">*</span>
+          Votre num&eacute;ro Mobile Money <span style="color:var(--rouge)">*</span>
         </label>
         <input class="form-control" type="tel" name="telephone"
                placeholder="+243 8X XXX XXXX"
                value="<?= e($_POST['telephone'] ?? '') ?>"
-               pattern="[+0-9\s]{10,15}" required>
+               pattern="[+0-9\s]{10,15}">
         <div style="font-size:11px;color:var(--gris-500);margin-top:4px">
           Num&eacute;ro utilis&eacute; pour effectuer le virement Mobile Money
+        </div>
+      </div>
+
+      <!-- Champs carte bancaire -->
+      <div id="field-carte" style="display:none">
+        <div class="form-group">
+          <label class="form-label"><i class="bi bi-credit-card-2-front" style="color:var(--primary)"></i> Num&eacute;ro de carte <span style="color:var(--rouge)">*</span></label>
+          <input class="form-control" type="text" name="card_number" id="card_number"
+                 placeholder="1234 5678 9012 3456"
+                 maxlength="19"
+                 value="<?= e($_POST['card_number'] ?? '') ?>"
+                 oninput="formatCardNum(this)">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label"><i class="bi bi-calendar3" style="color:var(--primary)"></i> Expiration</label>
+            <input class="form-control" type="text" name="card_expiry" id="card_expiry"
+                   placeholder="MM/AA" maxlength="5"
+                   value="<?= e($_POST['card_expiry'] ?? '') ?>"
+                   oninput="formatExpiry(this)">
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label"><i class="bi bi-lock" style="color:var(--primary)"></i> CVC</label>
+            <input class="form-control" type="text" name="card_cvc" id="card_cvc"
+                   placeholder="123" maxlength="4"
+                   value="<?= e($_POST['card_cvc'] ?? '') ?>">
+          </div>
+        </div>
+        <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;padding:10px 14px;font-size:12px;color:#92400E;margin-top:12px">
+          <i class="bi bi-info-circle"></i> Paiement par carte trait&eacute; manuellement dans les 24h.
+          Vos donn&eacute;es de carte ne sont pas stock&eacute;es sur nos serveurs.
         </div>
       </div>
 
@@ -783,6 +841,34 @@ document.getElementById('payForm').addEventListener('submit', function() {
     btn.disabled = true;
     btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Envoi en cours\u2026';
 });
+
+function togglePayFields(methode) {
+    const isCarte = methode === 'CARTE';
+    const telField  = document.getElementById('field-telephone');
+    const carteField = document.getElementById('field-carte');
+    telField.style.display  = isCarte ? 'none' : '';
+    carteField.style.display = isCarte ? '' : 'none';
+    // Gérer le required
+    const telInput = telField.querySelector('input');
+    if (telInput) telInput.required = !isCarte;
+}
+
+function formatCardNum(input) {
+    let v = input.value.replace(/\D/g, '').slice(0, 16);
+    input.value = v.replace(/(.{4})/g, '$1 ').trim();
+}
+
+function formatExpiry(input) {
+    let v = input.value.replace(/\D/g, '').slice(0, 4);
+    if (v.length >= 3) v = v.slice(0, 2) + '/' + v.slice(2);
+    input.value = v;
+}
+
+// Sélection initiale si retour formulaire
+(function() {
+    const checked = document.querySelector('input[name="methode"]:checked');
+    if (checked) togglePayFields(checked.value);
+})();
 </script>
 
 <?php include __DIR__ . '/includes/footer_app.php'; ?>

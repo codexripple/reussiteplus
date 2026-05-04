@@ -23,7 +23,8 @@ define('BCRYPT_COST', 12);
 // Plans & Tarifs (en CDF)
 define('PLANS', [
     'GRATUIT' => [
-        'nom'          => 'Gratuit',
+        'nom'          => 'Découverte',
+        'tagline'      => 'Commencez gratuitement',
         'prix'         => 0,
         'prix_affiche' => 'Gratuit',
         'examens_mois' => 5,
@@ -32,10 +33,11 @@ define('PLANS', [
         'corrige'      => false,
         'ia'           => false,
         'couleur'      => '#6B7280',
-        'icone'        => 'bi bi-backpack',
+        'icone'        => 'bi bi-compass',
     ],
     'BASIQUE' => [
-        'nom'          => 'Basique',
+        'nom'          => 'Essentiel',
+        'tagline'      => 'Pour préparer efficacement',
         'prix'         => 5000,
         'prix_affiche' => '5 000 CDF/mois',
         'examens_mois' => 30,
@@ -44,24 +46,26 @@ define('PLANS', [
         'corrige'      => true,
         'ia'           => false,
         'couleur'      => '#1E5FAD',
-        'icone'        => 'bi bi-book',
+        'icone'        => 'bi bi-mortarboard',
         'populaire'    => false,
     ],
     'PREMIUM' => [
-        'nom'          => 'Premium',
+        'nom'          => 'Excellence',
+        'tagline'      => 'Le plan des futurs lauréats',
         'prix'         => 10000,
         'prix_affiche' => '10 000 CDF/mois',
-        'examens_mois' => -1, // illimité
+        'examens_mois' => -1,
         'questions'    => -1,
         'archives'     => true,
         'corrige'      => true,
         'ia'           => true,
         'couleur'      => '#C9972A',
-        'icone'        => 'bi bi-star',
+        'icone'        => 'bi bi-trophy',
         'populaire'    => true,
     ],
     'ECOLE' => [
-        'nom'          => 'École',
+        'nom'          => 'Institution',
+        'tagline'      => 'Pour les établissements scolaires',
         'prix'         => 50000,
         'prix_affiche' => '50 000 CDF/mois',
         'examens_mois' => -1,
@@ -77,9 +81,10 @@ define('PLANS', [
 
 // Méthodes de paiement Mobile Money
 define('METHODES_PAIEMENT', [
-    'MPESA'        => ['nom' => 'M-Pesa',       'numero' => '+243 81X XXX XXX', 'icone' => 'bi bi-phone'],
-    'AIRTEL_MONEY' => ['nom' => 'Airtel Money',  'numero' => '+243 99X XXX XXX', 'icone' => 'bi bi-phone'],
-    'ORANGE_MONEY' => ['nom' => 'Orange Money',  'numero' => '+243 84X XXX XXX', 'icone' => 'bi bi-phone'],
+    'MPESA'        => ['nom' => 'M-Pesa',                'numero' => '+243 81X XXX XXX', 'icone' => 'bi bi-phone',             'type' => 'mobile'],
+    'AIRTEL_MONEY' => ['nom' => 'Airtel Money',           'numero' => '+243 99X XXX XXX', 'icone' => 'bi bi-phone',             'type' => 'mobile'],
+    'ORANGE_MONEY' => ['nom' => 'Orange Money',           'numero' => '+243 84X XXX XXX', 'icone' => 'bi bi-phone',             'type' => 'mobile'],
+    'CARTE'        => ['nom' => 'Carte Visa / Mastercard','numero' => 'Paiement sécurisé',  'icone' => 'bi bi-credit-card-2-front','type' => 'carte'],
 ]);
 
 // Limites plan gratuit
