@@ -130,7 +130,7 @@ include __DIR__ . '/includes/header_app.php';
   <div style="text-align:center;margin-top:24px;font-size:13px;color:var(--gris-500)">
     Un problème avec votre paiement ?
     <a href="mailto:paiement@reussiteplus.cd" style="color:var(--primary);font-weight:600">Contactez notre support</a>
-    ou écrivez-nous sur WhatsApp au +243 8XX XXX XXX
+    ou écrivez-nous sur <a href="https://wa.me/243977329184" target="_blank" style="color:#25D366;font-weight:600"><i class="bi bi-whatsapp"></i> WhatsApp +243 977 329 184</a>
   </div>
 </div>
 

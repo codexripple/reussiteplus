@@ -183,7 +183,111 @@ include __DIR__ . '/includes/header_app.php';
     <a href="/reussiteplus/resultat.php" class="btn btn-ghost"><i class="bi bi-list-ul"></i> Tous mes résultats</a>
     <a href="/reussiteplus/examen.php" class="btn btn-primary"><i class="bi bi-arrow-repeat"></i> Refaire un examen</a>
     <a href="/reussiteplus/progression.php" class="btn btn-ghost"><i class="bi bi-graph-up"></i> Ma progression</a>
+    <?php if ($total > 0): ?>
+    <button onclick="printCertificat()" class="btn btn-gold"><i class="bi bi-award-fill"></i> Télécharger le certificat</button>
+    <?php endif; ?>
   </div>
+
+  <!-- ══════════ CERTIFICAT ══════════ -->
+  <?php
+  $mention = '';
+  $mentionColor = '';
+  $mentionBg = '';
+  if ($pct >= 80) { $mention = 'Très Grande Distinction'; $mentionColor = '#007A5E'; $mentionBg = '#EAF5F1'; }
+  elseif ($pct >= 70) { $mention = 'Grande Distinction'; $mentionColor = '#1E5FAD'; $mentionBg = '#EEF4FF'; }
+  elseif ($pct >= 60) { $mention = 'Distinction'; $mentionColor = '#C9972A'; $mentionBg = '#FFFBEB'; }
+  elseif ($pct >= 50) { $mention = 'Satisfaction'; $mentionColor = '#6B7280'; $mentionBg = '#F9FAFB'; }
+  else { $mention = 'Participation'; $mentionColor = '#6B7280'; $mentionBg = '#F3F4F6'; }
+  $dateFormated = date('j', strtotime($session['finished_at'] ?? 'now'));
+  $moisFr = ['','janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  $dateCert = $dateFormated . ' ' . $moisFr[(int)date('n', strtotime($session['finished_at'] ?? 'now'))] . ' ' . date('Y', strtotime($session['finished_at'] ?? 'now'));
+  ?>
+  <div id="certificat-block" style="display:none;margin-bottom:32px">
+    <div id="certificat"
+         style="background:white;border:3px solid <?= $mentionColor ?>;border-radius:16px;padding:40px 48px;text-align:center;position:relative;font-family:Georgia,serif;max-width:720px;margin:0 auto;box-shadow:0 8px 32px rgba(0,0,0,.1)">
+
+      <!-- Coins décoratifs -->
+      <div style="position:absolute;top:10px;left:10px;width:32px;height:32px;border-top:3px solid <?= $mentionColor ?>;border-left:3px solid <?= $mentionColor ?>;border-radius:4px 0 0 0"></div>
+      <div style="position:absolute;top:10px;right:10px;width:32px;height:32px;border-top:3px solid <?= $mentionColor ?>;border-right:3px solid <?= $mentionColor ?>;border-radius:0 4px 0 0"></div>
+      <div style="position:absolute;bottom:10px;left:10px;width:32px;height:32px;border-bottom:3px solid <?= $mentionColor ?>;border-left:3px solid <?= $mentionColor ?>;border-radius:0 0 0 4px"></div>
+      <div style="position:absolute;bottom:10px;right:10px;width:32px;height:32px;border-bottom:3px solid <?= $mentionColor ?>;border-right:3px solid <?= $mentionColor ?>;border-radius:0 0 4px 0"></div>
+
+      <!-- Logo & titre établissement -->
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#9CA3AF;margin-bottom:6px">République Démocratique du Congo</div>
+      <div style="font-family:var(--font-display,'Arial'),sans-serif;font-size:26px;font-weight:900;color:<?= $mentionColor ?>;letter-spacing:1px;margin-bottom:2px">RÉUSSITE+</div>
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:3px;color:#9CA3AF;margin-bottom:24px">Plateforme nationale de préparation aux examens</div>
+
+      <!-- Ligne décorative -->
+      <div style="height:1px;background:linear-gradient(to right, transparent, <?= $mentionColor ?>, transparent);margin-bottom:24px"></div>
+
+      <!-- Titre certificat -->
+      <div style="font-size:13px;text-transform:uppercase;letter-spacing:2px;color:#6B7280;margin-bottom:10px">Certifie que</div>
+      <div style="font-family:var(--font-display,'Georgia'),serif;font-size:32px;font-weight:900;color:#111827;margin-bottom:6px">
+        <?= e($user['prenom'] . ' ' . strtoupper($user['nom'])) ?>
+      </div>
+      <div style="font-size:13px;color:#6B7280;margin-bottom:24px">a complété avec succès l'ensemble des épreuves de l'examen</div>
+
+      <!-- Titre examen -->
+      <div style="background:<?= $mentionBg ?>;border:1.5px solid <?= $mentionColor ?>30;border-radius:10px;padding:14px 24px;display:inline-block;margin-bottom:20px;max-width:90%">
+        <div style="font-size:16px;font-weight:700;color:#111827"><?= e($session['titre']) ?></div>
+        <div style="font-size:12px;color:#6B7280;margin-top:4px"><?= e($session['matiere_nom'] ?? '') ?> · <?= $dateCert ?></div>
+      </div>
+
+      <!-- Score -->
+      <div style="display:flex;justify-content:center;gap:32px;margin-bottom:24px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:38px;font-weight:900;color:<?= $mentionColor ?>;line-height:1"><?= number_format($pct, 0) ?>%</div>
+          <div style="font-size:11px;color:#9CA3AF;text-transform:uppercase;letter-spacing:1px;margin-top:4px">Score obtenu</div>
+        </div>
+        <div style="width:1px;background:#E5E7EB"></div>
+        <div>
+          <div style="font-size:38px;font-weight:900;color:#111827;line-height:1"><?= $bonnes ?>/<?= $total ?></div>
+          <div style="font-size:11px;color:#9CA3AF;text-transform:uppercase;letter-spacing:1px;margin-top:4px">Bonnes réponses</div>
+        </div>
+        <div style="width:1px;background:#E5E7EB"></div>
+        <div>
+          <div style="font-size:38px;font-weight:900;color:<?= $mentionColor ?>;line-height:1"><?= number_format((float)$session['score'], 0) ?></div>
+          <div style="font-size:11px;color:#9CA3AF;text-transform:uppercase;letter-spacing:1px;margin-top:4px">Points</div>
+        </div>
+      </div>
+
+      <!-- Mention -->
+      <div style="background:<?= $mentionBg ?>;color:<?= $mentionColor ?>;padding:8px 28px;border-radius:30px;display:inline-block;font-weight:700;font-size:16px;letter-spacing:.5px;margin-bottom:24px;border:1.5px solid <?= $mentionColor ?>40">
+        ★ <?= $mention ?> ★
+      </div>
+
+      <!-- Ligne décorative -->
+      <div style="height:1px;background:linear-gradient(to right, transparent, <?= $mentionColor ?>, transparent);margin-bottom:24px"></div>
+
+      <!-- Signatures -->
+      <div style="display:flex;justify-content:space-around;font-size:11px;color:#6B7280;gap:20px;flex-wrap:wrap">
+        <div style="text-align:center">
+          <div style="font-size:22px;margin-bottom:4px;color:<?= $mentionColor ?>">✦</div>
+          <div style="font-weight:700;color:#111827;font-size:13px">Direction Pédagogique</div>
+          <div>RÉUSSITE+</div>
+        </div>
+        <div style="text-align:center">
+          <div style="background:<?= $mentionColor ?>;color:white;padding:6px 16px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:4px"><?= $pct >= 50 ? '✓ VALIDÉ' : '✓ PARTICIPÉ' ?></div>
+          <div>Réf : <?= substr($sessionId, 0, 8) ?></div>
+          <div>reussiteplus.cd</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:22px;margin-bottom:4px;color:<?= $mentionColor ?>">✦</div>
+          <div style="font-weight:700;color:#111827;font-size:13px">Émis le</div>
+          <div><?= $dateCert ?></div>
+        </div>
+      </div>
+
+    </div><!-- /certificat -->
+    <div style="text-align:center;margin-top:16px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap">
+      <button onclick="printCertificat()" class="btn btn-primary"><i class="bi bi-printer"></i> Imprimer</button>
+      <button onclick="downloadCertificat()" class="btn btn-gold"><i class="bi bi-download"></i> Télécharger PDF</button>
+      <a href="https://wa.me/243977329184?text=<?= rawurlencode("Bonjour, j'ai obtenu " . number_format($pct,0) . "% (" . $mention . ") à l'examen " . $session['titre'] . " sur RÉUSSITE+. Réf : " . substr($sessionId,0,8)) ?>" target="_blank" class="btn btn-ghost" style="background:#25D366;color:white;border-color:#25D366">
+        <i class="bi bi-whatsapp"></i> Partager sur WhatsApp
+      </a>
+    </div>
+  </div>
+  <!-- /certificat-block -->
 
   <!-- Détail des réponses -->
   <?php if ($answers): ?>
@@ -226,5 +330,41 @@ include __DIR__ . '/includes/header_app.php';
   </div>
   <?php endif; ?>
 </div>
+
+<script>
+function printCertificat() {
+    const block = document.getElementById('certificat-block');
+    block.style.display = '';
+    block.scrollIntoView({behavior: 'smooth', block: 'start'});
+
+    setTimeout(() => {
+        const cert = document.getElementById('certificat').outerHTML;
+        const win = window.open('', '_blank', 'width=800,height=700');
+        win.document.write(`<!DOCTYPE html><html lang="fr"><head>
+          <meta charset="UTF-8">
+          <title>Certificat RÉUSSITE+</title>
+          <style>
+            * { box-sizing: border-box; margin: 0; padding: 0; }
+            body { background: white; font-family: Georgia, serif; padding: 20px; }
+            @media print {
+              body { padding: 0; }
+              button { display: none !important; }
+              @page { size: A4 landscape; margin: 10mm; }
+            }
+          </style>
+        </head><body>${cert}</body></html>`);
+        win.document.close();
+        win.focus();
+        setTimeout(() => win.print(), 600);
+    }, 400);
+}
+
+function downloadCertificat() {
+    const block = document.getElementById('certificat-block');
+    block.style.display = '';
+    // Utiliser l'impression vers PDF (comportement natif des navigateurs)
+    printCertificat();
+}
+</script>
 
 <?php include __DIR__ . '/includes/footer_app.php'; ?>

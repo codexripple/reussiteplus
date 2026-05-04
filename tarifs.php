@@ -391,7 +391,7 @@ include __DIR__ . '/includes/header_app.php';
     <div style="margin-top:20px;font-size:12px;color:var(--gris-400)">
       <i class="bi bi-shield-check" style="color:var(--primary)"></i> Paiements sécurisés &nbsp;·&nbsp;
       <i class="bi bi-headset" style="color:var(--primary)"></i> Support : <a href="mailto:support@reussiteplus.cd" style="color:var(--primary)">support@reussiteplus.cd</a> &nbsp;·&nbsp;
-      <i class="bi bi-whatsapp" style="color:#25D366"></i> WhatsApp : +243 8XX XXX XXX
+      <i class="bi bi-whatsapp" style="color:#25D366"></i> <a href="https://wa.me/243977329184" target="_blank" style="color:#25D366">+243 977 329 184</a>
     </div>
   </div>
 

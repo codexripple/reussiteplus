@@ -308,7 +308,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
           <div class="info-icon green"><i class="bi bi-whatsapp"></i></div>
           <div>
             <div class="info-label">WhatsApp</div>
-            <div class="info-value"><a href="https://wa.me/243XXXXXXXXX" target="_blank">+243 XX XXX XXXX</a><br><span style="font-size:12px;color:var(--gris-500)">Lun–Ven, 8h–18h (heure de Kinshasa)</span></div>
+            <div class="info-value"><a href="https://wa.me/243977329184" target="_blank">+243 977 329 184</a><br><span style="font-size:12px;color:var(--gris-500)">Lun–Ven, 8h–18h (heure de Kinshasa)</span></div>
           </div>
         </div>
 
@@ -331,7 +331,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
         <div class="social-row">
           <a href="#" class="social-btn fb" title="Facebook"><i class="bi bi-facebook"></i></a>
           <a href="#" class="social-btn tw" title="Twitter / X"><i class="bi bi-twitter-x"></i></a>
-          <a href="#" class="social-btn wa" title="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+          <a href="https://wa.me/243977329184" target="_blank" class="social-btn wa" title="WhatsApp"><i class="bi bi-whatsapp"></i></a>
           <a href="#" class="social-btn yt" title="YouTube"><i class="bi bi-youtube"></i></a>
         </div>
       </div>

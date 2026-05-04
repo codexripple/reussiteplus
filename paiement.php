@@ -496,7 +496,7 @@ include __DIR__ . '/includes/header_app.php';
     </div>
     <div class="pay-step">
       <div class="pay-step-num">3</div>
-      <div>En cas d&rsquo;urgence, &eacute;crivez &agrave; <a href="mailto:paiement@reussiteplus.cd" style="color:var(--primary);font-weight:600">paiement@reussiteplus.cd</a> en mentionnant votre r&eacute;f&eacute;rence.</div>
+      <div>En cas d&rsquo;urgence, &eacute;crivez &agrave; <a href="mailto:paiement@reussiteplus.cd" style="color:var(--primary);font-weight:600">paiement@reussiteplus.cd</a> ou sur <a href="https://wa.me/243977329184" target="_blank" style="color:#25D366;font-weight:600"><i class="bi bi-whatsapp"></i> WhatsApp</a> en mentionnant votre r&eacute;f&eacute;rence.</div>
     </div>
     <?php else: ?>
     <div class="pay-step">
@@ -509,7 +509,7 @@ include __DIR__ . '/includes/header_app.php';
     </div>
     <div class="pay-step">
       <div class="pay-step-num">3</div>
-      <div>Envoyez la capture &agrave; <a href="mailto:paiement@reussiteplus.cd" style="color:var(--primary);font-weight:600">paiement@reussiteplus.cd</a> en mentionnant la r&eacute;f&eacute;rence <strong><?= e($successRef) ?></strong>.</div>
+      <div>Envoyez la capture &agrave; <a href="mailto:paiement@reussiteplus.cd" style="color:var(--primary);font-weight:600">paiement@reussiteplus.cd</a> ou sur <a href="https://wa.me/243977329184" target="_blank" style="color:#25D366;font-weight:600"><i class="bi bi-whatsapp"></i> WhatsApp (+243 977 329 184)</a> en mentionnant la r&eacute;f&eacute;rence <strong><?= e($successRef) ?></strong>.</div>
     </div>
     <div class="pay-step">
       <div class="pay-step-num">4</div>
