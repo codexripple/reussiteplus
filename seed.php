@@ -106,6 +106,27 @@ $archivesData = [
     ['ENAFEP 2020 — Mathématiques',        2020,'ENAFEP',    'maths',    0],
     ['ENAFEP 2020 — Français',             2020,'ENAFEP',    'francais', 0],
     ['ENAFEP 2020 — Sciences Naturelles',  2020,'ENAFEP',    'sciences', 0],
+    ['ENAFEP 2020 — Histoire-Géographie',  2020,'ENAFEP',    'histgeo',  0],
+    ['ENAFEP 2020 — Anglais',              2020,'ENAFEP',    'anglais',  0],
+    // ── ENAFEP 2019 ──────────────────────────────────────────
+    ['ENAFEP 2019 — Mathématiques',        2019,'ENAFEP',    'maths',    0],
+    ['ENAFEP 2019 — Français',             2019,'ENAFEP',    'francais', 0],
+    ['ENAFEP 2019 — Sciences Naturelles',  2019,'ENAFEP',    'sciences', 0],
+    ['ENAFEP 2019 — Histoire-Géographie',  2019,'ENAFEP',    'histgeo',  0],
+    ['ENAFEP 2019 — Anglais',              2019,'ENAFEP',    'anglais',  0],
+    // ── ENAFEP 2018 ──────────────────────────────────────────
+    ['ENAFEP 2018 — Mathématiques',        2018,'ENAFEP',    'maths',    0],
+    ['ENAFEP 2018 — Français',             2018,'ENAFEP',    'francais', 0],
+    ['ENAFEP 2018 — Sciences Naturelles',  2018,'ENAFEP',    'sciences', 0],
+    ['ENAFEP 2018 — Histoire-Géographie',  2018,'ENAFEP',    'histgeo',  0],
+    ['ENAFEP 2021 — Français',             2021,'ENAFEP',    'francais', 0],
+    ['ENAFEP 2021 — Sciences Naturelles',  2021,'ENAFEP',    'sciences', 0],
+    ['ENAFEP 2021 — Histoire-Géographie',  2021,'ENAFEP',    'histgeo',  0],
+    ['ENAFEP 2021 — Anglais',              2021,'ENAFEP',    'anglais',  0],
+    // ── ENAFEP 2020 ──────────────────────────────────────────
+    ['ENAFEP 2020 — Mathématiques',        2020,'ENAFEP',    'maths',    0],
+    ['ENAFEP 2020 — Français',             2020,'ENAFEP',    'francais', 0],
+    ['ENAFEP 2020 — Sciences Naturelles',  2020,'ENAFEP',    'sciences', 0],
     ['ENAFEP 2020 — Anglais',              2020,'ENAFEP',    'anglais',  0],
     // ── TENASOSP 2024 ────────────────────────────────────────
     ['TENASOSP 2024 — Mathématiques',      2024,'TENASOSP',  'maths',    1],
@@ -132,6 +153,26 @@ $archivesData = [
     ['TENASOSP 2021 — Chimie',             2021,'TENASOSP',  'chimie',   1],
     ['TENASOSP 2021 — Physique',           2021,'TENASOSP',  'physique', 1],
     ['TENASOSP 2021 — Biologie',           2021,'TENASOSP',  'biologie', 1],
+    // ── TENASOSP 2022 ────────────────────────────────────────
+    ['TENASOSP 2022 — Mathématiques',      2022,'TENASOSP',  'maths',    1],
+    ['TENASOSP 2022 — Chimie',             2022,'TENASOSP',  'chimie',   1],
+    ['TENASOSP 2022 — Physique',           2022,'TENASOSP',  'physique', 1],
+    ['TENASOSP 2022 — Biologie',           2022,'TENASOSP',  'biologie', 1],
+    ['TENASOSP 2022 — Français',           2022,'TENASOSP',  'francais', 1],
+    // ── TENASOSP 2023 ────────────────────────────────────────
+    ['TENASOSP 2023 — Mathématiques',      2023,'TENASOSP',  'maths',    1],
+    ['TENASOSP 2023 — Chimie',             2023,'TENASOSP',  'chimie',   1],
+    ['TENASOSP 2023 — Physique',           2023,'TENASOSP',  'physique', 1],
+    ['TENASOSP 2023 — Biologie',           2023,'TENASOSP',  'biologie', 1],
+    ['TENASOSP 2023 — Français',           2023,'TENASOSP',  'francais', 1],
+    ['TENASOSP 2023 — Anglais',            2023,'TENASOSP',  'anglais',  1],
+    // ── TENASOSP 2024 ────────────────────────────────────────
+    ['TENASOSP 2024 — Mathématiques',      2024,'TENASOSP',  'maths',    1],
+    ['TENASOSP 2024 — Chimie',             2024,'TENASOSP',  'chimie',   1],
+    ['TENASOSP 2024 — Physique',           2024,'TENASOSP',  'physique', 1],
+    ['TENASOSP 2024 — Biologie',           2024,'TENASOSP',  'biologie', 1],
+    ['TENASOSP 2024 — Français',           2024,'TENASOSP',  'francais', 1],
+    ['TENASOSP 2024 — Anglais',            2024,'TENASOSP',  'anglais',  1],
     // ── EXAMEN D'ÉTAT 2024 ───────────────────────────────────
     ['Examen d\'État 2024 — Mathématiques',2024,'EXAMEN_ETAT','maths',   1],
     ['Examen d\'État 2024 — Français',     2024,'EXAMEN_ETAT','francais',1],
@@ -166,11 +207,75 @@ $archivesData = [
     ['Examen d\'État 2020 — Français',     2020,'EXAMEN_ETAT','francais',1],
     ['Examen d\'État 2020 — Sciences',     2020,'EXAMEN_ETAT','sciences',1],
     ['Examen d\'État 2020 — Anglais',      2020,'EXAMEN_ETAT','anglais', 1],
+    // ── EXAMEN D'ÉTAT 2019 ───────────────────────────────────
+    ['Examen d\'État 2019 — Mathématiques',2019,'EXAMEN_ETAT','maths',   1],
+    ['Examen d\'État 2019 — Français',     2019,'EXAMEN_ETAT','francais',1],
+    ['Examen d\'État 2019 — Chimie',       2019,'EXAMEN_ETAT','chimie',  1],
+    ['Examen d\'État 2019 — Physique',     2019,'EXAMEN_ETAT','physique',1],
+    ['Examen d\'État 2019 — Biologie',     2019,'EXAMEN_ETAT','biologie',1],
+    ['Examen d\'État 2019 — Histoire-Géo', 2019,'EXAMEN_ETAT','histgeo', 1],
+    ['Examen d\'État 2019 — Anglais',      2019,'EXAMEN_ETAT','anglais', 1],
+    // ── EXAMEN D'ÉTAT 2018 ───────────────────────────────────
+    ['Examen d\'État 2018 — Mathématiques',2018,'EXAMEN_ETAT','maths',   1],
+    ['Examen d\'État 2018 — Français',     2018,'EXAMEN_ETAT','francais',1],
+    ['Examen d\'État 2018 — Chimie',       2018,'EXAMEN_ETAT','chimie',  1],
+    ['Examen d\'État 2018 — Physique',     2018,'EXAMEN_ETAT','physique',1],
+    ['Examen d\'État 2018 — Biologie',     2018,'EXAMEN_ETAT','biologie',1],
+    ['Examen d\'État 2018 — Histoire-Géo', 2018,'EXAMEN_ETAT','histgeo', 1],
+    ['Examen d\'État 2018 — Anglais',      2018,'EXAMEN_ETAT','anglais', 1],
+    // ── EXAMEN D'ÉTAT 2017 ───────────────────────────────────
+    ['Examen d\'État 2017 — Mathématiques',2017,'EXAMEN_ETAT','maths',   1],
+    ['Examen d\'État 2017 — Français',     2017,'EXAMEN_ETAT','francais',1],
+    ['Examen d\'État 2017 — Chimie',       2017,'EXAMEN_ETAT','chimie',  1],
+    ['Examen d\'État 2017 — Physique',     2017,'EXAMEN_ETAT','physique',1],
+    ['Examen d\'État 2017 — Biologie',     2017,'EXAMEN_ETAT','biologie',1],
+    ['Examen d\'État 2017 — Histoire-Géo', 2017,'EXAMEN_ETAT','histgeo', 1],
+    // ── DIOCÉSAIN — Kinshasa 2024 ────────────────────────────
+    ['Test Diocésain Kinshasa 2024 — Mathématiques', 2024,'DIOCESAIN','maths',    0],
+    ['Test Diocésain Kinshasa 2024 — Français',      2024,'DIOCESAIN','francais', 0],
+    ['Test Diocésain Kinshasa 2024 — Sciences',      2024,'DIOCESAIN','sciences', 0],
+    ['Test Diocésain Kinshasa 2024 — Histoire-Géo',  2024,'DIOCESAIN','histgeo',  0],
+    // ── DIOCÉSAIN — Kinshasa 2023 ────────────────────────────
+    ['Test Diocésain Kinshasa 2023 — Mathématiques', 2023,'DIOCESAIN','maths',    0],
+    ['Test Diocésain Kinshasa 2023 — Français',      2023,'DIOCESAIN','francais', 0],
+    ['Test Diocésain Kinshasa 2023 — Sciences',      2023,'DIOCESAIN','sciences', 0],
+    ['Test Diocésain Kinshasa 2023 — Histoire-Géo',  2023,'DIOCESAIN','histgeo',  0],
+    // ── DIOCÉSAIN — Lubumbashi 2024 ──────────────────────────
+    ['Test Diocésain Lubumbashi 2024 — Mathématiques',2024,'DIOCESAIN','maths',   0],
+    ['Test Diocésain Lubumbashi 2024 — Français',     2024,'DIOCESAIN','francais',0],
+    ['Test Diocésain Lubumbashi 2024 — Chimie',       2024,'DIOCESAIN','chimie',  0],
+    ['Test Diocésain Lubumbashi 2024 — Physique',     2024,'DIOCESAIN','physique',0],
+    // ── DIOCÉSAIN — Lubumbashi 2023 ──────────────────────────
+    ['Test Diocésain Lubumbashi 2023 — Mathématiques',2023,'DIOCESAIN','maths',   0],
+    ['Test Diocésain Lubumbashi 2023 — Français',     2023,'DIOCESAIN','francais',0],
+    ['Test Diocésain Lubumbashi 2023 — Chimie',       2023,'DIOCESAIN','chimie',  0],
+    // ── DIOCÉSAIN — Goma 2024 ────────────────────────────────
+    ['Test Diocésain Goma 2024 — Mathématiques',     2024,'DIOCESAIN','maths',    0],
+    ['Test Diocésain Goma 2024 — Français',          2024,'DIOCESAIN','francais', 0],
+    ['Test Diocésain Goma 2024 — Biologie',          2024,'DIOCESAIN','biologie', 0],
+    // ── DIOCÉSAIN — Mbuji-Mayi 2023 ──────────────────────────
+    ['Test Diocésain Mbuji-Mayi 2023 — Mathématiques',2023,'DIOCESAIN','maths',   0],
+    ['Test Diocésain Mbuji-Mayi 2023 — Français',     2023,'DIOCESAIN','francais',0],
+    ['Test Diocésain Mbuji-Mayi 2023 — Sciences',     2023,'DIOCESAIN','sciences',0],
+    // ── EXAMEN D'ÉTAT Rattrapage 2024 ────────────────────────
+    ['Examen d\'État 2024 Rattrapage — Mathématiques',2024,'EXAMEN_ETAT','maths',  1],
+    ['Examen d\'État 2024 Rattrapage — Français',     2024,'EXAMEN_ETAT','francais',1],
+    ['Examen d\'État 2024 Rattrapage — Chimie',       2024,'EXAMEN_ETAT','chimie', 1],
+    // ── EXAMEN D'ÉTAT Rattrapage 2023 ────────────────────────
+    ['Examen d\'État 2023 Rattrapage — Mathématiques',2023,'EXAMEN_ETAT','maths',  1],
+    ['Examen d\'État 2023 Rattrapage — Français',     2023,'EXAMEN_ETAT','francais',1],
 ];
 $stA = $pdo->prepare("INSERT INTO archives (id,titre,annee,exam_type,matiere_id,description,premium_only,slug,status) VALUES (UUID(),?,?,?,?,?,?,?,?)");
+$descMap = [
+    'ENAFEP'      => 'Épreuve nationale de fin d\'études primaires — session %d.',
+    'TENASOSP'    => 'Test national d\'entrée aux humanités scientifiques — session %d.',
+    'EXAMEN_ETAT' => 'Examen national de fin d\'études secondaires — session %d.',
+    'DIOCESAIN'   => 'Test d\'admission diocésain — session %d.',
+];
 foreach ($archivesData as [$titre,$annee,$type,$mat,$premium]) {
     $slug = strtolower(preg_replace('/[^a-z0-9]+/', '-', iconv('UTF-8','ASCII//TRANSLIT',$titre))) . '-' . uniqid();
-    $stA->execute([$titre,$annee,$type,$matiereMap[$mat],"Épreuve officielle $type $annee.",$premium,$slug,'PUBLIE']);
+    $desc = sprintf($descMap[$type] ?? 'Épreuve officielle %d.', $annee);
+    $stA->execute([$titre,$annee,$type,$matiereMap[$mat],$desc,$premium,$slug,'PUBLIE']);
 }
 seed_log("  ✓ " . count($archivesData) . " archives");
 

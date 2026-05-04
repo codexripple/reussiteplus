@@ -79,12 +79,12 @@ body{font-family:var(--font-body);background:var(--gris-100);min-height:100vh;di
   <div class="auth-logo">
     <div class="auth-logo-icon">🎓</div>
     <div class="auth-logo-text">RÉUSSITE<span>+</span></div>
-    <div class="auth-sub">Plateforme EdTech — RDC</div>
+    <div class="auth-sub">Bienvenue sur RÉUSSITE+ — RDC</div>
   </div>
 
   <div class="auth-card">
-    <div class="auth-title">Bon retour 👋</div>
-    <div class="auth-desc">Connectez-vous pour continuer votre préparation.</div>
+    <div class="auth-title">Content de te revoir</div>
+    <div class="auth-desc">Entre tes identifiants pour reprendre là où tu t'es arrêté.</div>
 
     <?php if ($errors): ?>
     <div class="error-box">⚠️ <?= e($errors[0]) ?></div>

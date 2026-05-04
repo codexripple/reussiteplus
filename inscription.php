@@ -105,12 +105,12 @@ select.form-control{cursor:pointer;}
   <div class="auth-logo">
     <div class="auth-logo-icon">🎓</div>
     <div class="auth-logo-text">RÉUSSITE<span>+</span></div>
-    <div style="font-size:13px;color:var(--gris-600);margin-top:4px">Plateforme EdTech — RDC</div>
+    <div style="font-size:13px;color:var(--gris-600);margin-top:4px">Examens officiels RDC — ENAFEP, TENASOSP, État</div>
   </div>
 
   <div class="auth-card">
-    <div class="auth-title">Créer mon compte 🚀</div>
-    <div class="auth-desc">Rejoignez +12 000 élèves qui préparent leurs examens sur RÉUSSITE+.</div>
+    <div class="auth-title">Créer mon compte</div>
+    <div class="auth-desc">Plus de 12 000 élèves préparent leurs examens ici. Rejoins-les, c'est gratuit.</div>
 
     <?php if ($referralUser): ?>
     <div class="referral-banner">
@@ -119,7 +119,7 @@ select.form-control{cursor:pointer;}
     <?php endif; ?>
 
     <div class="free-badge">
-      ✅ <strong>Compte Gratuit</strong> — 5 examens/mois sans carte bancaire
+      ✅ <strong>Compte gratuit</strong> — 5 examens par mois, sans carte bancaire
     </div>
 
     <?php if ($errors): ?>

@@ -214,11 +214,11 @@ a { text-decoration: none; color: inherit; }
 <!-- HERO -->
 <section class="hero">
   <div class="hero-content">
-    <div class="hero-badge">🇨🇩 Fait pour les élèves de la RDC</div>
+    <div class="hero-badge">🇨🇩 Conçu pour les élèves de la RDC</div>
     <h1 class="hero-title">
-      Réussir vos examens<br>n'a jamais été aussi<br><span>accessible</span>
+      Vos examens approchent.<br>Soyez vraiment<br><span>prêt.</span>
     </h1>
-    <p class="hero-sub">Archives officielles, QCM interactifs, plans de révision IA — tout ce qu'il faut pour décrocher votre diplôme.</p>
+    <p class="hero-sub">Sujets officiels, QCM par matière, corrections détaillées — le tout en un seul endroit, accessible depuis votre téléphone.</p>
     <div class="hero-cta">
       <a href="/reussiteplus/inscription.php" class="btn btn-primary btn-lg">Commencer gratuitement →</a>
       <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-lg">⭐ Voir les offres Premium</a>
@@ -262,39 +262,39 @@ a { text-decoration: none; color: inherit; }
     <div style="text-align:center;margin-bottom:12px">
       <div class="section-label" style="display:inline-block">Pourquoi RÉUSSITE+ ?</div>
     </div>
-    <h2 class="section-title" style="text-align:center">Tout ce dont vous avez besoin<br>pour réussir</h2>
-    <p class="section-sub" style="text-align:center;margin:0 auto">Une plateforme complète adaptée au système éducatif de la RDC.</p>
+    <h2 class="section-title" style="text-align:center">Ce qu'on trouve ici,<br>nulle part ailleurs</h2>
+    <p class="section-sub" style="text-align:center;margin:0 auto">Conçu autour des examens officiels de la RDC, pas copié sur une plateforme étrangère.</p>
 
     <div class="features-grid">
       <div class="feature-card">
         <div class="feature-icon">📁</div>
-        <div class="feature-title">Archives officielles complètes</div>
-        <div class="feature-desc">Tous les anciens sujets et corrigés officiels depuis 1990. ENAFEP, TENASOSP, Examen d'État, Tests diocésains — classés par matière, année et province.</div>
+        <div class="feature-title">Sujets & corrigés officiels</div>
+        <div class="feature-desc">ENAFEP, TENASOSP, Examen d'État, Tests diocésains — des centaines de sujets classés par matière, année et province. Exactement ce qui tombe aux examens.</div>
       </div>
       <div class="feature-card">
         <div class="feature-icon">✏️</div>
-        <div class="feature-title">Examens blancs chronométrés</div>
-        <div class="feature-desc">Simulez les conditions réelles d'examen avec un minuteur, des QCM officiel et un score instantané à la fin. Répétez autant de fois que nécessaire.</div>
+        <div class="feature-title">Entraîne-toi dans les vraies conditions</div>
+        <div class="feature-desc">Minuteur, QCM, score immédiat. Tu peux refaire le même examen autant de fois que tu veux — jusqu'à ce que tu le maîtrises vraiment.</div>
       </div>
       <div class="feature-card">
         <div class="feature-icon">🧠</div>
-        <div class="feature-title">Banque de 15 000+ questions</div>
-        <div class="feature-desc">Questions triées par matière, chapitre et niveau de difficulté. Chaque question avec explication détaillée et taux de réussite des élèves.</div>
+        <div class="feature-title">Des milliers de questions classées</div>
+        <div class="feature-desc">Par matière, par chapitre, par niveau. Chaque question a son explication. Tu sais exactement pourquoi tu t'es trompé, pas juste quelle réponse était bonne.</div>
       </div>
       <div class="feature-card">
         <div class="feature-icon">📈</div>
-        <div class="feature-title">Suivi de progression détaillé</div>
-        <div class="feature-desc">Visualisez vos forces et vos faiblesses par matière. Graphiques d'évolution, séries de jours consécutifs et classement provincial.</div>
+        <div class="feature-title">Tu vois où tu en es</div>
+        <div class="feature-desc">Score par matière, jours consécutifs, classement provincial. Plus besoin de deviner si tu progresses — les chiffres te le disent.</div>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">🤖</div>
-        <div class="feature-title">Plan de révision IA (Premium)</div>
-        <div class="feature-desc">Un algorithme analyse vos résultats et génère un plan de révision personnalisé semaine par semaine selon votre objectif et la date de l'examen.</div>
+        <div class="feature-icon">🗓️</div>
+        <div class="feature-title">Plan de révision sur-mesure (Premium)</div>
+        <div class="feature-desc">Tu entres la date de ton examen. On calcule ce qu'il faut réviser chaque semaine en fonction de tes points faibles. Pas de panique, juste un plan clair.</div>
       </div>
       <div class="feature-card">
         <div class="feature-icon">📶</div>
-        <div class="feature-title">Mode hors-ligne (PWA)</div>
-        <div class="feature-desc">Continuez à réviser même sans connexion Internet. Les archives et questions téléchargées restent disponibles dans le cache de votre téléphone.</div>
+        <div class="feature-title">Fonctionne sans connexion</div>
+        <div class="feature-desc">Pas de wifi ? Pas de problème. Les archives et les QCM téléchargés restent disponibles sur ton téléphone même hors-ligne.</div>
       </div>
     </div>
   </div>
@@ -306,8 +306,8 @@ a { text-decoration: none; color: inherit; }
     <div style="text-align:center;margin-bottom:12px">
       <div class="section-label" style="display:inline-block">Nos offres</div>
     </div>
-    <h2 class="section-title" style="text-align:center">Des tarifs adaptés à<br>chaque situation</h2>
-    <p class="section-sub" style="text-align:center;margin:0 auto">Payez en CDF via M-Pesa, Airtel Money ou Orange Money.</p>
+    <h2 class="section-title" style="text-align:center">Commence gratuitement,<br>passe au niveau supérieur si tu veux</h2>
+    <p class="section-sub" style="text-align:center;margin:0 auto">Paiement en CDF — M-Pesa, Airtel Money ou Orange Money.</p>
 
     <div class="pricing-grid" style="margin-top:56px">
       <?php foreach (PLANS as $planKey => $plan): ?>
@@ -358,11 +358,11 @@ a { text-decoration: none; color: inherit; }
     <div style="text-align:center;margin-bottom:12px">
       <div class="section-label" style="display:inline-block">Témoignages</div>
     </div>
-    <h2 class="section-title" style="text-align:center">Ils ont réussi grâce<br>à RÉUSSITE+</h2>
+    <h2 class="section-title" style="text-align:center">Ils l'ont fait.<br>À ton tour.</h2>
     <div class="testimonials-grid">
       <div class="testimonial-card">
         <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-text">"J'ai obtenu 87% à l'Examen d'État grâce aux archives et aux QCM. Le plan de révision IA m'a vraiment aidé à m'organiser."</p>
+        <p class="testimonial-text">"J'ai tout trouvé ici — les sujets depuis des années, les corrigés, les QCM. 87% à l'Examen d'État. Mes parents n'en revenaient pas."</p>
         <div class="testimonial-author">
           <div class="testimonial-avatar">KM</div>
           <div><div class="testimonial-name">Kala Muamba</div><div class="testimonial-school">Lycée Bosangani, Kinshasa</div></div>
@@ -370,7 +370,7 @@ a { text-decoration: none; color: inherit; }
       </div>
       <div class="testimonial-card">
         <div class="testimonial-stars">★★★★★</div>
-        <p class="testimonial-text">"Les corrigés détaillés m'ont permis de comprendre mes erreurs. J'ai réussi le TENASOSP du premier coup cette année !"</p>
+        <p class="testimonial-text">"Avant je séchais sur les corrigés parce que je n'avais personne pour m'expliquer. Là j'ai tout compris toute seule. TENASOSP réussi du premier coup."</p>
         <div class="testimonial-author">
           <div class="testimonial-avatar">BN</div>
           <div><div class="testimonial-name">Bénédicte Nzuzi</div><div class="testimonial-school">Institut Kikesa, Lubumbashi</div></div>
@@ -378,7 +378,7 @@ a { text-decoration: none; color: inherit; }
       </div>
       <div class="testimonial-card">
         <div class="testimonial-stars">★★★★☆</div>
-        <p class="testimonial-text">"En tant que répétiteur, j'utilise la banque de questions pour créer mes interros. Mes élèves ont progressé de 30% en 3 mois."</p>
+        <p class="testimonial-text">"Je prépare mes interros avec la banque de questions. Mes élèves travaillent aussi tout seuls sur la plateforme entre les séances. Ils ont clairement progressé."</p>
         <div class="testimonial-author">
           <div class="testimonial-avatar">EM</div>
           <div><div class="testimonial-name">Emmanuel Mbuyi</div><div class="testimonial-school">Répétiteur, Mbuji-Mayi</div></div>
@@ -391,8 +391,8 @@ a { text-decoration: none; color: inherit; }
 <!-- CTA FINAL -->
 <section class="cta-section">
   <div style="position:relative">
-    <h2 class="cta-title">Prêt à décrocher votre diplôme ?</h2>
-    <p class="cta-sub">Rejoignez +12 000 élèves qui se préparent déjà avec RÉUSSITE+</p>
+    <h2 class="cta-title">L'examen n'attend pas.</h2>
+    <p class="cta-sub">Plus de 12 000 élèves en RDC sont déjà dessus. Commence maintenant, c'est gratuit.</p>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
       <a href="/reussiteplus/inscription.php" class="btn btn-primary btn-lg">Créer mon compte gratuitement →</a>
       <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-lg">⭐ Voir le Premium</a>
