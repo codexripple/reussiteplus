@@ -23,8 +23,7 @@ $user = is_logged() ? current_user() : null;
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RÉUSSITE+ | La plateforme de référence pour réussir en RDC</title>
 <meta name="description" content="Préparez l'ENAFEP, TENASOSP, Tests diocésains et Examen d'État avec les archives officielles, QCM et plans de révision IA. Rejoignez +12 000 élèves en RDC.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/reussiteplus/assets/css/fonts.css">
 <style>
 :root {
   --primary: #007A5E; --primary-dark: #005A45; --primary-light: #00A97F; --primary-subtle: #E8F5F1;

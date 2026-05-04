@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Connexion — RÉUSSITE+</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/reussiteplus/assets/css/fonts.css">
 <style>
 :root {
   --primary:#007A5E;--primary-dark:#005A45;--primary-light:#00A97F;--primary-subtle:#E8F5F1;
