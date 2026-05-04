@@ -76,11 +76,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirmer_paiement'])
         if (!$errors) {
             $montant = $plan['prix'] * $duree;
             $remise  = 0;
+            $remiseDureeLabel = '';
+            $remisePromoLabel = '';
 
-            /* Remise dur&eacute;e */
+            /* Remise durée */
             $remisesDuree = [3 => 5, 6 => 10, 12 => 15];
             if (isset($remisesDuree[$duree])) {
-                $remise += $montant * $remisesDuree[$duree] / 100;
+                $taux = $remisesDuree[$duree];
+                $r    = $montant * $taux / 100;
+                $remise += $r;
+                $remiseDureeLabel = "Remise fidélité {$taux}% ({$duree} mois)";
             }
 
             /* Code promo */
@@ -93,15 +98,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirmer_paiement'])
                     [$codePromo]
                 );
                 if ($promoRow && ($promoRow['plan_applicable'] === 'TOUS' || $promoRow['plan_applicable'] === $planKey)) {
-                    $remise += $promoRow['type_remise'] === 'POURCENTAGE'
+                    $promoRemise = $promoRow['type_remise'] === 'POURCENTAGE'
                         ? $montant * ($promoRow['valeur_remise'] / 100)
                         : min($montant, (float)$promoRow['valeur_remise']);
+                    $remise += $promoRemise;
+                    $remisePromoLabel = 'Code promo ' . $codePromo;
                     dbQuery("UPDATE codes_promo SET nb_utilisations = nb_utilisations + 1 WHERE id = ?", [$promoRow['id']]);
                 }
             }
 
-            $montant = max(0, $montant - $remise);
-            $ref     = 'RP-' . strtoupper(substr(md5(uniqid()), 0, 8));
+            $sousTotal = $plan['prix'] * $duree;
+            $montant   = max(0, $sousTotal - $remise);
+            $ref       = 'RP-' . strtoupper(substr(md5(uniqid()), 0, 8));
+            $numFacture = 'FAC-' . date('Ymd') . '-' . strtoupper(substr($ref, 3, 6));
 
             dbInsert('abonnements', [
                 'user_id'            => $user['id'],
@@ -123,13 +132,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirmer_paiement'])
                 'user_id' => $user['id'],
                 'type'    => 'PAIEMENT',
                 'titre'   => 'Paiement en attente de confirmation',
-                'message' => "Votre demande d'abonnement {$plan['nom']} (R&eacute;f: {$ref}) a bien &eacute;t&eacute; re&ccedil;ue. Elle sera confirm&eacute;e sous 24h apr&egrave;s v&eacute;rification du paiement.",
+                'message' => "Votre demande d'abonnement {$plan['nom']} (Réf: {$ref}) a bien été reçue. Elle sera confirmée sous 24h après vérification du paiement.",
                 'lien'    => '/reussiteplus/abonnement.php',
             ]);
 
-            $success        = true;
-            $successRef     = $ref;
-            $successMontant = $montant;
+            $success            = true;
+            $successRef         = $ref;
+            $successMontant     = $montant;
+            $successSousTotal   = $sousTotal;
+            $successRemise      = $remise;
+            $successNumFacture  = $numFacture;
+            $successDuree       = $duree;
+            $successMethode     = $methode;
         }
     }
 }
@@ -471,62 +485,241 @@ include __DIR__ . '/includes/header_app.php';
 
 <div class="pay-wrap">
 
-<?php if ($success): /* ════════ PAGE SUCCÈS ════════ */ ?>
+<?php if ($success): /* ════════ PAGE SUCCÈS + FACTURE ════════ */
+  $moisFr = ['','janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  $dateEmission = date('j') . ' ' . $moisFr[(int)date('n')] . ' ' . date('Y');
+  $dateEcheance = date('j') . ' ' . $moisFr[(int)date('n', strtotime('+30 days'))] . ' ' . date('Y', strtotime('+30 days'));
+  $methodeName  = METHODES_PAIEMENT[$successMethode]['nom'] ?? $successMethode;
+  $dateFin      = date('d/m/Y', strtotime("+{$successDuree} month"));
+?>
 
-<div class="pay-success">
-  <div class="pay-success-icon"><i class="bi bi-check-lg"></i></div>
-  <div class="pay-success-title">Demande envoy&eacute;e !</div>
-  <p style="color:var(--gris-600);font-size:14px;margin-bottom:8px">
-    Votre demande d&rsquo;abonnement <strong><?= e($plan['nom']) ?></strong> a bien &eacute;t&eacute; re&ccedil;ue.
-  </p>
-  <div class="pay-success-ref"><?= e($successRef) ?></div>
-  <p style="font-size:13px;color:var(--gris-500);margin-bottom:20px">
-    Montant &agrave; virer&nbsp;: <strong><?= number_format((int)$successMontant, 0, ',', ' ') ?> CDF</strong>
-  </p>
-
-  <div class="pay-steps">
-    <?php if ($methode === 'CARTE'): ?>
-    <div class="pay-step">
-      <div class="pay-step-num">1</div>
-      <div>Votre demande de paiement par carte a bien &eacute;t&eacute; enregistr&eacute;e avec la r&eacute;f&eacute;rence <strong><?= e($successRef) ?></strong>.</div>
-    </div>
-    <div class="pay-step">
-      <div class="pay-step-num">2</div>
-      <div>Notre &eacute;quipe va vous contacter dans les <strong>24h</strong> pour finaliser le paiement par carte de mani&egrave;re s&eacute;curis&eacute;e.</div>
-    </div>
-    <div class="pay-step">
-      <div class="pay-step-num">3</div>
-      <div>En cas d&rsquo;urgence, &eacute;crivez &agrave; <a href="mailto:paiement@reussiteplus.cd" style="color:var(--primary);font-weight:600">paiement@reussiteplus.cd</a> ou sur <a href="https://wa.me/243977329184" target="_blank" style="color:#25D366;font-weight:600"><i class="bi bi-whatsapp"></i> WhatsApp</a> en mentionnant votre r&eacute;f&eacute;rence.</div>
-    </div>
-    <?php else: ?>
-    <div class="pay-step">
-      <div class="pay-step-num">1</div>
-      <div>Effectuez le virement Mobile Money du montant indiqu&eacute; via la m&eacute;thode choisie.</div>
-    </div>
-    <div class="pay-step">
-      <div class="pay-step-num">2</div>
-      <div>Prenez une capture d&rsquo;&eacute;cran de votre confirmation de paiement.</div>
-    </div>
-    <div class="pay-step">
-      <div class="pay-step-num">3</div>
-      <div>Envoyez la capture &agrave; <a href="mailto:paiement@reussiteplus.cd" style="color:var(--primary);font-weight:600">paiement@reussiteplus.cd</a> ou sur <a href="https://wa.me/243977329184" target="_blank" style="color:#25D366;font-weight:600"><i class="bi bi-whatsapp"></i> WhatsApp (+243 977 329 184)</a> en mentionnant la r&eacute;f&eacute;rence <strong><?= e($successRef) ?></strong>.</div>
-    </div>
-    <div class="pay-step">
-      <div class="pay-step-num">4</div>
-      <div>Activation de votre abonnement sous 24h apr&egrave;s v&eacute;rification.</div>
-    </div>
-    <?php endif; ?>
+<!-- Bannière succès -->
+<div style="text-align:center;margin-bottom:32px">
+  <div style="width:72px;height:72px;background:linear-gradient(135deg,var(--primary),var(--primary-light));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;box-shadow:0 8px 24px rgba(5,150,105,0.35)">
+    <i class="bi bi-check-lg" style="font-size:32px;color:white"></i>
   </div>
-
-  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-    <a href="/reussiteplus/dashboard.php" class="btn btn-primary">
-      <i class="bi bi-house"></i>&nbsp; Tableau de bord
-    </a>
-    <a href="/reussiteplus/notifications.php" class="btn btn-ghost">
-      <i class="bi bi-bell"></i>&nbsp; Mes notifications
-    </a>
-  </div>
+  <h2 style="font-family:var(--font-display);font-size:24px;font-weight:800;color:var(--gris-900);margin-bottom:6px">Demande envoyée avec succès !</h2>
+  <p style="color:var(--gris-600);font-size:14px;max-width:480px;margin:0 auto">
+    Votre demande d'abonnement <strong><?= e($plan['nom']) ?></strong> a bien été reçue.
+    Conservez votre facture ci-dessous.
+  </p>
 </div>
+
+<!-- Actions imprimables -->
+<div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:28px" class="no-print">
+  <button onclick="window.print()" class="btn btn-primary"><i class="bi bi-printer"></i> Imprimer la facture</button>
+  <button onclick="downloadInvoice()" class="btn btn-ghost"><i class="bi bi-download"></i> Télécharger PDF</button>
+  <a href="https://wa.me/243977329184?text=<?= rawurlencode('Bonjour, voici ma référence de paiement RÉUSSITE+ : ' . $successRef . ' — Plan ' . $plan['nom'] . ' — ' . number_format((int)$successMontant, 0, ',', ' ') . ' CDF') ?>" target="_blank" class="btn btn-ghost" style="background:#25D366;color:white;border-color:#25D366">
+    <i class="bi bi-whatsapp"></i> Envoyer par WhatsApp
+  </a>
+</div>
+
+<!-- ══════════ FACTURE PROFESSIONNELLE ══════════ -->
+<div id="invoice" style="background:white;max-width:760px;margin:0 auto 32px;border-radius:16px;overflow:hidden;box-shadow:var(--shadow-md);border:1px solid var(--gris-200)">
+
+  <!-- En-tête facture -->
+  <div style="background:linear-gradient(135deg,#0F172A 0%,#1E3A2F 100%);padding:32px 40px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:20px">
+    <div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div style="width:44px;height:44px;background:linear-gradient(135deg,var(--primary),#34D399);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <i class="bi bi-mortarboard-fill" style="color:white;font-size:20px"></i>
+        </div>
+        <div>
+          <div style="font-family:var(--font-display);font-size:22px;font-weight:900;color:white;letter-spacing:-0.3px">RÉUSSITE<span style="color:#FBBF24">+</span></div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.45);letter-spacing:2px;text-transform:uppercase">Plateforme EdTech RDC</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.5);line-height:1.8">
+        Kinshasa, République Démocratique du Congo<br>
+        contact@reussiteplus.cd · reussiteplus.cd<br>
+        WhatsApp : +243 977 329 184
+      </div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px">Facture Pro Forma</div>
+      <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:#FBBF24;letter-spacing:1px"><?= e($successNumFacture) ?></div>
+      <div style="margin-top:10px;font-size:12px;color:rgba(255,255,255,0.55)">
+        <div>Émise le : <strong style="color:rgba(255,255,255,0.85)"><?= $dateEmission ?></strong></div>
+        <div style="margin-top:2px">Réf. paiement : <strong style="color:rgba(255,255,255,0.85)"><?= e($successRef) ?></strong></div>
+      </div>
+      <!-- Statut -->
+      <div style="margin-top:14px;background:rgba(251,191,36,0.18);border:1px solid rgba(251,191,36,0.4);border-radius:20px;padding:5px 16px;display:inline-block;font-size:11px;font-weight:700;color:#FBBF24;text-transform:uppercase;letter-spacing:1px">
+        ⏳ En attente de confirmation
+      </div>
+    </div>
+  </div>
+
+  <!-- Infos client / émetteur -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid #E5E7EB">
+    <div style="padding:24px 32px;border-right:1px solid #E5E7EB">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9CA3AF;margin-bottom:10px">Facturé à</div>
+      <div style="font-family:var(--font-display);font-size:16px;font-weight:800;color:#111827"><?= e($user['prenom'] . ' ' . strtoupper($user['nom'])) ?></div>
+      <div style="font-size:13px;color:#6B7280;margin-top:4px;line-height:1.8">
+        <?= e($user['email']) ?><br>
+        Kinshasa, RDC
+      </div>
+    </div>
+    <div style="padding:24px 32px">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9CA3AF;margin-bottom:10px">Détails de la commande</div>
+      <div style="font-size:13px;color:#374151;line-height:2">
+        <div style="display:flex;justify-content:space-between"><span style="color:#9CA3AF">Durée :</span> <strong><?= $successDuree ?> mois</strong></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:#9CA3AF">Méthode :</span> <strong><?= e($methodeName) ?></strong></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:#9CA3AF">Début :</span> <strong><?= date('d/m/Y') ?></strong></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:#9CA3AF">Fin :</span> <strong><?= $dateFin ?></strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tableau des articles -->
+  <div style="padding:28px 32px">
+    <table style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr style="background:#F9FAFB;border-radius:8px">
+          <th style="padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#9CA3AF;border-bottom:2px solid #E5E7EB">Description</th>
+          <th style="padding:10px 14px;text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#9CA3AF;border-bottom:2px solid #E5E7EB;white-space:nowrap">Qté</th>
+          <th style="padding:10px 14px;text-align:right;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#9CA3AF;border-bottom:2px solid #E5E7EB;white-space:nowrap">P.U. (CDF)</th>
+          <th style="padding:10px 14px;text-align:right;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#9CA3AF;border-bottom:2px solid #E5E7EB;white-space:nowrap">Total (CDF)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:16px 14px;border-bottom:1px solid #F3F4F6;vertical-align:top">
+            <div style="font-weight:700;color:#111827;font-size:14px">
+              <i class="<?= e($plan['icone'] ?? 'bi bi-mortarboard') ?>" style="color:<?= e($plan['couleur'] ?? '#059669') ?>;margin-right:6px"></i>
+              Abonnement <?= e($plan['nom']) ?>
+            </div>
+            <div style="font-size:12px;color:#6B7280;margin-top:4px;line-height:1.6">
+              <?= e($plan['tagline'] ?? '') ?><br>
+              <?= $plan['examens_mois'] < 0 ? 'Examens illimités' : $plan['examens_mois'] . ' examens/mois' ?> •
+              <?= $plan['archives'] ? 'Archives complètes' : 'Archives de base' ?> •
+              <?= $plan['corrige'] ? 'Corrigés inclus' : 'Sans corrigés' ?> •
+              <?= ($plan['ia'] ?? false) ? 'IA incluse' : 'Sans IA' ?>
+            </div>
+          </td>
+          <td style="padding:16px 14px;text-align:center;border-bottom:1px solid #F3F4F6;color:#374151;font-weight:600"><?= $successDuree ?> mois</td>
+          <td style="padding:16px 14px;text-align:right;border-bottom:1px solid #F3F4F6;color:#374151;white-space:nowrap"><?= number_format((int)$plan['prix'], 0, ',', ' ') ?></td>
+          <td style="padding:16px 14px;text-align:right;border-bottom:1px solid #F3F4F6;font-weight:700;color:#111827;white-space:nowrap"><?= number_format((int)$successSousTotal, 0, ',', ' ') ?></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Totaux -->
+    <div style="display:flex;justify-content:flex-end;margin-top:16px">
+      <div style="min-width:280px">
+        <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:13px;color:#6B7280;border-bottom:1px solid #F3F4F6">
+          <span>Sous-total</span>
+          <span style="font-weight:600;color:#374151"><?= number_format((int)$successSousTotal, 0, ',', ' ') ?> CDF</span>
+        </div>
+        <?php if (!empty($remiseDureeLabel) && $successRemise > 0): ?>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:13px;color:#059669;border-bottom:1px solid #F3F4F6">
+          <span><i class="bi bi-tag-fill" style="font-size:10px;margin-right:4px"></i><?= e($remiseDureeLabel) ?></span>
+          <span style="font-weight:600">−<?= number_format((int)($successRemise), 0, ',', ' ') ?> CDF</span>
+        </div>
+        <?php endif; ?>
+        <?php if (!empty($remisePromoLabel) && isset($promoRemise) && $promoRemise > 0): ?>
+        <div style="display:flex;justify-content:space-between;padding:8px 0;font-size:13px;color:#059669;border-bottom:1px solid #F3F4F6">
+          <span><i class="bi bi-gift-fill" style="font-size:10px;margin-right:4px"></i><?= e($remisePromoLabel) ?></span>
+          <span style="font-weight:600">−<?= number_format((int)$promoRemise, 0, ',', ' ') ?> CDF</span>
+        </div>
+        <?php endif; ?>
+        <div style="display:flex;justify-content:space-between;padding:14px 16px;background:linear-gradient(135deg,#0F172A,#1E3A2F);border-radius:10px;margin-top:8px">
+          <span style="font-family:var(--font-display);font-size:15px;font-weight:800;color:white">TOTAL À PAYER</span>
+          <span style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#FBBF24"><?= number_format((int)$successMontant, 0, ',', ' ') ?> CDF</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Instructions de paiement -->
+  <div style="background:#F0FDF4;border-top:2px solid #BBF7D0;padding:24px 32px">
+    <div style="font-size:13px;font-weight:700;color:#065F46;margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px">
+      <i class="bi bi-info-circle-fill" style="margin-right:6px"></i>Instructions de paiement
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+      <?php if ($successMethode === 'CARTE'): ?>
+      <div style="background:white;border-radius:8px;padding:14px;border:1px solid #BBF7D0;display:flex;gap:10px">
+        <div style="width:28px;height:28px;background:#059669;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:white;font-weight:700;font-size:12px">1</div>
+        <div style="font-size:12px;color:#374151;line-height:1.5">Demande enregistrée. Notre équipe vous contactera sous <strong>24h</strong>.</div>
+      </div>
+      <div style="background:white;border-radius:8px;padding:14px;border:1px solid #BBF7D0;display:flex;gap:10px">
+        <div style="width:28px;height:28px;background:#059669;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:white;font-weight:700;font-size:12px">2</div>
+        <div style="font-size:12px;color:#374151;line-height:1.5">Paiement sécurisé finalisé. Activation immédiate de votre plan.</div>
+      </div>
+      <?php else: ?>
+      <div style="background:white;border-radius:8px;padding:14px;border:1px solid #BBF7D0;display:flex;gap:10px">
+        <div style="width:28px;height:28px;background:#059669;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:white;font-weight:700;font-size:12px">1</div>
+        <div style="font-size:12px;color:#374151;line-height:1.5">Effectuez le virement <strong><?= e($methodeName) ?></strong> de <strong><?= number_format((int)$successMontant, 0, ',', ' ') ?> CDF</strong>.</div>
+      </div>
+      <div style="background:white;border-radius:8px;padding:14px;border:1px solid #BBF7D0;display:flex;gap:10px">
+        <div style="width:28px;height:28px;background:#059669;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:white;font-weight:700;font-size:12px">2</div>
+        <div style="font-size:12px;color:#374151;line-height:1.5">Envoyez la capture à <a href="mailto:paiement@reussiteplus.cd" style="color:#059669;font-weight:600">paiement@reussiteplus.cd</a> avec la réf. <strong><?= e($successRef) ?></strong>.</div>
+      </div>
+      <div style="background:white;border-radius:8px;padding:14px;border:1px solid #BBF7D0;display:flex;gap:10px">
+        <div style="width:28px;height:28px;background:#059669;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:white;font-weight:700;font-size:12px">3</div>
+        <div style="font-size:12px;color:#374151;line-height:1.5">Activation sous <strong>24h</strong> après vérification. Notification par email.</div>
+      </div>
+      <?php endif; ?>
+    </div>
+  </div>
+
+  <!-- Pied de facture -->
+  <div style="background:#F9FAFB;border-top:1px solid #E5E7EB;padding:18px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+    <div style="font-size:11px;color:#9CA3AF;line-height:1.7">
+      <strong style="color:#374151">RÉUSSITE+</strong> — Plateforme d'éducation nationale RDC<br>
+      Ce document est une facture pro forma. Le service sera activé après confirmation du paiement.
+    </div>
+    <div style="text-align:right;font-size:11px;color:#9CA3AF">
+      <div><?= e($successNumFacture) ?> · <?= $dateEmission ?></div>
+      <div style="margin-top:2px">reussiteplus.cd</div>
+    </div>
+  </div>
+
+</div><!-- /invoice -->
+
+<!-- Boutons navigation -->
+<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:32px" class="no-print">
+  <a href="/reussiteplus/dashboard.php" class="btn btn-primary">
+    <i class="bi bi-house"></i> Tableau de bord
+  </a>
+  <a href="/reussiteplus/notifications.php" class="btn btn-ghost">
+    <i class="bi bi-bell"></i> Mes notifications
+  </a>
+  <a href="/reussiteplus/abonnement.php" class="btn btn-ghost">
+    <i class="bi bi-credit-card"></i> Mon abonnement
+  </a>
+</div>
+
+<script>
+function downloadInvoice() {
+  const inv = document.getElementById('invoice').outerHTML;
+  const win = window.open('', '_blank', 'width=900,height=750');
+  win.document.write(`<!DOCTYPE html><html lang="fr"><head>
+    <meta charset="UTF-8">
+    <title>Facture <?= e($successNumFacture) ?> — RÉUSSITE+</title>
+    <link rel="stylesheet" href="/reussiteplus/assets/css/bootstrap-icons.css?v=2">
+    <link rel="stylesheet" href="/reussiteplus/assets/css/fonts.css">
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0}
+      body{font-family:'Poppins','Arial',sans-serif;background:#F8FAFC;padding:20px}
+      @media print{body{padding:0;background:white}button{display:none!important}@page{size:A4;margin:8mm}}
+      :root{--primary:#059669;--primary-light:#34D399;--font-display:'Poppins','Arial',sans-serif}
+    </style>
+  </head><body>${inv}</body></html>`);
+  win.document.close();
+  win.focus();
+  setTimeout(() => win.print(), 700);
+}
+</script>
+
+<style>
+@media print {
+  .no-print { display: none !important; }
+  .sidebar, .topbar, .main-content > *:not(main), header, nav { display: none !important; }
+  .page-content { padding: 0 !important; }
+  #invoice { box-shadow: none !important; border-radius: 0 !important; }
+  body, .main-content { background: white !important; }
+}
+</style>
 
 <?php else: /* ════════ FORMULAIRE PAIEMENT ════════ */ ?>
 
