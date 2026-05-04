@@ -36,14 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             $pts     = $correct ? (float)$q['points'] : 0;
             $score  += $pts;
 
-            // Enregistrer la réponse
-            dbInsert('exam_answers', [
-                'session_id'     => $sessionId,
-                'question_id'    => $questionId,
-                'option_id'      => $optionId,
-                'est_correcte'   => $correct ? 1 : 0,
-                'points_obtenus' => $pts,
-            ]);
+            // Enregistrer la réponse (INSERT ou UPDATE si déjà existante)
+            dbQuery(
+                "INSERT INTO exam_answers (session_id, question_id, option_id, est_correcte, points_obtenus)
+                 VALUES (?, ?, ?, ?, ?)
+                 ON DUPLICATE KEY UPDATE option_id=VALUES(option_id), est_correcte=VALUES(est_correcte), points_obtenus=VALUES(points_obtenus)",
+                [$sessionId, $questionId, $optionId, $correct ? 1 : 0, $pts]
+            );
 
             // Mettre à jour compteur option
             dbQuery("UPDATE question_options SET selection_count = selection_count + 1 WHERE id=?", [$optionId]);
@@ -132,33 +131,38 @@ if ($sessionId) {
     if (!$sessionActive) {
         redirect('/reussiteplus/examen.php', 'error', 'Session introuvable ou déjà terminée.');
     }
-    // Charger les questions de cette session
-    $questions = dbAll(
+    // Charger les questions via les IDs persistés dans la session
+    $storedIds = $sessionActive['question_ids'] ? json_decode($sessionActive['question_ids'], true) : [];
+    if (!$storedIds) {
+        // Migration : sessions créées avant la migration — sélectionner et persister maintenant
+        $pickedQs = dbAll(
+            "SELECT id FROM question_bank WHERE matiere_id=? AND status='PUBLIE' AND type_question='QCM' ORDER BY RAND() LIMIT ?",
+            [$sessionActive['matiere_id'], (int)$sessionActive['nb_questions']]
+        );
+        $storedIds = array_column($pickedQs, 'id');
+        dbQuery("UPDATE exam_sessions SET question_ids=? WHERE id=?",
+                [json_encode($storedIds), $sessionId]);
+    }
+
+    if (!$storedIds) {
+        redirect('/reussiteplus/examen.php', 'error', 'Aucune question disponible pour cette session.');
+    }
+
+    // Construire la liste ordonnée avec placeholders
+    $placeholders = implode(',', array_fill(0, count($storedIds), '?'));
+    // ORDER BY FIELD pour respecter l'ordre d'origine
+    $orderField   = 'FIELD(qb.id,' . $placeholders . ')';
+    $questions    = dbAll(
         "SELECT qb.*, m.nom as matiere_nom,
                 GROUP_CONCAT(qo.id,'|',qo.lettre,'|',qo.texte,'|',qo.est_correcte ORDER BY qo.ordre SEPARATOR '§§') as options_raw
-         FROM exam_answers ea
-         JOIN question_bank qb ON ea.question_id = qb.id
+         FROM question_bank qb
          LEFT JOIN matieres m ON qb.matiere_id = m.id
          LEFT JOIN question_options qo ON qo.question_id = qb.id
-         WHERE ea.session_id = ?
-         GROUP BY qb.id",
-        [$sessionId]
+         WHERE qb.id IN ($placeholders)
+         GROUP BY qb.id
+         ORDER BY $orderField",
+        array_merge($storedIds, $storedIds)   // two sets: one for IN, one for FIELD
     );
-    // Si la session vient d'être créée (pas de réponses), charger les questions associées
-    if (!$questions) {
-        $questions = dbAll(
-            "SELECT qb.*, m.nom as matiere_nom,
-                    GROUP_CONCAT(qo.id,'|',qo.lettre,'|',qo.texte,'|',qo.est_correcte ORDER BY qo.ordre SEPARATOR '§§') as options_raw
-             FROM question_bank qb
-             LEFT JOIN matieres m ON qb.matiere_id = m.id
-             LEFT JOIN question_options qo ON qo.question_id = qb.id
-             WHERE qb.matiere_id = ? AND qb.status = 'PUBLIE' AND qb.type_question = 'QCM'
-             GROUP BY qb.id
-             ORDER BY RAND()
-             LIMIT ?",
-            [$sessionActive['matiere_id'], $sessionActive['nb_questions']]
-        );
-    }
     // Parser les options
     foreach ($questions as &$q) {
         $q['options'] = [];
@@ -186,8 +190,8 @@ if ($sessionId) {
           </div>
           <div style="display:flex;align-items:center;gap:20px">
             <div style="text-align:center">
-              <div id="timer" style="font-family:var(--font-display);font-size:24px;font-weight:800;color:var(--primary)">00:00</div>
-              <div style="font-size:10px;color:var(--gris-500);text-transform:uppercase;letter-spacing:.5px">Temps écoulé</div>
+              <div id="timer" style="font-family:var(--font-display);font-size:24px;font-weight:800;color:var(--primary)"><?= $sessionActive['temps_limite'] > 0 ? gmdate('i:s', (int)$sessionActive['temps_limite']) : '00:00' ?></div>
+              <div id="timer-label" style="font-size:10px;color:var(--gris-500);text-transform:uppercase;letter-spacing:.5px"><?= $sessionActive['temps_limite'] > 0 ? 'Temps restant' : 'Temps écoulé' ?></div>
             </div>
             <div style="text-align:center">
               <div id="counter" style="font-family:var(--font-display);font-size:24px;font-weight:800">1/<?= count($questions) ?></div>
@@ -256,33 +260,72 @@ if ($sessionId) {
     </div>
 
     <script>
-    const TOTAL = <?= count($questions) ?>;
-    const SESSION_ID = '<?= e($sessionId) ?>';
-    const CSRF = '<?= e(csrf_token()) ?>';
-    let current = 0;
-    let answers = {};
-    let timeStart = Date.now();
+    const TOTAL       = <?= count($questions) ?>;
+    const SESSION_ID  = '<?= e($sessionId) ?>';
+    const CSRF        = '<?= e(csrf_token()) ?>';
+    const TEMPS_LIMITE = <?= (int)($sessionActive['temps_limite'] ?? 0) ?>;  // 0 = sans limite
+    let current    = 0;
+    let answers    = {};
+    let timeStart  = Date.now();
     let timerInterval;
+    let submitted  = false;
 
-    // Timer
-    timerInterval = setInterval(() => {
-      const sec = Math.floor((Date.now() - timeStart) / 1000);
+    // ── TIMER ──────────────────────────────────────────────
+    const timerEl = document.getElementById('timer');
+    const timerLabel = document.getElementById('timer-label');
+
+    function formatTime(sec) {
       const m = String(Math.floor(sec / 60)).padStart(2, '0');
       const s = String(sec % 60).padStart(2, '0');
-      document.getElementById('timer').textContent = m + ':' + s;
-      // Alarme à 5min avant limite si applicable
+      return m + ':' + s;
+    }
+
+    timerInterval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - timeStart) / 1000);
+      if (TEMPS_LIMITE > 0) {
+        // Mode COMPTE À REBOURS
+        const remaining = Math.max(0, TEMPS_LIMITE - elapsed);
+        timerEl.textContent = formatTime(remaining);
+        if (remaining <= 300) {  // ≤ 5 min → orange
+          timerEl.style.color = 'var(--gold)';
+        }
+        if (remaining <= 60) {   // ≤ 1 min → rouge clignotant
+          timerEl.style.color = 'var(--rouge)';
+          timerEl.style.animation = 'pulse 1s infinite';
+        }
+        if (remaining === 0) {
+          clearInterval(timerInterval);
+          if (!submitted) {
+            alert('⏰ Temps écoulé ! Votre examen est soumis automatiquement.');
+            submitExam(true);
+          }
+        }
+      } else {
+        // Mode CHRONOMÈTRE (sans limite)
+        timerEl.textContent = formatTime(elapsed);
+      }
     }, 1000);
 
+    // ── NAVIGATION ────────────────────────────────────────
     function goToQuestion(idx) {
       document.querySelector('.question-slide[data-idx="' + current + '"]').style.display = 'none';
       current = idx;
       document.querySelector('.question-slide[data-idx="' + current + '"]').style.display = 'block';
-      document.getElementById('counter').textContent = (current+1) + '/' + TOTAL;
+      document.getElementById('counter').textContent = (current + 1) + '/' + TOTAL;
       document.getElementById('prevBtn').disabled = current === 0;
       document.getElementById('nextBtn').style.display = current < TOTAL - 1 ? '' : 'none';
       document.getElementById('submitBtn').style.display = current === TOTAL - 1 ? '' : 'none';
       document.getElementById('exam-progress').style.width = ((current + 1) / TOTAL * 100) + '%';
       updateDots();
+      // Restaurer la sélection visuelle si déjà répondu
+      const list = document.querySelector('.question-slide[data-idx="' + current + '"] .options-list');
+      if (list) {
+        const qId = list.dataset.questionId;
+        if (answers[qId]) {
+          const savedItem = list.querySelector('[data-option-id="' + answers[qId] + '"]');
+          if (savedItem) selectOptionVisual(list, savedItem);
+        }
+      }
     }
 
     function nextQuestion() { if (current < TOTAL - 1) goToQuestion(current + 1); }
@@ -290,10 +333,11 @@ if ($sessionId) {
 
     function updateDots() {
       document.querySelectorAll('.q-dot').forEach((d, i) => {
-        const id = document.querySelector('.question-slide[data-idx="' + i + '"] .options-list')?.dataset.questionId;
+        const slide = document.querySelector('.question-slide[data-idx="' + i + '"]');
+        const qId   = slide?.querySelector('.options-list')?.dataset.questionId;
         if (i === current) {
           d.style.background = 'var(--primary)'; d.style.color = 'white'; d.style.borderColor = 'var(--primary)';
-        } else if (id && answers[id]) {
+        } else if (qId && answers[qId]) {
           d.style.background = 'var(--primary-subtle)'; d.style.color = 'var(--primary-dark)'; d.style.borderColor = 'var(--primary)';
         } else {
           d.style.background = 'white'; d.style.color = 'var(--gris-700)'; d.style.borderColor = 'var(--gris-200)';
@@ -301,41 +345,69 @@ if ($sessionId) {
       });
     }
 
-    // Sélection d'option
-    document.addEventListener('click', function(e) {
-      const item = e.target.closest('.option-item');
-      if (!item) return;
-      const list = item.closest('.options-list');
-      if (!list) return;
-      const questionId = list.dataset.questionId;
-      const optionId   = item.dataset.optionId;
-
-      // Désélectionner toutes
+    // ── SÉLECTION OPTION ─────────────────────────────────
+    function selectOptionVisual(list, item) {
       list.querySelectorAll('.option-item').forEach(o => {
         o.style.borderColor = 'var(--gris-200)';
         o.style.background  = 'white';
         o.querySelector('.option-letter').style.background = 'var(--gris-100)';
         o.querySelector('.option-letter').style.color      = 'var(--gris-700)';
       });
-
-      // Sélectionner celle-ci
       item.style.borderColor = 'var(--primary)';
       item.style.background  = 'var(--primary-subtle)';
       item.querySelector('.option-letter').style.background = 'var(--primary)';
       item.querySelector('.option-letter').style.color      = 'white';
+    }
 
-      answers[questionId] = optionId;
+    document.addEventListener('click', function(e) {
+      const item = e.target.closest('.option-item');
+      if (!item) return;
+      const list = item.closest('.options-list');
+      if (!list) return;
+      answers[list.dataset.questionId] = item.dataset.optionId;
+      selectOptionVisual(list, item);
       updateDots();
     });
 
-    function submitExam() {
-      const unanswered = TOTAL - Object.keys(answers).length;
-      if (unanswered > 0) {
-        if (!confirm('Il reste ' + unanswered + ' question(s) sans réponse. Soumettre quand même ?')) return;
+    // ── RACCOURCIS CLAVIER (A/B/C/D + flèches) ───────────
+    document.addEventListener('keydown', function(e) {
+      if (submitted) return;
+      const tag = e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+      const key = e.key.toUpperCase();
+      if (['A','B','C','D','E'].includes(key)) {
+        const slide = document.querySelector('.question-slide[data-idx="' + current + '"]');
+        const options = slide?.querySelectorAll('.option-item');
+        const letterMap = {A:0,B:1,C:2,D:3,E:4};
+        const opt = options?.[letterMap[key]];
+        if (opt) {
+          opt.click();
+          // Avancer automatiquement après un court délai
+          if (current < TOTAL - 1) {
+            setTimeout(() => nextQuestion(), 350);
+          }
+        }
+      } else if (e.key === 'ArrowRight' || e.key === 'Enter') {
+        if (current === TOTAL - 1) { /* do nothing, user must click submit */ }
+        else nextQuestion();
+      } else if (e.key === 'ArrowLeft') {
+        prevQuestion();
       }
-      const btn = document.getElementById('submitBtn');
-      btn.disabled = true; btn.textContent = '⏳ Envoi en cours...';
+    });
+
+    // ── SOUMISSION ────────────────────────────────────────
+    function submitExam(force = false) {
+      if (submitted) return;
+      const unanswered = TOTAL - Object.keys(answers).length;
+      if (!force && unanswered > 0) {
+        if (!confirm('Il reste ' + unanswered + ' question(s) sans réponse.\nSoumettre quand même ?')) return;
+      }
+      submitted = true;
       clearInterval(timerInterval);
+
+      const btn = document.getElementById('submitBtn');
+      if (btn) { btn.disabled = true; btn.textContent = '⏳ Envoi en cours...'; }
 
       const temps = Math.floor((Date.now() - timeStart) / 1000);
       const fd = new FormData();
@@ -347,17 +419,25 @@ if ($sessionId) {
         fd.append('answers[' + qId + ']', oId);
       }
 
-      fetch(window.location.href, {method:'POST', body:fd})
+      fetch(window.location.href, { method: 'POST', body: fd })
         .then(r => r.json())
         .then(data => {
           if (data.redirect) window.location = data.redirect;
-          else alert(data.error || 'Erreur.');
+          else { submitted = false; alert(data.error || 'Erreur inconnue.'); if (btn) { btn.disabled=false; btn.textContent='✅ Soumettre l\'examen'; } }
         })
-        .catch(() => { btn.disabled = false; btn.textContent = '✅ Soumettre l\'examen'; });
+        .catch(() => {
+          submitted = false;
+          if (btn) { btn.disabled=false; btn.textContent='✅ Soumettre l\'examen'; }
+          alert('Erreur réseau. Vérifiez votre connexion et réessayez.');
+        });
     }
 
+    // Init
     updateDots();
     </script>
+    <style>
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    </style>
     <?php
     include __DIR__ . '/includes/footer_app.php';
     exit;
@@ -395,6 +475,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['start_exam'])) {
         'statut'       => 'EN_COURS',
     ]);
 
+    // Persister les questions choisies aléatoirement dans la session
+    $pickedQs = dbAll(
+        "SELECT id FROM question_bank WHERE matiere_id=? AND status='PUBLIE' AND type_question='QCM' ORDER BY RAND() LIMIT ?",
+        [$matiereId, min($nbQ, $nbDispo)]
+    );
+    $pickedIds = array_column($pickedQs, 'id');
+    dbQuery("UPDATE exam_sessions SET question_ids=? WHERE id=?",
+            [json_encode($pickedIds), $newSessionId]);
+
     redirect('/reussiteplus/examen.php?session=' . $newSessionId);
 }
 
@@ -421,7 +510,7 @@ include __DIR__ . '/includes/header_app.php';
   <?php endif; ?>
 
   <div class="card">
-    <div class="card-title" style="margin-bottom:4px;font-size:20px">✏️ Configurer votre examen</div>
+    <div class="card-title" style="margin-bottom:4px;font-size:20px"><i class="bi bi-pencil-square"></i> Configurer votre examen</div>
     <p style="color:var(--gris-600);font-size:14px;margin-bottom:24px">Choisissez une matière et le nombre de questions pour commencer.</p>
 
     <form method="POST" action="">
@@ -429,7 +518,7 @@ include __DIR__ . '/includes/header_app.php';
       <input type="hidden" name="start_exam" value="1">
 
       <div class="form-group">
-        <label class="form-label">📚 Matière *</label>
+        <label class="form-label"><i class="bi bi-book"></i> Matière *</label>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
           <?php foreach ($matieres as $m): ?>
           <label style="cursor:pointer">
@@ -447,7 +536,7 @@ include __DIR__ . '/includes/header_app.php';
 
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
         <div class="form-group">
-          <label class="form-label">🔢 Nombre de questions</label>
+          <label class="form-label"><i class="bi bi-hash"></i> Nombre de questions</label>
           <select class="form-control" name="nb_questions">
             <option value="5">5 questions (rapide)</option>
             <option value="10" selected>10 questions</option>
@@ -457,7 +546,7 @@ include __DIR__ . '/includes/header_app.php';
           </select>
         </div>
         <div class="form-group">
-          <label class="form-label">⏱ Limite de temps</label>
+          <label class="form-label"><i class="bi bi-stopwatch"></i> Limite de temps</label>
           <select class="form-control" name="temps_limite">
             <option value="900">15 minutes</option>
             <option value="1800">30 minutes</option>
@@ -469,7 +558,7 @@ include __DIR__ . '/includes/header_app.php';
       </div>
 
       <div class="form-group">
-        <label class="form-label">🎯 Type d'examen</label>
+        <label class="form-label"><i class="bi bi-bullseye"></i> Type d'examen</label>
         <select class="form-control" name="exam_type">
           <option value="ENTRAINEMENT">Entraînement libre</option>
           <option value="ENAFEP">Simulation ENAFEP</option>
@@ -480,19 +569,20 @@ include __DIR__ . '/includes/header_app.php';
       </div>
 
       <button type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top:8px">
-        🚀 Commencer l'examen
+        <i class="bi bi-rocket-takeoff"></i> Commencer l'examen
       </button>
     </form>
   </div>
 
   <!-- Conseils -->
   <div class="card" style="margin-top:20px;background:var(--bleu-light);border-color:var(--bleu)">
-    <div style="font-weight:700;color:var(--bleu);margin-bottom:8px">💡 Conseils pour réussir</div>
+    <div style="font-weight:700;color:var(--bleu);margin-bottom:8px"><i class="bi bi-lightbulb"></i> Conseils pour réussir</div>
     <ul style="font-size:13px;color:var(--gris-700);list-style:none">
-      <li style="padding:4px 0">📵 Éloignez les distractions pendant l'examen</li>
-      <li style="padding:4px 0">⏰ Respectez le temps imparti comme en conditions réelles</li>
-      <li style="padding:4px 0">📝 Lisez attentivement chaque question avant de répondre</li>
-      <li style="padding:4px 0">🔄 Révisez les réponses incorrectes après l'examen</li>
+      <li style="padding:4px 0"><i class="bi bi-phone-vibrate"></i> Éloignez les distractions pendant l'examen</li>
+      <li style="padding:4px 0"><i class="bi bi-alarm"></i> Respectez le temps imparti comme en conditions réelles</li>
+      <li style="padding:4px 0"><i class="bi bi-eye"></i> Lisez attentivement chaque question avant de répondre</li>
+      <li style="padding:4px 0"><i class="bi bi-arrow-repeat"></i> Révisez les réponses incorrectes après l'examen</li>
+      <li style="padding:4px 0"><i class="bi bi-keyboard"></i> <strong>Raccourcis :</strong> Tapez A/B/C/D pour répondre, ←→ pour naviguer</li>
     </ul>
   </div>
 </div>

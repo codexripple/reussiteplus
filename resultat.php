@@ -47,8 +47,8 @@ include __DIR__ . '/includes/header_app.php';
 <div style="max-width:800px;margin:0 auto">
   <!-- Score principal -->
   <div class="card" style="text-align:center;margin-bottom:24px;padding:40px">
-    <div style="font-size:64px;margin-bottom:16px">
-      <?php if ($pct >= 80): ?>🏆<?php elseif ($pct >= 60): ?>🎯<?php elseif ($pct >= 40): ?>📈<?php else: ?>💪<?php endif; ?>
+    <div style="font-size:56px;margin-bottom:16px;color:<?= score_couleur($pct) ?>">
+      <?php if ($pct >= 80): ?><i class="bi bi-trophy-fill"></i><?php elseif ($pct >= 60): ?><i class="bi bi-bullseye"></i><?php elseif ($pct >= 40): ?><i class="bi bi-graph-up-arrow"></i><?php else: ?><i class="bi bi-emoji-smile"></i><?php endif; ?>
     </div>
     <div style="font-family:var(--font-display);font-size:56px;font-weight:900;color:<?= score_couleur($pct) ?>">
       <?= number_format($pct, 1) ?>%
@@ -64,22 +64,22 @@ include __DIR__ . '/includes/header_app.php';
   <!-- Stats du résultat -->
   <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px">
     <div class="stat-card green">
-      <div class="stat-label">✅ Bonnes réponses</div>
+      <div class="stat-label"><i class="bi bi-check-circle-fill"></i> Bonnes réponses</div>
       <div class="stat-value"><?= $bonnes ?></div>
       <div class="stat-sub">sur <?= $total ?> questions</div>
     </div>
     <div class="stat-card rouge">
-      <div class="stat-label">❌ Mauvaises</div>
+      <div class="stat-label"><i class="bi bi-x-circle-fill"></i> Mauvaises</div>
       <div class="stat-value"><?= $mauvaises ?></div>
       <div class="stat-sub">à revoir</div>
     </div>
     <div class="stat-card gold">
-      <div class="stat-label">⭐ Score total</div>
+      <div class="stat-label"><i class="bi bi-star-fill"></i> Score total</div>
       <div class="stat-value"><?= number_format((float)$session['score'], 1) ?></div>
       <div class="stat-sub">/ <?= number_format((float)$session['score_max'], 1) ?> pts</div>
     </div>
     <div class="stat-card bleu">
-      <div class="stat-label">⏱ Temps passé</div>
+      <div class="stat-label"><i class="bi bi-stopwatch"></i> Temps passé</div>
       <div class="stat-value"><?= $mins ?>:<?= str_pad($secs, 2, '0', STR_PAD_LEFT) ?></div>
       <div class="stat-sub">minutes</div>
     </div>
@@ -87,21 +87,21 @@ include __DIR__ . '/includes/header_app.php';
 
   <!-- Actions -->
   <div style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap">
-    <a href="/reussiteplus/examen.php" class="btn btn-primary">🔄 Refaire un examen</a>
-    <a href="/reussiteplus/progression.php" class="btn btn-ghost">📈 Voir ma progression</a>
-    <a href="/reussiteplus/dashboard.php" class="btn btn-ghost">🏠 Tableau de bord</a>
+    <a href="/reussiteplus/examen.php" class="btn btn-primary"><i class="bi bi-arrow-repeat"></i> Refaire un examen</a>
+    <a href="/reussiteplus/progression.php" class="btn btn-ghost"><i class="bi bi-graph-up"></i> Voir ma progression</a>
+    <a href="/reussiteplus/dashboard.php" class="btn btn-ghost"><i class="bi bi-house"></i> Tableau de bord</a>
   </div>
 
   <!-- Détail des réponses -->
   <?php if ($answers): ?>
   <div class="section-header">
-    <div class="section-title">📋 Détail des réponses</div>
+    <div class="section-title"><i class="bi bi-list-check"></i> Détail des réponses</div>
   </div>
   <div style="display:flex;flex-direction:column;gap:12px">
     <?php foreach ($answers as $idx => $ans): ?>
     <div class="card" style="border-left:4px solid <?= $ans['est_correcte'] ? 'var(--primary)' : 'var(--rouge)' ?>">
       <div style="display:flex;gap:12px;align-items:flex-start">
-        <div style="font-size:20px;flex-shrink:0"><?= $ans['est_correcte'] ? '✅' : '❌' ?></div>
+        <div style="font-size:20px;flex-shrink:0;color:<?= $ans['est_correcte'] ? 'var(--primary)' : 'var(--rouge)' ?>"><?= $ans['est_correcte'] ? '<i class="bi bi-check-circle-fill"></i>' : '<i class="bi bi-x-circle-fill"></i>' ?></div>
         <div style="flex:1">
           <div style="font-size:13px;font-weight:600;color:var(--gris-700);margin-bottom:6px">
             Q<?= $idx + 1 ?> — <?= badge_difficulte($ans['difficulte']) ?>
@@ -119,11 +119,11 @@ include __DIR__ . '/includes/header_app.php';
           </div>
           <?php if (!$ans['est_correcte'] && $ans['explication']): ?>
           <div style="margin-top:10px;background:var(--bleu-light);color:var(--bleu);padding:10px 12px;border-radius:8px;font-size:13px;line-height:1.6">
-            💡 <?= nl2br(e($ans['explication'])) ?>
+            <i class="bi bi-lightbulb-fill"></i> <?= nl2br(e($ans['explication'])) ?>
           </div>
           <?php elseif (!$ans['est_correcte'] && $user['plan'] === 'GRATUIT'): ?>
           <div style="margin-top:10px;background:var(--gold-light);padding:8px 12px;border-radius:8px;font-size:12px;color:var(--gold-dark)">
-            ⭐ <a href="/reussiteplus/tarifs.php" style="color:var(--gold-dark);font-weight:600">Passez à Premium</a> pour voir les explications détaillées.
+            <i class="bi bi-star-fill"></i> <a href="/reussiteplus/tarifs.php" style="color:var(--gold-dark);font-weight:600">Passez à Premium</a> pour voir les explications détaillées.
           </div>
           <?php endif; ?>
         </div>
