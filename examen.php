@@ -448,28 +448,55 @@ if ($sessionId) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['start_exam'])) {
     if (!csrf_verify()) { redirect('/reussiteplus/examen.php', 'error', 'Token invalide.'); }
 
-    $matiereId = $_POST['matiere_id'] ?? null;
-    $nbQ       = max(5, min(50, (int)($_POST['nb_questions'] ?? 10)));
-    $examType  = $_POST['exam_type'] ?? 'ENTRAINEMENT';
-    $tempsLimite = (int)($_POST['temps_limite'] ?? 3600);
+    $archivePostId = $_POST['archive_id'] ?? null;
+    $archiveData   = null;
+    $matiereId     = $_POST['matiere_id'] ?? null;
+    $nbQ           = max(5, min(50, (int)($_POST['nb_questions'] ?? 20)));
+    $examType      = $_POST['exam_type'] ?? 'ENTRAINEMENT';
+    $tempsLimite   = (int)($_POST['temps_limite'] ?? 3600);
+
+    // Si on vient d'une archive, récupérer matiere + exam_type depuis l'archive
+    if ($archivePostId) {
+        $archiveData = dbRow("SELECT * FROM archives WHERE id = ?", [$archivePostId]);
+        if ($archiveData) {
+            $matiereId = $archiveData['matiere_id'];
+            $examType  = $archiveData['exam_type'];
+        }
+    }
 
     $matiere = $matiereId ? dbRow("SELECT * FROM matieres WHERE id=?", [$matiereId]) : null;
 
-    // Vérifier questions disponibles
-    $nbDispo = dbRow(
-        "SELECT COUNT(*) as c FROM question_bank WHERE matiere_id=? AND status='PUBLIE' AND type_question='QCM'",
-        [$matiereId]
-    )['c'] ?? 0;
+    // Filtrer par exam_type si disponible (hors entraînement libre)
+    $qWhere  = "matiere_id=? AND status='PUBLIE' AND type_question='QCM'";
+    $qParams = [$matiereId];
+    if ($examType && $examType !== 'ENTRAINEMENT') {
+        $qWhere  .= " AND exam_type=?";
+        $qParams[] = $examType;
+    }
+
+    $nbDispo = (int)(dbRow("SELECT COUNT(*) as c FROM question_bank WHERE $qWhere", $qParams)['c'] ?? 0);
+
+    // Fallback : si aucune question filtrée par exam_type, prendre toutes les questions de la matière
+    if ($nbDispo < 1 && $examType !== 'ENTRAINEMENT') {
+        $qWhere  = "matiere_id=? AND status='PUBLIE' AND type_question='QCM'";
+        $qParams = [$matiereId];
+        $nbDispo = (int)(dbRow("SELECT COUNT(*) as c FROM question_bank WHERE $qWhere", $qParams)['c'] ?? 0);
+    }
 
     if ($nbDispo < 1) {
         redirect('/reussiteplus/examen.php', 'error', 'Aucune question disponible pour cette matière.');
     }
 
+    $sessionTitre = $archiveData
+        ? $archiveData['titre']
+        : ($examType !== 'ENTRAINEMENT' ? "Simulation $examType — " : 'Entraînement — ') . ($matiere['nom'] ?? 'Général');
+
     $newSessionId = dbInsert('exam_sessions', [
         'user_id'      => $user['id'],
+        'archive_id'   => $archivePostId,
         'matiere_id'   => $matiereId,
         'exam_type'    => $examType,
-        'titre'        => 'Entraînement — ' . ($matiere['nom'] ?? 'Général'),
+        'titre'        => $sessionTitre,
         'nb_questions' => min($nbQ, $nbDispo),
         'temps_limite' => $tempsLimite,
         'statut'       => 'EN_COURS',
@@ -477,8 +504,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['start_exam'])) {
 
     // Persister les questions choisies aléatoirement dans la session
     $pickedQs = dbAll(
-        "SELECT id FROM question_bank WHERE matiere_id=? AND status='PUBLIE' AND type_question='QCM' ORDER BY RAND() LIMIT ?",
-        [$matiereId, min($nbQ, $nbDispo)]
+        "SELECT id FROM question_bank WHERE $qWhere ORDER BY RAND() LIMIT ?",
+        array_merge($qParams, [min($nbQ, $nbDispo)])
     );
     $pickedIds = array_column($pickedQs, 'id');
     dbQuery("UPDATE exam_sessions SET question_ids=? WHERE id=?",

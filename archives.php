@@ -95,6 +95,18 @@ if ($detailId) {
             }
         }
         $isBookmarked = (bool)dbRow("SELECT id FROM signets WHERE user_id=? AND archive_id=?", [$user['id'], $detailId]);
+        // Compter les questions disponibles pour cet archive (exam_type + matiere)
+        $nbQuestionsArchive = (int)(dbRow(
+            "SELECT COUNT(*) as c FROM question_bank WHERE matiere_id=? AND exam_type=? AND status='PUBLIE' AND type_question='QCM'",
+            [$detail['matiere_id'], $detail['exam_type']]
+        )['c'] ?? 0);
+        // Fallback si 0 : compter juste par matière
+        if ($nbQuestionsArchive === 0) {
+            $nbQuestionsArchive = (int)(dbRow(
+                "SELECT COUNT(*) as c FROM question_bank WHERE matiere_id=? AND status='PUBLIE' AND type_question='QCM'",
+                [$detail['matiere_id']]
+            )['c'] ?? 0);
+        }
     }
 }
 
@@ -194,11 +206,30 @@ include __DIR__ . '/includes/header_app.php';
   <!-- Sidebar détail -->
   <div>
     <div class="card" style="margin-bottom:16px">
-      <div class="card-title" style="margin-bottom:16px"><i class="bi bi-bullseye"></i> S'entraîner avec cet examen</div>
-      <a href="/reussiteplus/examen.php?archive=<?= e($detail['id']) ?>" class="btn btn-primary btn-full">
-        <i class="bi bi-pencil-square"></i> Passer l'examen en ligne
-      </a>
-      <div style="font-size:11px;color:var(--gris-500);text-align:center;margin-top:8px">Questions interactives chronométrées</div>
+      <div class="card-title" style="margin-bottom:12px"><i class="bi bi-bullseye"></i> S'entraîner avec cet examen</div>
+      <?php if ($nbQuestionsArchive > 0): ?>
+      <div style="background:var(--primary-subtle,#e6f4f0);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--primary)">
+        <i class="bi bi-check-circle-fill"></i> <strong><?= $nbQuestionsArchive ?> questions</strong> disponibles en ligne
+      </div>
+      <form method="POST" action="/reussiteplus/examen.php">
+        <?= csrf_field() ?>
+        <input type="hidden" name="start_exam" value="1">
+        <input type="hidden" name="archive_id" value="<?= e($detail['id']) ?>">
+        <input type="hidden" name="matiere_id" value="<?= e($detail['matiere_id']) ?>">
+        <input type="hidden" name="exam_type" value="<?= e($detail['exam_type']) ?>">
+        <input type="hidden" name="nb_questions" value="20">
+        <input type="hidden" name="temps_limite" value="3600">
+        <button type="submit" class="btn btn-primary btn-full">
+          <i class="bi bi-pencil-square"></i> Passer l'examen en ligne
+        </button>
+      </form>
+      <div style="font-size:11px;color:var(--gris-500);text-align:center;margin-top:8px">Questions interactives chronométrées • 1h</div>
+      <?php else: ?>
+      <div style="text-align:center;padding:12px 0;color:var(--gris-400);font-size:13px">
+        <i class="bi bi-hourglass-split" style="font-size:24px;display:block;margin-bottom:6px"></i>
+        Questions en cours d'ajout
+      </div>
+      <?php endif; ?>
     </div>
 
     <?php if ($user['plan'] === 'GRATUIT'): ?>
