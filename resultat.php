@@ -4,13 +4,106 @@ require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/helpers.php';
 
-$pageTitle  = 'Résultats de l\'examen';
-$pageActive = 'examen';
+$pageTitle  = 'Mes résultats';
+$pageActive = 'resultat';
 $user = require_login();
 
 $sessionId = $_GET['session'] ?? '';
-if (!$sessionId) { redirect('/reussiteplus/examen.php'); }
 
+// ── Mode liste : affiche l'historique de tous les examens ──
+if (!$sessionId) {
+    $page    = max(1, (int)($_GET['page'] ?? 1));
+    $perPage = 15;
+    $offset  = ($page - 1) * $perPage;
+
+    $total = (int)(dbRow(
+        "SELECT COUNT(*) as c FROM exam_sessions WHERE user_id=? AND statut='TERMINE'",
+        [$user['id']]
+    )['c'] ?? 0);
+
+    $sessions = dbAll(
+        "SELECT es.*, m.nom as matiere_nom, m.couleur as matiere_couleur, m.icone as matiere_icone
+         FROM exam_sessions es
+         LEFT JOIN matieres m ON es.matiere_id = m.id
+         WHERE es.user_id=? AND es.statut='TERMINE'
+         ORDER BY es.finished_at DESC
+         LIMIT ? OFFSET ?",
+        [$user['id'], $perPage, $offset]
+    );
+
+    include __DIR__ . '/includes/header_app.php';
+    ?>
+    <div style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+      <div>
+        <h2 style="font-family:var(--font-display);font-size:20px;font-weight:800;margin:0">Mes résultats</h2>
+        <p style="color:var(--gris-500);font-size:13px;margin:4px 0 0"><?= number_format($total) ?> examen<?= $total > 1 ? 's' : '' ?> terminé<?= $total > 1 ? 's' : '' ?></p>
+      </div>
+      <a href="/reussiteplus/examen.php" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Passer un examen</a>
+    </div>
+
+    <?php if ($sessions): ?>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <?php foreach ($sessions as $s):
+        $pct   = (float)($s['pourcentage'] ?? 0);
+        $mins  = floor(($s['temps_passe'] ?? 0) / 60);
+        $secs  = ($s['temps_passe'] ?? 0) % 60;
+        $date  = date('d/m/Y à H:i', strtotime($s['finished_at'] ?? $s['started_at']));
+        $color = score_couleur($pct);
+      ?>
+      <a href="/reussiteplus/resultat.php?session=<?= e($s['id']) ?>" style="text-decoration:none">
+        <div class="card" style="display:flex;align-items:center;gap:16px;padding:14px 18px;transition:box-shadow .15s;cursor:pointer"
+             onmouseenter="this.style.boxShadow='0 4px 16px rgba(0,0,0,.08)'"
+             onmouseleave="this.style.boxShadow=''">
+          <!-- Icône matière -->
+          <div style="width:44px;height:44px;border-radius:12px;background:<?= e($s['matiere_couleur'] ?? 'var(--primary)') ?>20;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">
+            <?= e($s['matiere_icone'] ?? '📚') ?>
+          </div>
+          <!-- Info -->
+          <div style="flex:1;min-width:0">
+            <div style="font-weight:700;color:var(--gris-900);font-size:14px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical"><?= e($s['titre']) ?></div>
+            <div style="font-size:12px;color:var(--gris-500);margin-top:2px">
+              <?= e($s['matiere_nom'] ?? '—') ?> • <?= $date ?>
+            </div>
+          </div>
+          <!-- Stats -->
+          <div style="display:flex;align-items:center;gap:16px;flex-shrink:0">
+            <div style="text-align:center">
+              <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:<?= $color ?>;line-height:1"><?= number_format($pct, 0) ?>%</div>
+              <div style="font-size:10px;color:var(--gris-500);text-transform:uppercase;margin-top:2px"><?= score_label($pct) ?></div>
+            </div>
+            <div style="text-align:center;display:none" class="d-md-block">
+              <div style="font-size:13px;font-weight:700;color:var(--gris-700)"><?= (int)$s['nb_questions'] ?>Q</div>
+              <div style="font-size:10px;color:var(--gris-500)"><?= $mins ?>:<?= str_pad($secs,2,'0',STR_PAD_LEFT) ?></div>
+            </div>
+            <div style="color:var(--gris-300);font-size:16px"><i class="bi bi-chevron-right"></i></div>
+          </div>
+        </div>
+      </a>
+      <?php endforeach; ?>
+    </div>
+
+    <?php if ($total > $perPage): ?>
+    <div style="display:flex;justify-content:center;gap:8px;margin-top:24px">
+      <?php for ($p = 1; $p <= ceil($total/$perPage); $p++): ?>
+      <a href="?page=<?= $p ?>" class="btn <?= $p === $page ? 'btn-primary' : 'btn-ghost' ?> btn-sm"><?= $p ?></a>
+      <?php endfor; ?>
+    </div>
+    <?php endif; ?>
+
+    <?php else: ?>
+    <div class="card" style="text-align:center;padding:60px 20px">
+      <div style="font-size:48px;margin-bottom:16px;opacity:.3"><i class="bi bi-clipboard-x"></i></div>
+      <div style="font-size:18px;font-weight:700;color:var(--gris-700);margin-bottom:8px">Aucun résultat pour l'instant</div>
+      <p style="color:var(--gris-500);margin-bottom:20px">Passez votre premier examen pour voir vos résultats ici.</p>
+      <a href="/reussiteplus/examen.php" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Commencer un examen</a>
+    </div>
+    <?php endif; ?>
+
+    <?php include __DIR__ . '/includes/footer_app.php'; ?>
+    <?php exit; ?>
+<?php } // fin mode liste
+
+// ── Mode détail : affiche le résultat d'un examen précis ──
 $session = dbRow(
     "SELECT es.*, m.nom as matiere_nom, m.couleur
      FROM exam_sessions es
@@ -18,7 +111,7 @@ $session = dbRow(
      WHERE es.id=? AND es.user_id=?",
     [$sessionId, $user['id']]
 );
-if (!$session) { redirect('/reussiteplus/dashboard.php', 'error', 'Session introuvable.'); }
+if (!$session) { redirect('/reussiteplus/resultat.php', 'error', 'Session introuvable.'); }
 
 // Réponses avec détails
 $answers = dbAll(
@@ -87,9 +180,9 @@ include __DIR__ . '/includes/header_app.php';
 
   <!-- Actions -->
   <div style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap">
+    <a href="/reussiteplus/resultat.php" class="btn btn-ghost"><i class="bi bi-list-ul"></i> Tous mes résultats</a>
     <a href="/reussiteplus/examen.php" class="btn btn-primary"><i class="bi bi-arrow-repeat"></i> Refaire un examen</a>
-    <a href="/reussiteplus/progression.php" class="btn btn-ghost"><i class="bi bi-graph-up"></i> Voir ma progression</a>
-    <a href="/reussiteplus/dashboard.php" class="btn btn-ghost"><i class="bi bi-house"></i> Tableau de bord</a>
+    <a href="/reussiteplus/progression.php" class="btn btn-ghost"><i class="bi bi-graph-up"></i> Ma progression</a>
   </div>
 
   <!-- Détail des réponses -->
