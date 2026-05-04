@@ -247,6 +247,7 @@ a { text-decoration: none; color: inherit; }
     <a href="#tarifs" class="nav-link">Tarifs</a>
     <a href="#temoignages" class="nav-link">Témoignages</a>
     <a href="archives.php" class="nav-link">Archives</a>
+    <a href="/reussiteplus/contact.php" class="nav-link">Contact</a>
   </div>
   <div class="nav-actions">
     <?php if ($user): ?>
@@ -543,7 +544,7 @@ a { text-decoration: none; color: inherit; }
       <a href="/reussiteplus/tarifs.php" class="footer-link">Tarifs</a>
       <a href="/reussiteplus/archives.php" class="footer-link">Archives</a>
       <a href="/reussiteplus/inscription.php" class="footer-link">Inscription</a>
-      <a href="mailto:contact@reussiteplus.cd" class="footer-link">Contact</a>
+      <a href="/reussiteplus/contact.php" class="footer-link">Contact</a>
     </div>
     <div class="footer-copy">Paiement via 💚 M-Pesa · 🔴 Airtel Money · 🟠 Orange Money</div>
   </div>

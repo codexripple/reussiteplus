@@ -367,3 +367,21 @@ CREATE TABLE IF NOT EXISTS admin_logs (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- ============================================================
+-- MESSAGES DE CONTACT
+-- ============================================================
+CREATE TABLE IF NOT EXISTS contact_messages (
+  id          CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+  nom         VARCHAR(100) NOT NULL,
+  email       VARCHAR(200) NOT NULL,
+  telephone   VARCHAR(30),
+  sujet       ENUM('PLAN','TECHNIQUE','PARTENARIAT','PRESSE','AUTRE') DEFAULT 'AUTRE',
+  message     TEXT NOT NULL,
+  statut      ENUM('NOUVEAU','LU','REPONDU') DEFAULT 'NOUVEAU',
+  ip          VARCHAR(45),
+  created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_statut (statut),
+  INDEX idx_email (email),
+  INDEX idx_date (created_at DESC)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
