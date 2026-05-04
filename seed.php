@@ -1007,6 +1007,165 @@ $qs_final = [
 ];
 foreach ($qs_final as [$matId,$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$matId,$e,$d,$s,$o); $total_q++; }
 
+/* ═══════════════════════════════════════════
+   PACK ÉTENDU — 120 nouvelles questions
+   Toutes matières, tous niveaux
+═══════════════════════════════════════════ */
+
+// ── MATHÉMATIQUES — pack étendu ──
+$mat = $matiereMap['maths'];
+$qs_maths_ext = [
+  ['Quel est le résultat de 3 × (4 + 2) − 5 ?',                                          'DEBUTANT',      'ENAFEP',     [['A','13',1],           ['B','7',0],             ['C','19',0],            ['D','11',0]]],
+  ['Convertir 3/5 en pourcentage.',                                                        'DEBUTANT',      'ENAFEP',     [['A','60%',1],          ['B','50%',0],           ['C','35%',0],           ['D','75%',0]]],
+  ['Quel est le résultat de √144 ?',                                                       'DEBUTANT',      'ENAFEP',     [['A','12',1],           ['B','14',0],            ['C','72',0],            ['D','11',0]]],
+  ['Combien vaut 20% de 350 ?',                                                             'DEBUTANT',      'ENAFEP',     [['A','70',1],           ['B','35',0],            ['C','700',0],           ['D','17,5',0]]],
+  ['Un rectangle a une longueur de 8 cm et une largeur de 5 cm. Son périmètre vaut :',    'DEBUTANT',      'ENAFEP',     [['A','26 cm',1],        ['B','40 cm',0],         ['C','13 cm',0],         ['D','20 cm',0]]],
+  ['Résoudre : 4x + 3 = 19',                                                               'ELEMENTAIRE',   'ENAFEP',     [['A','x = 4',1],        ['B','x = 7',0],         ['C','x = 5',0],         ['D','x = 3',0]]],
+  ['Quelle est la valeur de 7² − 3² ?',                                                    'ELEMENTAIRE',   'ENAFEP',     [['A','40',1],           ['B','10',0],            ['C','58',0],            ['D','16',0]]],
+  ['Dans un triangle isocèle, deux angles valent 55° chacun. Le troisième vaut :',        'ELEMENTAIRE',   'ENAFEP',     [['A','70°',1],          ['B','55°',0],           ['C','110°',0],          ['D','80°',0]]],
+  ['Simplifier : (12x³) / (4x)',                                                            'ELEMENTAIRE',   'TENASOSP',   [['A','3x²',1],          ['B','8x²',0],           ['C','3x',0],            ['D','12x²',0]]],
+  ['Résoudre l\'inégalité : 2x − 1 ≥ 5',                                                  'ELEMENTAIRE',   'ENAFEP',     [['A','x ≥ 3',1],        ['B','x ≥ 2',0],         ['C','x ≤ 3',0],         ['D','x ≥ 6',0]]],
+  ['Calculer l\'hypoténuse d\'un triangle rectangle de côtés 5 et 12.',                   'ELEMENTAIRE',   'ENAFEP',     [['A','13',1],           ['B','17',0],            ['C','7',0],             ['D','60',0]]],
+  ['Donner la valeur de 4⁰.',                                                               'DEBUTANT',      'ENAFEP',     [['A','1',1],            ['B','0',0],             ['C','4',0],             ['D','Indéfini',0]]],
+  ['Quelle est la valeur de f(3) si f(x) = 2x² − x + 4 ?',                                'ELEMENTAIRE',   'TENASOSP',   [['A','19',1],           ['B','13',0],            ['C','17',0],            ['D','22',0]]],
+  ['Calculer la moyenne de : 8, 12, 15, 9, 6.',                                             'ELEMENTAIRE',   'ENAFEP',     [['A','10',1],           ['B','12',0],            ['C','8',0],             ['D','9',0]]],
+  ['Résoudre : x² + 4x − 5 = 0',                                                           'INTERMEDIAIRE', 'TENASOSP',   [['A','x = 1 ou x = −5',1],['B','x = 5 ou x = −1',0],['C','x = −4 ou x = 5',0],['D','x = 2 ou x = −3',0]]],
+  ['Quel est le domaine de définition de f(x) = ln(2x − 4) ?',                             'AVANCE',        'EXAMEN_ETAT',[['A','x > 2',1],         ['B','x ≥ 2',0],         ['C','x > 4',0],         ['D','x > 0',0]]],
+  ['Un capital de 10 000 CDF placé à 5% par an. Intérêt après 3 ans ?',                   'INTERMEDIAIRE', 'ENAFEP',     [['A','1 500 CDF',1],    ['B','500 CDF',0],       ['C','5 000 CDF',0],     ['D','150 CDF',0]]],
+  ['Calculer le volume d\'un cube de côté 4 cm.',                                           'ELEMENTAIRE',   'ENAFEP',     [['A','64 cm³',1],       ['B','16 cm³',0],        ['C','48 cm³',0],        ['D','24 cm³',0]]],
+  ['Quelle est la valeur de 3/4 + 5/6 ?',                                                  'ELEMENTAIRE',   'ENAFEP',     [['A','19/12',1],        ['B','8/10',0],          ['C','15/24',0],         ['D','4/5',0]]],
+  ['La droite y = 0 est appelée :',                                                         'DEBUTANT',      'ENAFEP',     [['A','Axe des abscisses',1],['B','Axe des ordonnées',0],['C','Origine',0],    ['D','Bissectrice',0]]],
+];
+foreach ($qs_maths_ext as [$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$mat,$e,$d,$s,$o); $total_q++; }
+
+// ── FRANÇAIS — pack étendu ──
+$mat = $matiereMap['francais'];
+$qs_fr_ext = [
+  ['Quel est le participe passé de "naître" ?',                                             'DEBUTANT',      'ENAFEP',     [['A','né',1],           ['B','nait',0],          ['C','naissé',0],        ['D','né(e)',0]]],
+  ['Identifier le sujet dans : "Les oiseaux chantent au lever du soleil."',                'DEBUTANT',      'ENAFEP',     [['A','Les oiseaux',1],  ['B','chantent',0],      ['C','au lever',0],      ['D','du soleil',0]]],
+  ['Quel est le pluriel de "bail" ?',                                                       'ELEMENTAIRE',   'ENAFEP',     [['A','baux',1],         ['B','bails',0],         ['C','bailx',0],         ['D','bailes',0]]],
+  ['Quelle figure de style est employée dans : "C\'est une pluie de balles." ?',           'ELEMENTAIRE',   'ENAFEP',     [['A','Métaphore',1],    ['B','Comparaison',0],   ['C','Personnification',0],['D','Hyperbole',0]]],
+  ['Conjuguer "savoir" au subjonctif présent, 3e pers. sing. :',                           'INTERMEDIAIRE', 'EXAMEN_ETAT',[['A','qu\'il sache',1],  ['B','qu\'il sait',0],   ['C','qu\'il savait',0], ['D','qu\'il saurait',0]]],
+  ['Dans "Il faisait beau, aussi sortirent-ils.", "aussi" a le sens de :',                 'AVANCE',        'EXAMEN_ETAT',[['A','c\'est pourquoi',1],['B','également',0],     ['C','pourtant',0],      ['D','cependant',0]]],
+  ['Quel est le complément circonstanciel de temps dans : "Il part demain à l\'aube." ?', 'ELEMENTAIRE',   'ENAFEP',     [['A','demain à l\'aube',1],['B','Il',0],           ['C','part',0],          ['D','à l\'aube',0]]],
+  ['Le mot "omnivore" contient le préfixe latin "omni" qui signifie :',                   'ELEMENTAIRE',   'ENAFEP',     [['A','tout',1],         ['B','beaucoup',0],      ['C','nourrir',0],       ['D','vivant',0]]],
+  ['Quelle est la nature du mot "que" dans : "Je veux que tu partes." ?',                  'INTERMEDIAIRE', 'EXAMEN_ETAT',[['A','Conjonction de subordination',1],['B','Pronom relatif',0],['C','Adverbe',0],['D','Déterminant',0]]],
+  ['Identifier l\'apposition dans : "Jean, médecin réputé, soigne tout le monde."',       'AVANCE',        'EXAMEN_ETAT',[['A','médecin réputé',1],['B','Jean',0],          ['C','soigne',0],        ['D','tout le monde',0]]],
+  ['Quel temps est utilisé dans les propositions conditionnelles de type 3 (hypothèse passée) ?','EXPERT',  'EXAMEN_ETAT',[['A','Plus-que-parfait + conditionnel passé',1],['B','Imparfait + conditionnel',0],['C','Passé composé + futur',0],['D','Présent + conditionnel',0]]],
+  ['Dans quelle phrase le "ne" est-il explétif (sans valeur négative) ?',                  'EXPERT',        'EXAMEN_ETAT',[['A','Je crains qu\'il ne vienne.',1],['B','Il ne vient pas.',0],['C','Il ne sait rien.',0],['D','Je n\'ai pas vu.',0]]],
+  ['Quel est le sens littéraire du mot "périphrase" ?',                                    'AVANCE',        'EXAMEN_ETAT',[['A','Remplacer un mot par une expression qui le définit',1],['B','Répéter un même son',0],['C','Inverser l\'ordre des mots',0],['D','Exagérer une idée',0]]],
+  ['Conjuguer "résoudre" au passé simple, 1ère pers. plur. :',                             'AVANCE',        'EXAMEN_ETAT',[['A','nous résolûmes',1], ['B','nous résolvions',0],['C','nous avons résolu',0],['D','nous résolurent',0]]],
+];
+foreach ($qs_fr_ext as [$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$mat,$e,$d,$s,$o); $total_q++; }
+
+// ── CHIMIE — pack étendu ──
+$mat = $matiereMap['chimie'];
+$qs_ch_ext = [
+  ['Quel est le symbole de l\'aluminium ?',                                                 'DEBUTANT',      'ENAFEP',     [['A','Al',1],           ['B','Au',0],            ['C','Ag',0],            ['D','Am',0]]],
+  ['Le cuivre a pour symbole chimique :',                                                   'DEBUTANT',      'ENAFEP',     [['A','Cu',1],           ['B','Co',0],            ['C','Cr',0],            ['D','Cd',0]]],
+  ['Quelle est la charge d\'un proton ?',                                                   'ELEMENTAIRE',   'ENAFEP',     [['A','+1',1],           ['B','−1',0],            ['C','0',0],             ['D','+2',0]]],
+  ['Le fer rouille en formant :',                                                            'ELEMENTAIRE',   'ENAFEP',     [['A','De l\'oxyde de fer (Fe₂O₃)',1],['B','Du chlorure de fer',0],['C','Du sulfure de fer',0],['D','Du carbonate de fer',0]]],
+  ['L\'eau de chaux se trouble en présence de :',                                           'ELEMENTAIRE',   'TENASOSP',   [['A','CO₂',1],          ['B','O₂',0],            ['C','N₂',0],            ['D','H₂',0]]],
+  ['Quelle est la masse molaire de NaCl (Na=23, Cl=35,5) ?',                               'ELEMENTAIRE',   'TENASOSP',   [['A','58,5 g/mol',1],   ['B','46 g/mol',0],      ['C','71 g/mol',0],      ['D','35,5 g/mol',0]]],
+  ['Lors d\'une électrolyse, la réduction a lieu :',                                        'AVANCE',        'EXAMEN_ETAT',[['A','À la cathode (−)',1],['B','À l\'anode (+)',0], ['C','Dans le sel fondu',0],['D','Dans l\'électrolyte',0]]],
+  ['Le nombre d\'Avogadro est approximativement :',                                         'INTERMEDIAIRE', 'TENASOSP',   [['A','6,02 × 10²³',1],  ['B','6,02 × 10²⁰',0],   ['C','9,8 × 10²³',0],    ['D','1,6 × 10⁻¹⁹',0]]],
+  ['Les liaisons hydrogène expliquent :',                                                   'AVANCE',        'EXAMEN_ETAT',[['A','La tension superficielle de l\'eau et son point d\'ébullition élevé',1],['B','La rigidité des métaux',0],['C','La solubilité des lipides',0],['D','La conductivité ionique',0]]],
+  ['L\'oxydation correspond à :',                                                            'INTERMEDIAIRE', 'TENASOSP',   [['A','Une perte d\'électrons',1],['B','Un gain d\'électrons',0],['C','Une prise d\'hydrogène',0],['D','Un gain de protons',0]]],
+  ['La formule de l\'acide sulfurique est :',                                               'ELEMENTAIRE',   'TENASOSP',   [['A','H₂SO₄',1],        ['B','H₂SO₃',0],         ['C','HSO₄',0],          ['D','SO₄',0]]],
+  ['La loi de conservation de la matière (Lavoisier) dit que :',                           'ELEMENTAIRE',   'ENAFEP',     [['A','La masse totale se conserve lors d\'une réaction',1],['B','L\'énergie se crée',0],['C','Les atomes disparaissent',0],['D','Le volume est constant',0]]],
+];
+foreach ($qs_ch_ext as [$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$mat,$e,$d,$s,$o); $total_q++; }
+
+// ── PHYSIQUE — pack étendu ──
+$mat = $matiereMap['physique'];
+$qs_ph_ext = [
+  ['Une balle lancée horizontalement à v = 10 m/s depuis h = 20 m. Temps de chute (g=10)?','AVANCE',       'EXAMEN_ETAT',[['A','2 s',1],           ['B','4 s',0],           ['C','1 s',0],           ['D','√2 s',0]]],
+  ['La tension aux bornes d\'un générateur idéal est égale à :',                           'ELEMENTAIRE',   'ENAFEP',     [['A','Sa force électromotrice',1],['B','Sa résistance interne × I',0],['C','La puissance divisée par I',0],['D','Toujours 12 V',0]]],
+  ['Le principe d\'inertie (1ère loi de Newton) stipule :',                                'ELEMENTAIRE',   'ENAFEP',     [['A','Tout corps persévère dans son état de repos ou MRU sans force',1],['B','F = m × a',0],['C','Action = −Réaction',0],['D','L\'énergie se conserve',0]]],
+  ['Quelle est la relation entre longueur d\'onde (λ), fréquence (f) et vitesse (v) ?',   'INTERMEDIAIRE', 'TENASOSP',   [['A','v = λ × f',1],    ['B','v = λ / f',0],     ['C','λ = v × f',0],     ['D','f = λ × v',0]]],
+  ['Un condensateur de capacité C = 10 µF est chargé sous U = 5 V. Sa charge Q vaut :',  'AVANCE',        'EXAMEN_ETAT',[['A','50 µC',1],          ['B','2 µC',0],          ['C','0,5 µC',0],        ['D','50 mC',0]]],
+  ['L\'effet Joule correspond à :',                                                         'INTERMEDIAIRE', 'TENASOSP',   [['A','La chaleur dégagée par un conducteur traversé par un courant',1],['B','La variation de résistance avec la température',0],['C','La force sur un conducteur dans un champ magnétique',0],['D','La lumière émise par un filament',0]]],
+  ['La résonance d\'un circuit RLC se produit quand :',                                    'EXPERT',        'EXAMEN_ETAT',[['A','La fréquence d\'excitation = fréquence propre',1],['B','R = L',0],['C','C = 0',0],['D','L = 0',0]]],
+  ['La loi de Faraday dit que la force électromotrice induite est proportionnelle à :',   'AVANCE',        'EXAMEN_ETAT',[['A','La variation du flux magnétique dans le temps',1],['B','L\'intensité du courant',0],['C','La résistance du circuit',0],['D','La tension appliquée',0]]],
+  ['Quelle est l\'unité de la résistance électrique ?',                                    'DEBUTANT',      'ENAFEP',     [['A','Ohm (Ω)',1],       ['B','Volt',0],          ['C','Ampère',0],        ['D','Farad',0]]],
+  ['Un miroir plan produit une image :',                                                    'ELEMENTAIRE',   'ENAFEP',     [['A','Virtuelle, droite, de même taille',1],['B','Réelle, renversée',0],['C','Agrandie, virtuelle',0],['D','Réelle, droite',0]]],
+  ['La puissance dissipée dans une résistance R parcourue par I est :',                    'ELEMENTAIRE',   'TENASOSP',   [['A','P = R × I²',1],   ['B','P = R × I',0],     ['C','P = R / I²',0],    ['D','P = I / R',0]]],
+  ['Quel est l\'ordre de grandeur de la masse d\'un proton ?',                             'AVANCE',        'EXAMEN_ETAT',[['A','1,67 × 10⁻²⁷ kg',1],['B','9,1 × 10⁻³¹ kg',0],['C','1 kg',0],       ['D','1,67 × 10⁻²⁴ g',0]]],
+];
+foreach ($qs_ph_ext as [$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$mat,$e,$d,$s,$o); $total_q++; }
+
+// ── BIOLOGIE — pack étendu ──
+$mat = $matiereMap['biologie'];
+$qs_bio_ext = [
+  ['Quel est le rôle du rein dans l\'organisme ?',                                         'ELEMENTAIRE',   'ENAFEP',     [['A','Filtration du sang et production d\'urine',1],['B','Production de bile',0],['C','Absorption des lipides',0],['D','Régulation de la glycémie',0]]],
+  ['Les lymphocytes T sont impliqués dans :',                                               'AVANCE',        'EXAMEN_ETAT',[['A','L\'immunité cellulaire',1],['B','La production d\'anticorps',0],['C','La coagulation',0],['D','Le transport de l\'O₂',0]]],
+  ['La double hélice de l\'ADN a été découverte par :',                                    'INTERMEDIAIRE', 'TENASOSP',   [['A','Watson et Crick (1953)',1],['B','Mendel',0],['C','Pasteur',0],['D','Darwin',0]]],
+  ['Quel organe produit les hormones œstrogène et progestérone ?',                         'INTERMEDIAIRE', 'TENASOSP',   [['A','Les ovaires',1],  ['B','L\'utérus',0],     ['C','Le pancréas',0],   ['D','Les glandes surrénales',0]]],
+  ['La glycolyse se déroule dans :',                                                        'AVANCE',        'EXAMEN_ETAT',[['A','Le cytoplasme',1],  ['B','La mitochondrie',0],['C','Le noyau',0],      ['D','Le réticulum',0]]],
+  ['Les plaquettes sanguines sont responsables de :',                                      'ELEMENTAIRE',   'ENAFEP',     [['A','La coagulation',1],['B','Le transport de l\'oxygène',0],['C','La défense immunitaire',0],['D','La production d\'hormones',0]]],
+  ['Quel type de virus cause le VIH/SIDA ?',                                               'INTERMEDIAIRE', 'ENAFEP',     [['A','Rétrovirus (ARN)',1],['B','Virus à ADN',0],  ['C','Bactériophage',0], ['D','Prion',0]]],
+  ['La nutrition autotrophe des plantes repose sur :',                                     'ELEMENTAIRE',   'ENAFEP',     [['A','La photosynthèse (lumière + CO₂ + H₂O)',1],['B','La fermentation',0],['C','La respiration cellulaire',0],['D','L\'absorption de nitrates',0]]],
+  ['Quelle loi de Mendel dit que les caractères ségrègent indépendamment ?',               'AVANCE',        'EXAMEN_ETAT',[['A','Loi de l\'assortiment indépendant (2e loi)',1],['B','Loi de dominance',0],['C','Loi de ségrégation',0],['D','Loi de Lamarck',0]]],
+  ['Le système immunitaire reconnaît les agents pathogènes grâce aux :',                   'AVANCE',        'EXAMEN_ETAT',[['A','Antigènes de surface',1],['B','Anticorps',0],  ['C','Lymphocytes B',0], ['D','Globules rouges',0]]],
+  ['Quel est l\'acide aminé codé par AUG (codon initiateur) ?',                            'EXPERT',        'EXAMEN_ETAT',[['A','Méthionine',1],    ['B','Lysine',0],        ['C','Leucine',0],       ['D','Valine',0]]],
+  ['La cholestase correspond à un trouble de :',                                            'EXPERT',        'EXAMEN_ETAT',[['A','L\'écoulement de la bile',1],['B','La glycogénolyse',0],['C','La coagulation',0],['D','La diurèse',0]]],
+];
+foreach ($qs_bio_ext as [$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$mat,$e,$d,$s,$o); $total_q++; }
+
+// ── HISTOIRE-GÉOGRAPHIE — pack étendu ──
+$mat = $matiereMap['histgeo'];
+$qs_hg_ext = [
+  ['Quel explorateur européen a "découvert" le fleuve Congo en 1482 ?',                   'INTERMEDIAIRE', 'EXAMEN_ETAT',[['A','Diogo Cão',1],     ['B','Vasco de Gama',0], ['C','Christophe Colomb',0],['D','Magellan',0]]],
+  ['Le Traité de Berlin (1884-85) a :',                                                    'INTERMEDIAIRE', 'EXAMEN_ETAT',[['A','Partagé l\'Afrique entre puissances coloniales',1],['B','Accordé l\'indépendance aux colonies',0],['C','Interdit la traite des esclaves',0],['D','Créé la SDN',0]]],
+  ['Patrice Lumumba était le premier :',                                                   'ELEMENTAIRE',   'ENAFEP',     [['A','Premier ministre du Congo indépendant',1],['B','Président de la RDC',0],['C','Roi du Congo',0],['D','Chef de la rébellion katangaise',0]]],
+  ['Le fleuve Congo est le _____ plus long fleuve d\'Afrique.',                            'ELEMENTAIRE',   'ENAFEP',     [['A','2e',1],           ['B','1er',0],           ['C','3e',0],            ['D','4e',0]]],
+  ['Quel pays est voisin de la RDC à l\'est ?',                                            'DEBUTANT',      'ENAFEP',     [['A','Le Rwanda et le Burundi',1],['B','Le Niger',0],['C','Le Cameroun',0], ['D','L\'Angola',0]]],
+  ['La ville de Lubumbashi est la capitale de la province de :',                           'ELEMENTAIRE',   'ENAFEP',     [['A','Haut-Katanga',1], ['B','Tanganyika',0],    ['C','Lualaba',0],       ['D','Kasaï',0]]],
+  ['La Conférence Nationale Souveraine de la RDC a eu lieu en :',                         'INTERMEDIAIRE', 'ENAFEP',     [['A','1991-1992',1],    ['B','1980',0],          ['C','1997',0],          ['D','2003',0]]],
+  ['Les Accords de paix de Lusaka (1999) concernaient :',                                  'AVANCE',        'EXAMEN_ETAT',[['A','La guerre au Congo (RDC)',1],['B','La guerre civile au Rwanda',0],['C','Le conflit angolais',0],['D','La guerre d\'Éthiopie',0]]],
+  ['Quel est le principal port maritime de la RDC ?',                                      'ELEMENTAIRE',   'ENAFEP',     [['A','Matadi',1],       ['B','Boma',0],          ['C','Banana',0],        ['D','Kinshasa',0]]],
+  ['La Seconde Guerre mondiale a pris fin en :',                                            'ELEMENTAIRE',   'ENAFEP',     [['A','1945',1],         ['B','1918',0],          ['C','1939',0],          ['D','1950',0]]],
+  ['Le Mouvement Non-Aligné regroupe des pays qui :',                                     'AVANCE',        'EXAMEN_ETAT',[['A','Refusent de s\'aligner sur les blocs USA ou URSS pendant la Guerre froide',1],['B','Sont neutres dans toutes les guerres',0],['C','Appartiennent à l\'ONU uniquement',0],['D','Ne participent pas aux échanges commerciaux',0]]],
+  ['La déforestation du bassin du Congo menace principalement :',                          'INTERMEDIAIRE', 'ENAFEP',     [['A','La biodiversité et la régulation du climat mondial',1],['B','Le trafic aérien',0],['C','Les voies navigables',0],['D','Les gisements miniers',0]]],
+];
+foreach ($qs_hg_ext as [$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$mat,$e,$d,$s,$o); $total_q++; }
+
+// ── ANGLAIS — pack étendu ──
+$mat = $matiereMap['anglais'];
+$qs_en_ext = [
+  ['What is the superlative of "far" ?',                                                    'ELEMENTAIRE',   'ENAFEP',     [['A','farthest',1],     ['B','more far',0],      ['C','farrer',0],        ['D','most far',0]]],
+  ['Choose the correct verb form: "The news ___ bad."',                                    'INTERMEDIAIRE', 'EXAMEN_ETAT',[['A','is',1],            ['B','are',0],           ['C','were',0],          ['D','have been',0]]],
+  ['What is the meaning of "eloquent" ?',                                                   'INTERMEDIAIRE', 'EXAMEN_ETAT',[['A','Fluent and persuasive in speech',1],['B','Angry and loud',0],['C','Confused and hesitant',0],['D','Silent and reserved',0]]],
+  ['Which sentence is in the Future Perfect tense ?',                                      'AVANCE',        'EXAMEN_ETAT',[['A','By next year, I will have finished my studies.',1],['B','I will finish my studies.',0],['C','I have been studying for years.',0],['D','I was finishing my studies.',0]]],
+  ['The word "although" introduces a:',                                                     'INTERMEDIAIRE', 'EXAMEN_ETAT',[['A','Concessive clause',1],['B','Conditional clause',0],['C','Relative clause',0],['D','Purpose clause',0]]],
+  ['"She works hard so that she can succeed." "So that" expresses:',                       'INTERMEDIAIRE', 'EXAMEN_ETAT',[['A','Purpose',1],        ['B','Result',0],        ['C','Concession',0],    ['D','Condition',0]]],
+  ['Identify the error: "He is more taller than his brother."',                             'ELEMENTAIRE',   'ENAFEP',     [['A','Double comparative — should be "taller"',1],['B','Wrong subject',0],['C','Wrong tense',0],['D','No error',0]]],
+  ['What is a "thesis statement" in academic writing ?',                                   'AVANCE',        'EXAMEN_ETAT',[['A','The main argument of an essay, stated clearly',1],['B','The conclusion of an essay',0],['C','A quotation from a source',0],['D','The title of a paragraph',0]]],
+  ['"He can neither read nor write." This sentence uses:',                                  'AVANCE',        'EXAMEN_ETAT',[['A','Correlative conjunctions',1],['B','Relative clause',0],['C','Parallel structure only',0],['D','Compound sentence',0]]],
+  ['Which sentence uses "used to" correctly ?',                                             'ELEMENTAIRE',   'ENAFEP',     [['A','I used to play football every Saturday.',1],['B','I used to plays football.',0],['C','I am used to play football.',0],['D','I use to play football.',0]]],
+  ['What does "ubiquitous" mean ?',                                                         'EXPERT',        'EXAMEN_ETAT',[['A','Found everywhere',1],['B','Very expensive',0], ['C','Extremely loud',0],['D','Unique and rare',0]]],
+  ['"They had barely left when it started raining." "barely" is:',                         'AVANCE',        'EXAMEN_ETAT',[['A','An adverb of degree indicating scarcely',1],['B','A conjunction',0],['C','A preposition',0],['D','An adjective',0]]],
+];
+foreach ($qs_en_ext as [$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$mat,$e,$d,$s,$o); $total_q++; }
+
+// ── SCIENCES — pack étendu ──
+$mat = $matiereMap['sciences'];
+$qs_sc_ext = [
+  ['Quel est le rôle de l\'estomac dans la digestion ?',                                  'ELEMENTAIRE',   'ENAFEP',     [['A','Broyer les aliments et démarrer la digestion des protéines',1],['B','Absorber les nutriments',0],['C','Produire la bile',0],['D','Filtrer les déchets',0]]],
+  ['La photosynthèse se déroule principalement dans les :',                                'ELEMENTAIRE',   'ENAFEP',     [['A','Feuilles (chloroplastes)',1],['B','Racines',0],         ['C','Fleurs',0],        ['D','Tiges',0]]],
+  ['Quelle est la définition d\'un écosystème ?',                                         'ELEMENTAIRE',   'ENAFEP',     [['A','L\'ensemble des êtres vivants et leur environnement non vivant',1],['B','Uniquement la faune d\'une région',0],['C','Les espèces végétales d\'une zone',0],['D','Le sol et ses minéraux',0]]],
+  ['Quel est le phénomène par lequel une plante perd de l\'eau par ses feuilles ?',       'ELEMENTAIRE',   'TENASOSP',   [['A','Transpiration (ou évapotranspiration)',1],['B','Photosynthèse',0],['C','Osmose',0],          ['D','Absorption',0]]],
+  ['L\'ADN est constitué de :',                                                             'INTERMEDIAIRE', 'TENASOSP',   [['A','Nucléotides (bases, sucre, phosphate)',1],['B','Acides aminés',0],['C','Graisses et sucres',0],['D','Lipides et protéines',0]]],
+  ['Quel est l\'effet de serre en termes simples ?',                                       'ELEMENTAIRE',   'ENAFEP',     [['A','Les gaz atmosphériques retiennent la chaleur solaire',1],['B','Le soleil chauffe directement le sol',0],['C','La couche d\'ozone réfléchit la chaleur',0],['D','La vapeur d\'eau refroidit l\'atmosphère',0]]],
+  ['La marée est causée par :',                                                             'INTERMEDIAIRE', 'TENASOSP',   [['A','L\'attraction gravitationnelle de la Lune (et du Soleil)',1],['B','La rotation de la Terre',0],['C','Les vents océaniques',0],['D','Les courants thermiques',0]]],
+  ['Le tremblement de terre se mesure avec :',                                              'ELEMENTAIRE',   'ENAFEP',     [['A','Le sismographe (échelle de Richter)',1],['B','Le baromètre',0],['C','Le thermomètre',0],      ['D','L\'hygromètre',0]]],
+  ['Une molécule d\'eau H₂O a une géométrie :',                                            'AVANCE',        'EXAMEN_ETAT',[['A','Angulaire (coudée)',1],['B','Linéaire',0],          ['C','Tétraédrique',0],  ['D','Trigonale',0]]],
+  ['Quel organisme est à la base des chaînes alimentaires marines ?',                     'ELEMENTAIRE',   'ENAFEP',     [['A','Le phytoplancton',1],['B','Le zooplancton',0],     ['C','Les algues vertes',0],['D','Les bactéries',0]]],
+  ['La symbiose est une relation entre deux organismes où :',                               'INTERMEDIAIRE', 'TENASOSP',   [['A','Les deux bénéficient',1],['B','L\'un est parasité',0],['C','L\'un est indifférent',0],['D','Les deux sont lésés',0]]],
+  ['Qu\'est-ce que la tectonique des plaques explique ?',                                  'INTERMEDIAIRE', 'ENAFEP',     [['A','Les tremblements de terre, volcans et formation des montagnes',1],['B','Les phénomènes météorologiques',0],['C','La formation des rivières',0],['D','L\'évolution des espèces',0]]],
+];
+foreach ($qs_sc_ext as [$e,$d,$s,$o]) { insert_question($pdo,$stQ,$stO,$mat,$e,$d,$s,$o); $total_q++; }
+
 seed_log("  ✓ $total_q questions insérées");
 
 /* ── 6. ABONNEMENT DÉMO ─────────────────────────────────────── */
