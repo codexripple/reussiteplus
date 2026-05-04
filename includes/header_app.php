@@ -49,8 +49,8 @@ require_once __DIR__ . '/icons.php';
     <div class="user-avatar"><?= strtoupper(substr($user['prenom'], 0, 1) . substr($user['nom'], 0, 1)) ?></div>
     <div style="flex:1;min-width:0">
       <div class="user-info-name truncate"><?= e($user['prenom'] . ' ' . $user['nom']) ?></div>
-      <?php $plan = $user['plan']; $plans = PLANS; ?>
-      <div><span class="user-info-plan"><i class="bi bi-star-fill" style="font-size:10px"></i> <?= e($plans[$plan]['nom'] ?? $plan) ?></span></div>
+      <?php $userPlan = $user['plan']; $plans = PLANS; ?>
+      <div><span class="user-info-plan"><i class="bi bi-star-fill" style="font-size:10px"></i> <?= e($plans[$userPlan]['nom'] ?? $userPlan) ?></span></div>
     </div>
   </div>
 
@@ -139,7 +139,7 @@ require_once __DIR__ . '/icons.php';
       <input type="search" name="q" placeholder="Rechercher archives, questions…"
              value="<?= e($_GET['q'] ?? '') ?>">
     </form>
-    <a href="/reussiteplus/abonnement.php" class="topbar-btn" title="Mon abonnement — Plan <?= e($plan) ?>">
+    <a href="/reussiteplus/abonnement.php" class="topbar-btn" title="Mon abonnement — Plan <?= e($userPlan ?? $user['plan']) ?>">
       <i class="bi bi-credit-card"></i>
     </a>
     <a href="/reussiteplus/notifications.php" class="topbar-btn" title="Notifications">
