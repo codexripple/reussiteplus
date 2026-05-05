@@ -758,4 +758,248 @@ include __DIR__ . '/includes/header_app.php';
   </a>
 </div>
 
+<?php if ($welcome): ?>
+<!-- ═══════════════════════════════════════════════════════
+     MODAL ONBOARDING — Bienvenue sur RÉUSSITE+
+     Affiché à la première connexion / inscription
+     ═══════════════════════════════════════════════════════ -->
+<div id="onboardingOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9000;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)">
+  <div id="onboardingModal" style="background:var(--blanc);border-radius:20px;width:100%;max-width:620px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.3);position:relative">
+
+    <!-- Barre de progression -->
+    <div style="height:4px;background:var(--gris-200);border-radius:20px 20px 0 0;overflow:hidden">
+      <div id="obProgress" style="height:100%;background:linear-gradient(90deg,var(--primary),#7c3aed);border-radius:4px;transition:width .4s ease;width:25%"></div>
+    </div>
+
+    <!-- Étape 1 — Bienvenue -->
+    <div class="ob-step" id="ob-step-1" style="padding:36px 40px">
+      <div style="text-align:center;margin-bottom:28px">
+        <div style="width:72px;height:72px;background:linear-gradient(135deg,var(--primary),#7c3aed);border-radius:20px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px">
+          <i data-lucide="graduation-cap" style="width:36px;height:36px;stroke:#fff"></i>
+        </div>
+        <h2 style="font-family:var(--font-display);font-size:24px;font-weight:800;margin-bottom:8px">
+          Bienvenue sur RÉUSSITE+, <?= e($user['prenom']) ?> !
+        </h2>
+        <p style="color:var(--gris-600);font-size:14px;max-width:420px;margin:0 auto;line-height:1.7">
+          Votre plateforme de révision intelligente pour réussir l'<strong>ENAFEP</strong>, le <strong>TENASOSP</strong> et l'<strong>Examen d'État</strong> en République Démocratique du Congo.
+        </p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px">
+        <div style="background:var(--gris-50);border-radius:12px;padding:16px;display:flex;gap:12px;align-items:flex-start">
+          <div style="width:36px;height:36px;background:var(--primary-subtle);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <i data-lucide="file-check" style="width:18px;height:18px;stroke:var(--primary)"></i>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:13px;margin-bottom:3px">Examens blancs</div>
+            <div style="font-size:12px;color:var(--gris-500)">Simulez les conditions réelles avec des vrais sujets</div>
+          </div>
+        </div>
+        <div style="background:var(--gris-50);border-radius:12px;padding:16px;display:flex;gap:12px;align-items:flex-start">
+          <div style="width:36px;height:36px;background:#EEF4FD;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <i data-lucide="archive" style="width:18px;height:18px;stroke:#1E5FAD"></i>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:13px;margin-bottom:3px">Archives officielles</div>
+            <div style="font-size:12px;color:var(--gris-500)">Accédez aux anciens sujets avec corrigés PDF</div>
+          </div>
+        </div>
+        <div style="background:var(--gris-50);border-radius:12px;padding:16px;display:flex;gap:12px;align-items:flex-start">
+          <div style="width:36px;height:36px;background:#F5E6C0;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <i data-lucide="brain" style="width:18px;height:18px;stroke:#8C6A1A"></i>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:13px;margin-bottom:3px">IA Personnalisée</div>
+            <div style="font-size:12px;color:var(--gris-500)">Un coach qui analyse vos erreurs et crée votre plan</div>
+          </div>
+        </div>
+        <div style="background:var(--gris-50);border-radius:12px;padding:16px;display:flex;gap:12px;align-items:flex-start">
+          <div style="width:36px;height:36px;background:#FEF0EF;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <i data-lucide="trending-up" style="width:18px;height:18px;stroke:var(--rouge)"></i>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:13px;margin-bottom:3px">Suivi de progression</div>
+            <div style="font-size:12px;color:var(--gris-500)">Visualisez vos points forts et faiblesses</div>
+          </div>
+        </div>
+      </div>
+
+      <button onclick="obNext(2)" class="btn btn-primary btn-full btn-lg">
+        Découvrir comment ça marche <i data-lucide="arrow-right" style="width:16px;height:16px;vertical-align:-2px;margin-left:6px"></i>
+      </button>
+    </div>
+
+    <!-- Étape 2 — Comment ça marche -->
+    <div class="ob-step" id="ob-step-2" style="padding:36px 40px;display:none">
+      <h3 style="font-family:var(--font-display);font-size:20px;font-weight:800;margin-bottom:6px;text-align:center">Comment ça marche ?</h3>
+      <p style="text-align:center;color:var(--gris-500);font-size:13px;margin-bottom:24px">3 étapes simples pour progresser rapidement</p>
+
+      <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:28px">
+        <div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:40px;height:40px;background:linear-gradient(135deg,var(--primary),#00A97F);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px;flex-shrink:0">1</div>
+          <div style="flex:1;padding-top:6px">
+            <div style="font-weight:700;font-size:15px;margin-bottom:4px">Choisissez votre matière et passez un examen</div>
+            <div style="font-size:13px;color:var(--gris-500)">Mathématiques, Français, Sciences, Histoire-Géo, Physique, Chimie, Biologie ou Anglais — choisissez la durée et le niveau.</div>
+          </div>
+        </div>
+        <div style="width:1px;height:20px;background:var(--gris-200);margin-left:20px"></div>
+        <div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:40px;height:40px;background:linear-gradient(135deg,#1E5FAD,#7c3aed);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px;flex-shrink:0">2</div>
+          <div style="flex:1;padding-top:6px">
+            <div style="font-weight:700;font-size:15px;margin-bottom:4px">Consultez vos résultats détaillés</div>
+            <div style="font-size:13px;color:var(--gris-500)">Chaque bonne et mauvaise réponse est expliquée. Vous comprenez où vous avez fait des erreurs et pourquoi.</div>
+          </div>
+        </div>
+        <div style="width:1px;height:20px;background:var(--gris-200);margin-left:20px"></div>
+        <div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="width:40px;height:40px;background:linear-gradient(135deg,#C9972A,#F59E0B);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px;flex-shrink:0">3</div>
+          <div style="flex:1;padding-top:6px">
+            <div style="font-weight:700;font-size:15px;margin-bottom:4px">Progressez grâce au suivi et à l'IA</div>
+            <div style="font-size:13px;color:var(--gris-500)">Votre tableau de bord suit votre évolution. L'IA génère un plan de révision 7 jours sur mesure selon vos performances.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px">
+        <button onclick="obNext(1)" class="btn btn-ghost" style="flex:0 0 auto">
+          <i data-lucide="arrow-left" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"></i> Retour
+        </button>
+        <button onclick="obNext(3)" class="btn btn-primary" style="flex:1">
+          Voir les plans <i data-lucide="arrow-right" style="width:16px;height:16px;vertical-align:-2px;margin-left:6px"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Étape 3 — Plans tarifaires -->
+    <div class="ob-step" id="ob-step-3" style="padding:36px 40px;display:none">
+      <h3 style="font-family:var(--font-display);font-size:20px;font-weight:800;margin-bottom:6px;text-align:center">Choisissez votre plan</h3>
+      <p style="text-align:center;color:var(--gris-500);font-size:13px;margin-bottom:24px">Commencez gratuitement, évoluez quand vous voulez</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:24px">
+        <!-- GRATUIT -->
+        <div style="border:2px solid var(--gris-200);border-radius:14px;padding:16px;text-align:center">
+          <div style="font-weight:800;font-size:14px;margin-bottom:4px">Gratuit</div>
+          <div style="font-size:22px;font-weight:900;color:var(--gris-700);margin-bottom:8px">0 $</div>
+          <div style="font-size:11px;color:var(--gris-500);text-align:left;display:flex;flex-direction:column;gap:5px">
+            <span><i data-lucide="check" style="width:11px;height:11px;stroke:var(--primary);vertical-align:-1px;margin-right:3px"></i> 2 examens/mois</span>
+            <span><i data-lucide="check" style="width:11px;height:11px;stroke:var(--primary);vertical-align:-1px;margin-right:3px"></i> Questions basiques</span>
+            <span style="color:var(--gris-400)"><i data-lucide="x" style="width:11px;height:11px;vertical-align:-1px;margin-right:3px"></i> Archives</span>
+            <span style="color:var(--gris-400)"><i data-lucide="x" style="width:11px;height:11px;vertical-align:-1px;margin-right:3px"></i> IA Coach</span>
+          </div>
+        </div>
+        <!-- PREMIUM — mis en avant -->
+        <div style="border:2px solid var(--primary);border-radius:14px;padding:16px;text-align:center;background:var(--primary-subtle);position:relative">
+          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;font-size:10px;font-weight:700;padding:2px 12px;border-radius:10px;white-space:nowrap">POPULAIRE</div>
+          <div style="font-weight:800;font-size:14px;margin-bottom:4px;color:var(--primary)">Premium</div>
+          <div style="font-size:22px;font-weight:900;color:var(--primary);margin-bottom:8px">5 $<span style="font-size:11px;font-weight:400">/mois</span></div>
+          <div style="font-size:11px;color:var(--gris-700);text-align:left;display:flex;flex-direction:column;gap:5px">
+            <span><i data-lucide="check" style="width:11px;height:11px;stroke:var(--primary);vertical-align:-1px;margin-right:3px"></i> Examens illimités</span>
+            <span><i data-lucide="check" style="width:11px;height:11px;stroke:var(--primary);vertical-align:-1px;margin-right:3px"></i> Toutes les archives</span>
+            <span><i data-lucide="check" style="width:11px;height:11px;stroke:var(--primary);vertical-align:-1px;margin-right:3px"></i> Corrigés PDF</span>
+            <span><i data-lucide="check" style="width:11px;height:11px;stroke:var(--primary);vertical-align:-1px;margin-right:3px"></i> IA Coach 24h/24</span>
+          </div>
+        </div>
+        <!-- ÉCOLE -->
+        <div style="border:2px solid #C9972A;border-radius:14px;padding:16px;text-align:center;background:#FFFBF0">
+          <div style="font-weight:800;font-size:14px;margin-bottom:4px;color:#8C6A1A">École</div>
+          <div style="font-size:22px;font-weight:900;color:#8C6A1A;margin-bottom:8px">50 $<span style="font-size:11px;font-weight:400">/an</span></div>
+          <div style="font-size:11px;color:var(--gris-700);text-align:left;display:flex;flex-direction:column;gap:5px">
+            <span><i data-lucide="check" style="width:11px;height:11px;stroke:#8C6A1A;vertical-align:-1px;margin-right:3px"></i> Classe entière</span>
+            <span><i data-lucide="check" style="width:11px;height:11px;stroke:#8C6A1A;vertical-align:-1px;margin-right:3px"></i> Tableau prof</span>
+            <span><i data-lucide="check" style="width:11px;height:11px;stroke:#8C6A1A;vertical-align:-1px;margin-right:3px"></i> Tout Premium inclus</span>
+            <span><i data-lucide="check" style="width:11px;height:11px;stroke:#8C6A1A;vertical-align:-1px;margin-right:3px"></i> Rapport mensuel</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:linear-gradient(135deg,#4f1d9610,#007A5E10);border:1px solid var(--primary);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--gris-700);margin-bottom:20px;display:flex;gap:10px;align-items:center">
+        <i data-lucide="shield-check" style="width:20px;height:20px;stroke:var(--primary);flex-shrink:0"></i>
+        <span>Paiement via <strong>M-Pesa</strong>, <strong>Airtel Money</strong> ou <strong>Orange Money</strong>. Annulation à tout moment.</span>
+      </div>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <button onclick="obNext(2)" class="btn btn-ghost" style="flex:0 0 auto">
+          <i data-lucide="arrow-left" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"></i> Retour
+        </button>
+        <a href="/reussiteplus/tarifs.php" class="btn btn-primary" style="flex:1;justify-content:center;text-decoration:none">
+          <i data-lucide="crown" style="width:15px;height:15px;vertical-align:-2px;margin-right:6px"></i> Voir tous les plans
+        </a>
+        <button onclick="obClose()" class="btn btn-ghost" style="flex:0 0 auto;font-size:12px;color:var(--gris-400)">
+          Commencer gratuitement
+        </button>
+      </div>
+    </div>
+
+    <!-- Étape 4 — C'est parti ! (masquée, utilisée pour la complétion) -->
+    <div class="ob-step" id="ob-step-4" style="padding:48px 40px;display:none;text-align:center">
+      <div style="width:72px;height:72px;background:linear-gradient(135deg,#22C55E,#16A34A);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:20px">
+        <i data-lucide="check" style="width:36px;height:36px;stroke:#fff"></i>
+      </div>
+      <h3 style="font-family:var(--font-display);font-size:22px;font-weight:800;margin-bottom:10px">Vous êtes prêt, <?= e($user['prenom']) ?> !</h3>
+      <p style="color:var(--gris-500);font-size:14px;margin-bottom:28px;max-width:380px;margin-left:auto;margin-right:auto;line-height:1.7">
+        Votre tableau de bord est prêt. Passez votre premier examen dès maintenant et commencez à progresser.
+      </p>
+      <button onclick="obClose()" class="btn btn-primary btn-lg" style="min-width:220px">
+        <i data-lucide="play" style="width:16px;height:16px;vertical-align:-2px;margin-right:6px"></i> Commencer maintenant
+      </button>
+    </div>
+
+    <!-- Indicateurs de navigation -->
+    <div style="display:flex;justify-content:center;gap:8px;padding:16px 0 24px;position:sticky;bottom:0;background:var(--blanc)">
+      <?php for ($i = 1; $i <= 4; $i++): ?>
+      <button onclick="obNext(<?= $i ?>)" id="ob-dot-<?= $i ?>"
+        style="width:8px;height:8px;border-radius:50%;border:none;cursor:pointer;transition:all .3s;background:<?= $i === 1 ? 'var(--primary)' : 'var(--gris-200)' ?>;padding:0"></button>
+      <?php endfor; ?>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let obCurrentStep = 1;
+const obTotalSteps = 4;
+
+function obNext(step) {
+  // Masquer l'étape courante
+  document.getElementById('ob-step-' + obCurrentStep).style.display = 'none';
+  document.getElementById('ob-dot-' + obCurrentStep).style.background = 'var(--gris-200)';
+  document.getElementById('ob-dot-' + obCurrentStep).style.width = '8px';
+
+  obCurrentStep = step;
+
+  // Afficher la nouvelle étape
+  document.getElementById('ob-step-' + obCurrentStep).style.display = 'block';
+  document.getElementById('ob-dot-' + obCurrentStep).style.background = 'var(--primary)';
+  document.getElementById('ob-dot-' + obCurrentStep).style.width = '20px';
+  document.getElementById('ob-dot-' + obCurrentStep).style.borderRadius = '4px';
+
+  // Mettre à jour la barre de progression
+  document.getElementById('obProgress').style.width = (obCurrentStep / obTotalSteps * 100) + '%';
+
+  // Re-initialiser les icônes Lucide pour les étapes chargées
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+
+  // Scroller en haut du modal
+  document.getElementById('onboardingModal').scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function obClose() {
+  const overlay = document.getElementById('onboardingOverlay');
+  overlay.style.opacity = '0';
+  overlay.style.transition = 'opacity .3s ease';
+  setTimeout(() => overlay.remove(), 300);
+  // Nettoyer l'URL
+  if (history.replaceState) history.replaceState({}, '', window.location.pathname);
+}
+
+// Fermer en cliquant sur l'overlay (hors modal)
+document.getElementById('onboardingOverlay').addEventListener('click', function(e) {
+  if (e.target === this) obClose();
+});
+
+// Initialiser les icônes
+if (typeof lucide !== 'undefined') lucide.createIcons();
+</script>
+<?php endif; ?>
+
 <?php include __DIR__ . '/includes/footer_app.php'; ?>
