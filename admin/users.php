@@ -12,14 +12,13 @@ $user = require_admin();
 // Export CSV
 if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     $allUsers = dbAll("SELECT id, prenom, nom, email, plan, role, ville, ecole, classe, is_active, created_at FROM utilisateurs ORDER BY created_at DESC") ?? [];
-    ob_end_clean();
-    header('Content-Type: text/csv; charset=utf-8');
-    header('Content-Disposition: attachment; filename="utilisateurs_' . date('Y-m-d') . '.csv"');
-    $out = fopen('php://output', 'w');
-    fprintf($out, chr(0xEF).chr(0xBB).chr(0xBF)); // BOM UTF-8 pour Excel
-    fputcsv($out, ['ID', 'Prénom', 'Nom', 'Email', 'Plan', 'Rôle', 'Ville', 'École', 'Classe', 'Actif', 'Inscrit le'], ';');
+
+    // Construire le CSV en mémoire (stream temporaire)
+    $tmpStream = fopen('php://temp', 'r+');
+    fwrite($tmpStream, "\xEF\xBB\xBF"); // BOM UTF-8
+    fputcsv($tmpStream, ['ID', 'Prénom', 'Nom', 'Email', 'Plan', 'Rôle', 'Ville', 'École', 'Classe', 'Actif', 'Inscrit le'], ';');
     foreach ($allUsers as $u) {
-        fputcsv($out, [
+        fputcsv($tmpStream, [
             $u['id'],
             $u['prenom'],
             $u['nom'],
@@ -33,7 +32,18 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
             $u['created_at'],
         ], ';');
     }
-    fclose($out);
+    rewind($tmpStream);
+    $csvContent = stream_get_contents($tmpStream);
+    fclose($tmpStream);
+
+    // Vider tous les buffers puis envoyer
+    while (ob_get_level()) ob_end_clean();
+    header('Content-Type: application/vnd.ms-excel; charset=utf-8');
+    header('Content-Disposition: attachment; filename="utilisateurs_' . date('Y-m-d') . '.csv"');
+    header('Content-Length: ' . strlen($csvContent));
+    header('Cache-Control: no-cache, must-revalidate');
+    header('Pragma: no-cache');
+    echo $csvContent;
     exit;
 }
 
