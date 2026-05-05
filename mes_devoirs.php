@@ -89,7 +89,7 @@ if ($classeIds) {
     ) ?? [];
 }
 
-$stats = [
+$devoirsStats = [
     'total'    => count($devoirs),
     'soumis'   => count(array_filter($devoirs, fn($d) => $d['soumission_id'])),
     'en_attente' => count(array_filter($devoirs, fn($d) => !$d['soumission_id'])),
@@ -127,7 +127,7 @@ include __DIR__ . '/includes/header_app.php';
     <div style="display:flex;gap:10px">
       <?php foreach ([['total','Total','#fff'],['soumis','Soumis','#34d399'],['en_attente','En attente','#f59e0b'],['corriges','Corrigés','#a78bfa']] as [$k,$l,$c]): ?>
       <div style="text-align:center;padding:10px 14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:12px">
-        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:<?= $c ?>"><?= $stats[$k] ?></div>
+        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:<?= $c ?>"><?= $devoirsStats[$k] ?></div>
         <div style="font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase"><?= $l ?></div>
       </div>
       <?php endforeach; ?>

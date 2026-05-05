@@ -40,31 +40,10 @@ if ($classeIds) {
     $cours = dbAll($sql, $params) ?? [];
 }
 
-// Exercices disponibles pour mes classes
-$exercices = [];
-if ($classeIds) {
-    $inPlaceholders = implode(',', array_fill(0, count($classeIds), '?'));
-    $params2 = array_merge([$user['id']], $classeIds, [$user['id']]);
-    $exercices = dbAll(
-        "SELECT e.*,
-                (SELECT COUNT(*) FROM questions_exercice WHERE exercice_id=e.id) as nb_questions,
-                (SELECT s.score FROM sessions_exercice s WHERE s.exercice_id=e.id AND s.eleve_id=? AND s.statut='TERMINE' ORDER BY s.termine_le DESC LIMIT 1) as mon_score,
-                c.nom as classe_nom
-         FROM exercices_ecole e
-         LEFT JOIN classes_ecole c ON c.id=e.classe_id
-         WHERE e.actif=1 AND (e.classe_id IN ($inPlaceholders) OR e.classe_id IS NULL)
-         AND (SELECT COUNT(*) FROM questions_exercice WHERE exercice_id=e.id) > 0
-         ORDER BY e.created_at DESC",
-        $params2
-    ) ?? [];
-}
-
-$typesDispos = ['PDF'=>'📄 PDF','VIDEO'=>'🎬 Vidéo','AUDIO'=>'🎵 Audio','IMAGE'=>'🖼️ Image','LIEN'=>'🔗 Lien','AUTRE'=>'📁 Autre'];
-$stats = [
-    'cours_total'  => count($cours),
-    'pdf'          => count(array_filter($cours, fn($c) => $c['type']==='PDF')),
-    'exercices'    => count($exercices),
-    'faits'        => count(array_filter($exercices, fn($e) => $e['mon_score']!==null)),
+$typesDispos = ['PDF'=>'PDF','VIDEO'=>'Vid&eacute;o','AUDIO'=>'Audio','IMAGE'=>'Image','LIEN'=>'Lien','AUTRE'=>'Autre'];
+$coursStats = [
+    'cours_total' => count($cours),
+    'pdf'         => count(array_filter($cours, fn($c) => $c['type']==='PDF')),
 ];
 
 include __DIR__ . '/includes/header_app.php';
@@ -81,14 +60,14 @@ include __DIR__ . '/includes/header_app.php';
   <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px">
     <div>
       <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#fff;display:flex;align-items:center;gap:10px">
-        📚 Mes Cours & Exercices
+        <i data-lucide="book-open" style="width:22px;height:22px;stroke:#93c5fd"></i> Mes Cours
       </div>
-      <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:3px">Accédez à vos cours, téléchargez les PDF et passez vos exercices</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:3px">Acc&eacute;dez &agrave; vos ressources et t&eacute;l&eacute;chargez les PDF</div>
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <?php foreach ([['cours_total','Ressources','#fff'],['pdf','PDFs','#60a5fa'],['exercices','Quiz','#a78bfa'],['faits','Faits','#34d399']] as [$k,$l,$c]): ?>
+      <?php foreach ([['cours_total','Ressources','#fff'],['pdf','PDFs','#60a5fa']] as [$k,$l,$c]): ?>
       <div style="text-align:center;padding:8px 14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:12px">
-        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:<?= $c ?>"><?= $stats[$k] ?></div>
+        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:<?= $c ?>"><?= $coursStats[$k] ?></div>
         <div style="font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase"><?= $l ?></div>
       </div>
       <?php endforeach; ?>
@@ -98,7 +77,7 @@ include __DIR__ . '/includes/header_app.php';
 
 <?php if (!$mesClasses): ?>
 <div class="card" style="text-align:center;padding:60px 30px">
-  <div style="font-size:56px;margin-bottom:16px">🏫</div>
+  <div style="display:flex;justify-content:center;margin-bottom:16px"><i data-lucide="layout" style="width:48px;height:48px;stroke:var(--gris-300);stroke-width:1.5"></i></div>
   <div style="font-family:var(--font-display);font-size:20px;font-weight:800;margin-bottom:8px">Vous n'êtes dans aucune classe</div>
   <p style="color:var(--gris-500);font-size:13px;max-width:380px;margin:0 auto 24px">Rejoignez une classe pour accéder aux cours et exercices.</p>
   <a href="/reussiteplus/rejoindre.php" class="btn btn-primary" style="background:#1E5FAD;border-color:#1E5FAD">Rejoindre une classe</a>
@@ -131,27 +110,35 @@ include __DIR__ . '/includes/header_app.php';
   </form>
 </div>
 
-<!-- Tabs -->
-<div style="display:flex;gap:4px;margin-bottom:20px;background:var(--gris-100);padding:4px;border-radius:12px;width:fit-content">
-  <a href="#section-cours" class="tab-btn" style="padding:7px 18px;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none;background:var(--blanc);color:var(--primary);box-shadow:0 1px 4px rgba(0,0,0,.08)">📚 Cours (<?= count($cours) ?>)</a>
-  <a href="#section-exercices" class="tab-btn" style="padding:7px 18px;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none;color:var(--gris-600)">🧠 Exercices (<?= count($exercices) ?>)</a>
-</div>
+<!-- CTA exercices -->
+<a href="/reussiteplus/mes_exercices.php" style="display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,#4c1d95,#7C3AED);border-radius:12px;padding:12px 18px;margin-bottom:18px;text-decoration:none">
+  <i data-lucide="brain" style="width:20px;height:20px;stroke:#c4b5fd;flex-shrink:0"></i>
+  <div style="flex:1">
+    <div style="font-weight:800;color:#fff;font-size:13px">Acc&eacute;der &agrave; mes exercices</div>
+    <div style="font-size:11px;color:rgba(255,255,255,.55)">QCM, Vrai/Faux et exercices interactifs de vos classes</div>
+  </div>
+  <i data-lucide="arrow-right" style="width:16px;height:16px;stroke:#c4b5fd"></i>
+</a>
 
 <!-- ══ COURS / RESSOURCES ══════════════════════════════ -->
 <div id="section-cours" style="margin-bottom:32px">
-  <div style="font-family:var(--font-display);font-size:16px;font-weight:900;margin-bottom:14px">📚 Ressources de cours</div>
+  <div style="font-family:var(--font-display);font-size:16px;font-weight:900;margin-bottom:14px;display:flex;align-items:center;gap:8px"><i data-lucide="book-open" style="width:16px;height:16px;stroke:#1E5FAD"></i> Ressources de cours</div>
 
   <?php if ($cours): ?>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">
   <?php foreach ($cours as $c):
-    $typeColors = ['PDF'=>['#DC2626','#FEE2E2','📄'],'VIDEO'=>['#7C3AED','#EDE9FE','🎬'],
-                   'AUDIO'=>['#059669','#D1FAE5','🎵'],'IMAGE'=>['#B45309','#FEF3C7','🖼️'],
-                   'LIEN'=>['#1E5FAD','#DBEAFE','🔗'],'AUTRE'=>['#6B7280','#F3F4F6','📁']];
-    [$tColor,$tBg,$tIcon] = $typeColors[$c['type']??'AUTRE'] ?? $typeColors['AUTRE'];
+    $typeIcons = ['PDF'=>'file-text','VIDEO'=>'video','AUDIO'=>'music','IMAGE'=>'image','LIEN'=>'link','AUTRE'=>'folder'];
+    $typeColors = ['PDF'=>['#DC2626','#FEE2E2'],'VIDEO'=>['#7C3AED','#EDE9FE'],
+                   'AUDIO'=>['#059669','#D1FAE5'],'IMAGE'=>['#B45309','#FEF3C7'],
+                   'LIEN'=>['#1E5FAD','#DBEAFE'],'AUTRE'=>['#6B7280','#F3F4F6']];
+    $tIcon = $typeIcons[$c['type']??'AUTRE'] ?? 'folder';
+    [$tColor,$tBg] = $typeColors[$c['type']??'AUTRE'] ?? $typeColors['AUTRE'];
   ?>
   <div class="cours-card">
     <div style="display:flex;align-items:flex-start;gap:12px">
-      <div style="width:44px;height:44px;background:<?= $tBg ?>;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0"><?= $tIcon ?></div>
+      <div style="width:44px;height:44px;background:<?= $tBg ?>;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <i data-lucide="<?= $tIcon ?>" style="width:20px;height:20px;stroke:<?= $tColor ?>"></i>
+      </div>
       <div style="flex:1;min-width:0">
         <div style="font-size:10px;color:var(--gris-400);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px"><?= e($c['classe_nom']??'') ?> <?= $c['matiere'] ? '· '.e($c['matiere']) : '' ?></div>
         <div style="font-family:var(--font-display);font-size:14px;font-weight:800;color:var(--gris-900);margin-bottom:4px;line-height:1.2"><?= e($c['titre']??'') ?></div>
@@ -161,7 +148,7 @@ include __DIR__ . '/includes/header_app.php';
       </div>
     </div>
     <div style="display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--gris-100)">
-      <span style="background:<?= $tBg ?>;color:<?= $tColor ?>;font-size:10px;font-weight:700;padding:3px 10px;border-radius:8px"><?= $tIcon ?> <?= e($c['type']??'') ?></span>
+      <span style="background:<?= $tBg ?>;color:<?= $tColor ?>;font-size:10px;font-weight:700;padding:3px 10px;border-radius:8px;display:inline-flex;align-items:center;gap:4px"><i data-lucide="<?= $tIcon ?>" style="width:10px;height:10px"></i> <?= e($c['type']??'') ?></span>
       <?php if ($c['fichier_url']): ?>
       <a href="<?= e($c['fichier_url']) ?>" target="_blank" download
          onclick="incrementDl('<?= e($c['id']) ?>')"
@@ -183,72 +170,14 @@ include __DIR__ . '/includes/header_app.php';
   </div>
   <?php else: ?>
   <div style="text-align:center;padding:40px 20px;background:var(--gris-50);border:2px dashed var(--gris-200);border-radius:14px">
-    <div style="font-size:44px;margin-bottom:12px">📚</div>
+    <div style="display:flex;justify-content:center;margin-bottom:12px"><i data-lucide="book-open" style="width:40px;height:40px;stroke:var(--gris-300);stroke-width:1.5"></i></div>
     <div style="font-size:14px;font-weight:700;color:var(--gris-600)">Aucune ressource disponible</div>
-    <div style="font-size:12px;color:var(--gris-400);margin-top:4px">Vos enseignants n'ont pas encore publié de cours.</div>
+    <div style="font-size:12px;color:var(--gris-400);margin-top:4px">Vos enseignants n'ont pas encore publi&eacute; de cours.</div>
   </div>
   <?php endif; ?>
 </div>
 
-<!-- ══ EXERCICES ══════════════════════════════════════════ -->
-<div id="section-exercices">
-  <div style="font-family:var(--font-display);font-size:16px;font-weight:900;margin-bottom:14px">🧠 Exercices & Questionnaires</div>
 
-  <?php if ($exercices): ?>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">
-  <?php foreach ($exercices as $exo):
-    $typeColors = ['QCM'=>['#1E5FAD','#DBEAFE'],'VRAI_FAUX'=>['#059669','#D1FAE5'],'MIXTE'=>['#7C3AED','#EDE9FE']];
-    [$tColor,$tBg] = $typeColors[$exo['type']??'QCM'] ?? $typeColors['QCM'];
-    $monScore = $exo['mon_score'];
-    $pct = $monScore!==null && $exo['note_max']>0 ? round($monScore/$exo['note_max']*100) : null;
-    $scoreColor = $pct!==null ? ($pct>=70?'#059669':($pct>=50?'#B45309':'#DC2626')) : null;
-  ?>
-  <div class="cours-card" style="border-top:3px solid <?= $tColor ?>">
-    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
-      <div style="flex:1">
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px">
-          <span class="exo-badge" style="background:<?= $tBg ?>;color:<?= $tColor ?>"><?= $exo['type'] ?></span>
-          <?php if ($exo['classe_nom']): ?>
-          <span style="background:var(--gris-100);color:var(--gris-600);font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px"><?= e($exo['classe_nom']) ?></span>
-          <?php endif; ?>
-        </div>
-        <div style="font-family:var(--font-display);font-size:14px;font-weight:800;color:var(--gris-900);margin-bottom:5px"><?= e($exo['titre']) ?></div>
-        <div style="display:flex;gap:10px;font-size:11px;color:var(--gris-400)">
-          <span>❓ <?= $exo['nb_questions'] ?> questions</span>
-          <span>⏱ <?= $exo['duree_minutes'] ?> min</span>
-        </div>
-      </div>
-      <?php if ($pct !== null): ?>
-      <div style="text-align:center;background:<?= $tBg ?>;border-radius:12px;padding:8px 12px;flex-shrink:0">
-        <div style="font-family:var(--font-display);font-size:18px;font-weight:900;color:<?= $scoreColor ?>"><?= $pct ?>%</div>
-        <div style="font-size:9px;color:var(--gris-500);text-transform:uppercase">Score</div>
-      </div>
-      <?php endif; ?>
-    </div>
-
-    <!-- Score bar -->
-    <?php if ($pct !== null): ?>
-    <div style="height:5px;background:var(--gris-200);border-radius:3px;overflow:hidden">
-      <div style="width:<?= $pct ?>%;height:100%;background:<?= $scoreColor ?>;border-radius:3px"></div>
-    </div>
-    <?php endif; ?>
-
-    <a href="/reussiteplus/passer_exercice.php?id=<?= urlencode($exo['id']) ?>"
-       class="btn" style="width:100%;justify-content:center;background:<?= $tColor ?>;color:#fff;border:none;font-weight:800;text-decoration:none;display:flex;align-items:center;gap:7px;padding:10px">
-      <i data-lucide="<?= $pct!==null?'refresh-cw':'play' ?>" style="width:14px;height:14px;stroke:#fff"></i>
-      <?= $pct !== null ? 'Recommencer' : 'Commencer l\'exercice' ?>
-    </a>
-  </div>
-  <?php endforeach; ?>
-  </div>
-  <?php else: ?>
-  <div style="text-align:center;padding:40px 20px;background:var(--gris-50);border:2px dashed var(--gris-200);border-radius:14px">
-    <div style="font-size:44px;margin-bottom:12px">🧠</div>
-    <div style="font-size:14px;font-weight:700;color:var(--gris-600)">Aucun exercice disponible</div>
-    <div style="font-size:12px;color:var(--gris-400);margin-top:4px">Vos enseignants n'ont pas encore publié d'exercices.</div>
-  </div>
-  <?php endif; ?>
-</div>
 
 <?php endif; ?>
 
@@ -259,23 +188,6 @@ function incrementDl(id) {
     body: JSON.stringify({action:'increment_dl', id})
   });
 }
-
-// Scroll tabs
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', e => {
-    e.preventDefault();
-    const target = document.querySelector(btn.getAttribute('href'));
-    if (target) target.scrollIntoView({behavior:'smooth'});
-    document.querySelectorAll('.tab-btn').forEach(b => {
-      b.style.background = '';
-      b.style.color = 'var(--gris-600)';
-      b.style.boxShadow = '';
-    });
-    btn.style.background = 'var(--blanc)';
-    btn.style.color = 'var(--primary)';
-    btn.style.boxShadow = '0 1px 4px rgba(0,0,0,.08)';
-  });
-});
 </script>
 
 <?php include __DIR__ . '/includes/footer_app.php'; ?>

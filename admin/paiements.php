@@ -151,7 +151,7 @@ include __DIR__ . '/../includes/header_app.php';
 
   <?php else: ?>
   <div style="text-align:center;padding:40px;color:var(--gris-500)">
-    <div style="font-size:40px;margin-bottom:8px">💳</div>
+    <div style="margin-bottom:8px"></div>
     <div>Aucun paiement avec ce statut.</div>
   </div>
   <?php endif; ?>

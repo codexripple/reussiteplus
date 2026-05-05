@@ -284,7 +284,7 @@ include __DIR__ . '/../includes/header_app.php';
           &nbsp;&middot;&nbsp;<code style="font-size:10px;background:var(--gris-100);padding:1px 6px;border-radius:4px"><?= e($p['reference_paiement']) ?></code>
           <?php endif; ?>
           &nbsp;&middot;&nbsp;
-          <span style="color:var(--gris-400)"><?= time_ago($p['created_at']) ?></span>
+          <span style="color:var(--gris-400)"><?= temps_relatif($p['created_at']) ?></span>
         </div>
       </div>
       <div style="text-align:right;flex-shrink:0">
@@ -351,7 +351,7 @@ include __DIR__ . '/../includes/header_app.php';
       </div>
       <div class="msg-card-body"><?= e(mb_substr($m['message'], 0, 200)) ?><?= mb_strlen($m['message']) > 200 ? '…' : '' ?></div>
       <div class="msg-card-foot">
-        <span class="msg-card-time"><?= time_ago($m['created_at']) ?> &mdash; <?= $m['telephone'] ? e($m['telephone']) : '—' ?></span>
+        <span class="msg-card-time"><?= temps_relatif($m['created_at']) ?> &mdash; <?= $m['telephone'] ? e($m['telephone']) : '—' ?></span>
         <div style="display:flex;gap:8px">
           <a href="mailto:<?= e($m['email']) ?>?subject=Re: <?= urlencode($sujets[$m['sujet']] ?? 'Votre message') ?>" class="btn-xs" style="background:#EFF6FF;color:#1D4ED8">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -406,7 +406,7 @@ include __DIR__ . '/../includes/header_app.php';
           <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:6px;background:var(--primary-subtle);color:var(--primary)"><?= $PLANS[$u['plan']]['nom'] ?? e($u['plan']) ?></span>
         </div>
       </div>
-      <div class="user-card-time"><?= time_ago($u['created_at']) ?></div>
+      <div class="user-card-time"><?= temps_relatif($u['created_at']) ?></div>
     </div>
     <?php endforeach; ?>
     </div>

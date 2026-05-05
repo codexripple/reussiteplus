@@ -105,7 +105,7 @@ if (is_admin()) {
       <div class="nav-icon"><i data-lucide="book-open"></i></div>
       <span class="nav-label">Mes Cours</span>
     </a>
-    <a href="/reussiteplus/mes_cours.php" class="nav-item <?= $pageActive === 'mes_exercices' ? 'active' : '' ?>">
+    <a href="/reussiteplus/mes_exercices.php" class="nav-item <?= $pageActive === 'mes_exercices' ? 'active' : '' ?>">
       <div class="nav-icon"><i data-lucide="brain"></i></div>
       <span class="nav-label">Exercices</span>
     </a>
@@ -155,6 +155,14 @@ if (is_admin()) {
     <a href="/reussiteplus/ecole_exercices.php" class="nav-item <?= $pageActive === 'ecole_exercices' ? 'active' : '' ?>">
       <div class="nav-icon"><i data-lucide="brain"></i></div>
       <span class="nav-label">Exercices</span>
+    </a>
+    <a href="/reussiteplus/ecole_questions.php" class="nav-item <?= $pageActive === 'ecole_questions' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="help-circle"></i></div>
+      <span class="nav-label">Questions</span>
+    </a>
+    <a href="/reussiteplus/ecole_messages.php" class="nav-item <?= $pageActive === 'ecole_messages' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="message-square"></i></div>
+      <span class="nav-label">Messages</span>
     </a>
     <a href="/reussiteplus/ecole_ia.php" class="nav-item <?= $pageActive === 'ecole_ia' ? 'active' : '' ?>">
       <div class="nav-icon"><i data-lucide="sparkles"></i></div>

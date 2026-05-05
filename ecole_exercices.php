@@ -198,11 +198,14 @@ include __DIR__ . '/includes/header_app.php';
           <div style="font-size:14px;font-weight:700;color:var(--gris-900);margin-bottom:8px"><?= e($q['question']) ?></div>
           <?php foreach ($optsTxt as $oi => $opt): ?>
           <div class="opt-row <?= ($optsCorrect[$oi]??'0')==='1' ? 'opt-correct' : 'opt-wrong' ?>">
-            <?= ($optsCorrect[$oi]??'0')==='1' ? '✓' : '○' ?> <?= e($opt) ?>
+            <?= e($opt) ?>
           </div>
           <?php endforeach; ?>
           <?php if ($q['explication']): ?>
-          <div style="margin-top:7px;font-size:11px;color:#B45309;background:#FEF3C7;padding:6px 10px;border-radius:8px;border-left:3px solid #F59E0B">💡 <?= e($q['explication']) ?></div>
+          <div style="margin-top:7px;font-size:11px;color:#B45309;background:#FEF3C7;padding:6px 10px;border-radius:8px;border-left:3px solid #F59E0B;display:flex;gap:6px;align-items:flex-start">
+            <i data-lucide="info" style="width:11px;height:11px;flex-shrink:0;margin-top:1px"></i>
+            <?= e($q['explication']) ?>
+          </div>
           <?php endif; ?>
         </div>
         <form method="POST" onsubmit="return confirm('Supprimer cette question ?')">
@@ -220,7 +223,9 @@ include __DIR__ . '/includes/header_app.php';
 
     <?php if (!$questions): ?>
     <div style="text-align:center;padding:40px;background:var(--gris-50);border:2px dashed var(--gris-200);border-radius:12px">
-      <div style="font-size:40px;margin-bottom:12px">❓</div>
+      <div style="display:flex;justify-content:center;margin-bottom:12px">
+        <i data-lucide="help-circle" style="width:40px;height:40px;stroke:var(--gris-300);stroke-width:1.5"></i>
+      </div>
       <div style="font-size:14px;font-weight:700;color:var(--gris-600)">Aucune question encore</div>
       <div style="font-size:12px;color:var(--gris-400);margin-top:4px">Utilisez le formulaire pour ajouter vos premières questions.</div>
     </div>
@@ -229,7 +234,9 @@ include __DIR__ . '/includes/header_app.php';
     <!-- Résultats élèves -->
     <?php if ($resultats): ?>
     <div style="margin-top:20px">
-      <div style="font-family:var(--font-display);font-size:15px;font-weight:800;margin-bottom:12px">📊 Résultats des élèves</div>
+      <div style="font-family:var(--font-display);font-size:15px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px">
+        <i data-lucide="bar-chart-2" style="width:16px;height:16px;stroke:#1E5FAD"></i> Résultats des élèves
+      </div>
       <div style="background:var(--blanc);border:1.5px solid var(--gris-200);border-radius:12px;overflow:hidden">
         <table style="width:100%;border-collapse:collapse">
           <thead><tr style="background:var(--gris-50)">
@@ -306,10 +313,12 @@ include __DIR__ . '/includes/header_app.php';
             <label class="form-label">Réponse correcte</label>
             <div style="display:flex;gap:10px">
               <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;border:1.5px solid var(--gris-200);border-radius:8px;flex:1;justify-content:center">
-                <input type="radio" name="vf_correct" value="VRAI" checked style="accent-color:#059669"> ✓ VRAI
+                <input type="radio" name="vf_correct" value="VRAI" checked style="accent-color:#059669">
+                <i data-lucide="check" style="width:13px;height:13px;stroke:#059669"></i> VRAI
               </label>
               <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;border:1.5px solid var(--gris-200);border-radius:8px;flex:1;justify-content:center">
-                <input type="radio" name="vf_correct" value="FAUX" style="accent-color:#DC2626"> ✗ FAUX
+                <input type="radio" name="vf_correct" value="FAUX" style="accent-color:#DC2626">
+                <i data-lucide="x" style="width:13px;height:13px;stroke:#DC2626"></i> FAUX
               </label>
             </div>
           </div>
@@ -349,7 +358,8 @@ include __DIR__ . '/includes/header_app.php';
   <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px">
     <div>
       <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#fff;display:flex;align-items:center;gap:10px">
-        🧠 Exercices & Questionnaires
+        <i data-lucide="layers" style="width:20px;height:20px;stroke:#a78bfa"></i>
+        Exercices & Questionnaires
       </div>
       <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:4px">Créez des exercices interactifs pour évaluer vos élèves</div>
     </div>
@@ -370,7 +380,11 @@ include __DIR__ . '/includes/header_app.php';
 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">
 <?php foreach ($exercices as $exo):
   $typeColor = match($exo['type']) { 'QCM'=>'#1E5FAD','VRAI_FAUX'=>'#059669','MIXTE'=>'#7C3AED' };
-  $typeIcon  = match($exo['type']) { 'QCM'=>'📋','VRAI_FAUX'=>'⚖️','MIXTE'=>'🧩' };
+  $typeIcon = match($exo['type']) {
+    'QCM'      => '<i data-lucide="list" style="width:10px;height:10px"></i>',
+    'VRAI_FAUX'=> '<i data-lucide="check-square" style="width:10px;height:10px"></i>',
+    'MIXTE'    => '<i data-lucide="layers" style="width:10px;height:10px"></i>',
+  };
 ?>
 <div class="exo-card">
   <div class="top-bar" style="background:<?= $typeColor ?>"></div>
@@ -393,9 +407,9 @@ include __DIR__ . '/includes/header_app.php';
         <div style="font-size:12px;color:var(--gris-500);margin-bottom:6px"><?= e(mb_strimwidth($exo['description'],0,80,'…')) ?></div>
         <?php endif; ?>
         <div style="display:flex;gap:12px;font-size:11px;color:var(--gris-400)">
-          <span>❓ <?= $exo['nb_questions'] ?> questions</span>
-          <span>⏱ <?= $exo['duree_minutes'] ?> min</span>
-          <span>👥 <?= $exo['nb_sessions'] ?> passages</span>
+          <span><?= $exo['nb_questions'] ?> questions</span>
+          <span><i data-lucide="clock" style="width:10px;height:10px;vertical-align:-1px"></i> <?= $exo['duree_minutes'] ?> min</span>
+          <span><?= $exo['nb_sessions'] ?> passages</span>
         </div>
       </div>
     </div>
@@ -432,13 +446,15 @@ include __DIR__ . '/includes/header_app.php';
 
 <?php else: ?>
 <div class="card" style="text-align:center;padding:60px 30px">
-  <div style="font-size:56px;margin-bottom:16px">🧠</div>
+    <div style="display:flex;justify-content:center;margin-bottom:16px">
+      <i data-lucide="inbox" style="width:48px;height:48px;stroke:var(--gris-300);stroke-width:1.5"></i>
+    </div>
   <div style="font-family:var(--font-display);font-size:20px;font-weight:800;margin-bottom:8px">Aucun exercice créé</div>
   <p style="color:var(--gris-500);font-size:13px;max-width:400px;margin:0 auto 24px;line-height:1.6">
     Créez des QCM, Vrai/Faux et exercices mixtes pour évaluer vos élèves de façon interactive.
   </p>
   <button onclick="document.getElementById('modal-creer').style.display='flex'" class="btn btn-primary" style="background:#7C3AED;border-color:#7C3AED">
-    🧠 Créer mon premier exercice
+    Créer mon premier exercice
   </button>
 </div>
 <?php endif; ?>
@@ -449,7 +465,7 @@ include __DIR__ . '/includes/header_app.php';
 <div id="modal-creer" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);align-items:center;justify-content:center;z-index:1000;padding:20px;backdrop-filter:blur(5px)" onclick="if(event.target===this)this.style.display='none'">
   <div style="background:var(--blanc);border-radius:22px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto">
     <div style="padding:20px 24px 16px;border-bottom:1px solid var(--gris-100);position:sticky;top:0;background:var(--blanc);z-index:2;display:flex;align-items:center;justify-content:space-between">
-      <span style="font-family:var(--font-display);font-size:17px;font-weight:900">🧠 Créer un exercice</span>
+      <span style="font-family:var(--font-display);font-size:17px;font-weight:900;display:flex;align-items:center;gap:8px"><i data-lucide="plus-circle" style="width:18px;height:18px;stroke:#7C3AED"></i> Créer un exercice</span>
       <button onclick="document.getElementById('modal-creer').style.display='none'" style="background:none;border:none;cursor:pointer"><i data-lucide="x" style="width:20px;height:20px;stroke:var(--gris-400)"></i></button>
     </div>
     <div style="padding:20px 24px">
@@ -468,9 +484,9 @@ include __DIR__ . '/includes/header_app.php';
           <div class="form-group">
             <label class="form-label">Type</label>
             <select name="type" class="form-control">
-              <option value="QCM">📋 QCM</option>
-              <option value="VRAI_FAUX">⚖️ Vrai / Faux</option>
-              <option value="MIXTE">🧩 Mixte</option>
+              <option value="QCM">QCM — Choix multiple</option>
+              <option value="VRAI_FAUX">Vrai / Faux</option>
+              <option value="MIXTE">Mixte (QCM + Vrai/Faux)</option>
             </select>
           </div>
           <div class="form-group">

@@ -82,8 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 }
 
 // ── Stats utilisateur ─────────────────────────────────────
-$stats = [
-    'examens'    => (int)dbVal("SELECT COUNT(*) FROM exam_results WHERE user_id=? OR utilisateur_id=?", [$user['id'], $user['id']]) ?: (int)dbVal("SELECT total_examens FROM utilisateurs WHERE id=?", [$user['id']]),
+$profilStats = [
+    'examens'    => (int)dbVal("SELECT total_examens FROM utilisateurs WHERE id=?", [$user['id']]),
     'score_moy'  => (float)($user['score_moyen'] ?? 0),
     'streak'     => (int)($user['streak_jours'] ?? 0),
     'classes'    => (int)dbVal("SELECT COUNT(*) FROM classe_membres WHERE eleve_id=? AND statut='ACTIF'", [$user['id']]),
@@ -159,19 +159,19 @@ include __DIR__ . '/includes/header_app.php';
     <!-- Stats rapides -->
     <div style="display:flex;gap:10px;flex-wrap:wrap">
       <div class="stat-pill">
-        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#fff"><?= $stats['examens'] ?></div>
+        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#fff"><?= $profilStats['examens'] ?></div>
         <div style="font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase">Examens</div>
       </div>
       <div class="stat-pill">
-        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#fff"><?= number_format($stats['score_moy'],0) ?>%</div>
+        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#fff"><?= number_format($profilStats['score_moy'],0) ?>%</div>
         <div style="font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase">Moy. score</div>
       </div>
       <div class="stat-pill">
-        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#f59e0b">🔥<?= $stats['streak'] ?></div>
+        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#f59e0b">🔥<?= $profilStats['streak'] ?></div>
         <div style="font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase">Streak</div>
       </div>
       <div class="stat-pill">
-        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#fff"><?= $stats['classes'] ?></div>
+        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#fff"><?= $profilStats['classes'] ?></div>
         <div style="font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase">Classes</div>
       </div>
     </div>

@@ -145,7 +145,13 @@ $mentionColor = match(true) { $pct>=90=>'#059669', $pct>=70=>'#1E5FAD', $pct>=50
 <div style="max-width:720px;margin:0 auto">
   <!-- Score card -->
   <div style="background:linear-gradient(135deg,#0f172a,<?= $mentionColor ?>88,#0f172a);border-radius:var(--radius-xl);padding:36px;margin-bottom:24px;text-align:center">
-    <div style="font-size:60px;margin-bottom:12px"><?= $pct>=90?'🏆':($pct>=70?'🎯':($pct>=50?'📚':'💪')) ?></div>
+    <div style="margin-bottom:20px;display:flex;justify-content:center">
+      <?php
+        $lucideIcon = $pct>=90 ? 'award' : ($pct>=70 ? 'target' : ($pct>=50 ? 'book-open' : 'trending-up'));
+        $iconColor  = $mentionColor;
+      ?>
+      <i data-lucide="<?= $lucideIcon ?>" style="width:64px;height:64px;stroke:<?= $iconColor ?>;stroke-width:1.5"></i>
+    </div>
     <div style="font-family:var(--font-display);font-size:52px;font-weight:900;color:#fff;line-height:1"><?= number_format($session['score'],1) ?></div>
     <div style="font-size:18px;color:rgba(255,255,255,.6);margin-bottom:12px">/ <?= $exo['note_max'] ?> points</div>
     <div style="font-family:var(--font-display);font-size:22px;font-weight:700;color:<?= $mentionColor ?>"><?= $mention ?></div>
@@ -179,8 +185,8 @@ $mentionColor = match(true) { $pct>=90=>'#059669', $pct>=70=>'#1E5FAD', $pct>=50
   <?php foreach ($reponses as $i => $r): ?>
   <div class="q-block <?= $r['est_correct']===null ? 'res-libre' : ($r['est_correct'] ? 'res-correct' : 'res-wrong') ?>">
     <div style="display:flex;align-items:flex-start;gap:10px">
-      <div style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;font-family:var(--font-display);font-weight:900;background:<?= $r['est_correct']===null ? '#FEF3C7' : ($r['est_correct'] ? '#D1FAE5' : '#FEE2E2') ?>;color:<?= $r['est_correct']===null ? '#B45309' : ($r['est_correct'] ? '#065F46' : '#991B1B') ?>">
-        <?= $r['est_correct']===null ? '?' : ($r['est_correct'] ? '✓' : '✗') ?>
+      <div style="width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:<?= $r['est_correct']===null ? '#FEF3C7' : ($r['est_correct'] ? '#D1FAE5' : '#FEE2E2') ?>;color:<?= $r['est_correct']===null ? '#B45309' : ($r['est_correct'] ? '#065F46' : '#991B1B') ?>">
+        <i data-lucide="<?= $r['est_correct']===null ? 'help-circle' : ($r['est_correct'] ? 'check' : 'x') ?>" style="width:15px;height:15px"></i>
       </div>
       <div style="flex:1">
         <div style="font-size:13px;font-weight:700;color:var(--gris-700);margin-bottom:6px">Q<?= $i+1 ?>. <?= e($r['question']) ?></div>
@@ -188,7 +194,7 @@ $mentionColor = match(true) { $pct>=90=>'#059669', $pct>=70=>'#1E5FAD', $pct>=50
           <div style="font-size:12px;background:rgba(0,0,0,.04);padding:8px 12px;border-radius:8px;color:var(--gris-700)">
             Votre réponse : <em><?= e($r['reponse_texte']??'(pas de réponse)') ?></em>
           </div>
-          <div style="font-size:11px;color:#B45309;margin-top:6px">📝 Réponse libre — sera corrigée par l'enseignant</div>
+          <div style="font-size:11px;color:#B45309;margin-top:6px;display:flex;align-items:center;gap:5px"><i data-lucide="edit-2" style="width:11px;height:11px"></i> Réponse libre — sera corrigée par l'enseignant</div>
         <?php else: ?>
           <div style="font-size:12px;color:var(--gris-600)">
             Votre réponse : <strong style="color:<?= $r['est_correct'] ? '#059669' : '#DC2626' ?>"><?= e($r['option_txt']??'(pas de réponse)') ?></strong>
@@ -198,8 +204,9 @@ $mentionColor = match(true) { $pct>=90=>'#059669', $pct>=70=>'#1E5FAD', $pct>=50
           </div>
         <?php endif; ?>
         <?php if ($r['explication']): ?>
-        <div style="margin-top:8px;background:#FEF3C7;border-left:3px solid #F59E0B;border-radius:0 8px 8px 0;padding:7px 10px;font-size:11px;color:#92400E">
-          💡 <?= e($r['explication']) ?>
+        <div style="margin-top:8px;background:#FEF3C7;border-left:3px solid #F59E0B;border-radius:0 8px 8px 0;padding:7px 10px;font-size:11px;color:#92400E;display:flex;gap:6px;align-items:flex-start">
+          <i data-lucide="info" style="width:12px;height:12px;flex-shrink:0;margin-top:1px"></i>
+          <?= e($r['explication']) ?>
         </div>
         <?php endif; ?>
       </div>
@@ -213,7 +220,7 @@ $mentionColor = match(true) { $pct>=90=>'#059669', $pct>=70=>'#1E5FAD', $pct>=50
       <i data-lucide="list" style="width:13px;height:13px;vertical-align:-2px"></i> Tous les exercices
     </a>
     <a href="/reussiteplus/passer_exercice.php?id=<?= urlencode($exoId) ?>" class="btn btn-primary" style="background:#1E5FAD;border-color:#1E5FAD;flex:1;justify-content:center">
-      🔄 Recommencer
+      <i data-lucide="rotate-ccw" style="width:13px;height:13px;vertical-align:-2px"></i> Recommencer
     </a>
   </div>
 </div>
@@ -270,7 +277,7 @@ $mentionColor = match(true) { $pct>=90=>'#059669', $pct>=70=>'#1E5FAD', $pct>=50
         <?php foreach ($q['options'] as $opt): ?>
         <label class="option-label" style="flex:1;justify-content:center;font-size:16px;font-weight:700">
           <input type="radio" name="rep_<?= e($q['id']) ?>" value="<?= e($opt['id']) ?>" required style="display:none" onchange="markAnswered(<?= $i ?>)">
-          <?= $opt['texte'] === 'VRAI' ? '✓ VRAI' : '✗ FAUX' ?>
+          <?= $opt['texte'] === 'VRAI' ? '<i data-lucide="check" style="width:14px;height:14px;stroke:#059669"></i> VRAI' : '<i data-lucide="x" style="width:14px;height:14px;stroke:#DC2626"></i> FAUX' ?>
         </label>
         <?php endforeach; ?>
       </div>
