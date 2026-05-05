@@ -363,21 +363,36 @@ include __DIR__ . '/includes/header_app.php';
       </div>
 
       <!-- Contact rapide -->
-      <div style="margin-top:24px;background:var(--gris-50);border:1px solid var(--gris-200);border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-        <div>
-          <div style="font-size:13px;font-weight:700;color:var(--gris-800);margin-bottom:3px">
-            <i data-lucide="headphones" style="width:13px;height:13px;vertical-align:-2px;stroke:var(--primary)"></i>
-            Besoin d'aide ?
-          </div>
-          <div style="font-size:12px;color:var(--gris-500)">Notre équipe répond en moins d'une heure</div>
+      <div style="margin-top:24px;background:var(--gris-50);border:1px solid var(--gris-200);border-radius:12px;padding:16px 20px">
+        <div style="font-size:13px;font-weight:700;color:var(--gris-800);margin-bottom:12px;display:flex;align-items:center;gap:7px">
+          <i data-lucide="headphones" style="width:13px;height:13px;stroke:var(--primary)"></i>
+          Envoyez la preuve de paiement — Nous répondons en &lt; 1h
         </div>
-        <div style="display:flex;gap:8px">
-          <a href="mailto:paiement@reussiteplus.cd" class="btn btn-ghost btn-sm">
-            <i data-lucide="mail" style="width:12px;height:12px;vertical-align:-2px"></i> Email
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <a href="https://wa.me/<?= CONTACT_MPESA ?>?text=Ref+<?= urlencode($successRef) ?>" target="_blank" rel="noopener"
+             style="flex:1;min-width:140px;display:flex;align-items:center;gap:9px;padding:10px 14px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:10px;text-decoration:none;transition:.15s"
+             onmouseover="this.style.background='#DCFCE7'" onmouseout="this.style.background='#F0FDF4'">
+            <div style="width:32px;height:32px;background:#00A651;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <i data-lucide="message-circle" style="width:16px;height:16px;stroke:#fff"></i>
+            </div>
+            <div>
+              <div style="font-size:12px;font-weight:700;color:#14532D">WhatsApp M-Pesa</div>
+              <div style="font-size:11px;color:#059669">+243 83 150 8853</div>
+            </div>
           </a>
-          <a href="https://wa.me/243977329184?text=Ref+<?= urlencode($successRef) ?>" target="_blank" rel="noopener"
-             class="btn btn-sm" style="background:#25D366;color:#fff;border:none;font-weight:700">
-            <i data-lucide="message-circle" style="width:12px;height:12px;vertical-align:-2px;stroke:#fff"></i> WhatsApp
+          <a href="https://wa.me/<?= CONTACT_ORANGE ?>?text=Ref+<?= urlencode($successRef) ?>" target="_blank" rel="noopener"
+             style="flex:1;min-width:140px;display:flex;align-items:center;gap:9px;padding:10px 14px;background:#FFF7ED;border:1px solid #FED7AA;border-radius:10px;text-decoration:none;transition:.15s"
+             onmouseover="this.style.background='#FFEDD5'" onmouseout="this.style.background='#FFF7ED'">
+            <div style="width:32px;height:32px;background:#FF6600;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <i data-lucide="phone" style="width:16px;height:16px;stroke:#fff"></i>
+            </div>
+            <div>
+              <div style="font-size:12px;font-weight:700;color:#92400E">Orange Money</div>
+              <div style="font-size:11px;color:#D97706">+243 84 020 4331</div>
+            </div>
+          </a>
+          <a href="mailto:paiement@reussiteplus.cd" class="btn btn-ghost btn-sm" style="flex-shrink:0">
+            <i data-lucide="mail" style="width:12px;height:12px;vertical-align:-2px"></i> Email
           </a>
         </div>
       </div>

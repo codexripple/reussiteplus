@@ -191,9 +191,21 @@ include __DIR__ . '/includes/header_app.php';
             <i data-lucide="refresh-cw" style="width:13px;height:13px;vertical-align:-2px"></i> Renouveler
           </a>
         <?php elseif ($planKey === 'ECOLE'): ?>
-          <a href="mailto:contact@reussiteplus.cd?subject=Plan%20École%20-%20RÉUSSITE%2B" class="btn btn-primary btn-full">
-            <i data-lucide="mail" style="width:13px;height:13px;vertical-align:-2px"></i> Nous contacter
+          <a href="/reussiteplus/paiement.php?plan=ECOLE" class="btn btn-primary btn-full">
+            <i data-lucide="arrow-right-circle" style="width:13px;height:13px;vertical-align:-2px"></i> Activer le plan École
           </a>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <a href="https://wa.me/<?= CONTACT_MPESA ?>" target="_blank" rel="noopener"
+               style="flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:7px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;font-size:11px;font-weight:700;color:#059669;text-decoration:none;transition:.15s"
+               onmouseover="this.style.background='#DCFCE7'" onmouseout="this.style.background='#F0FDF4'">
+              <i data-lucide="message-circle" style="width:11px;height:11px;stroke:#059669"></i> +243 83 150 8853
+            </a>
+            <a href="https://wa.me/<?= CONTACT_ORANGE ?>" target="_blank" rel="noopener"
+               style="flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:7px;background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;font-size:11px;font-weight:700;color:#D97706;text-decoration:none;transition:.15s"
+               onmouseover="this.style.background='#FFEDD5'" onmouseout="this.style.background='#FFF7ED'">
+              <i data-lucide="phone" style="width:11px;height:11px;stroke:#D97706"></i> +243 84 020 4331
+            </a>
+          </div>
         <?php else: ?>
           <a href="/reussiteplus/paiement.php?plan=<?= $planKey ?>" class="btn btn-full" style="background:<?= $isPopular ? 'var(--gold)' : $couleur ?>;color:#fff;font-weight:700;border:none;padding:13px;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:opacity .15s;text-decoration:none" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
             <i data-lucide="arrow-right-circle" style="width:16px;height:16px;stroke:#fff"></i>

@@ -80,10 +80,30 @@ $notifs = (int)($stats['notifs_non_lues'] ?? 0);
     </a>
 
     <?php if (($user['plan'] ?? '') === 'ECOLE'): ?>
-    <div class="nav-section-title" style="margin-top:12px">Plan École</div>
+    <div class="nav-section-title" style="margin-top:12px">Mon École</div>
     <a href="/reussiteplus/ecole.php" class="nav-item <?= $pageActive === 'ecole' ? 'active' : '' ?>">
-      <div class="nav-icon"><i data-lucide="school"></i></div>
-      <span class="nav-label">Tableau de classe</span>
+      <div class="nav-icon"><i data-lucide="layout-dashboard"></i></div>
+      <span class="nav-label">Tableau de bord</span>
+    </a>
+    <a href="/reussiteplus/ecole_classes.php" class="nav-item <?= $pageActive === 'ecole_classes' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="layout-list"></i></div>
+      <span class="nav-label">Classes</span>
+    </a>
+    <a href="/reussiteplus/ecole_enseignants.php" class="nav-item <?= $pageActive === 'ecole_enseignants' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="user-check"></i></div>
+      <span class="nav-label">Enseignants</span>
+    </a>
+    <a href="/reussiteplus/ecole_eleves.php" class="nav-item <?= $pageActive === 'ecole_eleves' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="users"></i></div>
+      <span class="nav-label">Élèves</span>
+    </a>
+    <a href="/reussiteplus/ecole_emploi_temps.php" class="nav-item <?= $pageActive === 'ecole_emploi_temps' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="calendar-days"></i></div>
+      <span class="nav-label">Emploi du temps</span>
+    </a>
+    <a href="/reussiteplus/ecole_bibliotheque.php" class="nav-item <?= $pageActive === 'ecole_bibliotheque' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="book-open"></i></div>
+      <span class="nav-label">Bibliothèque</span>
     </a>
     <?php endif; ?>
 

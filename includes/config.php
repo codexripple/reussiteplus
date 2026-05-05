@@ -72,26 +72,45 @@ define('PLANS', [
         'populaire'    => true,
     ],
     'ECOLE' => [
-        'nom'          => 'École',
-        'prix'         => 50000,
-        'prix_affiche' => '50 000 CDF/mois',
-        'examens_mois' => -1,
-        'questions'    => -1,
-        'archives'     => true,
-        'corrige'      => true,
-        'ia'           => true,
-        'eleves_max'   => 50,
-        'couleur'      => '#007A5E',
-        'icone'        => '🏫',
+        'nom'             => 'École',
+        'prix'            => 50000,
+        'prix_affiche'    => '50 000 CDF/mois',
+        'examens_mois'    => -1,
+        'questions'       => -1,
+        'archives'        => true,
+        'corrige'         => true,
+        'ia'              => true,
+        'eleves_max'      => 50,
+        'enseignants_max' => 10,
+        'classes_max'     => 5,
+        'couleur'         => '#007A5E',
+        'icone'           => '🏫',
+        'features'        => [
+            '5 classes'                   => 'Gestion multi-classes',
+            '50 élèves'                   => 'Suivi individuel complet',
+            '10 enseignants'              => 'Comptes enseignants dédiés',
+            'Emploi du temps'             => 'Calendrier interactif',
+            'Devoirs & évaluations'       => 'Assignation & correction',
+            'Bibliothèque pédagogique'    => 'Ressources partagées',
+            'Bulletins automatiques'      => 'PDF imprimable',
+            'IA pédagogique'              => 'Analyse & recommandations',
+            'Messagerie interne'          => 'Annonces & communication',
+            'Rapports analytics'          => 'Statistiques avancées',
+        ],
     ],
 ]);
 
 // Méthodes de paiement Mobile Money
 define('METHODES_PAIEMENT', [
-    'MPESA'        => ['nom' => 'M-Pesa',       'numero' => '+243 81X XXX XXX', 'icone' => '💚'],
-    'AIRTEL_MONEY' => ['nom' => 'Airtel Money',  'numero' => '+243 99X XXX XXX', 'icone' => '🔴'],
-    'ORANGE_MONEY' => ['nom' => 'Orange Money',  'numero' => '+243 84X XXX XXX', 'icone' => '🟠'],
+    'MPESA'        => ['nom' => 'M-Pesa',       'numero' => '+243 83 150 8853', 'icone' => '💚', 'couleur' => '#00A651'],
+    'AIRTEL_MONEY' => ['nom' => 'Airtel Money',  'numero' => '+243 99X XXX XXX', 'icone' => '🔴', 'couleur' => '#E40613'],
+    'ORANGE_MONEY' => ['nom' => 'Orange Money',  'numero' => '+243 84 020 4331', 'icone' => '🟠', 'couleur' => '#FF6600'],
 ]);
+
+// Contacts support
+define('CONTACT_ORANGE', '+243840204331');
+define('CONTACT_MPESA',  '+243831508853');
+define('CONTACT_EMAIL',  'support@reussiteplus.cd');
 
 // Limites plan gratuit
 define('FREE_EXAMS_PER_MONTH', 5);
