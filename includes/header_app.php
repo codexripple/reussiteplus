@@ -178,7 +178,7 @@ if (is_admin()) {
     <?php $pendingPay = (int)(dbRow("SELECT COUNT(*) as n FROM abonnements WHERE statut='EN_ATTENTE'") ?? ['n'=>0])['n']; ?>
     <?php $pendingMsg = (int)(dbRow("SELECT COUNT(*) as n FROM contact_messages WHERE created_at >= DATE_SUB(NOW(),INTERVAL 48 HOUR)") ?? ['n'=>0])['n']; ?>
     <!-- ═══ ZONE ADMIN ═══ -->
-    <div style="margin:12px -12px 0;padding:10px 12px 6px;background:linear-gradient(135deg,rgba(0,122,94,.12),rgba(124,58,237,.08));border-top:1px solid rgba(0,122,94,.2);border-bottom:1px solid rgba(124,58,237,.15)">
+    <div class="sidebar-adm-header-text" style="margin:12px -12px 0;padding:10px 12px 6px;background:linear-gradient(135deg,rgba(0,122,94,.12),rgba(124,58,237,.08));border-top:1px solid rgba(0,122,94,.2);border-bottom:1px solid rgba(124,58,237,.15)">
       <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
         <div style="width:6px;height:6px;background:#4ade80;border-radius:50%;animation:adm-blink 1.5s infinite"></div>
         <span style="font-size:9px;font-weight:800;color:#4ade80;text-transform:uppercase;letter-spacing:1.5px">Mode Administration</span>
