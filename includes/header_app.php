@@ -36,17 +36,26 @@ $notifs = (int)($stats['notifs_non_lues'] ?? 0);
   </div>
 
   <div class="sidebar-user">
-    <div class="user-avatar"><?= strtoupper(substr($user['prenom'], 0, 1) . substr($user['nom'], 0, 1)) ?></div>
+    <div class="user-avatar" style="<?= is_admin() ? 'background:linear-gradient(135deg,#007A5E,#7C3AED)' : '' ?>"><?= strtoupper(substr($user['prenom'], 0, 1) . substr($user['nom'], 0, 1)) ?></div>
     <div>
       <div class="user-info-name"><?= e($user['prenom'] . ' ' . $user['nom']) ?></div>
       <div>
+        <?php if (is_admin()): ?>
+        <span class="user-info-plan" style="background:rgba(124,58,237,.2);color:#a78bfa">
+          <i data-lucide="shield-check" style="width:10px;height:10px"></i>
+          <?= $user['role'] === 'SUPER_ADMIN' ? 'Super Admin' : ($user['role'] === 'MODERATEUR' ? 'Modérateur' : 'Admin') ?>
+        </span>
+        <?php else: ?>
         <?php $plan = $user['plan']; $plans = PLANS; ?>
         <span class="user-info-plan"><i data-lucide="<?= $plan==='PREMIUM'?'crown':($plan==='BASIQUE'?'zap':'backpack') ?>"></i> <?= e($plans[$plan]['nom'] ?? $plan) ?></span>
+        <?php endif; ?>
       </div>
     </div>
   </div>
 
   <nav class="sidebar-nav">
+    <?php $isAdminPage = str_starts_with($pageActive ?? '', 'admin'); ?>
+    <?php if (!$isAdminPage): ?>
     <div class="nav-section-title">Principal</div>
 
     <a href="/reussiteplus/dashboard.php" class="nav-item <?= $pageActive === 'dashboard' ? 'active' : '' ?>">
@@ -146,13 +155,88 @@ $notifs = (int)($stats['notifs_non_lues'] ?? 0);
       <span class="nav-label">IA Pédagogique</span>
     </a>
     <?php endif; ?>
+    <?php endif; /* end !$isAdminPage */ ?>
 
     <?php if (is_admin()): ?>
-    <div class="nav-section-title" style="margin-top:12px">Administration</div>
-    <a href="/reussiteplus/admin/index.php" class="nav-item <?= $pageActive === 'admin' ? 'active' : '' ?>">
-      <div class="nav-icon"><i data-lucide="settings"></i></div>
-      <span class="nav-label">Admin</span>
+    <?php $pendingPay = (int)(dbRow("SELECT COUNT(*) as n FROM abonnements WHERE statut='EN_ATTENTE'") ?? ['n'=>0])['n']; ?>
+    <?php $pendingMsg = (int)(dbRow("SELECT COUNT(*) as n FROM contact_messages WHERE created_at >= DATE_SUB(NOW(),INTERVAL 48 HOUR)") ?? ['n'=>0])['n']; ?>
+    <!-- ═══ ZONE ADMIN ═══ -->
+    <div style="margin:12px -12px 0;padding:10px 12px 6px;background:linear-gradient(135deg,rgba(0,122,94,.12),rgba(124,58,237,.08));border-top:1px solid rgba(0,122,94,.2);border-bottom:1px solid rgba(124,58,237,.15)">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+        <div style="width:6px;height:6px;background:#4ade80;border-radius:50%;animation:adm-blink 1.5s infinite"></div>
+        <span style="font-size:9px;font-weight:800;color:#4ade80;text-transform:uppercase;letter-spacing:1.5px">Mode Administration</span>
+      </div>
+      <style>@keyframes adm-blink{0%,100%{opacity:1}50%{opacity:.3}}</style>
+    </div>
+
+    <div class="nav-section-title" style="margin-top:10px">Vue d'ensemble</div>
+    <a href="/reussiteplus/admin/index.php" class="nav-item adm-nav <?= $pageActive === 'admin' ? 'active adm-active' : '' ?>">
+      <div class="nav-icon adm-icon"><i data-lucide="layout-dashboard"></i></div>
+      <span class="nav-label">Tableau de bord</span>
     </a>
+
+    <div class="nav-section-title" style="margin-top:8px">Gestion</div>
+    <a href="/reussiteplus/admin/users.php" class="nav-item adm-nav <?= $pageActive === 'admin_users' ? 'active adm-active' : '' ?>">
+      <div class="nav-icon adm-icon"><i data-lucide="users"></i></div>
+      <span class="nav-label">Utilisateurs</span>
+    </a>
+    <a href="/reussiteplus/admin/paiements.php" class="nav-item adm-nav <?= $pageActive === 'admin_paiements' ? 'active adm-active' : '' ?>">
+      <div class="nav-icon adm-icon"><i data-lucide="credit-card"></i></div>
+      <span class="nav-label">Paiements</span>
+      <?php if ($pendingPay > 0): ?>
+      <span style="background:#F59E0B;color:white;font-size:9px;font-weight:800;padding:1px 6px;border-radius:10px;flex-shrink:0"><?= $pendingPay ?></span>
+      <?php endif; ?>
+    </a>
+    <a href="/reussiteplus/contact.php" class="nav-item adm-nav <?= $pageActive === 'admin_messages' ? 'active adm-active' : '' ?>">
+      <div class="nav-icon adm-icon"><i data-lucide="mail"></i></div>
+      <span class="nav-label">Messages</span>
+      <?php if ($pendingMsg > 0): ?>
+      <span style="background:#EF4444;color:white;font-size:9px;font-weight:800;padding:1px 6px;border-radius:10px;flex-shrink:0"><?= $pendingMsg ?></span>
+      <?php endif; ?>
+    </a>
+
+    <div class="nav-section-title" style="margin-top:8px">Contenu</div>
+    <a href="/reussiteplus/admin/archives.php" class="nav-item adm-nav <?= $pageActive === 'admin_archives' ? 'active adm-active' : '' ?>">
+      <div class="nav-icon adm-icon"><i data-lucide="folder-open"></i></div>
+      <span class="nav-label">Archives</span>
+    </a>
+    <a href="/reussiteplus/questions.php" class="nav-item adm-nav <?= $pageActive === 'admin_questions' ? 'active adm-active' : '' ?>">
+      <div class="nav-icon adm-icon"><i data-lucide="help-circle"></i></div>
+      <span class="nav-label">Questions</span>
+    </a>
+    <a href="/reussiteplus/tarifs.php" target="_blank" class="nav-item adm-nav">
+      <div class="nav-icon adm-icon"><i data-lucide="tag"></i></div>
+      <span class="nav-label">Tarifs &amp; Plans</span>
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2.5" style="flex-shrink:0"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    </a>
+
+    <div class="nav-section-title" style="margin-top:8px">Outils</div>
+    <a href="/reussiteplus/admin/users.php?export=csv" class="nav-item adm-nav">
+      <div class="nav-icon adm-icon"><i data-lucide="download"></i></div>
+      <span class="nav-label">Export CSV</span>
+    </a>
+    <a href="/reussiteplus/admin/index.php#ai-panel" class="nav-item adm-nav">
+      <div class="nav-icon" style="background:rgba(124,58,237,.2)"><i data-lucide="sparkles" style="width:16px;height:16px;stroke:#a78bfa"></i></div>
+      <span class="nav-label" style="color:rgba(255,255,255,.7)">Analyse IA Groq</span>
+    </a>
+
+    <div style="margin:10px -12px 0;padding:10px 20px 8px;border-top:1px solid rgba(255,255,255,.06)">
+      <a href="/reussiteplus/index.php" target="_blank" style="display:flex;align-items:center;gap:8px;font-size:11px;color:rgba(255,255,255,.3);text-decoration:none;font-weight:600;transition:.15s" onmouseover="this.style.color='rgba(255,255,255,.6)'" onmouseout="this.style.color='rgba(255,255,255,.3)'">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Voir le site public
+      </a>
+    </div>
+
+    <style>
+    .adm-nav:hover { background: rgba(0,122,94,.12) !important; }
+    .adm-nav .adm-icon { background: rgba(255,255,255,.06) !important; }
+    .adm-nav:hover .adm-icon { background: rgba(0,122,94,.2) !important; }
+    .adm-nav:hover .nav-icon svg { stroke: #4ade80 !important; }
+    .adm-active { background: rgba(0,122,94,.22) !important; }
+    .adm-active::before { background: #4ade80 !important; }
+    .adm-active .nav-icon svg { stroke: #4ade80 !important; }
+    .adm-active .nav-label { color: #4ade80 !important; font-weight: 600 !important; }
+    </style>
     <?php endif; ?>
   </nav>
 

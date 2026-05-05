@@ -5,7 +5,7 @@ require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/helpers.php';
 
 $pageTitle  = 'Gérer les archives';
-$pageActive = 'admin';
+$pageActive = 'admin_archives';
 $user = require_admin();
 
 $errors  = [];

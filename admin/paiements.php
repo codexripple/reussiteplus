@@ -5,7 +5,7 @@ require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/helpers.php';
 
 $pageTitle  = 'Gestion des paiements';
-$pageActive = 'admin';
+$pageActive = 'admin_paiements';
 $user = require_admin();
 
 // Confirmer ou refuser un paiement

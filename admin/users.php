@@ -5,7 +5,7 @@ require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/helpers.php';
 
 $pageTitle  = 'Gestion des utilisateurs';
-$pageActive = 'admin';
+$pageActive = 'admin_users';
 $user = require_admin();
 
 // Export CSV
