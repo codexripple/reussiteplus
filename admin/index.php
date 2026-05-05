@@ -109,6 +109,70 @@ include __DIR__ . '/../includes/header_app.php';
 @media(max-width:640px)  { .adm-kpi-grid { grid-template-columns:1fr 1fr; } }
 </style>
 
+<?php if (isset($_GET['welcome'])): ?>
+<!-- ═══ BANNIÈRE DE BIENVENUE ADMIN ════════════════════════ -->
+<div style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 60%,#0f172a 100%);border:1px solid rgba(124,58,237,.3);border-radius:18px;padding:28px 32px;margin-bottom:22px;position:relative;overflow:hidden">
+  <!-- Fond décoratif -->
+  <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(124,58,237,.2) 0%,transparent 70%);pointer-events:none"></div>
+  <div style="position:absolute;bottom:-20px;left:200px;width:160px;height:160px;background:radial-gradient(circle,rgba(0,122,94,.15) 0%,transparent 70%);pointer-events:none"></div>
+  <div style="position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap">
+    <div>
+      <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(201,151,42,.15);border:1px solid rgba(201,151,42,.3);color:#C9972A;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;padding:4px 12px;border-radius:20px;margin-bottom:14px">
+        <span style="width:6px;height:6px;background:#C9972A;border-radius:50%;display:inline-block"></span>
+        Espace Administration
+      </div>
+      <div style="font-family:var(--font-display);font-size:22px;font-weight:900;color:white;margin-bottom:6px">
+        Bon retour, <?= e($user['prenom']??'Admin') ?> !
+        <span style="color:#a78bfa">&mdash;</span>
+        <span style="color:rgba(255,255,255,.5);font-size:16px;font-weight:600">Tout est sous contrôle.</span>
+      </div>
+      <div style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:22px;max-width:580px;line-height:1.7">
+        Voici votre centre de commande. Vous gérez <strong style="color:rgba(255,255,255,.8)"><?= number_format($adm['total_users']) ?> utilisateurs actifs</strong>,
+        <strong style="color:rgba(255,255,255,.8)"><?= number_format($adm['total_archives']) ?> archives</strong> et
+        <strong style="color:rgba(255,255,255,.8)"><?= number_format($adm['total_questions']) ?> questions</strong> dans la banque.
+        <?php if ($adm['paiements_att'] > 0): ?>
+        <span style="color:#fbbf24"> &mdash; <?= $adm['paiements_att'] ?> paiement<?= $adm['paiements_att']>1?'s':'' ?> en attente de validation.</span>
+        <?php endif; ?>
+      </div>
+      <!-- Guide rapide -->
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <?php
+        $guides = [
+          ['href'=>'/reussiteplus/admin/users.php','icon'=>'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>','label'=>'Gérer les utilisateurs','color'=>'#007A5E'],
+          ['href'=>'/reussiteplus/admin/paiements.php','icon'=>'<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>','label'=>'Valider les paiements','color'=>'#C9972A'],
+          ['href'=>'/reussiteplus/admin/archives.php','icon'=>'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/>','label'=>'Archives &amp; contenu','color'=>'#60a5fa'],
+          ['href'=>'/reussiteplus/admin/users.php','icon'=>'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>','label'=>'Export CSV','color'=>'#4ade80'],
+        ];
+        foreach ($guides as $g): ?>
+        <a href="<?= $g['href'] ?>" style="display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.75);padding:8px 14px;border-radius:9px;font-size:12px;font-weight:700;text-decoration:none;transition:.15s" onmouseover="this.style.background='rgba(255,255,255,.12)'" onmouseout="this.style.background='rgba(255,255,255,.06)'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="<?= $g['color'] ?>" stroke-width="2.5"><?= $g['icon'] ?></svg>
+          <?= $g['label'] ?>
+        </a>
+        <?php endforeach; ?>
+        <button onclick="loadAiInsights()" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(109,40,217,.2));border:1px solid rgba(124,58,237,.4);color:#a78bfa;padding:8px 14px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;transition:.15s" onmouseover="this.style.background='linear-gradient(135deg,rgba(124,58,237,.45),rgba(109,40,217,.35))'" onmouseout="this.style.background='linear-gradient(135deg,rgba(124,58,237,.3),rgba(109,40,217,.2))'">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Analyse IA Groq
+        </button>
+      </div>
+    </div>
+    <!-- KPI rapide droite -->
+    <div style="display:flex;flex-direction:column;gap:8px;min-width:160px">
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px 16px;text-align:center">
+        <div style="font-family:var(--font-display);font-size:26px;font-weight:900;color:#4ade80"><?= number_format($adm['exams_today']) ?></div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:3px">examens aujourd'hui</div>
+      </div>
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px 16px;text-align:center">
+        <div style="font-family:var(--font-display);font-size:26px;font-weight:900;color:#fbbf24"><?= number_format($adm['revenus_mois'],0,',',' ') ?></div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:3px">CDF ce mois</div>
+      </div>
+    </div>
+  </div>
+  <button onclick="this.closest('div[style]').style.display='none'" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.4);width:28px;height:28px;border-radius:7px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center" title="Fermer">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+</div>
+<?php endif; ?>
+
 <!-- -- PAGE HEADER -------------------------------------- -->
 <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:22px">
   <div>

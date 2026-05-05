@@ -119,7 +119,11 @@ function require_login(string $redirect = '/reussiteplus/connexion.php'): array 
 }
 
 function require_admin(): array {
-    $user = require_login();
+    if (!is_logged()) {
+        header('Location: /reussiteplus/admin/connexion.php');
+        exit;
+    }
+    $user = require_login('/reussiteplus/admin/connexion.php');
     if (!is_admin()) {
         header('Location: /reussiteplus/dashboard.php');
         exit;

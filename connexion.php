@@ -18,6 +18,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['password'] ?? ''
         );
         if ($result['ok']) {
+            // Admin → rediriger vers le panel admin
+            $role = $result['user']['role'] ?? '';
+            if (in_array($role, ['SUPER_ADMIN', 'ADMIN', 'MODERATEUR'])) {
+                header('Location: /reussiteplus/admin/index.php?welcome=1');
+                exit;
+            }
             // Montrer l'onboarding si c'est un nouvel utilisateur (aucun examen)
             $dest = $redirect;
             if ($dest === '/reussiteplus/dashboard.php') {
