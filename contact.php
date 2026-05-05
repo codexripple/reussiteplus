@@ -290,7 +290,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 
 <!-- Hero succès -->
 <div style="background:linear-gradient(160deg,#0D1117 0%,#0d3320 50%,#0D1117 100%);padding:80px 40px 60px;text-align:center;position:relative;overflow:hidden">
-  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1400&q=60') center/cover;opacity:.06"></div>
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1400&q=60') center/cover;opacity:.06"></div>
   <!-- Orb glow -->
   <div style="position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(0,169,127,.25) 0%,transparent 70%);pointer-events:none"></div>
   <div style="position:relative;max-width:640px;margin:0 auto">
@@ -450,7 +450,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 <!-- HERO -->
 <div class="hero-contact" style="position:relative;overflow:hidden">
   <!-- Image de fond -->
-  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1400&q=60') center/cover;opacity:.12;pointer-events:none"></div>
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1400&q=60') center/cover;opacity:.12;pointer-events:none"></div>
   <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 0%,rgba(0,122,94,0.22) 0%,transparent 65%);pointer-events:none"></div>
   <div class="hero-contact-inner" style="position:relative">
     <div class="hero-label"><i class="bi bi-envelope-heart-fill"></i> Contactez-nous</div>
@@ -539,7 +539,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 
       <!-- Image témoignage -->
       <div style="margin-top:16px;border-radius:var(--radius-xl);overflow:hidden;position:relative;height:180px">
-        <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?w=700&q=70" alt="Élèves RÉUSSITE+" style="width:100%;height:100%;object-fit:cover">
+        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=700&q=70" alt="Élèves RÉUSSITE+" style="width:100%;height:100%;object-fit:cover">
         <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.8),transparent)"></div>
         <div style="position:absolute;bottom:16px;left:16px;right:16px">
           <div style="font-size:13px;color:white;font-style:italic;line-height:1.5">"RÉUSSITE+ m'a aidé à avoir 16/20 à l'Examen d'État !"</div>
@@ -641,7 +641,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
       <!-- Mini upsell sous le formulaire -->
       <div style="margin-top:16px;background:linear-gradient(135deg,#0D1117,#1a2f50);border-radius:var(--radius-xl);padding:24px 28px;position:relative;overflow:hidden">
         <div style="position:absolute;right:0;top:0;bottom:0;width:160px;overflow:hidden;opacity:.15">
-          <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=300&q=60" alt="" style="width:100%;height:100%;object-fit:cover">
+          <img src="https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=300&q=60" alt="" style="width:100%;height:100%;object-fit:cover">
         </div>
         <div style="position:relative">
           <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">💡 Conseil de l'équipe</div>
@@ -676,7 +676,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 
 <!-- CTA BOTTOM -->
 <section class="cta-bottom" style="position:relative;overflow:hidden">
-  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1400&q=50') center/cover;opacity:.06;pointer-events:none"></div>
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1400&q=50') center/cover;opacity:.06;pointer-events:none"></div>
   <div class="cta-bottom-inner" style="position:relative">
     <div style="font-size:52px;margin-bottom:16px">🏆</div>
     <h2>Chaque jour sans s'entraîner<br>est un avantage donné aux autres.</h2>

@@ -8,6 +8,33 @@ $pageTitle  = 'Gestion des utilisateurs';
 $pageActive = 'admin';
 $user = require_admin();
 
+// Export CSV
+if (isset($_GET['export']) && $_GET['export'] === 'csv') {
+    $allUsers = dbAll("SELECT id, prenom, nom, email, plan, role, ville, ecole, classe, is_active, created_at FROM utilisateurs ORDER BY created_at DESC") ?? [];
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="utilisateurs_' . date('Y-m-d') . '.csv"');
+    $out = fopen('php://output', 'w');
+    fprintf($out, chr(0xEF).chr(0xBB).chr(0xBF)); // BOM UTF-8 pour Excel
+    fputcsv($out, ['ID', 'Prénom', 'Nom', 'Email', 'Plan', 'Rôle', 'Ville', 'École', 'Classe', 'Actif', 'Inscrit le'], ';');
+    foreach ($allUsers as $u) {
+        fputcsv($out, [
+            $u['id'],
+            $u['prenom'],
+            $u['nom'],
+            $u['email'],
+            $u['plan'],
+            $u['role'],
+            $u['ville'] ?? '',
+            $u['ecole'] ?? '',
+            $u['classe'] ?? '',
+            $u['is_active'] ? 'Oui' : 'Non',
+            $u['created_at'],
+        ], ';');
+    }
+    fclose($out);
+    exit;
+}
+
 // Actions (changer plan, activer/désactiver)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
     $action  = $_POST['action'] ?? '';
