@@ -78,6 +78,22 @@ $notifs = (int)($stats['notifs_non_lues'] ?? 0);
         <span class="nav-badge"><?= $notifs ?></span>
       <?php endif; ?>
     </a>
+    <a href="/reussiteplus/profil.php" class="nav-item <?= $pageActive === 'profil' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="user-circle"></i></div>
+      <span class="nav-label">Mon Profil</span>
+    </a>
+    <a href="/reussiteplus/mes_devoirs.php" class="nav-item <?= $pageActive === 'mes_devoirs' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="clipboard"></i></div>
+      <span class="nav-label">Mes Devoirs</span>
+    </a>
+    <a href="/reussiteplus/mes_cours.php" class="nav-item <?= $pageActive === 'mes_cours' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="book-open"></i></div>
+      <span class="nav-label">Mes Cours</span>
+    </a>
+    <a href="/reussiteplus/mes_cours.php" class="nav-item <?= $pageActive === 'mes_exercices' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="brain"></i></div>
+      <span class="nav-label">Exercices</span>
+    </a>
 
     <?php if (($user['plan'] ?? '') === 'ECOLE'): ?>
     <div class="nav-section-title" style="margin-top:12px">Mon École</div>
@@ -120,6 +136,10 @@ $notifs = (int)($stats['notifs_non_lues'] ?? 0);
     <a href="/reussiteplus/ecole_certificat.php" class="nav-item <?= $pageActive === 'ecole_certificat' ? 'active' : '' ?>">
       <div class="nav-icon"><i data-lucide="scroll"></i></div>
       <span class="nav-label">Certificats</span>
+    </a>
+    <a href="/reussiteplus/ecole_exercices.php" class="nav-item <?= $pageActive === 'ecole_exercices' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="brain"></i></div>
+      <span class="nav-label">Exercices</span>
     </a>
     <a href="/reussiteplus/ecole_ia.php" class="nav-item <?= $pageActive === 'ecole_ia' ? 'active' : '' ?>">
       <div class="nav-icon"><i data-lucide="sparkles"></i></div>
