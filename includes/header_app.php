@@ -114,8 +114,12 @@ $notifs = (int)($stats['notifs_non_lues'] ?? 0);
       <span class="nav-label">Absences</span>
     </a>
     <a href="/reussiteplus/ecole_bulletin.php" class="nav-item <?= $pageActive === 'ecole_bulletin' ? 'active' : '' ?>">
-      <div class="nav-icon"><i data-lucide="award"></i></div>
+      <div class="nav-icon"><i data-lucide="clipboard-list"></i></div>
       <span class="nav-label">Bulletins</span>
+    </a>
+    <a href="/reussiteplus/ecole_certificat.php" class="nav-item <?= $pageActive === 'ecole_certificat' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="scroll"></i></div>
+      <span class="nav-label">Certificats</span>
     </a>
     <a href="/reussiteplus/ecole_ia.php" class="nav-item <?= $pageActive === 'ecole_ia' ? 'active' : '' ?>">
       <div class="nav-icon"><i data-lucide="sparkles"></i></div>
