@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $eleves = [];
 if ($classeActive) {
     $eleves = dbAll(
-        "SELECT u.id, u.nom, u.prenom FROM classe_membres cm JOIN users u ON u.id=cm.user_id WHERE cm.classe_id=? ORDER BY u.nom, u.prenom",
+        "SELECT u.id, u.prenom, u.nom FROM classe_membres cm JOIN utilisateurs u ON u.id=cm.eleve_id WHERE cm.classe_id=? ORDER BY u.nom, u.prenom",
         [$filtreClasse]
     ) ?? [];
 }
@@ -70,8 +70,8 @@ if ($classeActive) {
 $certificats = [];
 if ($classeActive) {
     $certificats = dbAll(
-        "SELECT cert.*, u.nom, u.prenom, u.email FROM certificats_ecole cert
-         JOIN users u ON u.id=cert.eleve_id
+        "SELECT cert.*, u.nom as eleve_nom, u.prenom as eleve_prenom, u.email as eleve_email FROM certificats_ecole cert
+         JOIN utilisateurs u ON u.id=cert.eleve_id
          WHERE cert.ecole_admin_id=? AND cert.classe_id=?
          ORDER BY cert.created_at DESC",
         [$user['id'], $filtreClasse]
@@ -83,11 +83,11 @@ $previewCode = $_GET['preview'] ?? '';
 $certPreview = null;
 if ($previewCode) {
     $certPreview = dbRow(
-        "SELECT cert.*, u.nom, u.prenom, c.nom as classe_nom, adm.nom as admin_nom, adm.prenom as admin_prenom
+        "SELECT cert.*, u.nom as eleve_nom, u.prenom as eleve_prenom, c.nom as classe_nom, adm.nom as admin_nom, adm.prenom as admin_prenom
          FROM certificats_ecole cert
-         JOIN users u ON u.id=cert.eleve_id
+         JOIN utilisateurs u ON u.id=cert.eleve_id
          JOIN classes_ecole c ON c.id=cert.classe_id
-         JOIN users adm ON adm.id=cert.ecole_admin_id
+         JOIN utilisateurs adm ON adm.id=cert.ecole_admin_id
          WHERE cert.code_verif=? AND cert.ecole_admin_id=?",
         [$previewCode, $user['id']]
     );
@@ -282,7 +282,7 @@ include __DIR__ . '/includes/header_app.php';
     <!-- Certifie que -->
     <div class="cert-certifie">certifie que</div>
     <div class="cert-name" style="color:<?= $tc['color'] ?>;font-size:32px">
-      <?= e(strtoupper($certPreview['nom']??'')) ?> <?= e($certPreview['prenom']??'') ?>
+      <?= e(strtoupper($certPreview['eleve_nom']??'')) ?> <?= e($certPreview['eleve_prenom']??'') ?>
     </div>
 
     <!-- Description -->
@@ -317,7 +317,7 @@ include __DIR__ . '/includes/header_app.php';
       <div class="cert-sig">
         <div class="cert-sig-line" style="background:<?= $tc['color'] ?>"></div>
         <div class="cert-sig-title">Le Directeur</div>
-        <div style="font-size:10px;opacity:.6;font-family:var(--font-display);margin-top:2px"><?= e(strtoupper($certPreview['admin_nom']??'')) ?></div>
+        <div style="font-size:10px;opacity:.6;font-family:var(--font-display);margin-top:2px"><?= e(strtoupper($certPreview['admin_nom']??'')) ?> <?= e($certPreview['admin_prenom']??'') ?></div>
       </div>
       <div class="cert-qr-area" style="color:<?= $tc['color'] ?>">
         <div class="cert-qr-box">QR</div>
@@ -374,8 +374,8 @@ include __DIR__ . '/includes/header_app.php';
       </div>
     </div>
     <div style="padding:14px">
-      <div style="font-size:15px;font-weight:800;color:var(--gris-900);margin-bottom:4px"><?= e(($cert['prenom']??'').' '.strtoupper($cert['nom']??'')) ?></div>
-      <div style="font-size:11px;color:var(--gris-500);margin-bottom:8px"><?= e($cert['email']??'') ?></div>
+      <div style="font-size:15px;font-weight:800;color:var(--gris-900);margin-bottom:4px"><?= e(($cert['eleve_prenom']??'').' '.strtoupper($cert['eleve_nom']??'')) ?></div>
+      <div style="font-size:11px;color:var(--gris-500);margin-bottom:8px"><?= e($cert['eleve_email']??'') ?></div>
       <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">
         <?php if ($cert['mention']): ?>
         <span style="background:<?= $tc['accent'] ?>;color:<?= $tc['color'] ?>;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px">🏅 <?= e($cert['mention']) ?></span>
@@ -474,7 +474,7 @@ include __DIR__ . '/includes/header_app.php';
             <select name="eleve_id" class="form-control" required id="eleve-select">
               <option value="">-- Choisir un élève --</option>
               <?php foreach ($eleves as $el): ?>
-              <option value="<?= e($el['id']) ?>"><?= e(($el['prenom']??'').' '.($el['nom']??'')) ?></option>
+              <option value="<?= e($el['id']) ?>"><?= e(($el['prenom']??'').' '.strtoupper($el['nom']??'')) ?></option>
               <?php endforeach; ?>
             </select>
           </div>

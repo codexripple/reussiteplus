@@ -9,14 +9,14 @@ $cert = null;
 
 if ($code) {
     $cert = dbRow(
-        "SELECT cert.*, u.nom, u.prenom, u.email,
+        "SELECT cert.*, u.nom as eleve_nom, u.prenom as eleve_prenom, u.email as eleve_email,
                 c.nom AS classe_nom,
                 adm.nom AS admin_nom, adm.prenom AS admin_prenom,
-                ec.nom AS ecole_nom, ec.ville AS ecole_ville
+                ec.nom AS ecole_nom
          FROM certificats_ecole cert
-         JOIN users u   ON u.id  = cert.eleve_id
+         JOIN utilisateurs u   ON u.id  = cert.eleve_id
          JOIN classes_ecole c ON c.id = cert.classe_id
-         JOIN users adm ON adm.id = cert.ecole_admin_id
+         JOIN utilisateurs adm ON adm.id = cert.ecole_admin_id
          LEFT JOIN ecoles ec ON ec.admin_id = cert.ecole_admin_id
          WHERE cert.code_verif = ?",
         [$code]
@@ -147,8 +147,8 @@ $tc = $cert ? ($typeConfig[$cert['type']] ?? $typeConfig['REUSSITE']) : null;
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
         Certificat authentique et vérifié
       </div>
-      <div class="result-name" style="color:#fff"><?= e(strtoupper($cert['prenom']??'').' '.strtoupper($cert['nom']??'')) ?></div>
-      <div class="result-sub" style="color:rgba(255,255,255,.7)"><?= e($cert['email']??'') ?></div>
+      <div class="result-name" style="color:#fff"><?= e(($cert['eleve_prenom']??'').' '.strtoupper($cert['eleve_nom']??'')) ?></div>
+      <div class="result-sub" style="color:rgba(255,255,255,.7)"><?= e($cert['eleve_email']??'') ?></div>
     </div>
 
     <!-- Grille de détails -->
