@@ -58,6 +58,44 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeSidebar();
 });
 
+// ─── Sidebar collapse desktop (WordPress-style) ───────────────
+const collapseBtn = document.getElementById('sidebarCollapseBtn');
+const COLLAPSE_KEY = 'rp_sidebar_collapsed';
+
+// Auto-generate tooltips from nav-label text
+document.querySelectorAll('.nav-item').forEach(item => {
+  const label = item.querySelector('.nav-label');
+  if (label && !item.dataset.tooltip) {
+    item.dataset.tooltip = label.textContent.trim();
+  }
+});
+
+function applySidebarCollapse(animate) {
+  if (window.innerWidth <= 768) return; // mobile uses drawer
+  const isCollapsed = localStorage.getItem(COLLAPSE_KEY) === '1';
+  if (!animate) sidebar?.classList.add('no-transition');
+  sidebar?.classList.toggle('collapsed', isCollapsed);
+  if (!animate) {
+    // Force reflow then remove class
+    sidebar?.offsetHeight;
+    sidebar?.classList.remove('no-transition');
+  }
+}
+
+if (collapseBtn && sidebar) {
+  collapseBtn.addEventListener('click', () => {
+    if (window.innerWidth <= 768) return;
+    const willCollapse = !sidebar.classList.contains('collapsed');
+    localStorage.setItem(COLLAPSE_KEY, willCollapse ? '1' : '0');
+    applySidebarCollapse(true);
+  });
+}
+
+// Apply on load (no animation on first render)
+applySidebarCollapse(false);
+// Re-apply on resize
+window.addEventListener('resize', () => applySidebarCollapse(false));
+
 // ─── Notification badge polling (toutes les 60s) ──────────────
 async function refreshNotifBadge() {
   try {

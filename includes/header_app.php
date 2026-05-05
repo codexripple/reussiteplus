@@ -39,6 +39,9 @@ if (is_admin()) {
       <div class="logo-text">RÉUSSITE<span>+</span></div>
       <div class="logo-sub">Plateforme EdTech RDC</div>
     </div>
+    <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" title="Réduire">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 19l-7-7 7-7"/><path d="M21 19l-7-7 7-7"/></svg>
+    </button>
   </div>
 
   <div class="sidebar-user">
