@@ -111,6 +111,8 @@ a{text-decoration:none;color:inherit;}
   padding:0 40px;height:64px;border-bottom:1px solid rgba(255,255,255,0.07);
 }
 .nav-links{display:flex;gap:28px;}
+.nav-logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:22px;font-weight:800;color:white;text-decoration:none;}
+.nav-logo .lplus{color:var(--gold);}
 .nav-link{font-size:14px;font-weight:500;color:rgba(255,255,255,0.6);transition:var(--transition);}
 .nav-link:hover,.nav-link.active{color:white;}
 .nav-actions{display:flex;gap:10px;align-items:center;}
@@ -260,9 +262,9 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 
 <!-- NAVIGATION -->
 <nav class="nav">
-  <a href="/reussiteplus/index.php" style="display:flex;align-items:center;gap:10px">
-    <div style="width:36px;height:36px;background:var(--primary);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:900;color:white;font-size:16px">R+</div>
-    <span style="font-family:var(--font-display);font-weight:800;color:white;font-size:16px">RÉUSSITE<span style="color:var(--primary-light)">+</span></span>
+  <a href="/reussiteplus/index.php" class="nav-logo">
+    <img src="/reussiteplus/assets/img/logo-icon.svg" alt="RÉUSSITE+" width="32" height="32" style="display:block;flex-shrink:0">
+    <span>RÉUSSITE<span class="lplus">+</span></span>
   </a>
   <div class="nav-links">
     <a href="/reussiteplus/index.php#fonctionnalites" class="nav-link">Fonctionnalités</a>
@@ -699,8 +701,8 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 <footer class="footer">
   <div class="footer-inner">
     <div style="display:flex;align-items:center;gap:8px">
-      <div style="width:30px;height:30px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:900;color:white;font-size:13px">R+</div>
-      <span style="font-family:var(--font-display);font-weight:800;color:rgba(255,255,255,.6);font-size:14px">RÉUSSITE+</span>
+      <img src="/reussiteplus/assets/img/logo-icon.svg" alt="" width="26" height="26" style="display:block;flex-shrink:0;opacity:.8">
+      <span style="font-family:var(--font-display);font-weight:800;color:rgba(255,255,255,.8);font-size:16px">RÉUSSITE<span style="color:#C9972A">+</span></span>
     </div>
     <div class="footer-links">
       <a href="/reussiteplus/index.php" class="footer-link">Accueil</a>
