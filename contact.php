@@ -297,7 +297,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
   <div style="position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(0,169,127,.25) 0%,transparent 70%);pointer-events:none"></div>
   <div style="position:relative;max-width:640px;margin:0 auto">
     <!-- Check animé -->
-    <div class="success-check">✅</div>
+    <div class="success-check"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" stroke="rgba(74,222,128,.3)" stroke-width="1.5"/><polyline points="20 6 9 17 4 12"/></svg></div>
     <div style="font-family:var(--font-display);font-size:clamp(28px,5vw,46px);font-weight:900;color:white;line-height:1.1;margin-bottom:14px">
       Message reçu,<br><span style="color:var(--primary-light)"><?= e(explode(' ', $nomEnvoyeur)[0]) ?> !</span>
     </div>
@@ -317,7 +317,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 <div style="background:white;border-bottom:3px solid var(--primary);padding:28px 40px;text-align:center">
   <div style="max-width:700px;margin:0 auto">
     <p style="font-size:18px;color:var(--gris-800);line-height:1.7;font-style:italic">
-      💡 <strong>En attendant notre réponse</strong>, saviez-vous que les élèves qui s'entraînent régulièrement sur RÉUSSITE+ améliorent leurs résultats de <strong style="color:var(--primary)">47% en moyenne</strong> avant les examens officiels ?
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9972A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-4px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> <strong>En attendant notre réponse</strong>, saviez-vous que les élèves qui s'entraînent régulièrement sur RÉUSSITE+ améliorent leurs résultats de <strong style="color:var(--primary)">47% en moyenne</strong> avant les examens officiels ?
     </p>
   </div>
 </div>
@@ -329,7 +329,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
     <!-- Titre -->
     <div style="text-align:center;margin-bottom:48px">
       <div style="display:inline-block;background:var(--primary-subtle);border:1px solid rgba(0,122,94,.3);color:var(--primary-dark);font-size:11px;font-weight:700;padding:5px 16px;border-radius:50px;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px">
-        🚀 Ne perdez pas de temps
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Ne perdez pas de temps
       </div>
       <h2 style="font-family:var(--font-display);font-size:clamp(24px,4vw,38px);font-weight:900;color:var(--gris-900);margin-bottom:10px">
         Commencez à préparer <span style="color:var(--primary)">dès maintenant</span>
@@ -343,7 +343,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
     <!-- Témoignage fort -->
     <div style="background:linear-gradient(135deg,#0D1117,#1a3a2a);border-radius:20px;padding:36px;margin-bottom:48px;display:flex;gap:28px;align-items:center;flex-wrap:wrap;position:relative;overflow:hidden">
       <div style="position:absolute;right:-20px;top:-20px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,169,127,.15),transparent 70%);pointer-events:none"></div>
-      <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#007A5E,#00A97F);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0">👩‍🎓</div>
+      <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#007A5E,#00A97F);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
       <div style="flex:1;min-width:240px">
         <div style="font-size:17px;color:white;line-height:1.7;font-style:italic;margin-bottom:12px">
           "J'ai eu <strong style="color:#4ade80">18/20 en mathématiques</strong> à l'Examen d'État. Je m'entraînais tous les soirs sur RÉUSSITE+. Les exercices ressemblent exactement aux vrais examens !"
@@ -363,44 +363,44 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 
       <!-- Gratuit -->
       <div style="background:white;border:2px solid var(--gris-200);border-radius:20px;padding:28px;position:relative">
-        <div style="font-size:32px;margin-bottom:10px">🎓</div>
+        <div style="width:52px;height:52px;border-radius:12px;background:#F3F4F6;display:flex;align-items:center;justify-content:center;margin-bottom:12px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
         <div style="font-family:var(--font-display);font-size:18px;font-weight:900;color:var(--gris-900);margin-bottom:6px">Gratuit</div>
         <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--gris-700);margin-bottom:16px">0 <span style="font-size:14px;font-weight:500;color:var(--gris-500)">CDF/mois</span></div>
         <ul style="list-style:none;margin-bottom:24px;font-size:13px;color:var(--gris-600);line-height:2">
-          <li>✅ 5 examens d'entraînement/mois</li>
-          <li>✅ Statistiques de base</li>
-          <li>❌ Archives officielles</li>
-          <li>❌ Examens illimités</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#007A5E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 5 examens d'entraînement/mois</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#007A5E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Statistiques de base</li>
+          <li style="display:flex;align-items:center;gap:8px;opacity:.45"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Archives officielles</li>
+          <li style="display:flex;align-items:center;gap:8px;opacity:.45"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Examens illimités</li>
         </ul>
         <a href="/reussiteplus/inscription.php" class="plan-cta" style="display:block;text-align:center;padding:12px;border:2px solid var(--gris-200);border-radius:10px;font-weight:700;color:var(--gris-700);font-size:14px;text-decoration:none;transition:.2s">Commencer gratuitement</a>
       </div>
 
       <!-- Basique — recommandé -->
       <div style="background:linear-gradient(160deg,#003d2b,#007A5E);border:2px solid var(--primary);border-radius:20px;padding:28px;position:relative;transform:scale(1.03);box-shadow:0 20px 60px rgba(0,122,94,.3)">
-        <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:white;font-size:10px;font-weight:800;padding:4px 14px;border-radius:50px;text-transform:uppercase;letter-spacing:1px;white-space:nowrap">⭐ Le plus populaire</div>
-        <div style="font-size:32px;margin-bottom:10px">🚀</div>
+        <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:white;font-size:10px;font-weight:800;padding:4px 14px;border-radius:50px;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;display:inline-flex;align-items:center;gap:5px"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Le plus populaire</div>
+        <div style="width:52px;height:52px;border-radius:12px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;margin-bottom:12px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
         <div style="font-family:var(--font-display);font-size:18px;font-weight:900;color:white;margin-bottom:6px">Basique</div>
         <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:white;margin-bottom:4px">5 000 <span style="font-size:14px;font-weight:500;color:rgba(255,255,255,.6)">CDF/mois</span></div>
         <div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:16px">soit ~1,8 USD/mois</div>
         <ul style="list-style:none;margin-bottom:24px;font-size:13px;color:rgba(255,255,255,.8);line-height:2">
-          <li>✅ Examens illimités</li>
-          <li>✅ Toutes les archives officielles</li>
-          <li>✅ Statistiques avancées</li>
-          <li>✅ Résultats détaillés</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Examens illimités</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Toutes les archives officielles</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Statistiques avancées</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Résultats détaillés</li>
         </ul>
         <a href="/reussiteplus/inscription.php?plan=BASIQUE" style="display:block;text-align:center;padding:13px;background:white;color:var(--primary-dark);border-radius:10px;font-weight:800;font-size:14px;text-decoration:none;transition:.2s">S'abonner maintenant →</a>
       </div>
 
       <!-- Premium -->
       <div style="background:white;border:2px solid #7C3AED;border-radius:20px;padding:28px;position:relative">
-        <div style="font-size:32px;margin-bottom:10px">💎</div>
+        <div style="width:52px;height:52px;border-radius:12px;background:#EDE9FE;display:flex;align-items:center;justify-content:center;margin-bottom:12px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
         <div style="font-family:var(--font-display);font-size:18px;font-weight:900;color:var(--gris-900);margin-bottom:6px">Premium</div>
         <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:#7C3AED;margin-bottom:16px">10 000 <span style="font-size:14px;font-weight:500;color:var(--gris-500)">CDF/mois</span></div>
         <ul style="list-style:none;margin-bottom:24px;font-size:13px;color:var(--gris-600);line-height:2">
-          <li>✅ Tout le plan Basique</li>
-          <li>✅ IA pédagogique personnalisée</li>
-          <li>✅ Coaching & suivi détaillé</li>
-          <li>✅ Certificats de réussite</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Tout le plan Basique</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> IA pédagogique personnalisée</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Coaching &amp; suivi détaillé</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Certificats de réussite</li>
         </ul>
         <a href="/reussiteplus/inscription.php?plan=PREMIUM" style="display:block;text-align:center;padding:12px;background:linear-gradient(135deg,#7C3AED,#6D28D9);color:white;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none;transition:.2s">Découvrir Premium →</a>
       </div>
@@ -409,11 +409,11 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 
     <!-- Modes de paiement -->
     <div style="background:white;border-radius:16px;padding:24px 28px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;border:1px solid var(--gris-200)">
-      <div style="font-size:14px;font-weight:700;color:var(--gris-700)">💳 Paiement facile avec :</div>
+      <div style="font-size:14px;font-weight:700;color:var(--gris-700);display:flex;align-items:center;gap:6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> Paiement facile avec :</div>
       <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
-        <div style="background:#FEF9EC;border:1px solid #F59E0B;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;color:#92400E;display:flex;align-items:center;gap:6px">📱 M-Pesa</div>
-        <div style="background:#FFF5EC;border:1px solid #F97316;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;color:#9A3412;display:flex;align-items:center;gap:6px">📱 Orange Money</div>
-        <div style="background:#EFF6FF;border:1px solid #3B82F6;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;color:#1E40AF;display:flex;align-items:center;gap:6px">📱 Airtel Money</div>
+        <div style="background:#FEF9EC;border:1px solid #F59E0B;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;color:#92400E;display:flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> M-Pesa</div>
+        <div style="background:#FFF5EC;border:1px solid #F97316;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;color:#9A3412;display:flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> Orange Money</div>
+        <div style="background:#EFF6FF;border:1px solid #3B82F6;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;color:#1E40AF;display:flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> Airtel Money</div>
       </div>
       <div style="margin-left:auto;font-size:12px;color:var(--gris-500)">Pas de carte bancaire requise</div>
     </div>
@@ -427,7 +427,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
         Voir tous les tarifs →
       </a>
     </div>
-    <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--gris-500)">✅ Sans engagement · Annulable à tout moment · 100% sécurisé</div>
+    <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--gris-500);display:flex;align-items:center;justify-content:center;gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#007A5E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Sans engagement &middot; Annulable à tout moment &middot; 100% sécurisé</div>
 
   </div>
 </div>
@@ -460,8 +460,12 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
     <p>Une question sur votre abonnement, un problème technique ou une idée de partenariat ?<br>Notre équipe répond sous <strong style="color:white">24 heures</strong>.</p>
     <!-- Stats mini -->
     <div style="display:flex;justify-content:center;gap:24px;margin-top:32px;flex-wrap:wrap">
-      <?php foreach (['⚡ Réponse en < 24h','✅ Support en français','🇨🇩 Équipe basée à Kinshasa'] as $badge): ?>
-      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);padding:8px 16px;border-radius:50px;font-size:13px;color:rgba(255,255,255,.7)"><?= $badge ?></div>
+      <?php foreach ([
+        ['icon'=>'<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>', 'text'=>'Réponse en &lt; 24h'],
+        ['icon'=>'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>', 'text'=>'Support en français'],
+        ['icon'=>'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>', 'text'=>'Équipe basée à Kinshasa'],
+      ] as $badge): ?>
+      <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);padding:8px 16px;border-radius:50px;font-size:13px;color:rgba(255,255,255,.7);display:inline-flex;align-items:center;gap:6px"><?= $badge['icon'] ?> <?= $badge['text'] ?></div>
       <?php endforeach; ?>
     </div>
   </div>
@@ -530,7 +534,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
       <!-- Carte garantie -->
       <div style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:var(--radius-xl);padding:28px;margin-top:16px;color:white;position:relative;overflow:hidden">
         <div style="position:absolute;right:-20px;bottom:-20px;width:120px;height:120px;background:rgba(255,255,255,.06);border-radius:50%"></div>
-        <div style="font-size:32px;margin-bottom:10px">🛡️</div>
+        <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;margin-bottom:10px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg></div>
         <div style="font-family:var(--font-display);font-size:16px;font-weight:800;margin-bottom:8px">Réponse garantie sous 24h</div>
         <div style="font-size:13px;opacity:.8;line-height:1.6;margin-bottom:16px">Tous les messages reçus avant 16h sont traités le jour même.</div>
         <div style="background:rgba(255,255,255,.15);border-radius:10px;padding:10px 14px;font-size:12px;display:flex;align-items:center;gap:8px">
@@ -646,7 +650,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
           <img src="https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=300&q=60" alt="" style="width:100%;height:100%;object-fit:cover">
         </div>
         <div style="position:relative">
-          <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">💡 Conseil de l'équipe</div>
+          <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:flex;align-items:center;gap:5px"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12" stroke="white" stroke-width="2"/><line x1="12" y1="16" x2="12.01" y2="16" stroke="white" stroke-width="2"/></svg> Conseil de l'équipe</div>
           <div style="font-family:var(--font-display);font-size:15px;font-weight:800;color:white;margin-bottom:8px">En attente de notre réponse ?</div>
           <div style="font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:16px">
             Commencez dès maintenant avec notre plan gratuit — 5 examens d'entraînement vous attendent, sans carte bancaire.
@@ -680,7 +684,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 <section class="cta-bottom" style="position:relative;overflow:hidden">
   <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1400&q=50') center/cover;opacity:.06;pointer-events:none"></div>
   <div class="cta-bottom-inner" style="position:relative">
-    <div style="font-size:52px;margin-bottom:16px">🏆</div>
+    <div style="width:72px;height:72px;border-radius:50%;background:rgba(0,122,94,.2);border:2px solid rgba(0,122,94,.4);display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--primary-light)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div>
     <h2>Chaque jour sans s'entraîner<br>est un avantage donné aux autres.</h2>
     <p>Plus de 12 000 élèves se préparent déjà sur RÉUSSITE+. L'examen approche — rejoignez-les.</p>
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
@@ -691,7 +695,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
         Voir les tarifs
       </a>
     </div>
-    <div style="margin-top:14px;font-size:12px;color:rgba(255,255,255,.3)">✅ Inscription en 30 secondes · Pas de carte bancaire</div>
+    <div style="margin-top:14px;font-size:12px;color:rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;gap:6px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Inscription en 30 secondes &middot; Pas de carte bancaire</div>
   </div>
 </section>
 
