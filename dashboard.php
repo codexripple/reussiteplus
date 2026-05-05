@@ -383,9 +383,9 @@ include __DIR__ . '/includes/header_app.php';
         <div class="ob-plan-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
           <div class="ob-plan">
             <div style="font-weight:800;font-size:13px;margin-bottom:3px;color:#4A5568">Gratuit</div>
-            <div style="font-size:20px;font-weight:900;color:#4A5568;margin-bottom:10px">0 $</div>
+            <div style="font-size:20px;font-weight:900;color:#4A5568;margin-bottom:10px">Gratuit</div>
             <div style="font-size:11px;display:flex;flex-direction:column;gap:5px;color:#4A5568">
-              <div class="ob-check">✓ 2 examens/mois</div>
+              <div class="ob-check">✓ 5 examens/mois</div>
               <div class="ob-check">✓ Questions basiques</div>
               <div class="ob-cross">✗ Archives</div>
               <div class="ob-cross">✗ IA Coach</div>
@@ -394,7 +394,7 @@ include __DIR__ . '/includes/header_app.php';
           <div class="ob-plan ob-best">
             <div class="ob-plan-badge">POPULAIRE</div>
             <div style="font-weight:800;font-size:13px;margin-bottom:3px;color:#005A45">Premium</div>
-            <div style="font-size:20px;font-weight:900;color:#007A5E;margin-bottom:10px">5 $<span style="font-size:11px;font-weight:400">/mois</span></div>
+            <div style="font-size:20px;font-weight:900;color:#007A5E;margin-bottom:10px">10 000 <span style="font-size:11px;font-weight:400">CDF/mois</span></div>
             <div style="font-size:11px;display:flex;flex-direction:column;gap:5px;color:#2E4A3A">
               <div class="ob-check">✓ Examens illimités</div>
               <div class="ob-check">✓ Toutes archives</div>
@@ -404,7 +404,7 @@ include __DIR__ . '/includes/header_app.php';
           </div>
           <div class="ob-plan" style="border-color:#C9972A;background:#FFFBF0">
             <div style="font-weight:800;font-size:13px;margin-bottom:3px;color:#8C6A1A">École</div>
-            <div style="font-size:20px;font-weight:900;color:#C9972A;margin-bottom:10px">50 $<span style="font-size:11px;font-weight:400">/an</span></div>
+            <div style="font-size:20px;font-weight:900;color:#C9972A;margin-bottom:10px">50 000 <span style="font-size:11px;font-weight:400">CDF/mois</span></div>
             <div style="font-size:11px;display:flex;flex-direction:column;gap:5px;color:#6B4E1A">
               <div style="color:#C9972A">✓ Classe entière</div>
               <div style="color:#C9972A">✓ Tableau prof</div>
