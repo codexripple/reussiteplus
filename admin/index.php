@@ -1,4 +1,4 @@
-?<?php
+﻿<?php
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/auth.php';
@@ -9,7 +9,7 @@ $pageActive = 'admin';
 $user = require_admin();
 
 // -- Statistiques principales ----------------------------
-$stats = [
+$adm = [
     'total_users'     => (int)dbRow("SELECT COUNT(*) as n FROM utilisateurs WHERE is_active=1")['n'],
     'users_today'     => (int)dbRow("SELECT COUNT(*) as n FROM utilisateurs WHERE DATE(created_at)=CURDATE()")['n'],
     'users_7j'        => (int)dbRow("SELECT COUNT(*) as n FROM utilisateurs WHERE created_at >= DATE_SUB(CURDATE(),INTERVAL 6 DAY)")['n'],
@@ -27,15 +27,15 @@ $stats = [
 ];
 
 // Taux de croissance
-$revGrowth = $stats['revenus_hier'] > 0
-    ? round(($stats['revenus_mois'] - $stats['revenus_hier']) / $stats['revenus_hier'] * 100, 1)
-    : ($stats['revenus_mois'] > 0 ? 100 : 0);
+$revGrowth = $adm['revenus_hier'] > 0
+    ? round(($adm['revenus_mois'] - $adm['revenus_hier']) / $adm['revenus_hier'] * 100, 1)
+    : ($adm['revenus_mois'] > 0 ? 100 : 0);
 
 // Plans distribution
 $planStats = dbAll("SELECT plan, COUNT(*) as nb FROM utilisateurs WHERE is_active=1 GROUP BY plan ORDER BY FIELD(plan,'ECOLE','PREMIUM','BASIQUE','GRATUIT')") ?? [];
 $totalUsers = max(1, array_sum(array_column($planStats ?? [], 'nb')));
 
-// Inscriptions 30 derniers jours (regroup�es par semaine pour le chart)
+// Inscriptions 30 derniers jours (regroupï¿½es par semaine pour le chart)
 $insc30j = dbAll("SELECT DATE(created_at) as jour, COUNT(*) as nb FROM utilisateurs WHERE created_at >= DATE_SUB(CURDATE(),INTERVAL 29 DAY) GROUP BY DATE(created_at) ORDER BY jour ASC") ?? [];
 $inscMap = [];
 foreach ($insc30j as $r) $inscMap[$r['jour']] = (int)$r['nb'];
@@ -52,8 +52,8 @@ $lastUsers = dbAll("SELECT id, prenom, nom, email, plan, role, ville, created_at
 // Messages de contact non lus (48h)
 $lastMessages = dbAll("SELECT * FROM contact_messages ORDER BY created_at DESC LIMIT 5") ?? [];
 
-// Activit� exam sessions today
-$examSessions = dbAll("SELECT e.titre_custom, u.prenom, u.nom, s.score, s.started_at, s.statut FROM exam_sessions s JOIN utilisateurs u ON u.id=s.user_id LEFT JOIN archives e ON e.id=s.archive_id WHERE DATE(s.started_at)=CURDATE() ORDER BY s.started_at DESC LIMIT 8") ?? [];
+// Activitï¿½ exam sessions today
+$examSessions = dbAll("SELECT COALESCE(s.titre, e.titre, 'Examen libre') AS titre_custom, u.prenom, u.nom, s.score, s.started_at, s.statut FROM exam_sessions s JOIN utilisateurs u ON u.id=s.user_id LEFT JOIN archives e ON e.id=s.archive_id WHERE DATE(s.started_at)=CURDATE() ORDER BY s.started_at DESC LIMIT 8") ?? [];
 
 include __DIR__ . '/../includes/header_app.php';
 ?>
@@ -114,13 +114,13 @@ include __DIR__ . '/../includes/header_app.php';
   <div>
     <div style="font-family:var(--font-display);font-size:22px;font-weight:900;color:var(--gris-900)">Tableau de bord</div>
     <div style="font-size:12px;color:var(--gris-500);margin-top:2px">
-      <?= date('l d F Y', time()) ?> &middot; Connect� en tant que <strong><?= e($user['prenom']??'') ?></strong>
+      <?= date('l d F Y', time()) ?> &middot; Connect&eacute; en tant que <strong><?= e($user['prenom']??'') ?></strong>
     </div>
   </div>
   <div style="display:flex;gap:10px;align-items:center">
-    <?php if ($stats['paiements_att'] > 0): ?>
+    <?php if ($adm['paiements_att'] > 0): ?>
     <a href="/reussiteplus/admin/paiements.php" class="btn btn-gold btn-sm" style="background:#C9972A;color:white;border:none">
-      <?= $stats['paiements_att'] ?> paiement<?= $stats['paiements_att']>1?'s':'' ?> en attente
+      <?= $adm['paiements_att'] ?> paiement<?= $adm['paiements_att']>1?'s':'' ?> en attente
     </a>
     <?php endif; ?>
     <button onclick="loadAiInsights()" id="ai-btn" class="btn btn-sm" style="background:linear-gradient(135deg,#7C3AED,#6D28D9);color:white;border:none;font-weight:700">
@@ -138,11 +138,11 @@ include __DIR__ . '/../includes/header_app.php';
     <div class="icon-wrap" style="background:#E8F5F1;color:#007A5E">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
     </div>
-    <div class="val"><?= number_format($stats['total_users']) ?></div>
+    <div class="val"><?= number_format($adm['total_users']) ?></div>
     <div class="lbl">Utilisateurs actifs</div>
     <div class="sub" style="color:var(--gris-500)">
-      <span class="badge-growth" style="background:#E8F5F1;color:#007A5E">+<?= $stats['users_7j'] ?> cette semaine</span>
-      &nbsp;<span style="color:var(--gris-400)">+<?= $stats['users_today'] ?> aujourd'hui</span>
+      <span class="badge-growth" style="background:#E8F5F1;color:#007A5E">+<?= $adm['users_7j'] ?> cette semaine</span>
+      &nbsp;<span style="color:var(--gris-400)">+<?= $adm['users_today'] ?> aujourd'hui</span>
     </div>
   </div>
 
@@ -152,7 +152,7 @@ include __DIR__ . '/../includes/header_app.php';
     <div class="icon-wrap" style="background:#FEF3D7;color:#C9972A">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
     </div>
-    <div class="val"><?= number_format($stats['revenus_mois'], 0, ',', ' ') ?></div>
+    <div class="val"><?= number_format($adm['revenus_mois'], 0, ',', ' ') ?></div>
     <div class="lbl">Revenus ce mois (CDF)</div>
     <div class="sub">
       <?php $gc = $revGrowth; $gcPos = $gc >= 0; ?>
@@ -168,23 +168,23 @@ include __DIR__ . '/../includes/header_app.php';
     <div class="icon-wrap" style="background:#DBEAFE;color:#1E5FAD">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
     </div>
-    <div class="val"><?= number_format($stats['exams_today']) ?></div>
+    <div class="val"><?= number_format($adm['exams_today']) ?></div>
     <div class="lbl">Examens aujourd'hui</div>
     <div class="sub" style="color:var(--gris-500)">
-      <span class="badge-growth" style="background:#DBEAFE;color:#1E5FAD"><?= $stats['exams_7j'] ?> cette semaine</span>
+      <span class="badge-growth" style="background:#DBEAFE;color:#1E5FAD"><?= $adm['exams_7j'] ?> cette semaine</span>
     </div>
   </div>
 
   <!-- Paiements en attente -->
-  <div class="adm-kpi" style="<?= $stats['paiements_att']>0?'border-color:#F59E0B;background:#FFFBEB':'' ?>">
-    <div class="accent-bar" style="background:<?= $stats['paiements_att']>0?'#F59E0B':'#9CA3AF' ?>"></div>
-    <div class="icon-wrap" style="background:<?= $stats['paiements_att']>0?'#FEF3C7':'var(--gris-100)' ?>;color:<?= $stats['paiements_att']>0?'#B45309':'var(--gris-500)' ?>">
+  <div class="adm-kpi" style="<?= $adm['paiements_att']>0?'border-color:#F59E0B;background:#FFFBEB':'' ?>">
+    <div class="accent-bar" style="background:<?= $adm['paiements_att']>0?'#F59E0B':'#9CA3AF' ?>"></div>
+    <div class="icon-wrap" style="background:<?= $adm['paiements_att']>0?'#FEF3C7':'var(--gris-100)' ?>;color:<?= $adm['paiements_att']>0?'#B45309':'var(--gris-500)' ?>">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
     </div>
-    <div class="val" style="color:<?= $stats['paiements_att']>0?'#B45309':'var(--gris-900)' ?>"><?= $stats['paiements_att'] ?></div>
+    <div class="val" style="color:<?= $adm['paiements_att']>0?'#B45309':'var(--gris-900)' ?>"><?= $adm['paiements_att'] ?></div>
     <div class="lbl">Paiements en attente</div>
     <div class="sub">
-      <?php if ($stats['paiements_att'] > 0): ?>
+      <?php if ($adm['paiements_att'] > 0): ?>
       <a href="/reussiteplus/admin/paiements.php" style="color:#B45309;font-size:11px;font-weight:700">Traiter maintenant &rarr;</a>
       <?php else: ?>
       <span style="font-size:11px;color:var(--gris-400)">Aucun paiement en attente</span>
@@ -198,10 +198,10 @@ include __DIR__ . '/../includes/header_app.php';
 <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px">
   <?php
   $kpis2 = [
-    ['val'=>$stats['total_archives'], 'lbl'=>'Archives disponibles', 'link'=>'/reussiteplus/admin/archives.php', 'color'=>'#059669'],
-    ['val'=>number_format($stats['total_questions']), 'lbl'=>'Questions en banque', 'link'=>'', 'color'=>'#7C3AED'],
-    ['val'=>$stats['classes_actives'], 'lbl'=>'Classes actives', 'link'=>'', 'color'=>'#1E5FAD'],
-    ['val'=>$stats['messages_contact'], 'lbl'=>'Messages (48h)', 'link'=>'', 'color'=>'#DC2626'],
+    ['val'=>$adm['total_archives'], 'lbl'=>'Archives disponibles', 'link'=>'/reussiteplus/admin/archives.php', 'color'=>'#059669'],
+    ['val'=>number_format($adm['total_questions']), 'lbl'=>'Questions en banque', 'link'=>'', 'color'=>'#7C3AED'],
+    ['val'=>$adm['classes_actives'], 'lbl'=>'Classes actives', 'link'=>'', 'color'=>'#1E5FAD'],
+    ['val'=>$adm['messages_contact'], 'lbl'=>'Messages (48h)', 'link'=>'', 'color'=>'#DC2626'],
   ];
   foreach ($kpis2 as $k):
   ?>
@@ -221,19 +221,19 @@ include __DIR__ . '/../includes/header_app.php';
   <div class="ai-panel-hd">
     <div style="display:flex;align-items:center;gap:10px">
       <div class="ai-dot"></div>
-      <span style="font-family:var(--font-display);font-size:14px;font-weight:800;color:white">Intelligence Artificielle � Analyse de la plateforme</span>
+      <span style="font-family:var(--font-display);font-size:14px;font-weight:800;color:white">Intelligence Artificielle &mdash; Analyse de la plateforme</span>
     </div>
-    <span style="font-size:11px;color:rgba(255,255,255,.3)">Llama 3.1 � Groq</span>
+    <span style="font-size:11px;color:rgba(255,255,255,.3)">Llama 3.1 &middot; Groq</span>
   </div>
   <div id="ai-content" style="padding:20px">
-    <!-- Insights automatiques bas�s sur les donn�es -->
+    <!-- Insights automatiques basï¿½s sur les donnï¿½es -->
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px" id="ai-auto">
       <?php
       // Insight 1 : plan le plus populaire
       $topPlan = $planStats[0] ?? null;
       $paidUsers = 0;
       foreach ($planStats as $ps) if ($ps['plan'] !== 'GRATUIT') $paidUsers += $ps['nb'];
-      $convRate = $stats['total_users'] > 0 ? round($paidUsers / $stats['total_users'] * 100, 1) : 0;
+      $convRate = $adm['total_users'] > 0 ? round($paidUsers / $adm['total_users'] * 100, 1) : 0;
 
       $aiInsights = [
         [
@@ -241,21 +241,21 @@ include __DIR__ . '/../includes/header_app.php';
           'color' => '#a78bfa',
           'bg'    => 'rgba(124,58,237,.15)',
           'title' => 'Conversion payant',
-          'text'  => "Taux de conversion : <strong style='color:#a78bfa'>{$convRate}%</strong> des utilisateurs sont sur un plan payant. " . ($convRate < 20 ? "Optimisation de l'onboarding recommand�e." : "Excellent taux � maintenir la qualit� du contenu.")
+          'text'  => "Taux de conversion : <strong style='color:#a78bfa'>{$convRate}%</strong> des utilisateurs sont sur un plan payant. " . ($convRate < 20 ? "Optimisation de l'onboarding recommand&eacute;e." : "Excellent taux &mdash; maintenir la qualit&eacute; du contenu.")
         ],
         [
           'type' => 'REVENU',
           'color' => '#34d399',
           'bg'    => 'rgba(52,211,153,.12)',
           'title' => 'Performance revenus',
-          'text'  => "Revenus mensuels : <strong style='color:#34d399'>" . number_format($stats['revenus_mois'],0,',',' ') . " CDF</strong>. " . ($revGrowth >= 0 ? "Croissance de +{$revGrowth}% par rapport au mois pr�c�dent." : "Baisse de {$revGrowth}% � r�viser la strat�gie tarifaire.")
+          'text'  => "Revenus mensuels : <strong style='color:#34d399'>" . number_format($adm['revenus_mois'],0,',',' ') . " CDF</strong>. " . ($revGrowth >= 0 ? "Croissance de +{$revGrowth}% par rapport au mois pr&eacute;c&eacute;dent." : "Baisse de {$revGrowth}% &mdash; r&eacute;viser la strat&eacute;gie tarifaire.")
         ],
         [
           'type' => 'ACTIVITE',
           'color' => '#60a5fa',
           'bg'    => 'rgba(96,165,250,.12)',
           'title' => 'Engagement utilisateurs',
-          'text'  => "<strong style='color:#60a5fa'>{$stats['exams_today']}</strong> examens lanc�s aujourd'hui. " . ($stats['exams_today'] >= 10 ? "Bonne activit� journali�re." : "Activit� faible � envisager des notifications push ou emails d'encouragement.")
+          'text'  => "<strong style='color:#60a5fa'>{$adm['exams_today']}</strong> examens lanc&eacute;s aujourd'hui. " . ($adm['exams_today'] >= 10 ? "Bonne activit&eacute; journali&egrave;re." : "Activit&eacute; faible &mdash; envisager des notifications push ou emails d'encouragement.")
         ],
       ];
       foreach ($aiInsights as $ins):
@@ -270,9 +270,9 @@ include __DIR__ . '/../includes/header_app.php';
       <?php endforeach; ?>
     </div>
 
-    <!-- Analyse IA Groq (charg�e � la demande) -->
+    <!-- Analyse IA Groq (chargï¿½e ï¿½ la demande) -->
     <div id="ai-groq-result" style="display:none;margin-top:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px">
-      <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Analyse approfondie � IA Groq</div>
+      <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Analyse approfondie &mdash; IA Groq</div>
       <div id="ai-groq-text" style="font-size:14px;color:rgba(255,255,255,.8);line-height:1.8"></div>
     </div>
     <div id="ai-loading" style="display:none;text-align:center;padding:20px;color:rgba(255,255,255,.4);font-size:13px">
@@ -289,7 +289,7 @@ include __DIR__ . '/../includes/header_app.php';
   <div class="adm-card">
     <div class="adm-card-hd">
       <div>
-        <div class="adm-card-title">Inscriptions � 30 derniers jours</div>
+        <div class="adm-card-title">Inscriptions &mdash; 30 derniers jours</div>
         <div style="font-size:11px;color:var(--gris-400);margin-top:2px"><?= array_sum(array_values($inscMap)) ?> nouvelles inscriptions</div>
       </div>
     </div>
@@ -304,7 +304,7 @@ include __DIR__ . '/../includes/header_app.php';
           $h = $nb > 0 ? max(8, (int)(($nb / $maxI) * 80)) : 3;
         ?>
         <div class="bar" style="height:<?= $h ?>px;background:<?= $nb>0?'var(--primary)':'var(--gris-200)' ?>;opacity:<?= $nb>0?'1':'.5' ?>"
-             title="<?= date('d/m', strtotime($jour)) ?> � <?= $nb ?> inscription<?= $nb>1?'s':'' ?>"
+             title="<?= date('d/m', strtotime($jour)) ?> &mdash; <?= $nb ?> inscription<?= $nb>1?'s':'' ?>"
              onmouseover="showTip(this,'<?= date('d/m', strtotime($jour)) ?> : <?= $nb ?> inscription<?= $nb>1?'s':'' ?>')"
              onmouseout="hideTip()"></div>
         <?php endfor; ?>
@@ -319,8 +319,8 @@ include __DIR__ . '/../includes/header_app.php';
   <div class="adm-card">
     <div class="adm-card-hd">
       <div>
-        <div class="adm-card-title">Revenus � 6 derniers mois</div>
-        <div style="font-size:11px;color:var(--gris-400);margin-top:2px">CDF confirm�s</div>
+        <div class="adm-card-title">Revenus &mdash; 6 derniers mois</div>
+        <div style="font-size:11px;color:var(--gris-400);margin-top:2px">CDF confirm&eacute;s</div>
       </div>
     </div>
     <div class="adm-card-body">
@@ -337,12 +337,12 @@ include __DIR__ . '/../includes/header_app.php';
         <?php foreach ($moisLabels as $mois):
           $v = $revMap[$mois] ?? 0;
           $h = $v > 0 ? max(8, (int)(($v / $maxR) * 80)) : 3;
-          $shortM = ['01'=>'Jan','02'=>'F�v','03'=>'Mar','04'=>'Avr','05'=>'Mai','06'=>'Jun','07'=>'Jul','08'=>'Ao�','09'=>'Sep','10'=>'Oct','11'=>'Nov','12'=>'D�c'];
+          $shortM = ['01'=>'Jan','02'=>'F&eacute;v','03'=>'Mar','04'=>'Avr','05'=>'Mai','06'=>'Jun','07'=>'Jul','08'=>'Ao&ucirc;t','09'=>'Sep','10'=>'Oct','11'=>'Nov','12'=>'D&eacute;c'];
           $lbl = $shortM[substr($mois,5,2)] ?? substr($mois,5,2);
         ?>
         <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px">
           <div class="bar" style="width:100%;height:<?= $h ?>px;background:<?= $v>0?'#C9972A':'var(--gris-200)' ?>;opacity:<?= $v>0?'1':'.5' ?>"
-               title="<?= $lbl ?> <?= substr($mois,0,4) ?> � <?= number_format($v,0,',',' ') ?> CDF"
+               title="<?= $lbl ?> <?= substr($mois,0,4) ?> &mdash; <?= number_format($v,0,',',' ') ?> CDF"
                onmouseover="showTip(this,'<?= $lbl ?> : <?= number_format($v,0,',',' ') ?> CDF')"
                onmouseout="hideTip()"></div>
           <div style="font-size:9px;color:var(--gris-400)"><?= $lbl ?></div>
@@ -357,10 +357,10 @@ include __DIR__ . '/../includes/header_app.php';
 <!-- -- PLANS + ACTIVITE --------------------------------- -->
 <div class="adm-section">
 
-  <!-- R�partition plans -->
+  <!-- Rï¿½partition plans -->
   <div class="adm-card">
     <div class="adm-card-hd">
-      <div class="adm-card-title">R�partition des abonnements</div>
+      <div class="adm-card-title">R&eacute;partition des abonnements</div>
       <div style="font-size:11px;color:var(--gris-500)"><?= number_format($totalUsers) ?> utilisateurs</div>
     </div>
     <div class="adm-card-body">
@@ -390,11 +390,11 @@ include __DIR__ . '/../includes/header_app.php';
     </div>
   </div>
 
-  <!-- Activit� r�cente -->
+  <!-- Activitï¿½ rï¿½cente -->
   <div class="adm-card">
     <div class="adm-card-hd">
-      <div class="adm-card-title">Activit� � Examens du jour</div>
-      <span style="background:var(--primary);color:white;font-size:10px;font-weight:800;padding:2px 8px;border-radius:8px"><?= $stats['exams_today'] ?></span>
+      <div class="adm-card-title">Activit&eacute; &mdash; Examens du jour</div>
+      <span style="background:var(--primary);color:white;font-size:10px;font-weight:800;padding:2px 8px;border-radius:8px"><?= $adm['exams_today'] ?></span>
     </div>
     <div class="adm-card-body" style="padding:12px 20px">
       <?php if ($examSessions): ?>
@@ -435,11 +435,11 @@ include __DIR__ . '/../includes/header_app.php';
     <table class="adm-table">
       <thead>
         <tr>
-          <th>R�f�rence</th>
+          <th>R&eacute;f&eacute;rence</th>
           <th>Utilisateur</th>
           <th>Plan</th>
           <th>Montant</th>
-          <th>M�thode</th>
+          <th>M&eacute;thode</th>
           <th>Date</th>
           <th>Actions</th>
         </tr>
@@ -515,9 +515,9 @@ include __DIR__ . '/../includes/header_app.php';
   <!-- Messages de contact -->
   <div class="adm-card">
     <div class="adm-card-hd">
-      <div class="adm-card-title">Messages de contact r�cents</div>
-      <?php if ($stats['messages_contact'] > 0): ?>
-      <span style="background:#FEE2E2;color:#DC2626;font-size:10px;font-weight:800;padding:2px 8px;border-radius:8px"><?= $stats['messages_contact'] ?> nouveaux</span>
+      <div class="adm-card-title">Messages de contact r&eacute;cents</div>
+      <?php if ($adm['messages_contact'] > 0): ?>
+      <span style="background:#FEE2E2;color:#DC2626;font-size:10px;font-weight:800;padding:2px 8px;border-radius:8px"><?= $adm['messages_contact'] ?> nouveaux</span>
       <?php endif; ?>
     </div>
     <div class="adm-card-body" style="padding:0">
@@ -535,11 +535,11 @@ include __DIR__ . '/../includes/header_app.php';
           </div>
           <div style="font-size:10px;color:var(--gris-400);white-space:nowrap"><?= temps_relatif($msg['created_at']) ?></div>
         </div>
-        <div style="font-size:12px;color:var(--gris-600);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><?= e(mb_strimwidth($msg['message']??'',0,80,'�')) ?></div>
+        <div style="font-size:12px;color:var(--gris-600);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><?= e(mb_strimwidth($msg['message']??'',0,80,'...')) ?></div>
       </div>
       <?php endforeach; ?>
       <?php else: ?>
-      <div style="text-align:center;padding:28px;color:var(--gris-400);font-size:13px">Aucun message r�cent</div>
+      <div style="text-align:center;padding:28px;color:var(--gris-400);font-size:13px">Aucun message r&eacute;cent</div>
       <?php endif; ?>
     </div>
   </div>
@@ -552,7 +552,7 @@ include __DIR__ . '/../includes/header_app.php';
   <div style="display:flex;gap:10px;flex-wrap:wrap">
     <a href="/reussiteplus/admin/users.php" class="btn btn-ghost btn-sm" style="font-weight:700">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-      G�rer les utilisateurs
+      G&eacute;rer les utilisateurs
     </a>
     <a href="/reussiteplus/admin/paiements.php" class="btn btn-ghost btn-sm" style="font-weight:700">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
@@ -560,7 +560,7 @@ include __DIR__ . '/../includes/header_app.php';
     </a>
     <a href="/reussiteplus/admin/archives.php" class="btn btn-ghost btn-sm" style="font-weight:700">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
-      G�rer archives
+      G&eacute;rer archives
     </a>
     <a href="/reussiteplus/tarifs.php" target="_blank" class="btn btn-ghost btn-sm" style="font-weight:700">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
@@ -605,7 +605,7 @@ async function loadAiInsights() {
   const text   = document.getElementById('ai-groq-text');
 
   btn.disabled  = true;
-  btn.textContent = 'Analyse en cours�';
+  btn.textContent = 'Analyse en cours...';
   loader.style.display  = 'block';
   result.style.display  = 'none';
 
@@ -614,13 +614,13 @@ async function loadAiInsights() {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
-        users:       <?= $stats['total_users'] ?>,
-        users_today: <?= $stats['users_today'] ?>,
-        users_7j:    <?= $stats['users_7j'] ?>,
-        revenus:     <?= $stats['revenus_mois'] ?>,
+        users:       <?= $adm['total_users'] ?>,
+        users_today: <?= $adm['users_today'] ?>,
+        users_7j:    <?= $adm['users_7j'] ?>,
+        revenus:     <?= $adm['revenus_mois'] ?>,
         rev_growth:  <?= $revGrowth ?>,
-        exams_today: <?= $stats['exams_today'] ?>,
-        paiements:   <?= $stats['paiements_att'] ?>,
+        exams_today: <?= $adm['exams_today'] ?>,
+        paiements:   <?= $adm['paiements_att'] ?>,
         conv_rate:   <?= $convRate ?>,
         plans:       <?= json_encode(array_column($planStats??[], 'nb', 'plan')) ?>
       })
@@ -631,7 +631,7 @@ async function loadAiInsights() {
       result.style.display = 'block';
     }
   } catch (e) {
-    text.innerHTML = '<span style="color:#f87171">Impossible de contacter l\'IA. V�rifiez la cl� GROQ_API_KEY.</span>';
+    text.innerHTML = '<span style="color:#f87171">Impossible de contacter l\'IA. V&eacute;rifiez la cl&eacute; GROQ_API_KEY.</span>';
     result.style.display = 'block';
   }
 
