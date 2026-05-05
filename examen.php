@@ -212,7 +212,7 @@ if ($sessionId) {
               <?= badge_difficulte($q['difficulte']) ?>
               <span class="badge badge-gray"><?= (int)$q['points'] ?> pt<?= $q['points'] > 1 ? 's' : '' ?></span>
               <?php if ($q['temps_suggere']): ?>
-              <span class="badge badge-bleu">⏱ <?= (int)($q['temps_suggere']/60) ?>min</span>
+              <span class="badge badge-bleu"><i data-lucide="timer" style="width:11px;height:11px;vertical-align:-1px"></i> <?= (int)($q['temps_suggere']/60) ?>min</span>
               <?php endif; ?>
             </div>
           </div>
@@ -234,7 +234,7 @@ if ($sessionId) {
 
       <!-- Navigation bas -->
       <div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 20px">
-        <button class="btn btn-ghost" id="prevBtn" onclick="prevQuestion()" disabled>← Précédent</button>
+        <button class="btn btn-ghost" id="prevBtn" onclick="prevQuestion()" disabled><i data-lucide="chevron-left" style="width:14px;height:14px;vertical-align:-2px"></i> Précédent</button>
 
         <div id="question-dots" style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center">
           <?php foreach ($questions as $idx => $q): ?>
@@ -247,9 +247,9 @@ if ($sessionId) {
         </div>
 
         <div style="display:flex;gap:10px">
-          <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Suivant →</button>
+          <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Suivant <i data-lucide="chevron-right" style="width:14px;height:14px;vertical-align:-2px"></i></button>
           <button class="btn btn-gold" id="submitBtn" style="display:none" onclick="submitExam()">
-            ✅ Soumettre l'examen
+            <i data-lucide="send" style="width:14px;height:14px;vertical-align:-2px"></i> Soumettre l'examen
           </button>
         </div>
       </div>
@@ -334,7 +334,7 @@ if ($sessionId) {
         if (!confirm('Il reste ' + unanswered + ' question(s) sans réponse. Soumettre quand même ?')) return;
       }
       const btn = document.getElementById('submitBtn');
-      btn.disabled = true; btn.textContent = '⏳ Envoi en cours...';
+      btn.disabled = true; btn.innerHTML = '<i data-lucide="loader" style="width:14px;height:14px;vertical-align:-2px"></i> Envoi en cours...';
       clearInterval(timerInterval);
 
       const temps = Math.floor((Date.now() - timeStart) / 1000);
@@ -353,7 +353,7 @@ if ($sessionId) {
           if (data.redirect) window.location = data.redirect;
           else alert(data.error || 'Erreur.');
         })
-        .catch(() => { btn.disabled = false; btn.textContent = '✅ Soumettre l\'examen'; });
+        .catch(() => { btn.disabled = false; btn.innerHTML = '<i data-lucide="send" style="width:14px;height:14px;vertical-align:-2px"></i> Soumettre l\'examen'; });
     }
 
     updateDots();
@@ -421,7 +421,7 @@ include __DIR__ . '/includes/header_app.php';
   <?php endif; ?>
 
   <div class="card">
-    <div class="card-title" style="margin-bottom:4px;font-size:20px">✏️ Configurer votre examen</div>
+    <div class="card-title" style="margin-bottom:4px;font-size:20px"><i data-lucide="settings-2" style="width:20px;height:20px;vertical-align:-4px;stroke:var(--primary)"></i> Configurer votre examen</div>
     <p style="color:var(--gris-600);font-size:14px;margin-bottom:24px">Choisissez une matière et le nombre de questions pour commencer.</p>
 
     <form method="POST" action="">
