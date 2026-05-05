@@ -79,6 +79,14 @@ $notifs = (int)($stats['notifs_non_lues'] ?? 0);
       <?php endif; ?>
     </a>
 
+    <?php if (($user['plan'] ?? '') === 'ECOLE'): ?>
+    <div class="nav-section-title" style="margin-top:12px">Plan École</div>
+    <a href="/reussiteplus/ecole.php" class="nav-item <?= $pageActive === 'ecole' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="school"></i></div>
+      <span class="nav-label">Tableau de classe</span>
+    </a>
+    <?php endif; ?>
+
     <?php if (is_admin()): ?>
     <div class="nav-section-title" style="margin-top:12px">Administration</div>
     <a href="/reussiteplus/admin/index.php" class="nav-item <?= $pageActive === 'admin' ? 'active' : '' ?>">
