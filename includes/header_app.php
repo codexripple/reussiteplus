@@ -105,6 +105,22 @@ $notifs = (int)($stats['notifs_non_lues'] ?? 0);
       <div class="nav-icon"><i data-lucide="book-open"></i></div>
       <span class="nav-label">Bibliothèque</span>
     </a>
+    <a href="/reussiteplus/ecole_devoirs.php" class="nav-item <?= $pageActive === 'ecole_devoirs' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="file-text"></i></div>
+      <span class="nav-label">Devoirs</span>
+    </a>
+    <a href="/reussiteplus/ecole_absences.php" class="nav-item <?= $pageActive === 'ecole_absences' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="user-x"></i></div>
+      <span class="nav-label">Absences</span>
+    </a>
+    <a href="/reussiteplus/ecole_bulletin.php" class="nav-item <?= $pageActive === 'ecole_bulletin' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="award"></i></div>
+      <span class="nav-label">Bulletins</span>
+    </a>
+    <a href="/reussiteplus/ecole_ia.php" class="nav-item <?= $pageActive === 'ecole_ia' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="sparkles"></i></div>
+      <span class="nav-label">IA Pédagogique</span>
+    </a>
     <?php endif; ?>
 
     <?php if (is_admin()): ?>

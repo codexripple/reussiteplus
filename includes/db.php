@@ -80,3 +80,19 @@ function dbUpdate(string $table, array $data, string $whereCol, mixed $whereVal)
     );
     return $stmt->rowCount();
 }
+
+// Exécuter une requête et retourner le nombre de lignes affectées (INSERT/UPDATE/DELETE)
+function dbRun(string $sql, array $params = []): int {
+    return dbQuery($sql, $params)->rowCount();
+}
+
+// Retourner une valeur scalaire (première colonne de la première ligne)
+function dbScalar(string $sql, array $params = []): mixed {
+    $row = dbQuery($sql, $params)->fetch(PDO::FETCH_NUM);
+    return $row ? $row[0] : null;
+}
+
+// Alias de dbScalar
+function dbVal(string $sql, array $params = []): mixed {
+    return dbScalar($sql, $params);
+}
