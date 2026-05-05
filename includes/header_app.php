@@ -1,11 +1,11 @@
 <?php
 // Template : En-tête de page (avec sidebar)
-if (!isset($pageTitle))  $pageTitle  = 'Dashboard';
+// Usage: include 'includes/header_app.php'; après avoir défini $pageTitle et $pageActive
+if (!isset($pageTitle)) $pageTitle = 'Dashboard';
 if (!isset($pageActive)) $pageActive = 'dashboard';
-$user   = require_login();
-$stats  = get_user_stats($user['id']);
+$user  = require_login();
+$stats = get_user_stats($user['id']);
 $notifs = (int)($stats['notifs_non_lues'] ?? 0);
-require_once __DIR__ . '/icons.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -13,44 +13,32 @@ require_once __DIR__ . '/icons.php';
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= e($pageTitle) ?> — RÉUSSITE+</title>
-<link rel="icon" type="image/svg+xml" href="/reussiteplus/assets/img/favicon.svg">
-<link rel="stylesheet" href="/reussiteplus/assets/css/fonts.css">
-<link rel="stylesheet" href="/reussiteplus/assets/css/bootstrap-icons.css?v=2">
-<link rel="stylesheet" href="/reussiteplus/assets/css/app.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/reussiteplus/assets/css/app.css?v=<?= filemtime(__DIR__ . '/../assets/css/app.css') ?>">
 <?= isset($extraHead) ? $extraHead : '' ?>
-<!-- Appliquer le thème AVANT le rendu pour éviter le flash -->
-<script>
-(function(){
-  var t = localStorage.getItem('rp-theme');
-  var p = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  document.documentElement.setAttribute('data-theme', t || (p ? 'dark' : 'light'));
-})();
-</script>
 </head>
 <body>
 <div class="app-wrapper">
 
-<!-- MOBILE overlay -->
-<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
-
 <!-- SIDEBAR -->
-<aside class="sidebar" id="sidebar">
+<aside class="sidebar">
   <div class="sidebar-logo">
-    <a href="/reussiteplus/dashboard.php" style="display:flex;align-items:center;gap:10px;text-decoration:none">
-      <img src="/reussiteplus/assets/img/logo-icon.svg" alt="RÉUSSITE+" width="36" height="36" style="flex-shrink:0">
-      <div>
-        <div class="logo-text">RÉUSSITE<span>+</span></div>
-        <div class="logo-sub">Plateforme EdTech RDC</div>
-      </div>
-    </a>
+    <div class="logo-icon"><i data-lucide="graduation-cap"></i></div>
+    <div>
+      <div class="logo-text">RÉUSSITE<span>+</span></div>
+      <div class="logo-sub">Plateforme EdTech RDC</div>
+    </div>
   </div>
 
   <div class="sidebar-user">
     <div class="user-avatar"><?= strtoupper(substr($user['prenom'], 0, 1) . substr($user['nom'], 0, 1)) ?></div>
-    <div style="flex:1;min-width:0">
-      <div class="user-info-name truncate"><?= e($user['prenom'] . ' ' . $user['nom']) ?></div>
-      <?php $userPlan = $user['plan']; $plans = PLANS; ?>
-      <div><span class="user-info-plan"><i class="bi bi-star-fill" style="font-size:10px"></i> <?= e($plans[$userPlan]['nom'] ?? $userPlan) ?></span></div>
+    <div>
+      <div class="user-info-name"><?= e($user['prenom'] . ' ' . $user['nom']) ?></div>
+      <div>
+        <?php $plan = $user['plan']; $plans = PLANS; ?>
+        <span class="user-info-plan"><i data-lucide="<?= $plan==='PREMIUM'?'crown':($plan==='BASIQUE'?'zap':'backpack') ?>"></i> <?= e($plans[$plan]['nom'] ?? $plan) ?></span>
+      </div>
     </div>
   </div>
 
@@ -58,61 +46,40 @@ require_once __DIR__ . '/icons.php';
     <div class="nav-section-title">Principal</div>
 
     <a href="/reussiteplus/dashboard.php" class="nav-item <?= $pageActive === 'dashboard' ? 'active' : '' ?>">
-      <div class="nav-icon"><i class="bi bi-house-door"></i></div>
+      <div class="nav-icon"><i data-lucide="layout-dashboard"></i></div>
       <span class="nav-label">Tableau de bord</span>
     </a>
-
     <a href="/reussiteplus/archives.php" class="nav-item <?= $pageActive === 'archives' ? 'active' : '' ?>">
-      <div class="nav-icon"><i class="bi bi-archive"></i></div>
+      <div class="nav-icon"><i data-lucide="folder-open"></i></div>
       <span class="nav-label">Archives</span>
     </a>
-
     <a href="/reussiteplus/examen.php" class="nav-item <?= $pageActive === 'examen' ? 'active' : '' ?>">
-      <div class="nav-icon"><i class="bi bi-pencil-square"></i></div>
+      <div class="nav-icon"><i data-lucide="pencil-line"></i></div>
       <span class="nav-label">Passer un examen</span>
     </a>
-
     <a href="/reussiteplus/questions.php" class="nav-item <?= $pageActive === 'questions' ? 'active' : '' ?>">
-      <div class="nav-icon"><i class="bi bi-book"></i></div>
+      <div class="nav-icon"><i data-lucide="brain"></i></div>
       <span class="nav-label">Banque de questions</span>
     </a>
 
-    <a href="/reussiteplus/recherche.php" class="nav-item <?= $pageActive === 'recherche' ? 'active' : '' ?>">
-      <div class="nav-icon"><i class="bi bi-search"></i></div>
-      <span class="nav-label">Recherche</span>
-    </a>
-
-    <div class="nav-section-title" style="margin-top:12px">Suivi</div>
-
+    <div class="nav-section-title" style="margin-top:12px">Progression</div>
     <a href="/reussiteplus/progression.php" class="nav-item <?= $pageActive === 'progression' ? 'active' : '' ?>">
-      <div class="nav-icon"><i class="bi bi-graph-up"></i></div>
+      <div class="nav-icon"><i data-lucide="trending-up"></i></div>
       <span class="nav-label">Ma progression</span>
-    </a>    <?php $haIASidebar = PLANS[$userPlan]['ia'] ?? false; ?>
-    <a href="/reussiteplus/revision.php" class="nav-item <?= $pageActive === 'revision' ? 'active' : '' ?>">
-      <div class="nav-icon"><i class="bi bi-cpu"></i></div>
-      <span class="nav-label">Révision IA</span>
-      <?php if ($haIASidebar): ?>
-      <span class="nav-badge" style="background:linear-gradient(135deg,#7c3aed,var(--primary));font-size:9px;padding:1px 5px">IA</span>
-      <?php else: ?>
-      <span style="font-size:10px;margin-left:auto">🔒</span>
-      <?php endif; ?>
     </a>
-    <a href="/reussiteplus/resultat.php" class="nav-item <?= $pageActive === 'resultat' ? 'active' : '' ?>">
-      <div class="nav-icon"><i class="bi bi-trophy"></i></div>
-      <span class="nav-label">Mes résultats</span>
-    </a>
-
     <a href="/reussiteplus/notifications.php" class="nav-item <?= $pageActive === 'notifications' ? 'active' : '' ?>">
-      <div class="nav-icon"><i class="bi bi-bell"></i></div>
+      <div class="nav-icon"><i data-lucide="bell"></i></div>
       <span class="nav-label">Notifications</span>
-      <?php if ($notifs > 0): ?><span class="nav-badge"><?= $notifs ?></span><?php endif; ?>
+      <?php if ($notifs > 0): ?>
+        <span class="nav-badge"><?= $notifs ?></span>
+      <?php endif; ?>
     </a>
 
     <?php if (is_admin()): ?>
     <div class="nav-section-title" style="margin-top:12px">Administration</div>
     <a href="/reussiteplus/admin/index.php" class="nav-item <?= $pageActive === 'admin' ? 'active' : '' ?>">
-      <div class="nav-icon"><i class="bi bi-gear"></i></div>
-      <span class="nav-label">Administration</span>
+      <div class="nav-icon"><i data-lucide="settings"></i></div>
+      <span class="nav-label">Admin</span>
     </a>
     <?php endif; ?>
   </nav>
@@ -120,44 +87,47 @@ require_once __DIR__ . '/icons.php';
   <div class="sidebar-bottom">
     <?php if ($user['plan'] === 'GRATUIT'): ?>
     <a href="/reussiteplus/tarifs.php" class="sidebar-upgrade">
-      <div class="sidebar-upgrade-title">
-        <i class="bi bi-star-fill" style="font-size:11px"></i> Passer à Premium
-      </div>
+      <div class="sidebar-upgrade-title"><i data-lucide="star" style="width:14px;height:14px;vertical-align:-2px"></i> Passer à Premium</div>
       <div class="sidebar-upgrade-sub">Accès illimité dès 10 000 CDF/mois</div>
     </a>
     <?php endif; ?>
-    <a href="/reussiteplus/deconnexion.php" class="nav-item" style="margin-top:4px">
-      <div class="nav-icon"><i class="bi bi-box-arrow-right"></i></div>
+    <a href="/reussiteplus/deconnexion.php" class="nav-item" style="margin-top:8px">
+      <div class="nav-icon"><i data-lucide="log-out"></i></div>
       <span class="nav-label">Déconnexion</span>
     </a>
   </div>
 </aside>
+<!-- Overlay sidebar mobile -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <!-- MAIN CONTENT -->
 <div class="main-content">
   <!-- TOP BAR -->
   <header class="topbar">
-    <button class="topbar-btn" id="menuToggle" onclick="toggleSidebar()"
-            style="display:none;border:none;background:transparent;color:var(--gris-700)" title="Menu">
-      <i class="bi bi-list" style="font-size:22px"></i>
+    <!-- Hamburger mobile -->
+    <button class="menu-toggle" id="menuToggle" aria-label="Menu" aria-expanded="false">
+      <span class="menu-toggle-icon">
+        <span></span><span></span><span></span>
+      </span>
     </button>
+
     <h1 class="topbar-title"><?= e($pageTitle) ?></h1>
     <form class="search-bar" action="/reussiteplus/recherche.php" method="GET">
-      <i class="bi bi-search"></i>
-      <input type="search" name="q" placeholder="Rechercher archives, questions…"
-             value="<?= e($_GET['q'] ?? '') ?>">
+      <i data-lucide="search" style="width:15px;height:15px;flex-shrink:0;opacity:.5"></i>
+      <input type="search" name="q" placeholder="Rechercher archives, questions..." value="<?= e($_GET['q'] ?? '') ?>">
     </form>
-    <a href="/reussiteplus/abonnement.php" class="topbar-btn" title="Mon abonnement — Plan <?= e($userPlan ?? $user['plan']) ?>">
-      <i class="bi bi-credit-card"></i>
+    <!-- Loupe mobile (remplace la barre de recherche) -->
+    <a href="/reussiteplus/recherche.php" class="topbar-btn topbar-search-btn" title="Rechercher"><i data-lucide="search"></i></a>
+
+    <a href="/reussiteplus/abonnement.php" class="topbar-btn" title="Mon abonnement">
+      <i data-lucide="<?= $user['plan']==='PREMIUM'?'crown':($user['plan']==='BASIQUE'?'zap':'backpack') ?>"></i>
     </a>
     <a href="/reussiteplus/notifications.php" class="topbar-btn" title="Notifications">
-      <i class="bi bi-bell"></i>
+      <i data-lucide="bell"></i>
       <?php if ($notifs > 0): ?><span class="notif-dot"></span><?php endif; ?>
     </a>
-    <button class="theme-toggle" id="themeToggle" title="Changer le thème" onclick="toggleTheme()">
-      <i class="bi bi-moon-stars-fill icon-moon"></i>
-      <i class="bi bi-sun-fill icon-sun"></i>
-    </button>
+    <!-- Bouton dark mode -->
+    <button id="themeToggle" class="topbar-btn" title="Changer le thème" onclick="toggleTheme()"><i data-lucide="moon"></i></button>
   </header>
 
   <!-- PAGE CONTENT -->

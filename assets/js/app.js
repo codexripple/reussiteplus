@@ -3,25 +3,6 @@
  * Global JavaScript utilities
  */
 
-// ─── Dark / Light mode ────────────────────────────────────────
-(function initTheme() {
-  const saved = localStorage.getItem('rp-theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const theme = saved || (prefersDark ? 'dark' : 'light');
-  document.documentElement.setAttribute('data-theme', theme);
-})();
-
-function toggleTheme() {
-  const html = document.documentElement;
-  const current = html.getAttribute('data-theme') || 'light';
-  const next = current === 'dark' ? 'light' : 'dark';
-  html.setAttribute('data-theme', next);
-  localStorage.setItem('rp-theme', next);
-
-  // Feedback toast
-  showToast(next === 'dark' ? '🌙 Mode nuit activé' : '☀️ Mode jour activé', 'info', 2000);
-}
-
 // ─── Flash messages auto-hide ─────────────────────────────────
 document.querySelectorAll('.alert').forEach(el => {
   if (el.dataset.autohide !== 'false') {
@@ -39,30 +20,43 @@ function getCsrfToken() {
 }
 
 // ─── Mobile sidebar toggle ────────────────────────────────────
-function toggleSidebar() {
-  const s = document.getElementById('sidebar');
-  const o = document.getElementById('sidebarOverlay');
-  if (!s) return;
-  s.classList.toggle('open');
-  if (o) o.classList.toggle('active');
+const sidebar  = document.querySelector('.sidebar');
+const menuBtn  = document.getElementById('menuToggle');
+const overlay  = document.getElementById('sidebarOverlay');
+
+function openSidebar() {
+  sidebar?.classList.add('open');
+  overlay?.classList.add('active');
+  document.body.style.overflow = 'hidden'; // empêche le scroll du fond
+  menuBtn?.setAttribute('aria-expanded', 'true');
 }
 function closeSidebar() {
-  const s = document.getElementById('sidebar');
-  const o = document.getElementById('sidebarOverlay');
-  if (s) s.classList.remove('open');
-  if (o) o.classList.remove('active');
+  sidebar?.classList.remove('open');
+  overlay?.classList.remove('active');
+  document.body.style.overflow = '';
+  menuBtn?.setAttribute('aria-expanded', 'false');
 }
 
-// Show mobile menu button on small screens
-(function() {
-  const btn = document.getElementById('menuToggle');
-  function checkWidth() {
-    if (!btn) return;
-    btn.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
-  }
-  checkWidth();
-  window.addEventListener('resize', checkWidth);
-})();
+if (menuBtn && sidebar) {
+  menuBtn.addEventListener('click', () => {
+    sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+  });
+}
+if (overlay) {
+  overlay.addEventListener('click', closeSidebar);
+}
+
+// Fermer sidebar quand on clique sur un lien nav (mobile)
+document.querySelectorAll('.nav-item').forEach(link => {
+  link.addEventListener('click', () => {
+    if (window.innerWidth <= 768) closeSidebar();
+  });
+});
+
+// Fermer avec Escape
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeSidebar();
+});
 
 // ─── Notification badge polling (toutes les 60s) ──────────────
 async function refreshNotifBadge() {
@@ -120,24 +114,34 @@ document.querySelectorAll('[data-autosubmit]').forEach(el => {
   el.addEventListener('change', () => el.closest('form')?.submit());
 });
 
-// ─── Toast utility ────────────────────────────────────────────
-function showToast(msg, type = 'success', duration = 4000) {
-  let container = document.querySelector('.toast-container');
-  if (!container) {
-    container = document.createElement('div');
-    container.className = 'toast-container';
-    document.body.appendChild(container);
-  }
-  const toast = document.createElement('div');
-  toast.className = `toast toast-${type}`;
-  toast.innerHTML = `<span style="flex:1">${msg}</span><button class="toast-close" onclick="this.parentElement.remove()">×</button>`;
-  container.appendChild(toast);
-  if (duration > 0) {
-    setTimeout(() => {
-      toast.style.transition = 'opacity .3s, transform .3s';
-      toast.style.opacity = '0';
-      toast.style.transform = 'translateY(8px)';
-      setTimeout(() => toast.remove(), 300);
-    }, duration);
+// ─── Dark mode ───────────────────────────────────────────────
+function initTheme() {
+  const saved = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+  updateThemeBtn(saved);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
+  const next    = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  updateThemeBtn(next);
+}
+
+function updateThemeBtn(theme) {
+  const btn = document.getElementById('themeToggle');
+  if (btn) {
+    btn.innerHTML = theme === 'dark'
+      ? '<i data-lucide="sun"></i>'
+      : '<i data-lucide="moon"></i>';
+    lucide?.createIcons({ nodes: [btn] });
   }
 }
+
+initTheme();
+
+// Initialize Lucide icons
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+});
