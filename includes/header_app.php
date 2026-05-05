@@ -6,6 +6,12 @@ if (!isset($pageActive)) $pageActive = 'dashboard';
 $user  = require_login();
 $stats = get_user_stats($user['id']);
 $notifs = (int)($stats['notifs_non_lues'] ?? 0);
+// Pour les admins : alertes spécifiques (paiements + messages)
+$adminAlerts = 0;
+if (is_admin()) {
+    $adminAlerts  = (int)(dbRow("SELECT COUNT(*) as n FROM abonnements WHERE statut='EN_ATTENTE'") ?? ['n'=>0])['n'];
+    $adminAlerts += (int)(dbRow("SELECT COUNT(*) as n FROM contact_messages WHERE statut='NOUVEAU'") ?? ['n'=>0])['n'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -174,6 +180,13 @@ $notifs = (int)($stats['notifs_non_lues'] ?? 0);
       <div class="nav-icon adm-icon"><i data-lucide="layout-dashboard"></i></div>
       <span class="nav-label">Tableau de bord</span>
     </a>
+    <a href="/reussiteplus/admin/notifications.php" class="nav-item adm-nav <?= $pageActive === 'admin_notifs' ? 'active adm-active' : '' ?>">
+      <div class="nav-icon adm-icon"><i data-lucide="bell"></i></div>
+      <span class="nav-label">Alertes</span>
+      <?php if ($adminAlerts > 0): ?>
+      <span style="background:#EF4444;color:white;font-size:9px;font-weight:800;padding:1px 6px;border-radius:10px;flex-shrink:0"><?= $adminAlerts ?></span>
+      <?php endif; ?>
+    </a>
 
     <div class="nav-section-title" style="margin-top:8px">Gestion</div>
     <a href="/reussiteplus/admin/users.php" class="nav-item adm-nav <?= $pageActive === 'admin_users' ? 'active adm-active' : '' ?>">
@@ -278,10 +291,17 @@ $notifs = (int)($stats['notifs_non_lues'] ?? 0);
     <a href="/reussiteplus/abonnement.php" class="topbar-btn" title="Mon abonnement">
       <i data-lucide="<?= $user['plan']==='PREMIUM'?'crown':($user['plan']==='BASIQUE'?'zap':'backpack') ?>"></i>
     </a>
+    <?php if (is_admin()): ?>
+    <a href="/reussiteplus/admin/notifications.php" class="topbar-btn" title="Alertes admin">
+      <i data-lucide="bell"></i>
+      <?php if ($adminAlerts > 0): ?><span class="notif-dot"></span><?php endif; ?>
+    </a>
+    <?php else: ?>
     <a href="/reussiteplus/notifications.php" class="topbar-btn" title="Notifications">
       <i data-lucide="bell"></i>
       <?php if ($notifs > 0): ?><span class="notif-dot"></span><?php endif; ?>
     </a>
+    <?php endif; ?>
     <!-- Bouton dark mode -->
     <button id="themeToggle" class="topbar-btn" title="Changer le thème" onclick="toggleTheme()"><i data-lucide="moon"></i></button>
   </header>
