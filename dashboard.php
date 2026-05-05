@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/auth.php';
@@ -64,494 +64,6 @@ $planJoursRestants = $planExpire ? max(0, (int)(($planExpire - time()) / 86400))
 include __DIR__ . '/includes/header_app.php';
 ?>
 
-<?php if ($welcome): ?>
-<!-- ══════════════════════════════════════════════════════════
-     ONBOARDING MODAL — affiché uniquement à la 1ère connexion
-     ══════════════════════════════════════════════════════════ -->
-<style>
-.ob-backdrop{
-  position:fixed;inset:0;background:rgba(0,0,0,.55);
-  backdrop-filter:blur(4px);z-index:9000;
-  display:flex;align-items:center;justify-content:center;padding:20px;
-  animation:ob-fade-in .3s ease;
-}
-@keyframes ob-fade-in{from{opacity:0}to{opacity:1}}
-.ob-card{
-  background:#fff;border-radius:20px;width:100%;max-width:540px;
-  max-height:90vh;overflow-y:auto;
-  box-shadow:0 24px 80px rgba(0,0,0,.25);overflow:hidden;
-  animation:ob-slide-up .35s cubic-bezier(.4,0,.2,1);
-}
-[data-theme="dark"] .ob-card{background:#1E293B;}
-@keyframes ob-slide-up{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
-/* Scroll sur le contenu intérieur, footer fixe */
-#obSteps{overflow-y:auto;max-height:calc(90vh - 80px - 4px);}
-/* Hero compact */
-.ob-hero{padding:28px 36px 22px;}
-.ob-icon-wrap{width:60px;height:60px;border-radius:16px;margin-bottom:14px;}
-.ob-icon-wrap svg{width:28px;height:28px;}
-.ob-hero h2{font-size:clamp(17px,3.5vw,22px);margin-bottom:8px;}
-.ob-hero p{font-size:13px;}
-.ob-body{padding:20px 36px;}
-.ob-footer{padding:16px 36px 22px;}
-
-/* Barre de progression en haut */
-.ob-progress-bar{height:4px;background:#E2E8F0;position:relative;}
-[data-theme="dark"] .ob-progress-bar{background:#334155;}
-.ob-progress-fill{height:100%;background:linear-gradient(90deg,#007A5E,#00C896);border-radius:4px;transition:width .4s cubic-bezier(.4,0,.2,1);}
-
-/* Header coloré */
-.ob-hero{
-  padding:40px 40px 32px;text-align:center;position:relative;
-  background:linear-gradient(160deg,#0D1117 0%,#003D2E 100%);
-  overflow:hidden;
-}
-.ob-hero-photo{
-  position:absolute;inset:0;
-  background:url('/reussiteplus/assets/img/hero-students.jpg') center/cover no-repeat;
-  opacity:.12;
-}
-.ob-hero::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 80% 70% at 50% 0%,rgba(0,122,94,.5) 0%,transparent 70%);
-}
-.ob-hero-inner{position:relative;}
-.ob-step-badge{
-  display:inline-flex;align-items:center;gap:6px;
-  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
-  border-radius:20px;padding:5px 14px;margin-bottom:16px;
-  font-family:'Poppins',sans-serif;font-size:11px;font-weight:700;
-  letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.7);
-}
-.ob-step-badge .ob-step-dot{
-  width:6px;height:6px;border-radius:50%;background:#FBBF24;
-}
-.ob-icon-wrap{
-  width:72px;height:72px;border-radius:20px;margin:0 auto 20px;
-  display:flex;align-items:center;justify-content:center;
-  border:1px solid rgba(255,255,255,.15);
-}
-.ob-icon-wrap svg{width:34px;height:34px;stroke:#fff;stroke-width:1.8;}
-.ob-hero h2{
-  font-family:'Poppins',sans-serif;font-size:clamp(20px,4vw,26px);
-  font-weight:800;color:#fff;line-height:1.2;margin-bottom:10px;
-}
-.ob-hero h2 span{color:#FBBF24;}
-.ob-hero p{font-family:'Inter',sans-serif;font-size:14px;color:rgba(255,255,255,.65);line-height:1.65;max-width:380px;margin:0 auto;}
-
-/* Corps */
-.ob-body{padding:28px 40px;}
-.ob-features{display:flex;flex-direction:column;gap:14px;}
-.ob-feat{
-  display:flex;align-items:flex-start;gap:14px;
-  padding:14px 16px;border-radius:12px;
-  background:#F8FAFC;border:1px solid #E2E8F0;
-}
-[data-theme="dark"] .ob-feat{background:#0F172A;border-color:#334155;}
-.ob-feat-icon{
-  width:38px;height:38px;border-radius:10px;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-}
-.ob-feat-icon svg{width:18px;height:18px;stroke:currentColor;}
-.ob-feat-text strong{display:block;font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;color:#1C2433;margin-bottom:2px;}
-[data-theme="dark"] .ob-feat-text strong{color:#F1F5F9;}
-.ob-feat-text span{font-family:'Inter',sans-serif;font-size:12px;color:#6B7280;line-height:1.5;}
-[data-theme="dark"] .ob-feat-text span{color:#94A3B8;}
-
-/* Mock preview dans le corps */
-.ob-preview{
-  background:#F8FAFC;border:1px solid #E2E8F0;border-radius:14px;
-  padding:16px;margin-top:4px;
-}
-[data-theme="dark"] .ob-preview{background:#0F172A;border-color:#334155;}
-.ob-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-.ob-bar-row:last-child{margin-bottom:0;}
-.ob-bar-label{font-size:11px;color:#6B7280;width:70px;font-family:'Inter',sans-serif;}
-.ob-bar-track{flex:1;height:6px;border-radius:6px;background:#E2E8F0;overflow:hidden;}
-[data-theme="dark"] .ob-bar-track{background:#334155;}
-.ob-bar-fill{height:100%;border-radius:6px;}
-.ob-bar-pct{font-size:11px;color:#6B7280;width:32px;text-align:right;font-family:'Inter',sans-serif;}
-
-/* Navigation */
-.ob-footer{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:20px 40px 28px;gap:12px;
-}
-.ob-dots{display:flex;gap:6px;}
-.ob-dot{width:7px;height:7px;border-radius:50%;background:#E2E8F0;transition:all .3s;cursor:pointer;border:none;}
-[data-theme="dark"] .ob-dot{background:#334155;}
-.ob-dot.active{background:#007A5E;width:22px;border-radius:6px;}
-.ob-btn-back{
-  display:flex;align-items:center;gap:6px;
-  background:none;border:1.5px solid #E2E8F0;
-  border-radius:10px;padding:9px 16px;
-  font-family:'Poppins',sans-serif;font-size:13px;font-weight:600;
-  color:#4A5568;cursor:pointer;transition:all .2s;
-}
-[data-theme="dark"] .ob-btn-back{border-color:#334155;color:#94A3B8;}
-.ob-btn-back:hover{border-color:#007A5E;color:#007A5E;}
-.ob-btn-next{
-  display:flex;align-items:center;gap:8px;
-  background:#007A5E;border:none;border-radius:10px;
-  padding:10px 22px;
-  font-family:'Poppins',sans-serif;font-size:13px;font-weight:700;
-  color:#fff;cursor:pointer;transition:all .2s;
-}
-.ob-btn-next:hover{background:#005A45;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,122,94,.3);}
-.ob-btn-next svg{width:15px;height:15px;stroke:#fff;transition:transform .2s;}
-.ob-btn-next:hover svg{transform:translateX(3px);}
-.ob-btn-next.ob-btn-finish{background:linear-gradient(135deg,#007A5E,#00A97F);}
-.ob-btn-finish:hover{background:linear-gradient(135deg,#005A45,#007A5E) !important;}
-</style>
-
-<div class="ob-backdrop" id="obBackdrop">
-  <div class="ob-card" id="obCard">
-    <!-- Barre de progression -->
-    <div class="ob-progress-bar">
-      <div class="ob-progress-fill" id="obFill" style="width:16.66%"></div>
-    </div>
-
-    <!-- Étapes -->
-    <div id="obSteps">
-
-      <!-- Étape 1 : Félicitations -->
-      <div class="ob-step" data-step="0">
-        <div class="ob-hero">
-          <div class="ob-hero-photo"></div>
-          <div class="ob-hero-inner">
-            <div class="ob-step-badge"><span class="ob-step-dot"></span>Bienvenue</div>
-            <div class="ob-icon-wrap" style="background:rgba(0,169,127,.25)">
-              <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
-              </svg>
-            </div>
-            <h2>Félicitations,<br><span><?= e($user['prenom']) ?> !</span></h2>
-            <p>Ton compte est prêt. En 2 minutes, tu vas découvrir tout ce que RÉUSSITE+ peut faire pour toi.</p>
-          </div>
-        </div>
-        <div class="ob-body">
-          <div class="ob-features">
-            <div class="ob-feat">
-              <div class="ob-feat-icon" style="background:#E8F5F1;color:#007A5E">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-                </svg>
-              </div>
-              <div class="ob-feat-text"><strong>Archives officielles</strong><span>Examen d'État, TENASOSP, ENAFEP depuis 2010</span></div>
-            </div>
-            <div class="ob-feat">
-              <div class="ob-feat-icon" style="background:#EFF6FF;color:#3B82F6">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                </svg>
-              </div>
-              <div class="ob-feat-text"><strong>QCM chronométrés</strong><span>Entraîne-toi dans les conditions de l'examen réel</span></div>
-            </div>
-            <div class="ob-feat">
-              <div class="ob-feat-icon" style="background:#F3F0FF;color:#7C3AED">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-                </svg>
-              </div>
-              <div class="ob-feat-text"><strong>Révision IA personnalisée</strong><span>Un plan de révision adapté à tes lacunes</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Étape 2 : Le tableau de bord -->
-      <div class="ob-step" data-step="1" style="display:none">
-        <div class="ob-hero">
-          <div class="ob-hero-photo"></div>
-          <div class="ob-hero-inner">
-            <div class="ob-step-badge"><span class="ob-step-dot"></span>Étape 1 sur 5</div>
-            <div class="ob-icon-wrap" style="background:rgba(96,165,250,.25)">
-              <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-                <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-              </svg>
-            </div>
-            <h2>Ton <span>tableau de bord</span></h2>
-            <p>Cette page est ton point de départ. Elle te montre tes statistiques, ta progression et ton activité en temps réel.</p>
-          </div>
-        </div>
-        <div class="ob-body">
-          <div class="ob-preview">
-            <div class="ob-bar-row">
-              <span class="ob-bar-label">Score moyen</span>
-              <div class="ob-bar-track"><div class="ob-bar-fill" style="width:0%;background:#007A5E" id="ob-bar-score"></div></div>
-              <span class="ob-bar-pct">0%</span>
-            </div>
-            <div class="ob-bar-row">
-              <span class="ob-bar-label">Examens passés</span>
-              <div class="ob-bar-track"><div class="ob-bar-fill" style="width:0%;background:#3B82F6"></div></div>
-              <span class="ob-bar-pct">0</span>
-            </div>
-            <div class="ob-bar-row">
-              <span class="ob-bar-label">Série active</span>
-              <div class="ob-bar-track"><div class="ob-bar-fill" style="width:0%;background:#FBBF24"></div></div>
-              <span class="ob-bar-pct">0j</span>
-            </div>
-          </div>
-          <p style="font-size:12px;color:#6B7280;margin-top:12px;font-family:'Inter',sans-serif;line-height:1.6">
-            💡 <strong>Astuce :</strong> Reviens chaque jour pour maintenir ta série et améliorer ton score moyen progressivement.
-          </p>
-        </div>
-      </div>
-
-      <!-- Étape 3 : Archives -->
-      <div class="ob-step" data-step="2" style="display:none">
-        <div class="ob-hero">
-          <div class="ob-hero-photo"></div>
-          <div class="ob-hero-inner">
-            <div class="ob-step-badge"><span class="ob-step-dot"></span>Étape 2 sur 5</div>
-            <div class="ob-icon-wrap" style="background:rgba(251,191,36,.25)">
-              <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-                <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
-              </svg>
-            </div>
-            <h2>Les <span>Archives officielles</span></h2>
-            <p>Accède aux vrais sujets d'examen depuis 2010 avec leurs corrigés détaillés, organisés par matière et par année.</p>
-          </div>
-        </div>
-        <div class="ob-body">
-          <div class="ob-features">
-            <div class="ob-feat">
-              <div class="ob-feat-icon" style="background:#FFFBEB;color:#D97706">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                </svg>
-              </div>
-              <div class="ob-feat-text"><strong>Comment l'utiliser ?</strong><span>Va dans <strong>Archives</strong> → choisis une matière → sélectionne une année → lis le sujet et son corrigé.</span></div>
-            </div>
-            <div class="ob-feat">
-              <div class="ob-feat-icon" style="background:#F0FDF4;color:#16A34A">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </div>
-              <div class="ob-feat-text"><strong>Plan gratuit</strong><span>Accès à 5 archives par mois. <strong>Premium</strong> = archives illimitées + corrigés complets.</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Étape 4 : QCM / Examens -->
-      <div class="ob-step" data-step="3" style="display:none">
-        <div class="ob-hero">
-          <div class="ob-hero-photo"></div>
-          <div class="ob-hero-inner">
-            <div class="ob-step-badge"><span class="ob-step-dot"></span>Étape 3 sur 5</div>
-            <div class="ob-icon-wrap" style="background:rgba(239,68,68,.2)">
-              <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-              </svg>
-            </div>
-            <h2>S'entraîner avec<br>les <span>QCM</span></h2>
-            <p>Passe des examens blancs dans les conditions réelles : chronomètre, score instantané, explication de chaque réponse.</p>
-          </div>
-        </div>
-        <div class="ob-body">
-          <div class="ob-features">
-            <div class="ob-feat">
-              <div class="ob-feat-icon" style="background:#FFF1F2;color:#E11D48">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                </svg>
-              </div>
-              <div class="ob-feat-text"><strong>Comment démarrer ?</strong><span>Va dans <strong>Examens</strong> → choisis une matière et une durée → réponds aux questions → consulte ton score.</span></div>
-            </div>
-            <div class="ob-feat">
-              <div class="ob-feat-icon" style="background:#FFFBEB;color:#D97706">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-                </svg>
-              </div>
-              <div class="ob-feat-text"><strong>Limite gratuite</strong><span><strong>5 examens par mois</strong> en plan Gratuit. Pas de limite en Premium.</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Étape 5 : Révision IA -->
-      <div class="ob-step" data-step="4" style="display:none">
-        <div class="ob-hero">
-          <div class="ob-hero-photo"></div>
-          <div class="ob-hero-inner">
-            <div class="ob-step-badge"><span class="ob-step-dot"></span>Étape 4 sur 5</div>
-            <div class="ob-icon-wrap" style="background:rgba(139,92,246,.25)">
-              <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-              </svg>
-            </div>
-            <h2>La <span>Révision IA</span></h2>
-            <p>L'intelligence artificielle analyse tes résultats et génère un plan de révision semaine par semaine pour combler tes lacunes.</p>
-          </div>
-        </div>
-        <div class="ob-body">
-          <div class="ob-features">
-            <div class="ob-feat">
-              <div class="ob-feat-icon" style="background:#F3F0FF;color:#7C3AED">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/>
-                </svg>
-              </div>
-              <div class="ob-feat-text"><strong>Comment l'activer ?</strong><span>Va dans <strong>Progression</strong> → clique sur <em>"Générer mon plan IA"</em> → le plan s'adapte chaque semaine.</span></div>
-            </div>
-            <div class="ob-feat">
-              <div class="ob-feat-icon" style="background:#F0FDF4;color:#16A34A">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                </svg>
-              </div>
-              <div class="ob-feat-text"><strong>Fonctionnalité Premium</strong><span>Disponible dès le plan Basique. Plus tu passes d'examens, plus l'IA est précise.</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Étape 6 : C'est parti ! -->
-      <div class="ob-step" data-step="5" style="display:none">
-        <div class="ob-hero">
-          <div class="ob-hero-photo"></div>
-          <div class="ob-hero-inner">
-            <div class="ob-step-badge"><span class="ob-step-dot"></span>Étape 5 sur 5</div>
-            <div class="ob-icon-wrap" style="background:rgba(251,191,36,.3)">
-              <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-              </svg>
-            </div>
-            <h2>Tu es <span>prêt(e) !</span></h2>
-            <p>Commence par passer ton premier examen blanc pour établir ton niveau de départ.</p>
-          </div>
-        </div>
-        <div class="ob-body">
-          <div class="ob-features">
-            <div class="ob-feat">
-              <div class="ob-feat-icon" style="background:#E8F5F1;color:#007A5E">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/>
-                </svg>
-              </div>
-              <div class="ob-feat-text"><strong>1. Commence maintenant</strong><span>Passe ton premier examen — 5 minutes suffisent pour voir ton niveau.</span></div>
-            </div>
-            <div class="ob-feat">
-              <div class="ob-feat-icon" style="background:#EFF6FF;color:#3B82F6">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/>
-                </svg>
-              </div>
-              <div class="ob-feat-text"><strong>2. Reviens chaque jour</strong><span>15 min par jour valent mieux que 3h le week-end. Ta série compte !</span></div>
-            </div>
-            <div class="ob-feat">
-              <div class="ob-feat-icon" style="background:#FFFBEB;color:#D97706">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                </svg>
-              </div>
-              <div class="ob-feat-text"><strong>3. Passe en Premium</strong><span>Archives illimitées, corrigés complets, plan IA — tout pour maximiser tes chances.</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /ob-steps -->
-
-    <!-- Navigation -->
-    <div class="ob-footer">
-      <div class="ob-dots">
-        <button class="ob-dot active" onclick="obGo(0)"></button>
-        <button class="ob-dot" onclick="obGo(1)"></button>
-        <button class="ob-dot" onclick="obGo(2)"></button>
-        <button class="ob-dot" onclick="obGo(3)"></button>
-        <button class="ob-dot" onclick="obGo(4)"></button>
-        <button class="ob-dot" onclick="obGo(5)"></button>
-      </div>
-      <div style="display:flex;gap:10px">
-        <button class="ob-btn-back" id="obBack" onclick="obPrev()" style="display:none">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-          Retour
-        </button>
-        <button class="ob-btn-next" id="obNext" onclick="obNext()">
-          Suivant
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<script>
-(function(){
-  const TOTAL = 6;
-  let cur = 0;
-
-  function obGo(n) {
-    // Cacher étape actuelle
-    document.querySelectorAll('.ob-step')[cur].style.display = 'none';
-    document.querySelectorAll('.ob-dot')[cur].classList.remove('active');
-    cur = n;
-    // Afficher nouvelle étape
-    document.querySelectorAll('.ob-step')[cur].style.display = '';
-    document.querySelectorAll('.ob-dot')[cur].classList.add('active');
-    // Barre de progression
-    document.getElementById('obFill').style.width = ((cur + 1) / TOTAL * 100) + '%';
-    // Bouton retour
-    document.getElementById('obBack').style.display = cur > 0 ? '' : 'none';
-    // Bouton suivant / terminer
-    const btn = document.getElementById('obNext');
-    if (cur === TOTAL - 1) {
-      btn.innerHTML = 'Commencer <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>';
-      btn.classList.add('ob-btn-finish');
-      btn.onclick = obClose;
-    } else {
-      btn.innerHTML = 'Suivant <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
-      btn.classList.remove('ob-btn-finish');
-      btn.onclick = obNext;
-    }
-  }
-
-  window.obNext = function() { if (cur < TOTAL - 1) obGo(cur + 1); };
-  window.obPrev = function() { if (cur > 0) obGo(cur - 1); };
-  window.obGo   = obGo;
-
-  window.obClose = function() {
-    const bd = document.getElementById('obBackdrop');
-    bd.style.transition = 'opacity .3s';
-    bd.style.opacity = '0';
-    setTimeout(() => bd.remove(), 320);
-    // Nettoyer l'URL sans recharger la page
-    if (history.replaceState) {
-      const url = new URL(window.location.href);
-      url.searchParams.delete('welcome');
-      history.replaceState({}, '', url.toString());
-    }
-  };
-
-  // Fermer en cliquant sur le backdrop (pas la carte)
-  document.getElementById('obBackdrop').addEventListener('click', function(e) {
-    if (e.target === this) obClose();
-  });
-
-  // Clavier
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowRight') obNext();
-    if (e.key === 'ArrowLeft')  obPrev();
-    if (e.key === 'Escape')     obClose();
-  });
-
-  // Charger les fonts si pas déjà présentes
-  if (!document.querySelector('link[href*="Poppins"]')) {
-    const l = document.createElement('link');
-    l.rel = 'stylesheet';
-    l.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&family=Inter:wght@400;500&display=swap';
-    document.head.appendChild(l);
-  }
-})();
-</script>
-<?php endif; ?>
 
 <?php if ($user['plan'] === 'GRATUIT'): ?>
 <div style="background:linear-gradient(135deg,#F5E6C0,#FFF7E6);border:1px solid rgba(201,151,42,0.3);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
@@ -759,247 +271,254 @@ include __DIR__ . '/includes/header_app.php';
 </div>
 
 <?php if ($welcome): ?>
-<!-- ═══════════════════════════════════════════════════════
-     MODAL ONBOARDING — Bienvenue sur RÉUSSITE+
-     Affiché à la première connexion / inscription
-     ═══════════════════════════════════════════════════════ -->
-<div id="onboardingOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9000;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)">
-  <div id="onboardingModal" style="background:var(--blanc);border-radius:20px;width:100%;max-width:620px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.3);position:relative">
+<style>
+#ob-bd{position:fixed;inset:0;background:rgba(15,23,42,.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(6px);animation:ob-fadein .25s ease}
+@keyframes ob-fadein{from{opacity:0}to{opacity:1}}
+#ob-card{background:#fff;border-radius:20px;width:100%;max-width:560px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.25);display:flex;flex-direction:column;max-height:92vh}
+.ob-slides{flex:1;overflow:hidden;position:relative;min-height:0}
+.ob-slide{position:absolute;inset:0;overflow-y:auto;padding:36px 40px;transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .3s;will-change:transform}
+.ob-slide.ob-active{transform:translateX(0);opacity:1;position:relative}
+.ob-slide.ob-left{transform:translateX(-100%);opacity:0;pointer-events:none}
+.ob-slide.ob-right{transform:translateX(100%);opacity:0;pointer-events:none}
+.ob-topbar{height:4px;background:#E2E8F0;flex-shrink:0}
+.ob-fill{height:100%;background:linear-gradient(90deg,#007A5E,#7c3aed);border-radius:4px;transition:width .35s ease}
+.ob-footer{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;border-top:1px solid #F1F5F9;flex-shrink:0}
+.ob-dots{display:flex;gap:6px;align-items:center}
+.ob-dot{width:7px;height:7px;border-radius:4px;background:#E2E8F0;border:none;cursor:pointer;padding:0;transition:all .25s}
+.ob-dot.on{width:20px;background:#007A5E}
+.ob-nav{display:flex;gap:8px}
+.ob-btn{height:38px;padding:0 20px;border-radius:10px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:6px;transition:all .2s}
+.ob-btn-sec{background:#F1F5F9;color:#4A5568}.ob-btn-sec:hover{background:#E2E8F0}
+.ob-btn-pri{background:#007A5E;color:#fff}.ob-btn-pri:hover{background:#005A45}
+.ob-btn-gold{background:linear-gradient(135deg,#C9972A,#F59E0B);color:#fff}.ob-btn-gold:hover{filter:brightness(1.05)}
+.ob-icon{width:60px;height:60px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+.ob-tag{display:inline-flex;align-items:center;gap:5px;background:#F1F5F9;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;color:#4A5568}
+.ob-plan{border-radius:14px;padding:16px 14px;border:2px solid #E2E8F0;position:relative}
+.ob-plan.ob-best{border-color:#007A5E;background:#E8F5F1}
+.ob-plan-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#007A5E;color:#fff;font-size:10px;font-weight:700;padding:2px 10px;border-radius:10px;white-space:nowrap;font-family:'Poppins',sans-serif}
+.ob-check{color:#007A5E;font-size:12px}.ob-cross{color:#CBD5E1;font-size:12px}
+.ob-step-row{display:flex;gap:14px;align-items:flex-start}
+.ob-step-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px;flex-shrink:0}
+@media(max-width:480px){.ob-slide{padding:24px 20px}.ob-footer{padding:12px 16px}.ob-plan-grid{grid-template-columns:1fr!important}}
+</style>
 
+<div id="ob-bd">
+  <div id="ob-card">
     <!-- Barre de progression -->
-    <div style="height:4px;background:var(--gris-200);border-radius:20px 20px 0 0;overflow:hidden">
-      <div id="obProgress" style="height:100%;background:linear-gradient(90deg,var(--primary),#7c3aed);border-radius:4px;transition:width .4s ease;width:25%"></div>
-    </div>
+    <div class="ob-topbar"><div class="ob-fill" id="ob-fill" style="width:25%"></div></div>
 
-    <!-- Étape 1 — Bienvenue -->
-    <div class="ob-step" id="ob-step-1" style="padding:36px 40px">
-      <div style="text-align:center;margin-bottom:28px">
-        <div style="width:72px;height:72px;background:linear-gradient(135deg,var(--primary),#7c3aed);border-radius:20px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px">
-          <i data-lucide="graduation-cap" style="width:36px;height:36px;stroke:#fff"></i>
-        </div>
-        <h2 style="font-family:var(--font-display);font-size:24px;font-weight:800;margin-bottom:8px">
-          Bienvenue sur RÉUSSITE+, <?= e($user['prenom']) ?> !
-        </h2>
-        <p style="color:var(--gris-600);font-size:14px;max-width:420px;margin:0 auto;line-height:1.7">
-          Votre plateforme de révision intelligente pour réussir l'<strong>ENAFEP</strong>, le <strong>TENASOSP</strong> et l'<strong>Examen d'État</strong> en République Démocratique du Congo.
-        </p>
-      </div>
+    <!-- Slides -->
+    <div class="ob-slides" id="ob-slides">
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px">
-        <div style="background:var(--gris-50);border-radius:12px;padding:16px;display:flex;gap:12px;align-items:flex-start">
-          <div style="width:36px;height:36px;background:var(--primary-subtle);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <i data-lucide="file-check" style="width:18px;height:18px;stroke:var(--primary)"></i>
-          </div>
-          <div>
-            <div style="font-weight:700;font-size:13px;margin-bottom:3px">Examens blancs</div>
-            <div style="font-size:12px;color:var(--gris-500)">Simulez les conditions réelles avec des vrais sujets</div>
-          </div>
+      <!-- Slide 0 — Bienvenue -->
+      <div class="ob-slide ob-active">
+        <div class="ob-icon" style="background:linear-gradient(135deg,#007A5E,#7c3aed)">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
         </div>
-        <div style="background:var(--gris-50);border-radius:12px;padding:16px;display:flex;gap:12px;align-items:flex-start">
-          <div style="width:36px;height:36px;background:#EEF4FD;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <i data-lucide="archive" style="width:18px;height:18px;stroke:#1E5FAD"></i>
+        <h2 style="font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;text-align:center;margin-bottom:8px">Bienvenue, <?= e($user['prenom']) ?> !</h2>
+        <p style="text-align:center;color:#6B7280;font-size:13px;line-height:1.7;margin-bottom:24px">Votre plateforme de révision intelligente pour réussir l'<strong>ENAFEP</strong>, le <strong>TENASOSP</strong> et l'<strong>Examen d'État</strong> en RDC.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div style="background:#F8FAFC;border-radius:12px;padding:14px 12px;display:flex;gap:10px">
+            <div style="width:32px;height:32px;background:#E8F5F1;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#007A5E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            </div>
+            <div><div style="font-weight:700;font-size:12px;margin-bottom:2px">Examens blancs</div><div style="font-size:11px;color:#6B7280">Conditions réelles + corrigés</div></div>
           </div>
-          <div>
-            <div style="font-weight:700;font-size:13px;margin-bottom:3px">Archives officielles</div>
-            <div style="font-size:12px;color:var(--gris-500)">Accédez aux anciens sujets avec corrigés PDF</div>
+          <div style="background:#F8FAFC;border-radius:12px;padding:14px 12px;display:flex;gap:10px">
+            <div style="width:32px;height:32px;background:#EEF4FD;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1E5FAD" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div><div style="font-weight:700;font-size:12px;margin-bottom:2px">Archives officielles</div><div style="font-size:11px;color:#6B7280">Sujets + corrigés PDF</div></div>
           </div>
-        </div>
-        <div style="background:var(--gris-50);border-radius:12px;padding:16px;display:flex;gap:12px;align-items:flex-start">
-          <div style="width:36px;height:36px;background:#F5E6C0;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <i data-lucide="brain" style="width:18px;height:18px;stroke:#8C6A1A"></i>
+          <div style="background:#F8FAFC;border-radius:12px;padding:14px 12px;display:flex;gap:10px">
+            <div style="width:32px;height:32px;background:#F5E6C0;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8C6A1A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <div><div style="font-weight:700;font-size:12px;margin-bottom:2px">IA Coach 24h/24</div><div style="font-size:11px;color:#6B7280">Plan de révision sur mesure</div></div>
           </div>
-          <div>
-            <div style="font-weight:700;font-size:13px;margin-bottom:3px">IA Personnalisée</div>
-            <div style="font-size:12px;color:var(--gris-500)">Un coach qui analyse vos erreurs et crée votre plan</div>
-          </div>
-        </div>
-        <div style="background:var(--gris-50);border-radius:12px;padding:16px;display:flex;gap:12px;align-items:flex-start">
-          <div style="width:36px;height:36px;background:#FEF0EF;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <i data-lucide="trending-up" style="width:18px;height:18px;stroke:var(--rouge)"></i>
-          </div>
-          <div>
-            <div style="font-weight:700;font-size:13px;margin-bottom:3px">Suivi de progression</div>
-            <div style="font-size:12px;color:var(--gris-500)">Visualisez vos points forts et faiblesses</div>
+          <div style="background:#F8FAFC;border-radius:12px;padding:14px 12px;display:flex;gap:10px">
+            <div style="width:32px;height:32px;background:#FEF0EF;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C9342A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            </div>
+            <div><div style="font-weight:700;font-size:12px;margin-bottom:2px">Suivi de progression</div><div style="font-size:11px;color:#6B7280">Points forts &amp; faiblesses</div></div>
           </div>
         </div>
       </div>
 
-      <button onclick="obNext(2)" class="btn btn-primary btn-full btn-lg">
-        Découvrir comment ça marche <i data-lucide="arrow-right" style="width:16px;height:16px;vertical-align:-2px;margin-left:6px"></i>
-      </button>
-    </div>
-
-    <!-- Étape 2 — Comment ça marche -->
-    <div class="ob-step" id="ob-step-2" style="padding:36px 40px;display:none">
-      <h3 style="font-family:var(--font-display);font-size:20px;font-weight:800;margin-bottom:6px;text-align:center">Comment ça marche ?</h3>
-      <p style="text-align:center;color:var(--gris-500);font-size:13px;margin-bottom:24px">3 étapes simples pour progresser rapidement</p>
-
-      <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:28px">
-        <div style="display:flex;gap:16px;align-items:flex-start">
-          <div style="width:40px;height:40px;background:linear-gradient(135deg,var(--primary),#00A97F);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px;flex-shrink:0">1</div>
-          <div style="flex:1;padding-top:6px">
-            <div style="font-weight:700;font-size:15px;margin-bottom:4px">Choisissez votre matière et passez un examen</div>
-            <div style="font-size:13px;color:var(--gris-500)">Mathématiques, Français, Sciences, Histoire-Géo, Physique, Chimie, Biologie ou Anglais — choisissez la durée et le niveau.</div>
+      <!-- Slide 1 — Comment ça marche -->
+      <div class="ob-slide ob-right">
+        <h3 style="font-family:'Poppins',sans-serif;font-size:19px;font-weight:800;text-align:center;margin-bottom:6px">Comment ça marche ?</h3>
+        <p style="text-align:center;color:#6B7280;font-size:13px;margin-bottom:24px">3 étapes pour progresser rapidement</p>
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <div class="ob-step-row">
+            <div class="ob-step-num" style="background:linear-gradient(135deg,#007A5E,#00A97F)">1</div>
+            <div style="padding-top:4px">
+              <div style="font-weight:700;font-size:14px;margin-bottom:3px">Passez un examen blanc</div>
+              <div style="font-size:13px;color:#6B7280;line-height:1.6">Choisissez une matière, une durée et répondez aux questions dans les conditions réelles.</div>
+            </div>
           </div>
-        </div>
-        <div style="width:1px;height:20px;background:var(--gris-200);margin-left:20px"></div>
-        <div style="display:flex;gap:16px;align-items:flex-start">
-          <div style="width:40px;height:40px;background:linear-gradient(135deg,#1E5FAD,#7c3aed);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px;flex-shrink:0">2</div>
-          <div style="flex:1;padding-top:6px">
-            <div style="font-weight:700;font-size:15px;margin-bottom:4px">Consultez vos résultats détaillés</div>
-            <div style="font-size:13px;color:var(--gris-500)">Chaque bonne et mauvaise réponse est expliquée. Vous comprenez où vous avez fait des erreurs et pourquoi.</div>
+          <div style="width:2px;height:16px;background:#E2E8F0;margin-left:17px"></div>
+          <div class="ob-step-row">
+            <div class="ob-step-num" style="background:linear-gradient(135deg,#1E5FAD,#7c3aed)">2</div>
+            <div style="padding-top:4px">
+              <div style="font-weight:700;font-size:14px;margin-bottom:3px">Analysez vos résultats</div>
+              <div style="font-size:13px;color:#6B7280;line-height:1.6">Chaque erreur est expliquée. Vous comprenez pourquoi vous avez raté et comment faire mieux.</div>
+            </div>
           </div>
-        </div>
-        <div style="width:1px;height:20px;background:var(--gris-200);margin-left:20px"></div>
-        <div style="display:flex;gap:16px;align-items:flex-start">
-          <div style="width:40px;height:40px;background:linear-gradient(135deg,#C9972A,#F59E0B);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:16px;flex-shrink:0">3</div>
-          <div style="flex:1;padding-top:6px">
-            <div style="font-weight:700;font-size:15px;margin-bottom:4px">Progressez grâce au suivi et à l'IA</div>
-            <div style="font-size:13px;color:var(--gris-500)">Votre tableau de bord suit votre évolution. L'IA génère un plan de révision 7 jours sur mesure selon vos performances.</div>
+          <div style="width:2px;height:16px;background:#E2E8F0;margin-left:17px"></div>
+          <div class="ob-step-row">
+            <div class="ob-step-num" style="background:linear-gradient(135deg,#C9972A,#F59E0B)">3</div>
+            <div style="padding-top:4px">
+              <div style="font-weight:700;font-size:14px;margin-bottom:3px">Laissez l'IA vous guider</div>
+              <div style="font-size:13px;color:#6B7280;line-height:1.6">L'assistant IA génère un plan de révision 7 jours adapté à vos points faibles.</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div style="display:flex;gap:12px">
-        <button onclick="obNext(1)" class="btn btn-ghost" style="flex:0 0 auto">
-          <i data-lucide="arrow-left" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"></i> Retour
+      <!-- Slide 2 — Plans -->
+      <div class="ob-slide ob-right">
+        <h3 style="font-family:'Poppins',sans-serif;font-size:19px;font-weight:800;text-align:center;margin-bottom:6px">Choisissez votre plan</h3>
+        <p style="text-align:center;color:#6B7280;font-size:13px;margin-bottom:20px">Commencez gratuitement, évoluez quand vous voulez</p>
+        <div class="ob-plan-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
+          <div class="ob-plan">
+            <div style="font-weight:800;font-size:13px;margin-bottom:3px;color:#4A5568">Gratuit</div>
+            <div style="font-size:20px;font-weight:900;color:#4A5568;margin-bottom:10px">0 $</div>
+            <div style="font-size:11px;display:flex;flex-direction:column;gap:5px;color:#4A5568">
+              <div class="ob-check">✓ 2 examens/mois</div>
+              <div class="ob-check">✓ Questions basiques</div>
+              <div class="ob-cross">✗ Archives</div>
+              <div class="ob-cross">✗ IA Coach</div>
+            </div>
+          </div>
+          <div class="ob-plan ob-best">
+            <div class="ob-plan-badge">POPULAIRE</div>
+            <div style="font-weight:800;font-size:13px;margin-bottom:3px;color:#005A45">Premium</div>
+            <div style="font-size:20px;font-weight:900;color:#007A5E;margin-bottom:10px">5 $<span style="font-size:11px;font-weight:400">/mois</span></div>
+            <div style="font-size:11px;display:flex;flex-direction:column;gap:5px;color:#2E4A3A">
+              <div class="ob-check">✓ Examens illimités</div>
+              <div class="ob-check">✓ Toutes archives</div>
+              <div class="ob-check">✓ Corrigés PDF</div>
+              <div class="ob-check">✓ IA Coach</div>
+            </div>
+          </div>
+          <div class="ob-plan" style="border-color:#C9972A;background:#FFFBF0">
+            <div style="font-weight:800;font-size:13px;margin-bottom:3px;color:#8C6A1A">École</div>
+            <div style="font-size:20px;font-weight:900;color:#C9972A;margin-bottom:10px">50 $<span style="font-size:11px;font-weight:400">/an</span></div>
+            <div style="font-size:11px;display:flex;flex-direction:column;gap:5px;color:#6B4E1A">
+              <div style="color:#C9972A">✓ Classe entière</div>
+              <div style="color:#C9972A">✓ Tableau prof</div>
+              <div style="color:#C9972A">✓ Tout Premium</div>
+              <div style="color:#C9972A">✓ Rapport mensuel</div>
+            </div>
+          </div>
+        </div>
+        <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:10px;padding:11px 14px;font-size:12px;color:#166534;display:flex;gap:8px;align-items:center">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Paiement sécurisé via <strong>M-Pesa</strong>, <strong>Airtel Money</strong> ou <strong>Orange Money</strong>. Annulable à tout moment.</span>
+        </div>
+      </div>
+
+      <!-- Slide 3 — C'est parti -->
+      <div class="ob-slide ob-right" style="text-align:center">
+        <div class="ob-icon" style="background:linear-gradient(135deg,#22C55E,#16A34A);width:70px;height:70px">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 style="font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;margin-bottom:10px">Vous êtes prêt·e, <?= e($user['prenom']) ?> !</h2>
+        <p style="color:#6B7280;font-size:13px;line-height:1.7;max-width:380px;margin:0 auto 28px">Votre premier examen prend 5 minutes. C'est le meilleur moyen de connaître votre niveau de départ.</p>
+        <div style="display:flex;flex-direction:column;gap:10px;max-width:320px;margin:0 auto">
+          <a href="/reussiteplus/examen.php" onclick="obClose()" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#007A5E;color:#fff;border-radius:12px;padding:14px;font-weight:700;font-size:14px;text-decoration:none;transition:background .2s" onmouseover="this.style.background='#005A45'" onmouseout="this.style.background='#007A5E'">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Passer mon premier examen
+          </a>
+          <a href="/reussiteplus/tarifs.php" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#F1F5F9;color:#007A5E;border-radius:12px;padding:12px;font-weight:600;font-size:13px;text-decoration:none;transition:background .2s" onmouseover="this.style.background='#E2E8F0'" onmouseout="this.style.background='#F1F5F9'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Voir les plans Premium
+          </a>
+          <button onclick="obClose()" style="background:none;border:none;color:#9CA3AF;font-size:12px;cursor:pointer;padding:6px">Continuer gratuitement</button>
+        </div>
+      </div>
+
+    </div><!-- /ob-slides -->
+
+    <!-- Footer navigation -->
+    <div class="ob-footer">
+      <div class="ob-dots">
+        <button class="ob-dot on" data-i="0" onclick="obGoto(0)"></button>
+        <button class="ob-dot" data-i="1" onclick="obGoto(1)"></button>
+        <button class="ob-dot" data-i="2" onclick="obGoto(2)"></button>
+        <button class="ob-dot" data-i="3" onclick="obGoto(3)"></button>
+      </div>
+      <div class="ob-nav">
+        <button class="ob-btn ob-btn-sec" id="ob-back" onclick="obGoto(window._obCur-1)" style="display:none">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Retour
         </button>
-        <button onclick="obNext(3)" class="btn btn-primary" style="flex:1">
-          Voir les plans <i data-lucide="arrow-right" style="width:16px;height:16px;vertical-align:-2px;margin-left:6px"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- Étape 3 — Plans tarifaires -->
-    <div class="ob-step" id="ob-step-3" style="padding:36px 40px;display:none">
-      <h3 style="font-family:var(--font-display);font-size:20px;font-weight:800;margin-bottom:6px;text-align:center">Choisissez votre plan</h3>
-      <p style="text-align:center;color:var(--gris-500);font-size:13px;margin-bottom:24px">Commencez gratuitement, évoluez quand vous voulez</p>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:24px">
-        <!-- GRATUIT -->
-        <div style="border:2px solid var(--gris-200);border-radius:14px;padding:16px;text-align:center">
-          <div style="font-weight:800;font-size:14px;margin-bottom:4px">Gratuit</div>
-          <div style="font-size:22px;font-weight:900;color:var(--gris-700);margin-bottom:8px">0 $</div>
-          <div style="font-size:11px;color:var(--gris-500);text-align:left;display:flex;flex-direction:column;gap:5px">
-            <span><i data-lucide="check" style="width:11px;height:11px;stroke:var(--primary);vertical-align:-1px;margin-right:3px"></i> 2 examens/mois</span>
-            <span><i data-lucide="check" style="width:11px;height:11px;stroke:var(--primary);vertical-align:-1px;margin-right:3px"></i> Questions basiques</span>
-            <span style="color:var(--gris-400)"><i data-lucide="x" style="width:11px;height:11px;vertical-align:-1px;margin-right:3px"></i> Archives</span>
-            <span style="color:var(--gris-400)"><i data-lucide="x" style="width:11px;height:11px;vertical-align:-1px;margin-right:3px"></i> IA Coach</span>
-          </div>
-        </div>
-        <!-- PREMIUM — mis en avant -->
-        <div style="border:2px solid var(--primary);border-radius:14px;padding:16px;text-align:center;background:var(--primary-subtle);position:relative">
-          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;font-size:10px;font-weight:700;padding:2px 12px;border-radius:10px;white-space:nowrap">POPULAIRE</div>
-          <div style="font-weight:800;font-size:14px;margin-bottom:4px;color:var(--primary)">Premium</div>
-          <div style="font-size:22px;font-weight:900;color:var(--primary);margin-bottom:8px">5 $<span style="font-size:11px;font-weight:400">/mois</span></div>
-          <div style="font-size:11px;color:var(--gris-700);text-align:left;display:flex;flex-direction:column;gap:5px">
-            <span><i data-lucide="check" style="width:11px;height:11px;stroke:var(--primary);vertical-align:-1px;margin-right:3px"></i> Examens illimités</span>
-            <span><i data-lucide="check" style="width:11px;height:11px;stroke:var(--primary);vertical-align:-1px;margin-right:3px"></i> Toutes les archives</span>
-            <span><i data-lucide="check" style="width:11px;height:11px;stroke:var(--primary);vertical-align:-1px;margin-right:3px"></i> Corrigés PDF</span>
-            <span><i data-lucide="check" style="width:11px;height:11px;stroke:var(--primary);vertical-align:-1px;margin-right:3px"></i> IA Coach 24h/24</span>
-          </div>
-        </div>
-        <!-- ÉCOLE -->
-        <div style="border:2px solid #C9972A;border-radius:14px;padding:16px;text-align:center;background:#FFFBF0">
-          <div style="font-weight:800;font-size:14px;margin-bottom:4px;color:#8C6A1A">École</div>
-          <div style="font-size:22px;font-weight:900;color:#8C6A1A;margin-bottom:8px">50 $<span style="font-size:11px;font-weight:400">/an</span></div>
-          <div style="font-size:11px;color:var(--gris-700);text-align:left;display:flex;flex-direction:column;gap:5px">
-            <span><i data-lucide="check" style="width:11px;height:11px;stroke:#8C6A1A;vertical-align:-1px;margin-right:3px"></i> Classe entière</span>
-            <span><i data-lucide="check" style="width:11px;height:11px;stroke:#8C6A1A;vertical-align:-1px;margin-right:3px"></i> Tableau prof</span>
-            <span><i data-lucide="check" style="width:11px;height:11px;stroke:#8C6A1A;vertical-align:-1px;margin-right:3px"></i> Tout Premium inclus</span>
-            <span><i data-lucide="check" style="width:11px;height:11px;stroke:#8C6A1A;vertical-align:-1px;margin-right:3px"></i> Rapport mensuel</span>
-          </div>
-        </div>
-      </div>
-
-      <div style="background:linear-gradient(135deg,#4f1d9610,#007A5E10);border:1px solid var(--primary);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--gris-700);margin-bottom:20px;display:flex;gap:10px;align-items:center">
-        <i data-lucide="shield-check" style="width:20px;height:20px;stroke:var(--primary);flex-shrink:0"></i>
-        <span>Paiement via <strong>M-Pesa</strong>, <strong>Airtel Money</strong> ou <strong>Orange Money</strong>. Annulation à tout moment.</span>
-      </div>
-
-      <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <button onclick="obNext(2)" class="btn btn-ghost" style="flex:0 0 auto">
-          <i data-lucide="arrow-left" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"></i> Retour
-        </button>
-        <a href="/reussiteplus/tarifs.php" class="btn btn-primary" style="flex:1;justify-content:center;text-decoration:none">
-          <i data-lucide="crown" style="width:15px;height:15px;vertical-align:-2px;margin-right:6px"></i> Voir tous les plans
-        </a>
-        <button onclick="obClose()" class="btn btn-ghost" style="flex:0 0 auto;font-size:12px;color:var(--gris-400)">
-          Commencer gratuitement
+        <button class="ob-btn ob-btn-pri" id="ob-next" onclick="obGoto(window._obCur+1)">
+          Suivant
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
       </div>
     </div>
-
-    <!-- Étape 4 — C'est parti ! (masquée, utilisée pour la complétion) -->
-    <div class="ob-step" id="ob-step-4" style="padding:48px 40px;display:none;text-align:center">
-      <div style="width:72px;height:72px;background:linear-gradient(135deg,#22C55E,#16A34A);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-bottom:20px">
-        <i data-lucide="check" style="width:36px;height:36px;stroke:#fff"></i>
-      </div>
-      <h3 style="font-family:var(--font-display);font-size:22px;font-weight:800;margin-bottom:10px">Vous êtes prêt, <?= e($user['prenom']) ?> !</h3>
-      <p style="color:var(--gris-500);font-size:14px;margin-bottom:28px;max-width:380px;margin-left:auto;margin-right:auto;line-height:1.7">
-        Votre tableau de bord est prêt. Passez votre premier examen dès maintenant et commencez à progresser.
-      </p>
-      <button onclick="obClose()" class="btn btn-primary btn-lg" style="min-width:220px">
-        <i data-lucide="play" style="width:16px;height:16px;vertical-align:-2px;margin-right:6px"></i> Commencer maintenant
-      </button>
-    </div>
-
-    <!-- Indicateurs de navigation -->
-    <div style="display:flex;justify-content:center;gap:8px;padding:16px 0 24px;position:sticky;bottom:0;background:var(--blanc)">
-      <?php for ($i = 1; $i <= 4; $i++): ?>
-      <button onclick="obNext(<?= $i ?>)" id="ob-dot-<?= $i ?>"
-        style="width:8px;height:8px;border-radius:50%;border:none;cursor:pointer;transition:all .3s;background:<?= $i === 1 ? 'var(--primary)' : 'var(--gris-200)' ?>;padding:0"></button>
-      <?php endfor; ?>
-    </div>
-
   </div>
 </div>
 
 <script>
-let obCurrentStep = 1;
-const obTotalSteps = 4;
+(function() {
+  var TOTAL = 4;
+  window._obCur = 0;
+  var slides = document.querySelectorAll('#ob-slides .ob-slide');
+  var dots   = document.querySelectorAll('.ob-dot');
 
-function obNext(step) {
-  // Masquer l'étape courante
-  document.getElementById('ob-step-' + obCurrentStep).style.display = 'none';
-  document.getElementById('ob-dot-' + obCurrentStep).style.background = 'var(--gris-200)';
-  document.getElementById('ob-dot-' + obCurrentStep).style.width = '8px';
+  window.obGoto = function(n) {
+    if (n < 0 || n >= TOTAL) return;
+    var prev = window._obCur;
+    // Direction
+    slides[prev].className = 'ob-slide ' + (n > prev ? 'ob-left' : 'ob-right');
+    window._obCur = n;
+    slides[n].className = 'ob-slide ob-active';
+    // Dots
+    dots[prev].classList.remove('on');
+    dots[n].classList.add('on');
+    // Progress bar
+    document.getElementById('ob-fill').style.width = ((n + 1) / TOTAL * 100) + '%';
+    // Boutons
+    document.getElementById('ob-back').style.display = n > 0 ? '' : 'none';
+    var nextBtn = document.getElementById('ob-next');
+    if (n === TOTAL - 1) {
+      nextBtn.style.display = 'none';
+    } else {
+      nextBtn.style.display = '';
+      nextBtn.innerHTML = 'Suivant <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+    }
+  };
 
-  obCurrentStep = step;
+  window.obClose = function() {
+    var bd = document.getElementById('ob-bd');
+    bd.style.transition = 'opacity .25s';
+    bd.style.opacity = '0';
+    setTimeout(function(){ bd.remove(); }, 270);
+    if (history.replaceState) {
+      var url = new URL(window.location.href);
+      url.searchParams.delete('welcome');
+      history.replaceState({}, '', url.toString());
+    }
+  };
 
-  // Afficher la nouvelle étape
-  document.getElementById('ob-step-' + obCurrentStep).style.display = 'block';
-  document.getElementById('ob-dot-' + obCurrentStep).style.background = 'var(--primary)';
-  document.getElementById('ob-dot-' + obCurrentStep).style.width = '20px';
-  document.getElementById('ob-dot-' + obCurrentStep).style.borderRadius = '4px';
+  // Fermer sur clic backdrop
+  document.getElementById('ob-bd').addEventListener('click', function(e) {
+    if (e.target === this) window.obClose();
+  });
 
-  // Mettre à jour la barre de progression
-  document.getElementById('obProgress').style.width = (obCurrentStep / obTotalSteps * 100) + '%';
-
-  // Re-initialiser les icônes Lucide pour les étapes chargées
-  if (typeof lucide !== 'undefined') lucide.createIcons();
-
-  // Scroller en haut du modal
-  document.getElementById('onboardingModal').scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function obClose() {
-  const overlay = document.getElementById('onboardingOverlay');
-  overlay.style.opacity = '0';
-  overlay.style.transition = 'opacity .3s ease';
-  setTimeout(() => overlay.remove(), 300);
-  // Nettoyer l'URL
-  if (history.replaceState) history.replaceState({}, '', window.location.pathname);
-}
-
-// Fermer en cliquant sur l'overlay (hors modal)
-document.getElementById('onboardingOverlay').addEventListener('click', function(e) {
-  if (e.target === this) obClose();
-});
-
-// Initialiser les icônes
-if (typeof lucide !== 'undefined') lucide.createIcons();
+  // Clavier
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight') window.obGoto(window._obCur + 1);
+    if (e.key === 'ArrowLeft')  window.obGoto(window._obCur - 1);
+    if (e.key === 'Escape')     window.obClose();
+  });
+})();
 </script>
 <?php endif; ?>
+
 
 <?php include __DIR__ . '/includes/footer_app.php'; ?>
