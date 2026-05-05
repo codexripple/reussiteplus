@@ -172,15 +172,20 @@ include __DIR__ . '/includes/header_app.php';
     <?php endforeach; ?>
   </div>
   <?php endif; ?>
-  <?php if ($explication && $user['plan'] !== 'GRATUIT'): ?>
+  <?php if ($user['plan'] === 'GRATUIT'): ?>
+  <div class="q-expl-lock" id="expl-<?= $qid ?>">
+    <i data-lucide="lock" style="width:13px;height:13px;vertical-align:-2px;stroke:#D97706"></i>
+    <a href="/reussiteplus/tarifs.php" style="color:#92640A;font-weight:600">Passez à Basique ou Premium</a> pour débloquer les explications détaillées.
+  </div>
+  <?php elseif ($explication): ?>
   <div class="q-expl" id="expl-<?= $qid ?>">
     <i data-lucide="lightbulb" style="width:14px;height:14px;vertical-align:-2px;stroke:var(--primary)"></i>
     <strong>Explication :</strong> <?= e($explication) ?>
   </div>
   <?php else: ?>
-  <div class="q-expl-lock" id="expl-<?= $qid ?>">
-    <i data-lucide="lock" style="width:13px;height:13px;vertical-align:-2px;stroke:#D97706"></i>
-    <a href="/reussiteplus/tarifs.php" style="color:#92640A;font-weight:600">Passez à Premium</a> pour débloquer les explications.
+  <div class="q-expl" id="expl-<?= $qid ?>" style="background:var(--gris-50);border-left-color:var(--gris-300)">
+    <i data-lucide="check-circle" style="width:13px;height:13px;vertical-align:-2px;stroke:#007A5E"></i>
+    Bonne réponse ! Aucune explication supplémentaire pour cette question.
   </div>
   <?php endif; ?>
   <div class="q-footer">
