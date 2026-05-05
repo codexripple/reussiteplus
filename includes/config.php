@@ -3,6 +3,17 @@
 // RÉUSSITE+ | Configuration Centrale
 // ============================================================
 
+// Charger le fichier .env s'il existe (développement local)
+$_envFile = dirname(__DIR__) . '/.env';
+if (file_exists($_envFile)) {
+    foreach (file($_envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $_line) {
+        if ($_line[0] === '#' || strpos($_line, '=') === false) continue;
+        [$_k, $_v] = explode('=', $_line, 2);
+        $_ENV[trim($_k)] = trim($_v);
+    }
+    unset($_envFile, $_line, $_k, $_v);
+}
+
 define('APP_NAME',    'RÉUSSITE+');
 define('APP_VERSION', '1.0.0');
 define('APP_URL',     'http://localhost/reussiteplus');
