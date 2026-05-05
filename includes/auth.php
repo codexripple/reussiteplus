@@ -203,3 +203,87 @@ function auth_change_password(string $userId, string $oldPass, string $newPass):
     );
     return ['ok' => true];
 }
+// ── Demande de réinitialisation de mot de passe ────────
+function auth_request_password_reset(string $email): array {
+    $email = strtolower(trim($email));
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return ['ok' => false, 'msg' => 'Adresse email invalide.'];
+    }
+    $user = dbRow(
+        "SELECT id, nom, prenom, email FROM utilisateurs WHERE email = ? AND is_active = 1",
+        [$email]
+    );
+    // Always return ok to prevent email enumeration
+    if (!$user) {
+        return ['ok' => true, 'msg' => 'Si cet email existe, un lien vous a été envoyé.', 'sent' => false];
+    }
+
+    // Rate limit: pas plus d'une demande toutes les 5 minutes
+    $recent = dbRow(
+        "SELECT token_reset_expire FROM utilisateurs WHERE id = ? AND token_reset_expire > DATE_SUB(NOW(), INTERVAL 5 MINUTE)",
+        [$user['id']]
+    );
+    if ($recent) {
+        return ['ok' => false, 'msg' => 'Une demande a déjà été envoyée récemment. Patientez 5 minutes.'];
+    }
+
+    $token   = bin2hex(random_bytes(32)); // 64 chars hex
+    $expires = date('Y-m-d H:i:s', time() + 3600); // 1 heure
+
+    dbQuery(
+        "UPDATE utilisateurs SET token_reset = ?, token_reset_expire = ? WHERE id = ?",
+        [hash('sha256', $token), $expires, $user['id']]
+    );
+
+    $resetUrl   = APP_URL . '/reinitialiser_mot_de_passe.php?token=' . urlencode($token) . '&email=' . urlencode($email);
+    $isLocalhost = in_array(($_SERVER['HTTP_HOST'] ?? ''), ['localhost', '127.0.0.1']);
+
+    // Tentative d'envoi email
+    $sent = false;
+    if (!$isLocalhost) {
+        $subject = '=?UTF-8?B?' . base64_encode('Réinitialisation de votre mot de passe — RÉUSSITE+') . '?=';
+        $body    = "Bonjour {$user['prenom']},\n\n"
+                 . "Vous avez demandé à réinitialiser votre mot de passe sur RÉUSSITE+.\n\n"
+                 . "Cliquez sur le lien ci-dessous (valable 1 heure) :\n\n"
+                 . $resetUrl . "\n\n"
+                 . "Si vous n'avez pas fait cette demande, ignorez cet email.\n\n"
+                 . "L'équipe RÉUSSITE+";
+        $headers = "From: no-reply@reussiteplus.cd\r\nContent-Type: text/plain; charset=UTF-8";
+        $sent    = @mail($user['email'], $subject, $body, $headers);
+    }
+
+    return [
+        'ok'        => true,
+        'sent'      => $sent,
+        'dev_url'   => $isLocalhost ? $resetUrl : null,
+        'prenom'    => $user['prenom'],
+        'msg'       => 'Lien de réinitialisation généré.',
+    ];
+}
+
+// ── Confirmer la réinitialisation ──────────────────────
+function auth_confirm_password_reset(string $email, string $token, string $newPass): array {
+    if (strlen($newPass) < 8) {
+        return ['ok' => false, 'msg' => 'Le mot de passe doit contenir au moins 8 caractères.'];
+    }
+    $email = strtolower(trim($email));
+    $user  = dbRow(
+        "SELECT id, token_reset, token_reset_expire FROM utilisateurs WHERE email = ? AND is_active = 1",
+        [$email]
+    );
+    if (!$user || !$user['token_reset'] || !$user['token_reset_expire']) {
+        return ['ok' => false, 'msg' => 'Lien invalide ou expiré.'];
+    }
+    if (strtotime($user['token_reset_expire']) < time()) {
+        return ['ok' => false, 'msg' => 'Ce lien a expiré. Faites une nouvelle demande.'];
+    }
+    if (!hash_equals($user['token_reset'], hash('sha256', $token))) {
+        return ['ok' => false, 'msg' => 'Lien invalide.'];
+    }
+
+    dbQuery(
+        "UPDATE utilisateurs SET password_hash = ?, token_reset = NULL, token_reset_expire = NULL WHERE id = ?",
+        [password_hash($newPass, PASSWORD_BCRYPT, ['cost' => BCRYPT_COST]), $user['id']]
+    );
+    return ['ok' => true];
+}
