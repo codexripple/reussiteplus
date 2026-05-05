@@ -12,33 +12,25 @@ $user = require_admin();
 if (isset($_GET['action'], $_GET['id']) && !isset($_GET['confirm'])) {
     $action = $_GET['action'];
     $id     = $_GET['id'];
-    $abon = dbRow("SELECT a.*, u.id as uid, u.plan as user_plan, u.plan_expire_at as user_plan_expire FROM abonnements a JOIN utilisateurs u ON a.user_id=u.id WHERE a.id=?", [$id]);
+    $abon = dbRow("SELECT a.*, u.id as uid, u.plan as user_plan FROM abonnements a JOIN utilisateurs u ON a.user_id=u.id WHERE a.id=?", [$id]);
     if (!$abon) {
         redirect('/reussiteplus/admin/paiements.php', 'error', 'Paiement introuvable.');
     }
     if ($action === 'confirmer' && $abon['statut'] === 'EN_ATTENTE') {
-        // Calculer la date de fin : prolonger depuis l'expiry actuelle si encore active
-        $duree     = max(1, (int)($abon['duree_mois'] ?? 1));
-        $baseDate  = ($abon['user_plan_expire'] && strtotime($abon['user_plan_expire']) > time())
-                     ? $abon['user_plan_expire']
-                     : date('Y-m-d');
-        $newExpiry = date('Y-m-d', strtotime("+{$duree} month", strtotime($baseDate)));
-
-        dbQuery("UPDATE abonnements SET statut='CONFIRME', confirmed_at=NOW(), confirmed_by=?, date_fin=? WHERE id=?",
-            [$user['id'], $newExpiry, $id]);
+        dbQuery("UPDATE abonnements SET statut='CONFIRME', confirmed_at=NOW() WHERE id=?", [$id]);
         dbQuery("UPDATE utilisateurs SET plan=?, plan_expire_at=? WHERE id=?",
-            [$abon['plan'], $newExpiry, $abon['uid']]);
+            [$abon['plan'], $abon['date_fin'], $abon['uid']]);
         dbInsert('notifications', [
             'user_id' => $abon['uid'],
             'type'    => 'PAIEMENT',
             'titre'   => 'Paiement confirmé — ' . (PLANS[$abon['plan']]['nom'] ?? $abon['plan']),
-            'message' => "Votre abonnement {$abon['plan']} a été activé jusqu'au " . date('d/m/Y', strtotime($newExpiry)) . ". Bon apprentissage !",
+            'message' => "Votre abonnement {$abon['plan']} a été activé jusqu'au " . date('d/m/Y', strtotime($abon['date_fin'])) . ". Bon apprentissage !",
             'lien'    => '/reussiteplus/abonnement.php',
         ]);
-        dbInsert('admin_logs', ['user_id' => $user['id'], 'action' => 'CONFIRMER_PAIEMENT', 'details' => "ID=$id ref={$abon['reference_paiement']}"]);
+        dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => 'CONFIRMER_PAIEMENT', 'details' => "ID=$id ref={$abon['reference_paiement']}"]);
         redirect('/reussiteplus/admin/paiements.php', 'success', 'Paiement confirmé et plan activé.');
     } elseif ($action === 'refuser' && $abon['statut'] === 'EN_ATTENTE') {
-        dbQuery("UPDATE abonnements SET statut='ECHEC' WHERE id=?", [$id]);
+        dbQuery("UPDATE abonnements SET statut='REFUSE' WHERE id=?", [$id]);
         dbInsert('notifications', [
             'user_id' => $abon['uid'],
             'type'    => 'PAIEMENT',
@@ -46,7 +38,7 @@ if (isset($_GET['action'], $_GET['id']) && !isset($_GET['confirm'])) {
             'message' => "Votre paiement n'a pas pu être vérifié. Contactez support@reussiteplus.cd.",
             'lien'    => '/reussiteplus/abonnement.php',
         ]);
-        dbInsert('admin_logs', ['user_id' => $user['id'], 'action' => 'REFUSER_PAIEMENT', 'details' => "ID=$id"]);
+        dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => 'REFUSER_PAIEMENT', 'details' => "ID=$id"]);
         redirect('/reussiteplus/admin/paiements.php', 'success', 'Paiement refusé.');
     }
 }
@@ -56,10 +48,10 @@ $statut = $_GET['statut'] ?? 'EN_ATTENTE';
 $page   = max(1, (int)($_GET['page'] ?? 1));
 $limit  = 20;
 
-$validStatuts = ['EN_ATTENTE', 'CONFIRME', 'ECHEC', 'REMBOURSE', 'TOUS'];
+$validStatuts = ['EN_ATTENTE', 'CONFIRME', 'REFUSE', 'EXPIRE', 'TOUS'];
 if (!in_array($statut, $validStatuts, true)) $statut = 'EN_ATTENTE';
 
-$where  = $statut !== 'TOUS' ? "WHERE a.statut=?" : "";
+$where  = $statut !== 'TOUS' ? "AND a.statut=?" : "";
 $params = $statut !== 'TOUS' ? [$statut] : [];
 
 $total   = dbRow("SELECT COUNT(*) as n FROM abonnements a $where", $params)['n'];
@@ -70,7 +62,7 @@ $paiements = dbAll(
      $where ORDER BY a.created_at DESC LIMIT $limit OFFSET $offset",
     $params
 );
-$pagination = paginate($total, $page, $limit);
+$pagination = paginate($total, $limit, $page);
 
 include __DIR__ . '/../includes/header_app.php';
 ?>
@@ -84,7 +76,7 @@ include __DIR__ . '/../includes/header_app.php';
     $active = $statut === $s;
   ?>
   <a href="?statut=<?= $s ?>" class="btn <?= $active ? 'btn-primary' : 'btn-ghost' ?> btn-sm">
-    <?= $s === 'EN_ATTENTE' ? '<i class="bi bi-hourglass-split"></i>' : ($s === 'CONFIRME' ? '<i class="bi bi-check-circle-fill"></i>' : ($s === 'ECHEC' ? '<i class="bi bi-x-circle-fill"></i>' : ($s === 'REMBOURSE' ? '<i class="bi bi-arrow-counterclockwise"></i>' : '<i class="bi bi-list-ul"></i>'))) ?>
+    <?= $s === 'EN_ATTENTE' ? '<i data-lucide="clock" style="width:12px;height:12px;vertical-align:-1px"></i>' : ($s === 'CONFIRME' ? '<i data-lucide="check-circle" style="width:12px;height:12px;vertical-align:-1px"></i>' : ($s === 'REFUSE' ? '<i data-lucide="x-circle" style="width:12px;height:12px;vertical-align:-1px"></i>' : ($s === 'EXPIRE' ? '<i data-lucide="clock" style="width:12px;height:12px;vertical-align:-1px"></i>' : '<i data-lucide="list" style="width:12px;height:12px;vertical-align:-1px"></i>'))) ?>
     <?= $s ?> (<?= $cnt ?>)
   </a>
   <?php endforeach; ?>
@@ -92,7 +84,7 @@ include __DIR__ . '/../includes/header_app.php';
 
 <div class="card">
   <div class="card-header">
-    <div class="card-title"><i class="bi bi-credit-card-2-front"></i> Paiements — <?= $statut ?></div>
+    <div class="card-title"><i data-lucide="credit-card" style="width:15px;height:15px;vertical-align:-2px;margin-right:6px"></i> Paiements — <?= $statut ?></div>
     <div style="font-size:12px;color:var(--gris-500)"><?= $total ?> résultat(s)</div>
   </div>
 
@@ -104,7 +96,7 @@ include __DIR__ . '/../includes/header_app.php';
       </thead>
       <tbody>
       <?php foreach ($paiements as $p):
-        $sc = ['EN_ATTENTE'=>['#FEF3C7','#92400E'],'CONFIRME'=>['#D1FAE5','#064E3B'],'ECHEC'=>['#FEE2E2','#7F1D1D'],'REMBOURSE'=>['#F3F4F6','#6B7280']];
+        $sc = ['EN_ATTENTE'=>['#FEF3C7','#92400E'],'CONFIRME'=>['#D1FAE5','#064E3B'],'REFUSE'=>['#FEE2E2','#7F1D1D'],'EXPIRE'=>['#F3F4F6','#6B7280']];
         $c = $sc[$p['statut']] ?? $sc['EN_ATTENTE'];
       ?>
       <tr>
@@ -135,8 +127,8 @@ include __DIR__ . '/../includes/header_app.php';
         <td>
           <?php if ($p['statut'] === 'EN_ATTENTE'): ?>
           <div style="display:flex;gap:4px">
-            <a href="?action=confirmer&id=<?= e($p['id']) ?>&statut=<?= $statut ?>" class="btn btn-primary btn-sm" onclick="return confirm('Confirmer ce paiement de <?= e($p['prenom']) ?> ?')"><i class="bi bi-check-lg"></i></a>
-            <a href="?action=refuser&id=<?= e($p['id']) ?>&statut=<?= $statut ?>" class="btn btn-danger btn-sm" onclick="return confirm('Refuser ?')"><i class="bi bi-x-lg"></i></a>
+            <a href="?action=confirmer&id=<?= e($p['id']) ?>&statut=<?= $statut ?>" class="btn btn-primary btn-sm" onclick="return confirm('Confirmer ce paiement de <?= e($p['prenom']) ?> ?')">✓</a>
+            <a href="?action=refuser&id=<?= e($p['id']) ?>&statut=<?= $statut ?>" class="btn btn-danger btn-sm" onclick="return confirm('Refuser ?')">✗</a>
           </div>
           <?php else: ?>
           <span style="font-size:11px;color:var(--gris-400)">—</span>
@@ -159,7 +151,7 @@ include __DIR__ . '/../includes/header_app.php';
 
   <?php else: ?>
   <div style="text-align:center;padding:40px;color:var(--gris-500)">
-    <div style="font-size:40px;margin-bottom:8px;color:var(--gris-300)"><i class="bi bi-credit-card-2-front"></i></div>
+    <div style="font-size:40px;margin-bottom:8px">💳</div>
     <div>Aucun paiement avec ce statut.</div>
   </div>
   <?php endif; ?>

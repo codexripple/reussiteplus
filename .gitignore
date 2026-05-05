@@ -1,0 +1,16 @@
+# Variables d'environnement (ne jamais commiter)
+.env
+*.env
+
+# Fichiers de configuration locaux
+includes/config.local.php
+
+# Logs
+*.log
+logs/
+
+# Uploads utilisateurs
+uploads/
+
+# Cache
+cache/

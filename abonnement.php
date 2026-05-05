@@ -203,7 +203,7 @@ include __DIR__ . '/includes/header_app.php';
   </div>
   <div class="abn-stat-card">
     <div class="abn-stat-val" style="color:#F97316"><?= $streakJours ?></div>
-    <div class="abn-stat-label">Jours de suite 🔥</div>
+    <div class="abn-stat-label">Jours de suite <i data-lucide="flame" style="width:13px;height:13px;vertical-align:-2px;color:#F97316"></i></div>
   </div>
 </div>
 

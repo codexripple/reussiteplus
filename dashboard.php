@@ -636,7 +636,7 @@ include __DIR__ . '/includes/header_app.php';
       <?php foreach (array_slice($progressMatieres, 0, 4) as $pm): ?>
       <div style="margin-bottom:10px">
         <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
-          <span style="color:var(--gris-700)"><?= e($pm['icone'] ?? '📚') ?> <?= e($pm['nom']) ?></span>
+          <span style="color:var(--gris-700);display:flex;align-items:center;gap:5px"><?= matiere_icon($pm['icone'] ?? 'book', 13) ?> <?= e($pm['nom']) ?></span>
           <span style="font-weight:600;color:<?= score_couleur((float)$pm['score_moyen']) ?>"><?= number_format((float)$pm['score_moyen'],1) ?>%</span>
         </div>
         <div class="progress-bar">

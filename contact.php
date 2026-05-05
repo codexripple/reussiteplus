@@ -4,7 +4,7 @@ require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/helpers.php';
 
-$user = get_user(); // peut être null — page publique
+$user = current_user(); // peut être null — page publique
 
 $success = false;
 $errors  = [];

@@ -90,7 +90,7 @@ include __DIR__ . '/includes/header_app.php';
       <option value="">Toutes</option>
       <?php foreach ($matieres as $mat): ?>
       <option value="<?= e($mat['id']) ?>" <?= ($matiereF !== '' && (string)$mat['id'] === $matiereF) ? 'selected' : '' ?>>
-        <?= e($mat['icone'] ?? '📚') ?> <?= e($mat['nom']) ?>
+        <?= matiere_icon($mat['icone'] ?? 'book', 13) ?> <?= e($mat['nom']) ?>
       </option>
       <?php endforeach; ?>
     </select>
@@ -99,7 +99,7 @@ include __DIR__ . '/includes/header_app.php';
     <label style="font-size:11px;font-weight:600;color:var(--gris-500);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px">Difficulté</label>
     <select class="form-control" name="diff">
       <option value="">Toutes</option>
-      <?php foreach (['DEBUTANT'=>'🟢 Débutant','ELEMENTAIRE'=>'🔵 Élémentaire','INTERMEDIAIRE'=>'🟡 Intermédiaire','AVANCE'=>'🟠 Avancé','EXPERT'=>'🔴 Expert'] as $val => $label): ?>
+      <?php foreach (['DEBUTANT'=>'Débutant','ELEMENTAIRE'=>'Élémentaire','INTERMEDIAIRE'=>'Intermédiaire','AVANCE'=>'Avancé','EXPERT'=>'Expert'] as $val => $label): ?>
       <option value="<?= $val ?>" <?= $diffF === $val ? 'selected' : '' ?>><?= $label ?></option>
       <?php endforeach; ?>
     </select>
@@ -145,7 +145,7 @@ include __DIR__ . '/includes/header_app.php';
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
       <?php if ($q['matiere_nom']): ?>
       <span style="font-size:11px;background:<?= e($q['couleur'] ?? 'var(--primary)') ?>18;color:<?= e($q['couleur'] ?? 'var(--primary)') ?>;padding:3px 10px;border-radius:20px;font-weight:600">
-        <?= e($q['icone'] ?? '📚') ?> <?= e($q['matiere_nom']) ?>
+        <?= matiere_icon($q['icone'] ?? 'book', 12) ?> <?= e($q['matiere_nom']) ?>
       </span>
       <?php endif; ?>
       <?= badge_difficulte($q['difficulte'] ?? 'INTERMEDIAIRE') ?>

@@ -16,10 +16,10 @@ function format_prix(int $montant, string $devise = 'CDF'): string {
 // ── Badge plan utilisateur ─────────────────────────────────
 function badge_plan(string $plan): string {
     $map = [
-        'GRATUIT' => ['<i class="bi bi-backpack"></i> Gratuit', '#6B7280'],
-        'BASIQUE' => ['<i class="bi bi-book"></i> Basique', '#1E5FAD'],
-        'PREMIUM' => ['<i class="bi bi-star-fill"></i> Premium', '#C9972A'],
-        'ECOLE'   => ['<i class="bi bi-building"></i> École',   '#007A5E'],
+        'GRATUIT' => ['🎒 Gratuit', '#6B7280'],
+        'BASIQUE' => ['📘 Basique', '#1E5FAD'],
+        'PREMIUM' => ['⭐ Premium', '#C9972A'],
+        'ECOLE'   => ['🏫 École',   '#007A5E'],
     ];
     [$label, $color] = $map[$plan] ?? ['Gratuit', '#6B7280'];
     return "<span style=\"background:{$color}20;color:{$color};padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600\">{$label}</span>";
@@ -45,6 +45,18 @@ function slugify(string $text): string {
     $text = preg_replace('/[^a-z0-9\s-]/', '', $text);
     $text = preg_replace('/[\s-]+/', '-', trim($text));
     return $text;
+}
+
+// ── Icône Lucide pour une matière ─────────────────────────
+// $icone contient le nom Lucide (ex: 'calculator') ou un fallback emoji
+function matiere_icon(string $icone, int $size = 16, string $style = ''): string {
+    // Si c'est déjà un nom Lucide (pas emoji), on rend l'icône
+    if (preg_match('/^[a-z][a-z0-9\-]+$/', $icone)) {
+        $s = $style ? " style=\"{$style}\"" : '';
+        return "<i data-lucide=\"{$icone}\" style=\"width:{$size}px;height:{$size}px;vertical-align:middle{$style}\"></i>";
+    }
+    // Sinon fallback — on cherche le mapping par le nom Lucide par défaut
+    return "<i data-lucide=\"book\" style=\"width:{$size}px;height:{$size}px;vertical-align:middle\"></i>";
 }
 
 // ── Formatage score ────────────────────────────────────────

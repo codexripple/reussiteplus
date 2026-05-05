@@ -44,23 +44,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
                 'premium_only' => $premium,
             ];
             if ($editId) {
-                dbUpdate('archives', $data, ['id' => $editId]);
+                dbUpdate('archives', $data, 'id', $editId);
                 $success = 'Archive mise à jour.';
-                dbInsert('admin_logs', ['user_id'=>$user['id'],'action'=>'EDIT_ARCHIVE','details'=>"id=$editId"]);
+                dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'EDIT_ARCHIVE','details'=>"id=$editId"]);
             } else {
                 $slug = preg_replace('/[^a-z0-9]+/', '-', strtolower(iconv('UTF-8','ASCII//TRANSLIT',$titre))) . '-' . time();
                 $data['slug']   = $slug;
                 $data['status'] = 'PUBLIE';
                 dbInsert('archives', $data);
                 $success = 'Archive créée avec succès.';
-                dbInsert('admin_logs', ['user_id'=>$user['id'],'action'=>'CREATE_ARCHIVE','details'=>"titre=$titre"]);
+                dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'CREATE_ARCHIVE','details'=>"titre=$titre"]);
             }
         }
     } elseif ($action === 'delete_archive') {
         $delId = $_POST['delete_id'] ?? '';
         if ($delId) {
             dbQuery("DELETE FROM archives WHERE id=?", [$delId]);
-            dbInsert('admin_logs', ['user_id'=>$user['id'],'action'=>'DELETE_ARCHIVE','details'=>"id=$delId"]);
+            dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'DELETE_ARCHIVE','details'=>"id=$delId"]);
             $success = 'Archive supprimée.';
         }
     }
@@ -100,7 +100,7 @@ include __DIR__ . '/../includes/header_app.php';
 <div class="alert alert-error">⚠️ <?= e($errors[0]) ?></div>
 <?php endif; ?>
 <?php if ($success): ?>
-<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i> <?= e($success) ?></div>
+<div class="alert alert-success">✅ <?= e($success) ?></div>
 <?php endif; ?>
 
 <div style="display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start">
@@ -108,12 +108,12 @@ include __DIR__ . '/../includes/header_app.php';
   <div>
     <form method="GET" style="display:flex;gap:8px;margin-bottom:16px">
       <input class="form-control" name="q" value="<?= e($search) ?>" placeholder="Rechercher...">
-      <button type="submit" class="btn btn-ghost"><i class="bi bi-search"></i></button>
+      <button type="submit" class="btn btn-ghost">🔍</button>
     </form>
 
     <div class="card">
       <div class="card-header">
-        <div class="card-title"><i class="bi bi-archive"></i> Archives (<?= $total ?>)</div>
+        <div class="card-title">📂 Archives (<?= $total ?>)</div>
         <a href="/reussiteplus/admin/archives.php" class="btn btn-primary btn-sm">+ Nouvelle archive</a>
       </div>
       <div class="table-wrap">
@@ -126,15 +126,15 @@ include __DIR__ . '/../includes/header_app.php';
             <td><span class="badge badge-gray" style="font-size:10px"><?= e($a['exam_type']) ?></span></td>
             <td style="font-size:12px"><?= $a['annee'] ?></td>
             <td style="font-size:11px;color:var(--gris-500)"><?= e($a['matiere_nom'] ?? '—') ?></td>
-            <td><?= $a['premium_only'] ? '<span style="color:var(--gold)"><i class="bi bi-star-fill"></i></span>' : '<span style="font-size:12px;color:var(--gris-400)">—</span>' ?></td>
+            <td><?= $a['premium_only'] ? '<span style="color:var(--gold);font-size:12px">⭐</span>' : '<span style="font-size:12px;color:var(--gris-400)">—</span>' ?></td>
             <td style="font-size:12px"><?= number_format((int)$a['telechargements']) ?></td>
             <td style="white-space:nowrap">
-              <a href="?edit=<?= e($a['id']) ?>" class="btn btn-ghost btn-sm"><i class="bi bi-pencil-square"></i></a>
+              <a href="?edit=<?= e($a['id']) ?>" class="btn btn-ghost btn-sm">✏️</a>
               <form method="POST" style="display:inline" onsubmit="return confirm('Supprimer cette archive ?')">
                 <?= csrf_field() ?>
                 <input type="hidden" name="action" value="delete_archive">
                 <input type="hidden" name="delete_id" value="<?= e($a['id']) ?>">
-                <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button>
+                <button type="submit" class="btn btn-danger btn-sm">🗑</button>
               </form>
             </td>
           </tr>
@@ -154,7 +154,7 @@ include __DIR__ . '/../includes/header_app.php';
 
   <!-- Formulaire création/édition -->
   <div class="card" style="position:sticky;top:80px">
-    <div class="card-title" style="margin-bottom:20px"><?= $editArchive ? '<i class="bi bi-pencil-square"></i> Modifier l\'archive' : '<i class="bi bi-plus-circle"></i> Nouvelle archive' ?></div>
+    <div class="card-title" style="margin-bottom:20px"><?= $editArchive ? '✏️ Modifier l\'archive' : '➕ Nouvelle archive' ?></div>
     <form method="POST">
       <?= csrf_field() ?>
       <input type="hidden" name="action" value="save_archive">
@@ -210,11 +210,11 @@ include __DIR__ . '/../includes/header_app.php';
       <div class="form-group">
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
           <input type="checkbox" name="premium_only" value="1" <?= ($editArchive['premium_only'] ?? 0) ? 'checked' : '' ?>>
-          <i class="bi bi-star-fill" style="color:var(--gold)"></i> Réserver aux abonnés Premium
+          ⭐ Réserver aux abonnés Premium
         </label>
       </div>
 
-      <button type="submit" class="btn btn-primary btn-full"><?= $editArchive ? '<i class="bi bi-floppy"></i> Mettre à jour' : '<i class="bi bi-plus-circle"></i> Créer l\'archive' ?></button>
+      <button type="submit" class="btn btn-primary btn-full"><?= $editArchive ? '💾 Mettre à jour' : '➕ Créer l\'archive' ?></button>
       <?php if ($editArchive): ?>
       <a href="/reussiteplus/admin/archives.php" class="btn btn-ghost btn-full" style="margin-top:8px">Annuler</a>
       <?php endif; ?>

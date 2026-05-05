@@ -4,106 +4,13 @@ require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/helpers.php';
 
-$pageTitle  = 'Mes résultats';
-$pageActive = 'resultat';
+$pageTitle  = 'Résultats de l\'examen';
+$pageActive = 'examen';
 $user = require_login();
 
 $sessionId = $_GET['session'] ?? '';
+if (!$sessionId) { redirect('/reussiteplus/examen.php'); }
 
-// ── Mode liste : affiche l'historique de tous les examens ──
-if (!$sessionId) {
-    $page    = max(1, (int)($_GET['page'] ?? 1));
-    $perPage = 15;
-    $offset  = ($page - 1) * $perPage;
-
-    $total = (int)(dbRow(
-        "SELECT COUNT(*) as c FROM exam_sessions WHERE user_id=? AND statut='TERMINE'",
-        [$user['id']]
-    )['c'] ?? 0);
-
-    $sessions = dbAll(
-        "SELECT es.*, m.nom as matiere_nom, m.couleur as matiere_couleur, m.icone as matiere_icone
-         FROM exam_sessions es
-         LEFT JOIN matieres m ON es.matiere_id = m.id
-         WHERE es.user_id=? AND es.statut='TERMINE'
-         ORDER BY es.finished_at DESC
-         LIMIT ? OFFSET ?",
-        [$user['id'], $perPage, $offset]
-    );
-
-    include __DIR__ . '/includes/header_app.php';
-    ?>
-    <div style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
-      <div>
-        <h2 style="font-family:var(--font-display);font-size:20px;font-weight:800;margin:0">Mes résultats</h2>
-        <p style="color:var(--gris-500);font-size:13px;margin:4px 0 0"><?= number_format($total) ?> examen<?= $total > 1 ? 's' : '' ?> terminé<?= $total > 1 ? 's' : '' ?></p>
-      </div>
-      <a href="/reussiteplus/examen.php" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Passer un examen</a>
-    </div>
-
-    <?php if ($sessions): ?>
-    <div style="display:flex;flex-direction:column;gap:12px">
-      <?php foreach ($sessions as $s):
-        $pct   = (float)($s['pourcentage'] ?? 0);
-        $mins  = floor(($s['temps_passe'] ?? 0) / 60);
-        $secs  = ($s['temps_passe'] ?? 0) % 60;
-        $date  = date('d/m/Y à H:i', strtotime($s['finished_at'] ?? $s['started_at']));
-        $color = score_couleur($pct);
-      ?>
-      <a href="/reussiteplus/resultat.php?session=<?= e($s['id']) ?>" style="text-decoration:none">
-        <div class="card" style="display:flex;align-items:center;gap:16px;padding:14px 18px;transition:box-shadow .15s;cursor:pointer"
-             onmouseenter="this.style.boxShadow='0 4px 16px rgba(0,0,0,.08)'"
-             onmouseleave="this.style.boxShadow=''">
-          <!-- Icône matière -->
-          <div style="width:44px;height:44px;border-radius:12px;background:<?= e($s['matiere_couleur'] ?? 'var(--primary)') ?>20;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">
-            <?= e($s['matiere_icone'] ?? '📚') ?>
-          </div>
-          <!-- Info -->
-          <div style="flex:1;min-width:0">
-            <div style="font-weight:700;color:var(--gris-900);font-size:14px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical"><?= e($s['titre']) ?></div>
-            <div style="font-size:12px;color:var(--gris-500);margin-top:2px">
-              <?= e($s['matiere_nom'] ?? '—') ?> • <?= $date ?>
-            </div>
-          </div>
-          <!-- Stats -->
-          <div style="display:flex;align-items:center;gap:16px;flex-shrink:0">
-            <div style="text-align:center">
-              <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:<?= $color ?>;line-height:1"><?= number_format($pct, 0) ?>%</div>
-              <div style="font-size:10px;color:var(--gris-500);text-transform:uppercase;margin-top:2px"><?= score_label($pct) ?></div>
-            </div>
-            <div style="text-align:center;display:none" class="d-md-block">
-              <div style="font-size:13px;font-weight:700;color:var(--gris-700)"><?= (int)$s['nb_questions'] ?>Q</div>
-              <div style="font-size:10px;color:var(--gris-500)"><?= $mins ?>:<?= str_pad($secs,2,'0',STR_PAD_LEFT) ?></div>
-            </div>
-            <div style="color:var(--gris-300);font-size:16px"><i class="bi bi-chevron-right"></i></div>
-          </div>
-        </div>
-      </a>
-      <?php endforeach; ?>
-    </div>
-
-    <?php if ($total > $perPage): ?>
-    <div style="display:flex;justify-content:center;gap:8px;margin-top:24px">
-      <?php for ($p = 1; $p <= ceil($total/$perPage); $p++): ?>
-      <a href="?page=<?= $p ?>" class="btn <?= $p === $page ? 'btn-primary' : 'btn-ghost' ?> btn-sm"><?= $p ?></a>
-      <?php endfor; ?>
-    </div>
-    <?php endif; ?>
-
-    <?php else: ?>
-    <div class="card" style="text-align:center;padding:60px 20px">
-      <div style="font-size:48px;margin-bottom:16px;opacity:.3"><i class="bi bi-clipboard-x"></i></div>
-      <div style="font-size:18px;font-weight:700;color:var(--gris-700);margin-bottom:8px">Aucun résultat pour l'instant</div>
-      <p style="color:var(--gris-500);margin-bottom:20px">Passez votre premier examen pour voir vos résultats ici.</p>
-      <a href="/reussiteplus/examen.php" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Commencer un examen</a>
-    </div>
-    <?php endif; ?>
-
-    <?php include __DIR__ . '/includes/footer_app.php'; ?>
-    <?php exit; ?>
-<?php } // fin mode liste
-
-// ── Mode détail : affiche le résultat d'un examen précis ──
 $session = dbRow(
     "SELECT es.*, m.nom as matiere_nom, m.couleur
      FROM exam_sessions es
@@ -111,18 +18,19 @@ $session = dbRow(
      WHERE es.id=? AND es.user_id=?",
     [$sessionId, $user['id']]
 );
-if (!$session) { redirect('/reussiteplus/resultat.php', 'error', 'Session introuvable.'); }
+if (!$session) { redirect('/reussiteplus/dashboard.php', 'error', 'Session introuvable.'); }
 
 // Réponses avec détails
 $answers = dbAll(
     "SELECT ea.*, qb.enonce, qb.points, qb.difficulte,
             qo.texte as option_choisie_texte, qo.lettre as option_choisie_lettre,
             correct_opt.texte as bonne_reponse_texte, correct_opt.lettre as bonne_reponse_lettre,
-            correct_opt.explication
+            exp.explication
      FROM exam_answers ea
      JOIN question_bank qb ON ea.question_id = qb.id
      LEFT JOIN question_options qo ON ea.option_id = qo.id
      LEFT JOIN question_options correct_opt ON correct_opt.question_id = ea.question_id AND correct_opt.est_correcte = 1
+     LEFT JOIN question_explanations exp ON exp.question_id = ea.question_id
      WHERE ea.session_id = ?",
     [$sessionId]
 );
@@ -140,8 +48,8 @@ include __DIR__ . '/includes/header_app.php';
 <div style="max-width:800px;margin:0 auto">
   <!-- Score principal -->
   <div class="card" style="text-align:center;margin-bottom:24px;padding:40px">
-    <div style="font-size:56px;margin-bottom:16px;color:<?= score_couleur($pct) ?>">
-      <?php if ($pct >= 80): ?><i class="bi bi-trophy-fill"></i><?php elseif ($pct >= 60): ?><i class="bi bi-bullseye"></i><?php elseif ($pct >= 40): ?><i class="bi bi-graph-up-arrow"></i><?php else: ?><i class="bi bi-emoji-smile"></i><?php endif; ?>
+    <div style="font-size:48px;margin-bottom:16px">
+      <?php if ($pct >= 80): ?><i data-lucide="trophy" style="width:56px;height:56px;stroke:#C9972A"></i><?php elseif ($pct >= 60): ?><i data-lucide="target" style="width:56px;height:56px;stroke:#007A5E"></i><?php elseif ($pct >= 40): ?><i data-lucide="trending-up" style="width:56px;height:56px;stroke:#1E5FAD"></i><?php else: ?><i data-lucide="dumbbell" style="width:56px;height:56px;stroke:#C9342A"></i><?php endif; ?>
     </div>
     <div style="font-family:var(--font-display);font-size:56px;font-weight:900;color:<?= score_couleur($pct) ?>">
       <?= number_format($pct, 1) ?>%
@@ -157,22 +65,22 @@ include __DIR__ . '/includes/header_app.php';
   <!-- Stats du résultat -->
   <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px">
     <div class="stat-card green">
-      <div class="stat-label"><i class="bi bi-check-circle-fill"></i> Bonnes réponses</div>
+      <div class="stat-label"><i data-lucide="check-circle" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"></i> Bonnes réponses</div>
       <div class="stat-value"><?= $bonnes ?></div>
       <div class="stat-sub">sur <?= $total ?> questions</div>
     </div>
     <div class="stat-card rouge">
-      <div class="stat-label"><i class="bi bi-x-circle-fill"></i> Mauvaises</div>
+      <div class="stat-label"><i data-lucide="x-circle" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"></i> Mauvaises</div>
       <div class="stat-value"><?= $mauvaises ?></div>
       <div class="stat-sub">à revoir</div>
     </div>
     <div class="stat-card gold">
-      <div class="stat-label"><i class="bi bi-star-fill"></i> Score total</div>
+      <div class="stat-label"><i data-lucide="star" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"></i> Score total</div>
       <div class="stat-value"><?= number_format((float)$session['score'], 1) ?></div>
       <div class="stat-sub">/ <?= number_format((float)$session['score_max'], 1) ?> pts</div>
     </div>
     <div class="stat-card bleu">
-      <div class="stat-label"><i class="bi bi-stopwatch"></i> Temps passé</div>
+      <div class="stat-label"><i data-lucide="timer" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"></i> Temps passé</div>
       <div class="stat-value"><?= $mins ?>:<?= str_pad($secs, 2, '0', STR_PAD_LEFT) ?></div>
       <div class="stat-sub">minutes</div>
     </div>
@@ -180,125 +88,23 @@ include __DIR__ . '/includes/header_app.php';
 
   <!-- Actions -->
   <div style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap">
-    <a href="/reussiteplus/resultat.php" class="btn btn-ghost"><i class="bi bi-list-ul"></i> Tous mes résultats</a>
-    <a href="/reussiteplus/examen.php" class="btn btn-primary"><i class="bi bi-arrow-repeat"></i> Refaire un examen</a>
-    <a href="/reussiteplus/progression.php" class="btn btn-ghost"><i class="bi bi-graph-up"></i> Ma progression</a>
-    <?php if ($total > 0): ?>
-    <button onclick="printCertificat()" class="btn btn-gold"><i class="bi bi-award-fill"></i> Télécharger le certificat</button>
-    <?php endif; ?>
+    <a href="/reussiteplus/examen.php" class="btn btn-primary"><i data-lucide="refresh-cw" style="width:14px;height:14px;vertical-align:-2px;margin-right:6px"></i> Refaire un examen</a>
+    <a href="/reussiteplus/progression.php" class="btn btn-ghost"><i data-lucide="trending-up" style="width:14px;height:14px;vertical-align:-2px;margin-right:6px"></i> Voir ma progression</a>
+    <a href="/reussiteplus/dashboard.php" class="btn btn-ghost"><i data-lucide="home" style="width:14px;height:14px;vertical-align:-2px;margin-right:6px"></i> Tableau de bord</a>
   </div>
-
-  <!-- ══════════ CERTIFICAT ══════════ -->
-  <?php
-  $mention = '';
-  $mentionColor = '';
-  $mentionBg = '';
-  if ($pct >= 80) { $mention = 'Très Grande Distinction'; $mentionColor = '#007A5E'; $mentionBg = '#EAF5F1'; }
-  elseif ($pct >= 70) { $mention = 'Grande Distinction'; $mentionColor = '#1E5FAD'; $mentionBg = '#EEF4FF'; }
-  elseif ($pct >= 60) { $mention = 'Distinction'; $mentionColor = '#C9972A'; $mentionBg = '#FFFBEB'; }
-  elseif ($pct >= 50) { $mention = 'Satisfaction'; $mentionColor = '#6B7280'; $mentionBg = '#F9FAFB'; }
-  else { $mention = 'Participation'; $mentionColor = '#6B7280'; $mentionBg = '#F3F4F6'; }
-  $dateFormated = date('j', strtotime($session['finished_at'] ?? 'now'));
-  $moisFr = ['','janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
-  $dateCert = $dateFormated . ' ' . $moisFr[(int)date('n', strtotime($session['finished_at'] ?? 'now'))] . ' ' . date('Y', strtotime($session['finished_at'] ?? 'now'));
-  ?>
-  <div id="certificat-block" style="display:none;margin-bottom:32px">
-    <div id="certificat"
-         style="background:white;border:3px solid <?= $mentionColor ?>;border-radius:16px;padding:40px 48px;text-align:center;position:relative;font-family:Georgia,serif;max-width:720px;margin:0 auto;box-shadow:0 8px 32px rgba(0,0,0,.1)">
-
-      <!-- Coins décoratifs -->
-      <div style="position:absolute;top:10px;left:10px;width:32px;height:32px;border-top:3px solid <?= $mentionColor ?>;border-left:3px solid <?= $mentionColor ?>;border-radius:4px 0 0 0"></div>
-      <div style="position:absolute;top:10px;right:10px;width:32px;height:32px;border-top:3px solid <?= $mentionColor ?>;border-right:3px solid <?= $mentionColor ?>;border-radius:0 4px 0 0"></div>
-      <div style="position:absolute;bottom:10px;left:10px;width:32px;height:32px;border-bottom:3px solid <?= $mentionColor ?>;border-left:3px solid <?= $mentionColor ?>;border-radius:0 0 0 4px"></div>
-      <div style="position:absolute;bottom:10px;right:10px;width:32px;height:32px;border-bottom:3px solid <?= $mentionColor ?>;border-right:3px solid <?= $mentionColor ?>;border-radius:0 0 4px 0"></div>
-
-      <!-- Logo & titre établissement -->
-      <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#9CA3AF;margin-bottom:6px">République Démocratique du Congo</div>
-      <div style="font-family:var(--font-display,'Arial'),sans-serif;font-size:26px;font-weight:900;color:<?= $mentionColor ?>;letter-spacing:1px;margin-bottom:2px">RÉUSSITE+</div>
-      <div style="font-size:10px;text-transform:uppercase;letter-spacing:3px;color:#9CA3AF;margin-bottom:24px">Plateforme nationale de préparation aux examens</div>
-
-      <!-- Ligne décorative -->
-      <div style="height:1px;background:linear-gradient(to right, transparent, <?= $mentionColor ?>, transparent);margin-bottom:24px"></div>
-
-      <!-- Titre certificat -->
-      <div style="font-size:13px;text-transform:uppercase;letter-spacing:2px;color:#6B7280;margin-bottom:10px">Certifie que</div>
-      <div style="font-family:var(--font-display,'Georgia'),serif;font-size:32px;font-weight:900;color:#111827;margin-bottom:6px">
-        <?= e($user['prenom'] . ' ' . strtoupper($user['nom'])) ?>
-      </div>
-      <div style="font-size:13px;color:#6B7280;margin-bottom:24px">a complété avec succès l'ensemble des épreuves de l'examen</div>
-
-      <!-- Titre examen -->
-      <div style="background:<?= $mentionBg ?>;border:1.5px solid <?= $mentionColor ?>30;border-radius:10px;padding:14px 24px;display:inline-block;margin-bottom:20px;max-width:90%">
-        <div style="font-size:16px;font-weight:700;color:#111827"><?= e($session['titre']) ?></div>
-        <div style="font-size:12px;color:#6B7280;margin-top:4px"><?= e($session['matiere_nom'] ?? '') ?> · <?= $dateCert ?></div>
-      </div>
-
-      <!-- Score -->
-      <div style="display:flex;justify-content:center;gap:32px;margin-bottom:24px;flex-wrap:wrap">
-        <div>
-          <div style="font-size:38px;font-weight:900;color:<?= $mentionColor ?>;line-height:1"><?= number_format($pct, 0) ?>%</div>
-          <div style="font-size:11px;color:#9CA3AF;text-transform:uppercase;letter-spacing:1px;margin-top:4px">Score obtenu</div>
-        </div>
-        <div style="width:1px;background:#E5E7EB"></div>
-        <div>
-          <div style="font-size:38px;font-weight:900;color:#111827;line-height:1"><?= $bonnes ?>/<?= $total ?></div>
-          <div style="font-size:11px;color:#9CA3AF;text-transform:uppercase;letter-spacing:1px;margin-top:4px">Bonnes réponses</div>
-        </div>
-        <div style="width:1px;background:#E5E7EB"></div>
-        <div>
-          <div style="font-size:38px;font-weight:900;color:<?= $mentionColor ?>;line-height:1"><?= number_format((float)$session['score'], 0) ?></div>
-          <div style="font-size:11px;color:#9CA3AF;text-transform:uppercase;letter-spacing:1px;margin-top:4px">Points</div>
-        </div>
-      </div>
-
-      <!-- Mention -->
-      <div style="background:<?= $mentionBg ?>;color:<?= $mentionColor ?>;padding:8px 28px;border-radius:30px;display:inline-block;font-weight:700;font-size:16px;letter-spacing:.5px;margin-bottom:24px;border:1.5px solid <?= $mentionColor ?>40">
-        ★ <?= $mention ?> ★
-      </div>
-
-      <!-- Ligne décorative -->
-      <div style="height:1px;background:linear-gradient(to right, transparent, <?= $mentionColor ?>, transparent);margin-bottom:24px"></div>
-
-      <!-- Signatures -->
-      <div style="display:flex;justify-content:space-around;font-size:11px;color:#6B7280;gap:20px;flex-wrap:wrap">
-        <div style="text-align:center">
-          <div style="font-size:22px;margin-bottom:4px;color:<?= $mentionColor ?>">✦</div>
-          <div style="font-weight:700;color:#111827;font-size:13px">Direction Pédagogique</div>
-          <div>RÉUSSITE+</div>
-        </div>
-        <div style="text-align:center">
-          <div style="background:<?= $mentionColor ?>;color:white;padding:6px 16px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:4px"><?= $pct >= 50 ? '✓ VALIDÉ' : '✓ PARTICIPÉ' ?></div>
-          <div>Réf : <?= substr($sessionId, 0, 8) ?></div>
-          <div>reussiteplus.cd</div>
-        </div>
-        <div style="text-align:center">
-          <div style="font-size:22px;margin-bottom:4px;color:<?= $mentionColor ?>">✦</div>
-          <div style="font-weight:700;color:#111827;font-size:13px">Émis le</div>
-          <div><?= $dateCert ?></div>
-        </div>
-      </div>
-
-    </div><!-- /certificat -->
-    <div style="text-align:center;margin-top:16px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap">
-      <button onclick="printCertificat()" class="btn btn-primary"><i class="bi bi-printer"></i> Imprimer</button>
-      <button onclick="downloadCertificat()" class="btn btn-gold"><i class="bi bi-download"></i> Télécharger PDF</button>
-      <a href="https://wa.me/243977329184?text=<?= rawurlencode("Bonjour, j'ai obtenu " . number_format($pct,0) . "% (" . $mention . ") à l'examen " . $session['titre'] . " sur RÉUSSITE+. Réf : " . substr($sessionId,0,8)) ?>" target="_blank" class="btn btn-ghost" style="background:#25D366;color:white;border-color:#25D366">
-        <i class="bi bi-whatsapp"></i> Partager sur WhatsApp
-      </a>
-    </div>
-  </div>
-  <!-- /certificat-block -->
 
   <!-- Détail des réponses -->
   <?php if ($answers): ?>
   <div class="section-header">
-    <div class="section-title"><i class="bi bi-list-check"></i> Détail des réponses</div>
+    <div class="section-title"><i data-lucide="list" style="width:15px;height:15px;vertical-align:-2px;margin-right:6px"></i> Détail des réponses</div>
   </div>
   <div style="display:flex;flex-direction:column;gap:12px">
     <?php foreach ($answers as $idx => $ans): ?>
     <div class="card" style="border-left:4px solid <?= $ans['est_correcte'] ? 'var(--primary)' : 'var(--rouge)' ?>">
       <div style="display:flex;gap:12px;align-items:flex-start">
-        <div style="font-size:20px;flex-shrink:0;color:<?= $ans['est_correcte'] ? 'var(--primary)' : 'var(--rouge)' ?>"><?= $ans['est_correcte'] ? '<i class="bi bi-check-circle-fill"></i>' : '<i class="bi bi-x-circle-fill"></i>' ?></div>
+        <div style="width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:<?= $ans['est_correcte'] ? 'var(--primary-subtle)' : 'var(--rouge-light)' ?>">
+          <i data-lucide="<?= $ans['est_correcte'] ? 'check' : 'x' ?>" style="width:14px;height:14px;stroke:<?= $ans['est_correcte'] ? 'var(--primary)' : 'var(--rouge)' ?>"></i>
+        </div>
         <div style="flex:1">
           <div style="font-size:13px;font-weight:600;color:var(--gris-700);margin-bottom:6px">
             Q<?= $idx + 1 ?> — <?= badge_difficulte($ans['difficulte']) ?>
@@ -316,11 +122,11 @@ include __DIR__ . '/includes/header_app.php';
           </div>
           <?php if (!$ans['est_correcte'] && $ans['explication']): ?>
           <div style="margin-top:10px;background:var(--bleu-light);color:var(--bleu);padding:10px 12px;border-radius:8px;font-size:13px;line-height:1.6">
-            <i class="bi bi-lightbulb-fill"></i> <?= nl2br(e($ans['explication'])) ?>
+            <i data-lucide="lightbulb" style="width:13px;height:13px;vertical-align:-2px;margin-right:5px"></i><?= nl2br(e($ans['explication'])) ?>
           </div>
           <?php elseif (!$ans['est_correcte'] && $user['plan'] === 'GRATUIT'): ?>
           <div style="margin-top:10px;background:var(--gold-light);padding:8px 12px;border-radius:8px;font-size:12px;color:var(--gold-dark)">
-            <i class="bi bi-star-fill"></i> <a href="/reussiteplus/tarifs.php" style="color:var(--gold-dark);font-weight:600">Passez à Premium</a> pour voir les explications détaillées.
+            <i data-lucide="crown" style="width:12px;height:12px;vertical-align:-2px;margin-right:4px"></i><a href="/reussiteplus/tarifs.php" style="color:var(--gold-dark);font-weight:600">Passez à Premium</a> pour voir les explications détaillées.
           </div>
           <?php endif; ?>
         </div>
@@ -330,41 +136,5 @@ include __DIR__ . '/includes/header_app.php';
   </div>
   <?php endif; ?>
 </div>
-
-<script>
-function printCertificat() {
-    const block = document.getElementById('certificat-block');
-    block.style.display = '';
-    block.scrollIntoView({behavior: 'smooth', block: 'start'});
-
-    setTimeout(() => {
-        const cert = document.getElementById('certificat').outerHTML;
-        const win = window.open('', '_blank', 'width=800,height=700');
-        win.document.write(`<!DOCTYPE html><html lang="fr"><head>
-          <meta charset="UTF-8">
-          <title>Certificat RÉUSSITE+</title>
-          <style>
-            * { box-sizing: border-box; margin: 0; padding: 0; }
-            body { background: white; font-family: Georgia, serif; padding: 20px; }
-            @media print {
-              body { padding: 0; }
-              button { display: none !important; }
-              @page { size: A4 landscape; margin: 10mm; }
-            }
-          </style>
-        </head><body>${cert}</body></html>`);
-        win.document.close();
-        win.focus();
-        setTimeout(() => win.print(), 600);
-    }, 400);
-}
-
-function downloadCertificat() {
-    const block = document.getElementById('certificat-block');
-    block.style.display = '';
-    // Utiliser l'impression vers PDF (comportement natif des navigateurs)
-    printCertificat();
-}
-</script>
 
 <?php include __DIR__ . '/includes/footer_app.php'; ?>

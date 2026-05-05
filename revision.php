@@ -54,7 +54,7 @@ $csrf = csrf_token();
   <div>
     <h1 style="font-size:22px;font-weight:800;margin:0;display:flex;align-items:center;gap:10px">
       <span style="background:linear-gradient(135deg,var(--primary),#7c3aed);width:38px;height:38px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0">
-        <i class="bi bi-cpu"></i>
+        <i data-lucide="cpu" style="width:18px;height:18px"></i>
       </span>
       Révision IA Personnalisée
     </h1>
@@ -69,10 +69,10 @@ $csrf = csrf_token();
     </span>
     <?php else: ?>
     <span style="background:var(--gris-200);color:var(--gris-600);padding:4px 14px;border-radius:20px;font-size:11px;font-weight:700">
-      🔒 Plan Excellence requis
+      <i data-lucide="lock" style="width:11px;height:11px;vertical-align:-1px;margin-right:3px"></i> Plan Excellence requis
     </span>
     <?php endif; ?>
-    <a href="/reussiteplus/progression.php" class="btn btn-ghost btn-sm"><i class="bi bi-bar-chart"></i> Ma progression</a>
+    <a href="/reussiteplus/progression.php" class="btn btn-ghost btn-sm"><i data-lucide="bar-chart-2" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"></i> Ma progression</a>
   </div>
 </div>
 
@@ -86,7 +86,7 @@ $csrf = csrf_token();
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px">
       <?php foreach (['Diagnostic IA','Plan hebdo','Chat assistant'] as $t): ?>
       <div style="background:var(--gris-100);border-radius:10px;padding:18px;text-align:center">
-        <div style="font-size:28px;margin-bottom:8px">🤖</div>
+        <div style="font-size:28px;margin-bottom:8px"><i data-lucide="bot" style="width:28px;height:28px"></i></div>
         <div style="font-weight:700;font-size:14px"><?= $t ?></div>
         <div style="height:8px;background:var(--gris-200);border-radius:4px;margin-top:10px"></div>
         <div style="height:6px;background:var(--gris-200);border-radius:4px;margin-top:6px;width:70%"></div>
@@ -96,7 +96,7 @@ $csrf = csrf_token();
   </div>
   <!-- Overlay CTA -->
   <div style="background:linear-gradient(135deg,#4f1d96ee,#7c3aedee);padding:32px;text-align:center;color:#fff">
-    <div style="font-size:40px;margin-bottom:12px">🚀</div>
+    <div style="font-size:40px;margin-bottom:12px"><i data-lucide="rocket" style="width:44px;height:44px;stroke:#fff"></i></div>
     <div style="font-size:20px;font-weight:800;margin-bottom:8px">Débloquez la Révision IA</div>
     <p style="font-size:14px;opacity:.9;max-width:500px;margin:0 auto 20px">
       Accédez à votre coach IA personnel, un plan de révision hebdomadaire sur mesure, l'analyse de vos erreurs et un assistant disponible 24h/24.
@@ -108,7 +108,7 @@ $csrf = csrf_token();
       <div style="background:#ffffff22;border-radius:8px;padding:10px 18px;font-size:13px">✦ Exercices ciblés</div>
     </div>
     <a href="/reussiteplus/abonnement.php" class="btn" style="background:#fff;color:#7c3aed;font-weight:700;padding:12px 32px;font-size:15px;border-radius:10px">
-      <i class="bi bi-arrow-up-circle"></i> Passer au plan Excellence
+      <i data-lucide="arrow-up-circle" style="width:16px;height:16px;vertical-align:-2px;margin-right:6px"></i> Passer au plan Excellence
     </a>
     <div style="font-size:12px;opacity:.7;margin-top:10px">À partir de 5$/mois · Annulation à tout moment</div>
   </div>
@@ -116,14 +116,14 @@ $csrf = csrf_token();
 
 <!-- Diagnostic gratuit visible même sans IA -->
 <div style="margin-top:24px">
-  <div class="section-header"><div class="section-title"><i class="bi bi-clipboard-data"></i> Votre diagnostic (aperçu gratuit)</div></div>
+  <div class="section-header"><div class="section-title"><i data-lucide="clipboard-list" style="width:15px;height:15px;vertical-align:-2px;margin-right:6px"></i> Votre diagnostic (aperçu gratuit)</div></div>
   <?php if ($progressMatieres): ?>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">
     <?php foreach ($progressMatieres as $m): $pct=(float)$m['score_moyen']; ?>
     <div class="card" style="padding:14px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-        <span style="font-size:18px"><?= e($m['icone']??'📚') ?></span>
-        <span style="font-weight:600;font-size:13px"><?= e($m['nom']) ?></span>
+        <span style="display:flex;align-items:center;gap:8px"><?= matiere_icon($m['icone']??'book', 18) ?>
+        <span style="font-weight:600;font-size:13px"><?= e($m['nom']) ?></span></span>
       </div>
       <div style="display:flex;align-items:center;gap:8px">
         <div style="flex:1;height:6px;background:var(--gris-200);border-radius:3px;overflow:hidden">
@@ -141,7 +141,7 @@ $csrf = csrf_token();
   </div>
   <?php else: ?>
   <div class="card" style="text-align:center;padding:32px;color:var(--gris-500)">
-    <div style="font-size:36px;margin-bottom:10px"><i class="bi bi-clipboard"></i></div>
+    <div style="font-size:36px;margin-bottom:10px"><i data-lucide="clipboard" style="width:36px;height:36px;stroke:var(--gris-400)"></i></div>
     <div>Passez vos premiers examens pour voir votre diagnostic.</div>
     <a href="/reussiteplus/examen.php" class="btn btn-primary btn-sm" style="margin-top:12px">Commencer un examen</a>
   </div>
@@ -192,16 +192,16 @@ $csrf = csrf_token();
 <div class="card" style="padding:0;overflow:hidden;margin-bottom:24px">
   <div style="background:linear-gradient(135deg,#4f1d96,#7c3aed);padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
     <div style="color:#fff">
-      <div style="font-size:16px;font-weight:700;margin-bottom:2px"><i class="bi bi-calendar-week"></i> Plan de révision 7 jours</div>
+      <div style="font-size:16px;font-weight:700;margin-bottom:2px"><i data-lucide="calendar-days" style="width:15px;height:15px;vertical-align:-2px;margin-right:6px"></i> Plan de révision 7 jours</div>
       <div style="font-size:12px;opacity:.8">Généré par IA sur mesure selon vos performances</div>
     </div>
     <button id="btnPlanIA" onclick="genererPlan()" class="btn" style="background:#fff;color:#7c3aed;font-weight:700;gap:6px">
-      <i class="bi bi-stars"></i> Générer mon plan
+      <i data-lucide="sparkles" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"></i> Générer mon plan
     </button>
   </div>
   <div id="planRevisionResult" style="padding:22px;min-height:80px">
     <div style="text-align:center;color:var(--gris-400);padding:24px 0;font-size:13px">
-      <i class="bi bi-stars" style="font-size:28px;display:block;margin-bottom:8px"></i>
+      <i data-lucide="sparkles" style="width:28px;height:28px;display:block;margin-bottom:8px"></i>
       Cliquez sur « Générer mon plan » pour obtenir un programme personnalisé sur 7 jours.
     </div>
   </div>
@@ -212,8 +212,8 @@ $csrf = csrf_token();
 <!-- ══════════════════════════════════════════════════ -->
 <div style="margin-bottom:28px">
   <div class="section-header">
-    <div class="section-title"><i class="bi bi-target"></i> Exercices ciblés sur vos faiblesses</div>
-    <a href="/reussiteplus/examen.php" class="btn btn-ghost btn-sm"><i class="bi bi-pencil-square"></i> Tous les examens</a>
+    <div class="section-title"><i data-lucide="crosshair" style="width:15px;height:15px;vertical-align:-2px;margin-right:6px"></i> Exercices ciblés sur vos faiblesses</div>
+    <a href="/reussiteplus/examen.php" class="btn btn-ghost btn-sm"><i data-lucide="edit" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"></i> Tous les examens</a>
   </div>
   <?php if ($faiblesses): ?>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px">
@@ -221,8 +221,8 @@ $csrf = csrf_token();
       $pct=(float)$m['score_moyen']; $gap=60-$pct; ?>
     <div class="card" style="padding:16px;border-top:3px solid #ef4444">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:22px"><?= e($m['icone']??'📚') ?></span>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <?= matiere_icon($m['icone']??'book', 22) ?>
           <div>
             <div style="font-weight:700;font-size:14px"><?= e($m['nom']) ?></div>
             <div style="font-size:11px;color:var(--gris-500)"><?= (int)$m['questions_vues'] ?> questions vues</div>
@@ -231,14 +231,14 @@ $csrf = csrf_token();
         <span style="background:#fef2f2;color:#ef4444;padding:3px 10px;border-radius:12px;font-size:12px;font-weight:700"><?= number_format($pct,0) ?>%</span>
       </div>
       <div style="font-size:12px;color:var(--gris-600);margin-bottom:10px">
-        <i class="bi bi-arrow-up-right text-danger"></i> 
+        <i data-lucide="trending-up" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;stroke:#ef4444"></i>
         Il vous faut <strong>+<?= number_format($gap, 0) ?>%</strong> pour atteindre 60%
       </div>
       <div style="height:6px;background:var(--gris-200);border-radius:3px;margin-bottom:12px;overflow:hidden">
         <div style="width:<?= min(100,$pct) ?>%;height:100%;background:#ef4444;border-radius:3px"></div>
       </div>
       <a href="/reussiteplus/examen.php?matiere=<?= (int)$m['matiere_id'] ?>" class="btn btn-primary btn-sm" style="width:100%;justify-content:center">
-        <i class="bi bi-pencil-square"></i> S'entraîner maintenant
+        <i data-lucide="edit" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"></i> S'entraîner maintenant
       </a>
     </div>
     <?php endforeach; ?>
@@ -246,11 +246,11 @@ $csrf = csrf_token();
   <?php else: ?>
   <div class="card" style="text-align:center;padding:32px">
     <?php if ($totalExamens > 0): ?>
-    <div style="font-size:36px;margin-bottom:10px">🎉</div>
+    <div style="font-size:36px;margin-bottom:10px"><i data-lucide="party-popper" style="width:36px;height:36px;stroke:#22C55E"></i></div>
     <div style="font-weight:700;margin-bottom:6px">Excellente performance !</div>
     <div style="font-size:13px;color:var(--gris-500)">Toutes vos matières sont au-dessus de 60%. Continuez comme ça !</div>
     <?php else: ?>
-    <div style="font-size:36px;margin-bottom:10px"><i class="bi bi-pencil-square"></i></div>
+    <div style="font-size:36px;margin-bottom:10px"><i data-lucide="edit" style="width:36px;height:36px;stroke:var(--gris-400)"></i></div>
     <div style="font-weight:700;margin-bottom:6px">Aucune donnée disponible</div>
     <div style="font-size:13px;color:var(--gris-500);margin-bottom:16px">Passez quelques examens pour que l'IA puisse analyser vos faiblesses.</div>
     <a href="/reussiteplus/examen.php" class="btn btn-primary btn-sm">Commencer un examen</a>
@@ -265,16 +265,16 @@ $csrf = csrf_token();
 <div class="card" style="padding:0;overflow:hidden;margin-bottom:24px">
   <div style="background:linear-gradient(135deg,#92400e,#f59e0b);padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
     <div style="color:#fff">
-      <div style="font-size:15px;font-weight:700"><i class="bi bi-bug"></i> Analyse de vos erreurs récurrentes</div>
+      <div style="font-size:15px;font-weight:700"><i data-lucide="bug" style="width:14px;height:14px;vertical-align:-2px;margin-right:6px"></i> Analyse de vos erreurs récurrentes</div>
       <div style="font-size:12px;opacity:.8"><?= $nbErreurs ?> question(s) ratée(s) — L'IA explique pourquoi et comment progresser</div>
     </div>
     <button onclick="analyserErreurs()" id="btnErreurs" class="btn" style="background:#fff;color:#92400e;font-weight:700">
-      <i class="bi bi-lightbulb"></i> Analyser mes erreurs
+      <i data-lucide="lightbulb" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"></i> Analyser mes erreurs
     </button>
   </div>
   <div id="erreursResult" style="padding:22px;min-height:60px">
     <div style="text-align:center;color:var(--gris-400);padding:16px 0;font-size:13px">
-      <i class="bi bi-lightbulb" style="font-size:24px;display:block;margin-bottom:6px"></i>
+      <i data-lucide="lightbulb" style="width:24px;height:24px;display:block;margin-bottom:6px"></i>
       Cliquez pour recevoir une explication personnalisée de vos erreurs les plus fréquentes.
     </div>
   </div>
@@ -287,7 +287,7 @@ $csrf = csrf_token();
   <!-- Header chat -->
   <div style="background:var(--gris-50);border-bottom:1px solid var(--gris-200);padding:14px 20px;display:flex;align-items:center;gap:12px">
     <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,var(--primary));display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;flex-shrink:0">
-      <i class="bi bi-cpu"></i>
+      <i data-lucide="cpu" style="width:18px;height:18px"></i>
     </div>
     <div>
       <div style="font-weight:700;font-size:14px">RÉUSSITE+IA</div>
@@ -304,12 +304,12 @@ $csrf = csrf_token();
     <!-- Message de bienvenue -->
     <div class="chat-msg ai" style="display:flex;gap:10px;align-items:flex-start;max-width:80%">
       <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,var(--primary));display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;flex-shrink:0">
-        <i class="bi bi-cpu"></i>
+        <i data-lucide="cpu" style="width:13px;height:13px"></i>
       </div>
       <div style="background:var(--gris-100);border-radius:0 12px 12px 12px;padding:12px 14px;font-size:13px;line-height:1.6">
-        Bonjour <?= e($user['prenom']) ?> ! 👋 Je suis votre assistant IA RÉUSSITE+.<br><br>
+        Bonjour <?= e($user['prenom']) ?> ! Je suis votre assistant IA RÉUSSITE+.<br><br>
         Je suis ici pour vous aider à réviser toutes les matières : <strong>Mathématiques, Français, Sciences, Histoire-Géographie, Physique, Chimie, Biologie, Anglais</strong>.<br><br>
-        Posez-moi une question sur n'importe quel sujet, demandez-moi d'expliquer un concept, de vous poser une série de questions, ou de vous donner des astuces pour réussir votre examen ! 🎯
+        Posez-moi une question sur n'importe quel sujet, demandez-moi d'expliquer un concept, de vous poser une série de questions, ou de vous donner des astuces pour réussir votre examen !
       </div>
     </div>
     <!-- Suggestions rapides -->
@@ -342,13 +342,13 @@ $csrf = csrf_token();
       onkeydown="handleChatKey(event)"></textarea>
     <button id="btnSendChat" onclick="sendChatMessage()" 
       style="background:linear-gradient(135deg,#7c3aed,var(--primary));color:#fff;border:none;border-radius:10px;width:42px;height:42px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:18px;transition:opacity .2s">
-      <i class="bi bi-send-fill"></i>
+      <i data-lucide="send" style="width:18px;height:18px"></i>
     </button>
   </div>
 
   <!-- Footer note -->
   <div style="background:var(--gris-50);border-top:1px solid var(--gris-200);padding:8px 16px;font-size:11px;color:var(--gris-400);text-align:center">
-    <i class="bi bi-info-circle"></i> L'IA peut faire des erreurs. Vérifiez les informations importantes avec votre professeur.
+    <i data-lucide="info" style="width:12px;height:12px;vertical-align:-1px;margin-right:4px"></i> L'IA peut faire des erreurs. Vérifiez les informations importantes avec votre professeur.
   </div>
 </div>
 
@@ -358,15 +358,15 @@ $csrf = csrf_token();
 <?php if ($progressMatieres): ?>
 <div style="margin-bottom:24px">
   <div class="section-header">
-    <div class="section-title"><i class="bi bi-grid-3x3-gap"></i> Progression par matière</div>
+    <div class="section-title"><i data-lucide="grid" style="width:15px;height:15px;vertical-align:-2px;margin-right:6px"></i> Progression par matière</div>
     <a href="/reussiteplus/progression.php" class="btn btn-ghost btn-sm">Voir les détails</a>
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px">
     <?php foreach ($progressMatieres as $m): $pct=(float)$m['score_moyen']; ?>
     <div class="card" style="padding:14px;display:flex;flex-direction:column;gap:8px">
       <div style="display:flex;align-items:center;justify-content:space-between">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="font-size:20px"><?= e($m['icone']??'📚') ?></span>
+      <div style="display:flex;align-items:center;gap:8px">
+          <?= matiere_icon($m['icone']??'book', 20) ?>
           <span style="font-weight:600;font-size:13px"><?= e($m['nom']) ?></span>
         </div>
         <span style="font-size:14px;font-weight:800;color:<?= score_couleur($pct) ?>"><?= number_format($pct,0) ?>%</span>
@@ -428,7 +428,7 @@ function showIALoading(containerId, msg) {
 async function genererPlan() {
   const btn = document.getElementById('btnPlanIA');
   btn.disabled = true;
-  btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Génération en cours…';
+  btn.innerHTML = '<i data-lucide="hourglass" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"></i> Génération en cours…';
   showIALoading('planRevisionResult', 'L\'IA construit votre programme personnalisé…');
 
   try {
@@ -449,7 +449,7 @@ async function genererPlan() {
     document.getElementById('planRevisionResult').innerHTML = `<div class="alert alert-danger">Erreur réseau. Vérifiez votre connexion.</div>`;
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '<i class="bi bi-stars"></i> Régénérer';
+    btn.innerHTML = '<i data-lucide="sparkles" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"></i> Régénérer';
   }
 }
 
@@ -457,7 +457,7 @@ async function genererPlan() {
 async function analyserErreurs() {
   const btn = document.getElementById('btnErreurs');
   btn.disabled = true;
-  btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Analyse en cours…';
+  btn.innerHTML = '<i data-lucide="hourglass" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"></i> Analyse en cours…';
   showIALoading('erreursResult', 'L\'IA analyse vos erreurs récurrentes…');
 
   try {
@@ -478,7 +478,7 @@ async function analyserErreurs() {
     document.getElementById('erreursResult').innerHTML = `<div class="alert alert-danger">Erreur réseau.</div>`;
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '<i class="bi bi-lightbulb"></i> Relancer l\'analyse';
+    btn.innerHTML = '<i data-lucide="lightbulb" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"></i> Relancer l\'analyse';
   }
 }
 
@@ -491,7 +491,7 @@ function appendChatMessage(role, html, isStreaming = false) {
   if (isAI) {
     wrap.innerHTML = `
       <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,var(--primary));display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;flex-shrink:0">
-        <i class="bi bi-cpu"></i>
+        <i data-lucide="cpu" style="width:13px;height:13px"></i>
       </div>
       <div class="chat-bubble-ai" style="background:var(--gris-100);border-radius:0 12px 12px 12px;padding:12px 14px;font-size:13px;line-height:1.7;max-width:80%">${html}</div>`;
   } else {
@@ -511,7 +511,7 @@ function showTypingIndicator() {
   indicator.style.cssText = 'display:flex;gap:10px;align-items:flex-start';
   indicator.innerHTML = `
     <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,var(--primary));display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;flex-shrink:0">
-      <i class="bi bi-cpu"></i>
+      <i data-lucide="cpu" style="width:13px;height:13px"></i>
     </div>
     <div style="background:var(--gris-100);border-radius:0 12px 12px 12px;padding:12px 16px;display:flex;gap:4px;align-items:center">
       <span style="width:6px;height:6px;background:var(--gris-400);border-radius:50%;animation:bounce .7s ease infinite"></span>

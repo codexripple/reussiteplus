@@ -70,7 +70,7 @@ function build_user_context(array $user): string {
 }
 
 // ── Appel Groq API ──────────────────────────────────────────
-function call_groq(array $messages, int $maxTokens = null): array {
+function call_groq(array $messages, ?int $maxTokens = null): array {
     if (!GROQ_API_KEY) {
         return ['error' => 'no_key', 'msg' => 'Clé API Groq non configurée. Ajoutez GROQ_API_KEY dans votre environnement ou config.php.'];
     }
@@ -95,7 +95,8 @@ function call_groq(array $messages, int $maxTokens = null): array {
     }
     $data = json_decode($raw, true);
     if (isset($data['error'])) {
-        return ['error' => 'api_error', 'msg' => $data['error']['message'] ?? 'Erreur API Groq.'];
+        $detail = $data['error']['message'] ?? ($data['error']['code'] ?? json_encode($data['error']));
+        return ['error' => 'api_error', 'msg' => $detail];
     }
     $content = $data['choices'][0]['message']['content'] ?? '';
     return ['ok' => true, 'content' => $content];

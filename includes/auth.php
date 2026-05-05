@@ -62,7 +62,7 @@ function auth_register(array $data): array {
         'type'    => 'SYSTEME',
         'titre'   => 'Bienvenue sur RÉUSSITE+ !',
         'message' => 'Votre compte a été créé avec succès. Commencez dès maintenant à préparer votre examen.',
-        'lien'    => '/dashboard.php',
+        'lien'    => APP_URL . '/dashboard.php',
     ]);
 
     // Auto-login
@@ -91,11 +91,6 @@ function current_user(): ?array {
     return $_SESSION['user'] ?? null;
 }
 
-// Alias pour compatibilité
-function get_user(): ?array {
-    return current_user();
-}
-
 function is_logged(): bool {
     return isset($_SESSION['user']);
 }
@@ -110,13 +105,17 @@ function require_login(string $redirect = '/reussiteplus/connexion.php'): array 
         header('Location: ' . $redirect . '?redirect=' . urlencode($_SERVER['REQUEST_URI']));
         exit;
     }
-    // Rafraîchir les données + gérer expiry à chaque requête
-    refresh_user();
-    if (!is_logged()) {
-        header('Location: ' . $redirect . '?redirect=' . urlencode($_SERVER['REQUEST_URI']));
+    // Vérifier que le user existe toujours en DB (évite les sessions obsolètes)
+    $fresh = dbRow("SELECT * FROM utilisateurs WHERE id = ?", [$_SESSION['user']['id']]);
+    if (!$fresh) {
+        session_unset();
+        session_destroy();
+        header('Location: ' . $redirect . '?msg=session_expired');
         exit;
     }
-    return current_user();
+    unset($fresh['password_hash']);
+    $_SESSION['user'] = $fresh; // Rafraîchir la session
+    return $fresh;
 }
 
 function require_admin(): array {
@@ -131,51 +130,21 @@ function require_admin(): array {
 // ── Rafraîchir les données utilisateur en session ──────────
 function refresh_user(): void {
     if (!is_logged()) return;
-    $user = dbRow("SELECT * FROM utilisateurs WHERE id = ? AND is_active = 1", [$_SESSION['user']['id']]);
-    if (!$user) {
-        session_unset();
-        session_destroy();
-        return;
+    $user = dbRow("SELECT * FROM utilisateurs WHERE id = ?", [$_SESSION['user']['id']]);
+    if ($user) {
+        unset($user['password_hash']);
+        $_SESSION['user'] = $user;
     }
-    // Auto-downgrade si plan expiré
-    if ($user['plan'] !== 'GRATUIT' && $user['plan_expire_at'] && strtotime($user['plan_expire_at']) < time()) {
-        $oldPlan = $user['plan'];
-        dbQuery("UPDATE utilisateurs SET plan='GRATUIT', plan_expire_at=NULL WHERE id=?", [$user['id']]);
-        // Notifier une seule fois (max 1 notif d'expiry par jour)
-        $alreadyNotif = dbRow(
-            "SELECT id FROM notifications WHERE user_id=? AND type='SYSTEME' AND titre='Abonnement expiré' AND created_at > DATE_SUB(NOW(), INTERVAL 1 DAY)",
-            [$user['id']]
-        );
-        if (!$alreadyNotif) {
-            dbInsert('notifications', [
-                'user_id' => $user['id'],
-                'type'    => 'SYSTEME',
-                'titre'   => 'Abonnement expiré',
-                'message' => "Votre abonnement " . (PLANS[$oldPlan]['nom'] ?? $oldPlan) . " a expiré. Renouvelez pour continuer à bénéficier de tous les avantages.",
-                'lien'    => '/reussiteplus/tarifs.php',
-            ]);
-        }
-        $user['plan']           = 'GRATUIT';
-        $user['plan_expire_at'] = null;
-    }
-    unset($user['password_hash'], $user['token_verification'], $user['token_reset']);
-    $_SESSION['user'] = $user;
 }
 
-// ── Vérifier limite mensuelle (tous plans limités) ────────────
+// ── Vérifier limite plan gratuit ───────────────────────────
 function can_take_exam(): bool {
     $user = current_user();
     if (!$user) return false;
+    if ($user['plan'] !== 'GRATUIT') return true;
 
-    $plan     = $user['plan'];
-    $planData = PLANS[$plan] ?? [];
-    $maxExams = $planData['examens_mois'] ?? -1;
-
-    // Plans illimités (PREMIUM, ECOLE)
-    if ($maxExams === -1) return true;
-
-    // Réinitialiser compteur si nouveau mois
-    $today     = date('Y-m-d');
+    // Réinitialiser compteur mensuel si nouveau mois
+    $today = date('Y-m-d');
     $resetDate = $user['examens_mois_reset'] ?? null;
     if (!$resetDate || date('Y-m', strtotime($resetDate)) !== date('Y-m')) {
         dbQuery(
@@ -185,7 +154,113 @@ function can_take_exam(): bool {
         refresh_user();
         return true;
     }
-    return ($user['examens_mois'] ?? 0) < $maxExams;
+    return ($user['examens_mois'] ?? 0) < FREE_EXAMS_PER_MONTH;
+}
+
+// ── Demande de réinitialisation de mot de passe ────────────
+function auth_request_password_reset(string $email): array {
+    $email = strtolower(trim($email));
+
+    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return ['ok' => false, 'msg' => 'Adresse email invalide.'];
+    }
+
+    $user = dbRow(
+        "SELECT id, prenom, nom, email FROM utilisateurs WHERE email = ? AND is_active = 1",
+        [$email]
+    );
+
+    // Sécurité : ne pas révéler si l'email existe ou non
+    if (!$user) {
+        return ['ok' => true, 'prenom' => ''];
+    }
+
+    // Rate-limit : max 1 demande toutes les 5 minutes
+    $recent = dbRow(
+        "SELECT token_reset_expire FROM utilisateurs WHERE id = ? AND token_reset_expire > DATE_ADD(NOW(), INTERVAL -5 MINUTE)",
+        [$user['id']]
+    );
+    if ($recent) {
+        return ['ok' => false, 'msg' => 'Une demande a déjà été envoyée. Attendez 5 minutes avant de réessayer.'];
+    }
+
+    // Générer token sécurisé
+    $token      = bin2hex(random_bytes(32)); // 64 hex chars
+    $tokenHash  = hash('sha256', $token);
+    $expiry     = date('Y-m-d H:i:s', strtotime('+1 hour'));
+
+    dbQuery(
+        "UPDATE utilisateurs SET token_reset = ?, token_reset_expire = ? WHERE id = ?",
+        [$tokenHash, $expiry, $user['id']]
+    );
+
+    $resetUrl = APP_URL . '/reinitialiser_mot_de_passe.php'
+              . '?token=' . urlencode($token)
+              . '&email=' . urlencode($email);
+
+    // ── Envoi email ──────────────────────────────────────────
+    // En production : utiliser un service SMTP (PHPMailer, SendGrid, etc.)
+    // En développement (localhost) : on expose le lien directement
+    $emailSent = false;
+    if (APP_ENV !== 'development') {
+        $subject = 'Réinitialisation de votre mot de passe — RÉUSSITE+';
+        $body    = "Bonjour {$user['prenom']},\n\n"
+                 . "Cliquez sur ce lien pour créer un nouveau mot de passe :\n"
+                 . $resetUrl . "\n\n"
+                 . "Ce lien est valable 1 heure.\n\n"
+                 . "Si vous n'avez pas fait cette demande, ignorez cet email.\n\n"
+                 . "— L'équipe RÉUSSITE+";
+        $headers  = "From: noreply@reussiteplus.cd\r\n";
+        $headers .= "Reply-To: noreply@reussiteplus.cd\r\n";
+        $headers .= "X-Mailer: PHP/" . PHP_VERSION;
+        $emailSent = @mail($user['email'], $subject, $body, $headers);
+    }
+
+    return [
+        'ok'      => true,
+        'prenom'  => $user['prenom'],
+        // En mode développement ou si mail() échoue, on expose l'URL
+        'dev_url' => (APP_ENV === 'development' || !$emailSent) ? $resetUrl : null,
+    ];
+}
+
+// ── Confirmation de réinitialisation de mot de passe ───────
+function auth_confirm_password_reset(string $email, string $token, string $newPass): array {
+    $email = strtolower(trim($email));
+
+    if (strlen($newPass) < 8) {
+        return ['ok' => false, 'msg' => 'Le mot de passe doit contenir au moins 8 caractères.'];
+    }
+
+    $user = dbRow(
+        "SELECT id, token_reset, token_reset_expire FROM utilisateurs
+         WHERE email = ? AND is_active = 1 AND token_reset IS NOT NULL",
+        [$email]
+    );
+
+    if (!$user) {
+        return ['ok' => false, 'msg' => 'Lien invalide.'];
+    }
+
+    // Vérifier expiration
+    if (strtotime($user['token_reset_expire']) < time()) {
+        return ['ok' => false, 'msg' => 'Ce lien a expiré. Faites une nouvelle demande.'];
+    }
+
+    // Vérifier le token
+    if (!hash_equals($user['token_reset'], hash('sha256', $token))) {
+        return ['ok' => false, 'msg' => 'Lien invalide.'];
+    }
+
+    // Mettre à jour le mot de passe et invalider le token
+    dbQuery(
+        "UPDATE utilisateurs
+         SET password_hash = ?, token_reset = NULL, token_reset_expire = NULL
+         WHERE id = ?",
+        [password_hash($newPass, PASSWORD_BCRYPT, ['cost' => BCRYPT_COST]), $user['id']]
+    );
+
+    return ['ok' => true];
 }
 
 // ── Changer le mot de passe ────────────────────────────────
@@ -200,90 +275,6 @@ function auth_change_password(string $userId, string $oldPass, string $newPass):
     dbQuery(
         "UPDATE utilisateurs SET password_hash = ? WHERE id = ?",
         [password_hash($newPass, PASSWORD_BCRYPT, ['cost' => BCRYPT_COST]), $userId]
-    );
-    return ['ok' => true];
-}
-// ── Demande de réinitialisation de mot de passe ────────
-function auth_request_password_reset(string $email): array {
-    $email = strtolower(trim($email));
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        return ['ok' => false, 'msg' => 'Adresse email invalide.'];
-    }
-    $user = dbRow(
-        "SELECT id, nom, prenom, email FROM utilisateurs WHERE email = ? AND is_active = 1",
-        [$email]
-    );
-    // Always return ok to prevent email enumeration
-    if (!$user) {
-        return ['ok' => true, 'msg' => 'Si cet email existe, un lien vous a été envoyé.', 'sent' => false];
-    }
-
-    // Rate limit: pas plus d'une demande toutes les 5 minutes
-    $recent = dbRow(
-        "SELECT token_reset_expire FROM utilisateurs WHERE id = ? AND token_reset_expire > DATE_SUB(NOW(), INTERVAL 5 MINUTE)",
-        [$user['id']]
-    );
-    if ($recent) {
-        return ['ok' => false, 'msg' => 'Une demande a déjà été envoyée récemment. Patientez 5 minutes.'];
-    }
-
-    $token   = bin2hex(random_bytes(32)); // 64 chars hex
-    $expires = date('Y-m-d H:i:s', time() + 3600); // 1 heure
-
-    dbQuery(
-        "UPDATE utilisateurs SET token_reset = ?, token_reset_expire = ? WHERE id = ?",
-        [hash('sha256', $token), $expires, $user['id']]
-    );
-
-    $resetUrl   = APP_URL . '/reinitialiser_mot_de_passe.php?token=' . urlencode($token) . '&email=' . urlencode($email);
-    $isLocalhost = in_array(($_SERVER['HTTP_HOST'] ?? ''), ['localhost', '127.0.0.1']);
-
-    // Tentative d'envoi email
-    $sent = false;
-    if (!$isLocalhost) {
-        $subject = '=?UTF-8?B?' . base64_encode('Réinitialisation de votre mot de passe — RÉUSSITE+') . '?=';
-        $body    = "Bonjour {$user['prenom']},\n\n"
-                 . "Vous avez demandé à réinitialiser votre mot de passe sur RÉUSSITE+.\n\n"
-                 . "Cliquez sur le lien ci-dessous (valable 1 heure) :\n\n"
-                 . $resetUrl . "\n\n"
-                 . "Si vous n'avez pas fait cette demande, ignorez cet email.\n\n"
-                 . "L'équipe RÉUSSITE+";
-        $headers = "From: no-reply@reussiteplus.cd\r\nContent-Type: text/plain; charset=UTF-8";
-        $sent    = @mail($user['email'], $subject, $body, $headers);
-    }
-
-    return [
-        'ok'        => true,
-        'sent'      => $sent,
-        'dev_url'   => $isLocalhost ? $resetUrl : null,
-        'prenom'    => $user['prenom'],
-        'msg'       => 'Lien de réinitialisation généré.',
-    ];
-}
-
-// ── Confirmer la réinitialisation ──────────────────────
-function auth_confirm_password_reset(string $email, string $token, string $newPass): array {
-    if (strlen($newPass) < 8) {
-        return ['ok' => false, 'msg' => 'Le mot de passe doit contenir au moins 8 caractères.'];
-    }
-    $email = strtolower(trim($email));
-    $user  = dbRow(
-        "SELECT id, token_reset, token_reset_expire FROM utilisateurs WHERE email = ? AND is_active = 1",
-        [$email]
-    );
-    if (!$user || !$user['token_reset'] || !$user['token_reset_expire']) {
-        return ['ok' => false, 'msg' => 'Lien invalide ou expiré.'];
-    }
-    if (strtotime($user['token_reset_expire']) < time()) {
-        return ['ok' => false, 'msg' => 'Ce lien a expiré. Faites une nouvelle demande.'];
-    }
-    if (!hash_equals($user['token_reset'], hash('sha256', $token))) {
-        return ['ok' => false, 'msg' => 'Lien invalide.'];
-    }
-
-    dbQuery(
-        "UPDATE utilisateurs SET password_hash = ?, token_reset = NULL, token_reset_expire = NULL WHERE id = ?",
-        [password_hash($newPass, PASSWORD_BCRYPT, ['cost' => BCRYPT_COST]), $user['id']]
     );
     return ['ok' => true];
 }

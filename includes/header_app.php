@@ -13,6 +13,8 @@ $notifs = (int)($stats['notifs_non_lues'] ?? 0);
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= e($pageTitle) ?> — RÉUSSITE+</title>
+<link rel="icon" type="image/svg+xml" href="/reussiteplus/assets/img/favicon.svg">
+<link rel="shortcut icon" href="/reussiteplus/assets/img/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/reussiteplus/assets/css/app.css?v=<?= filemtime(__DIR__ . '/../assets/css/app.css') ?>">
@@ -24,7 +26,9 @@ $notifs = (int)($stats['notifs_non_lues'] ?? 0);
 <!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="sidebar-logo">
-    <div class="logo-icon"><i data-lucide="graduation-cap"></i></div>
+    <div class="logo-icon">
+      <img src="/reussiteplus/assets/img/logo-icon.svg" alt="RÉUSSITE+" width="32" height="32" style="display:block">
+    </div>
     <div>
       <div class="logo-text">RÉUSSITE<span>+</span></div>
       <div class="logo-sub">Plateforme EdTech RDC</div>

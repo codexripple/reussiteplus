@@ -16,16 +16,16 @@ $invalid = false;
 if (!$token || !$email) {
     $invalid = true;
 } else {
-    // Vérifier que le token est encore valide (avant même soumission)
     $check = dbRow(
-        "SELECT id, prenom FROM utilisateurs WHERE email = ? AND is_active = 1 AND token_reset IS NOT NULL AND token_reset_expire > NOW()",
+        "SELECT id, prenom, token_reset, token_reset_expire FROM utilisateurs
+         WHERE email = ? AND is_active = 1 AND token_reset IS NOT NULL",
         [$email]
     );
-    if (!$check || !hash_equals($check['token_reset'] ?? '', hash('sha256', $token))) {
-        // On ne compare pas ici pour éviter de charger le hash — on vérifie juste que qqch existe
-        // La vraie vérification se fait à la soumission
-    }
     if (!$check) {
+        $invalid = true;
+    } elseif (strtotime($check['token_reset_expire']) < time()) {
+        $invalid = true;
+    } elseif (!hash_equals($check['token_reset'], hash('sha256', $token))) {
         $invalid = true;
     }
 }

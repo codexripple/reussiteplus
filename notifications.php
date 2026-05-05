@@ -171,7 +171,7 @@ $typeMap = [
   <?php if ($notifsList): ?>
   <div class="notif-list">
   <?php foreach ($notifsList as $n):
-    $ti    = $typeMap[$n['type']] ?? ['icon' => '🔔', 'css' => 'ic-default'];
+    $ti    = $typeMap[$n['type']] ?? ['icon' => '<i data-lucide="bell"></i>', 'css' => 'ic-default'];
     $url   = notif_abs($n['lien'] ?? '');
     $isNew = !$n['lu'];
     $nid   = htmlspecialchars($n['id'], ENT_QUOTES);

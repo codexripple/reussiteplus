@@ -18,8 +18,7 @@ if ($_SERVER['SERVER_NAME'] !== 'localhost' && php_uname('n') !== gethostname())
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/db.php';
 
-$pdo = get_pdo();
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$pdo = db();
 header('Content-Type: text/plain; charset=utf-8');
 
 /* ── Helpers ─────────────────────────────────────────────────────────────── */

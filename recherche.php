@@ -145,7 +145,7 @@ include __DIR__ . '/includes/header_app.php';
          onmouseover="this.style.borderColor='var(--primary)'"
          onmouseout="this.style.borderColor='var(--gris-200)'">
         <div style="display:flex;align-items:center;gap:10px">
-          <span style="font-size:20px"><?= e($a['matiere_icone'] ?? '📚') ?></span>
+          <?= matiere_icon($a['matiere_icone'] ?? 'book', 20) ?>
           <div style="flex:1;min-width:0">
             <div style="font-size:14px;font-weight:600;color:var(--gris-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
               <?= e($a['titre']) ?>

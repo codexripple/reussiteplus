@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
         $newPlan = $_POST['plan'] ?? '';
         if (array_key_exists($newPlan, PLANS)) {
             dbQuery("UPDATE utilisateurs SET plan=? WHERE id=?", [$newPlan, $uid]);
-            dbInsert('admin_logs', ['user_id' => $user['id'], 'action' => 'CHANGE_PLAN', 'details' => "uid=$uid plan=$newPlan"]);
+            dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => 'CHANGE_PLAN', 'details' => "uid=$uid plan=$newPlan"]);
             redirect('/reussiteplus/admin/users.php', 'success', 'Plan mis à jour.');
         }
     } elseif ($action === 'toggle_active' && $uid) {
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
         if ($current) {
             $newState = $current['is_active'] ? 0 : 1;
             dbQuery("UPDATE utilisateurs SET is_active=? WHERE id=?", [$newState, $uid]);
-            dbInsert('admin_logs', ['user_id' => $user['id'], 'action' => $newState ? 'ACTIVER_USER' : 'DESACTIVER_USER', 'details' => "uid=$uid"]);
+            dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => $newState ? 'ACTIVER_USER' : 'DESACTIVER_USER', 'details' => "uid=$uid"]);
             redirect('/reussiteplus/admin/users.php', 'success', 'Statut utilisateur mis à jour.');
         }
     } elseif ($action === 'change_role' && $uid) {
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
         $newRole = $_POST['role'] ?? '';
         if (in_array($newRole, $validRoles, true)) {
             dbQuery("UPDATE utilisateurs SET role=? WHERE id=?", [$newRole, $uid]);
-            dbInsert('admin_logs', ['user_id' => $user['id'], 'action' => 'CHANGE_ROLE', 'details' => "uid=$uid role=$newRole"]);
+            dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => 'CHANGE_ROLE', 'details' => "uid=$uid role=$newRole"]);
             redirect('/reussiteplus/admin/users.php', 'success', 'Rôle mis à jour.');
         }
     }
@@ -64,7 +64,7 @@ $users = dbAll(
      FROM utilisateurs u WHERE $where ORDER BY u.created_at DESC LIMIT $limit OFFSET $offset",
     $params
 );
-$pagination = paginate($total, $page, $limit);
+$pagination = paginate($total, $limit, $page);
 
 include __DIR__ . '/../includes/header_app.php';
 ?>
@@ -86,7 +86,7 @@ include __DIR__ . '/../includes/header_app.php';
       <?php endforeach; ?>
     </select>
   </div>
-  <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Filtrer</button>
+  <button type="submit" class="btn btn-primary">🔍 Filtrer</button>
   <?php if ($search || $filPlan): ?>
   <a href="/reussiteplus/admin/users.php" class="btn btn-ghost">Réinitialiser</a>
   <?php endif; ?>
@@ -94,8 +94,8 @@ include __DIR__ . '/../includes/header_app.php';
 
 <div class="card">
   <div class="card-header">
-    <div class="card-title"><i class="bi bi-people"></i> Utilisateurs (<?= $total ?>)</div>
-    <div style="font-size:12px;color:var(--gris-500)">Page <?= $page ?>/<?= $pagination['pages'] ?></div>
+    <div class="card-title">👥 Utilisateurs (<?= $total ?>)</div>
+    <div style="font-size:12px;color:var(--gris-500)">Page <?= $page ?>/<?= $pagination['total_pages'] ?></div>
   </div>
 
   <div class="table-wrap">
@@ -120,7 +120,7 @@ include __DIR__ . '/../includes/header_app.php';
         </td>
         <td style="font-size:11px;color:var(--gris-500)"><?= date('d/m/Y', strtotime($u['created_at'])) ?></td>
         <td>
-          <button class="btn btn-ghost btn-sm" onclick="openModal('<?= e($u['id']) ?>','<?= e($u['plan']) ?>','<?= e($u['role']) ?>','<?= (int)$u['is_active'] ?>')"><i class="bi bi-gear-fill"></i></button>
+          <button class="btn btn-ghost btn-sm" onclick="openModal('<?= e($u['id']) ?>','<?= e($u['plan']) ?>','<?= e($u['role']) ?>','<?= (int)$u['is_active'] ?>')">⚙️</button>
         </td>
       </tr>
       <?php endforeach; ?>
@@ -129,9 +129,9 @@ include __DIR__ . '/../includes/header_app.php';
   </div>
 
   <!-- Pagination -->
-  <?php if ($pagination['pages'] > 1): ?>
+  <?php if ($pagination['total_pages'] > 1): ?>
   <div style="display:flex;justify-content:center;gap:6px;padding:16px;flex-wrap:wrap">
-    <?php for ($i = 1; $i <= $pagination['pages']; $i++): ?>
+    <?php for ($i = 1; $i <= $pagination['total_pages']; $i++): ?>
     <a href="?q=<?= urlencode($search) ?>&plan=<?= urlencode($filPlan) ?>&page=<?= $i ?>" class="btn <?= $i == $page ? 'btn-primary' : 'btn-ghost' ?> btn-sm"><?= $i ?></a>
     <?php endfor; ?>
   </div>
@@ -141,7 +141,7 @@ include __DIR__ . '/../includes/header_app.php';
 <!-- Modal gestion utilisateur -->
 <div id="user-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center">
   <div style="background:white;border-radius:var(--radius-xl);padding:28px;width:100%;max-width:420px;margin:16px">
-    <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:20px"><i class="bi bi-gear-fill"></i> Gérer l'utilisateur</div>
+    <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:20px">⚙️ Gérer l'utilisateur</div>
 
     <form method="POST" id="modal-form">
       <?= csrf_field() ?>
@@ -185,7 +185,7 @@ function openModal(uid, plan, role, active) {
   document.getElementById('modal-uid').value = uid;
   document.getElementById('modal-plan').value = plan;
   document.getElementById('modal-role').value = role;
-  document.getElementById('toggle-btn').innerHTML = active == 1 ? '<i class="bi bi-slash-circle"></i> Désactiver le compte' : '<i class="bi bi-check-circle"></i> Activer le compte';
+  document.getElementById('toggle-btn').textContent = active == 1 ? '🚫 Désactiver le compte' : '✅ Activer le compte';
   document.getElementById('user-modal').style.display = 'flex';
 }
 function closeModal() {
