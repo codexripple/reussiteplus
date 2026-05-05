@@ -208,7 +208,7 @@ if (is_admin()) {
       <span style="background:#F59E0B;color:white;font-size:9px;font-weight:800;padding:1px 6px;border-radius:10px;flex-shrink:0"><?= $pendingPay ?></span>
       <?php endif; ?>
     </a>
-    <a href="/reussiteplus/contact.php" class="nav-item adm-nav <?= $pageActive === 'admin_messages' ? 'active adm-active' : '' ?>">
+    <a href="/reussiteplus/admin/messages.php" class="nav-item adm-nav <?= $pageActive === 'admin_messages' ? 'active adm-active' : '' ?>">
       <div class="nav-icon adm-icon"><i data-lucide="mail"></i></div>
       <span class="nav-label">Messages</span>
       <?php if ($pendingMsg > 0): ?>

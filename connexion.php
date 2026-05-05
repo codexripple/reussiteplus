@@ -227,18 +227,6 @@ body{font-family:var(--ff-body);background:var(--n100);color:var(--n900);line-he
 .btn-submit svg{width:18px;height:18px;stroke:currentColor;transition:transform var(--ease);}
 .btn-submit:hover:not(:disabled) svg{transform:translateX(3px);}
 
-/* ── Démo box ───────────────────────────────────────────── */
-.demo-box{
-  background:linear-gradient(135deg,rgba(201,151,42,.08),rgba(201,151,42,.04));
-  border:1px solid rgba(201,151,42,.25);border-radius:var(--r);
-  padding:12px 14px;margin-top:20px;display:flex;align-items:flex-start;gap:10px;
-}
-.demo-box svg{width:15px;height:15px;stroke:var(--gold);flex-shrink:0;margin-top:2px;}
-.demo-box p{font-size:12px;color:var(--n600);line-height:1.5;}
-.demo-box strong{color:var(--n800);}
-[data-theme="dark"] .demo-box strong{color:var(--n200);}
-[data-theme="dark"] .demo-box p{color:var(--n400);}
-
 /* ── Divider ────────────────────────────────────────────── */
 .divider{display:flex;align-items:center;gap:10px;margin:22px 0;}
 .divider-line{flex:1;height:1px;background:var(--n200);}
@@ -559,20 +547,6 @@ body{font-family:var(--ff-body);background:var(--n100);color:var(--n900);line-he
           </svg>
         </button>
       </form>
-
-      <div class="divider">
-        <div class="divider-line"></div>
-        <div class="divider-text">accès démo</div>
-        <div class="divider-line"></div>
-      </div>
-
-      <div class="demo-box">
-        <!-- Icône info -->
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-        </svg>
-        <p>Compte de démonstration &mdash; <strong>demo@reussiteplus.cd</strong> / <strong>Demo1234!</strong></p>
-      </div>
 
       <div class="form-footer">
         <p>Pas encore de compte ? <a href="/reussiteplus/inscription.php">Créer un compte gratuit</a></p>

@@ -51,7 +51,7 @@ $limit  = 20;
 $validStatuts = ['EN_ATTENTE', 'CONFIRME', 'REFUSE', 'EXPIRE', 'TOUS'];
 if (!in_array($statut, $validStatuts, true)) $statut = 'EN_ATTENTE';
 
-$where  = $statut !== 'TOUS' ? "AND a.statut=?" : "";
+$where  = $statut !== 'TOUS' ? "WHERE a.statut=?" : "";
 $params = $statut !== 'TOUS' ? [$statut] : [];
 
 $total   = dbRow("SELECT COUNT(*) as n FROM abonnements a $where", $params)['n'];
@@ -62,7 +62,7 @@ $paiements = dbAll(
      $where ORDER BY a.created_at DESC LIMIT $limit OFFSET $offset",
     $params
 );
-$pagination = paginate($total, $limit, $page);
+$pagination = paginate($total, $page, $limit);
 
 include __DIR__ . '/../includes/header_app.php';
 ?>
@@ -141,9 +141,9 @@ include __DIR__ . '/../includes/header_app.php';
   </div>
 
   <!-- Pagination -->
-  <?php if ($pagination['total_pages'] > 1): ?>
+  <?php if ($pagination['pages'] > 1): ?>
   <div style="display:flex;justify-content:center;gap:6px;padding:16px">
-    <?php for ($i = 1; $i <= $pagination['total_pages']; $i++): ?>
+    <?php for ($i = 1; $i <= $pagination['pages']; $i++): ?>
     <a href="?statut=<?= $statut ?>&page=<?= $i ?>" class="btn <?= $i == $page ? 'btn-primary' : 'btn-ghost' ?> btn-sm"><?= $i ?></a>
     <?php endfor; ?>
   </div>
