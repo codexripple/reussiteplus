@@ -107,29 +107,41 @@ include __DIR__ . '/includes/header_app.php';
     <div style="font-size:14px;font-weight:500;line-height:1.6;margin-bottom:12px"><?= e($q['enonce']) ?></div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      <?php
+      $correcteLetter = '';
+      $explication = '';
+      foreach ($opts as $o) {
+        if ($o['est_correcte']) { $correcteLetter = $o['lettre']; if ($o['explication']) $explication = $o['explication']; }
+      }
+      ?>
       <?php foreach ($opts as $o): ?>
-      <div style="padding:6px 10px;border-radius:8px;font-size:13px;border:1.5px solid <?= $o['est_correcte'] ? 'var(--primary)' : 'var(--gris-200)' ?>;background:<?= $o['est_correcte'] ? 'var(--primary-subtle)' : 'var(--gris-50)' ?>;color:<?= $o['est_correcte'] ? 'var(--primary)' : 'var(--gris-700)' ?>;font-weight:<?= $o['est_correcte'] ? '600' : '400' ?>">
+      <div class="q-opt" data-qid="<?= $q['id'] ?>" data-correct="<?= e($correcteLetter) ?>"
+           style="padding:6px 10px;border-radius:8px;font-size:13px;border:1.5px solid var(--gris-200);background:var(--gris-50);color:var(--gris-700);transition:all .2s">
         <span style="font-weight:700;margin-right:6px"><?= e($o['lettre']) ?>)</span><?= e($o['texte']) ?>
-        <?php if ($o['est_correcte']): ?><span style="float:right;color:var(--primary)"><i data-lucide="check" style="width:14px;height:14px;vertical-align:-2px"></i></span><?php endif; ?>
       </div>
       <?php endforeach; ?>
     </div>
 
-    <?php
-    $explication = '';
-    foreach ($opts as $o) { if ($o['est_correcte'] && $o['explication']) { $explication = $o['explication']; break; } }
-    if ($explication):
-    ?>
-    <?php if ($user['plan'] !== 'GRATUIT'): ?>
-    <div style="margin-top:10px;padding:8px 12px;background:var(--gris-50);border-radius:8px;font-size:12px;color:var(--gris-600);border-left:3px solid var(--primary)">
-      <i data-lucide="lightbulb" style="width:13px;height:13px;vertical-align:-2px"></i> <?= e($explication) ?>
+    <!-- Bouton révéler -->
+    <button class="btn btn-ghost btn-sm" style="margin-top:10px;gap:6px;font-size:12px" onclick="revealAnswer(<?= $q['id'] ?>, '<?= e($correcteLetter) ?>', this)">
+      <i data-lucide="eye" style="width:14px;height:14px;vertical-align:-2px"></i> Voir la réponse
+    </button>
+
+    <!-- Bloc explication (caché par défaut) -->
+    <div id="expl-<?= $q['id'] ?>" style="display:none;margin-top:8px">
+      <?php if ($user['plan'] !== 'GRATUIT'): ?>
+        <?php if ($explication): ?>
+        <div style="padding:8px 12px;background:var(--gris-50);border-radius:8px;font-size:12px;color:var(--gris-600);border-left:3px solid var(--primary)">
+          <i data-lucide="lightbulb" style="width:13px;height:13px;vertical-align:-2px"></i> <?= e($explication) ?>
+        </div>
+        <?php endif; ?>
+      <?php else: ?>
+      <div style="padding:8px 12px;background:#FEF9EC;border-radius:8px;font-size:12px;color:#92640A">
+        <i data-lucide="lock" style="width:13px;height:13px;vertical-align:-2px"></i>
+        <a href="/reussiteplus/tarifs.php" style="color:#92640A;font-weight:600">Passez à Premium</a> pour voir les explications détaillées.
+      </div>
+      <?php endif; ?>
     </div>
-    <?php else: ?>
-    <div style="margin-top:10px;padding:8px 12px;background:var(--gold-light);border-radius:8px;font-size:12px;color:var(--gold-dark)">
-      <i data-lucide="lock" style="width:13px;height:13px;vertical-align:-2px"></i> <a href="/reussiteplus/tarifs.php" style="color:var(--gold-dark);font-weight:600">Passez à Premium</a> pour voir les explications détaillées.
-    </div>
-    <?php endif; ?>
-    <?php endif; ?>
   </div>
   <?php endforeach; ?>
 </div>
@@ -153,6 +165,29 @@ include __DIR__ . '/includes/header_app.php';
 <?php endif; ?>
 
 <script>
+function revealAnswer(qid, correctLetter, btn) {
+  // Mettre en évidence la bonne réponse
+  document.querySelectorAll(`.q-opt[data-qid="${qid}"]`).forEach(el => {
+    const letter = el.querySelector('span')?.textContent?.trim()?.replace(')','') || '';
+    if (letter === correctLetter) {
+      el.style.borderColor = 'var(--primary)';
+      el.style.background  = 'var(--primary-subtle)';
+      el.style.color       = 'var(--primary)';
+      el.style.fontWeight  = '600';
+      el.insertAdjacentHTML('beforeend','<span style="float:right;color:var(--primary)"><i data-lucide="check" style="width:14px;height:14px;vertical-align:-2px"></i></span>');
+    }
+  });
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+  // Afficher l'explication
+  const expl = document.getElementById('expl-' + qid);
+  if (expl) expl.style.display = 'block';
+  // Désactiver le bouton
+  btn.disabled = true;
+  btn.innerHTML = '<i data-lucide="check-circle" style="width:14px;height:14px;vertical-align:-2px;stroke:var(--primary)"></i> Réponse révélée';
+  btn.style.color = 'var(--primary)';
+  if (typeof lucide !== 'undefined') lucide.createIcons({ nodes: [btn] });
+}
+
 async function toggleSignet(btn, questionId) {
   const fd = new FormData();
   fd.append('type', 'QUESTION');
