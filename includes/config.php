@@ -17,19 +17,19 @@ if (file_exists($_envFile)) {
 define('APP_NAME',    'RÉUSSITE+');
 define('APP_VERSION', '1.0.0');
 define('APP_URL',     'http://localhost/reussiteplus');
-define('APP_ENV',     'development'); // 'production' en ligne
+define('APP_ENV',     $_ENV['APP_ENV'] ?? 'development'); // 'production' en ligne
 
 // Base de données
-define('DB_HOST',     'localhost');
-define('DB_PORT',     3306);
-define('DB_NAME',     'reussiteplus');
-define('DB_USER',     'root');
-define('DB_PASS',     '');
+define('DB_HOST',     $_ENV['DB_HOST'] ?? 'localhost');
+define('DB_PORT',     (int)($_ENV['DB_PORT'] ?? 3306));
+define('DB_NAME',     $_ENV['DB_NAME'] ?? 'reussiteplus');
+define('DB_USER',     $_ENV['DB_USER'] ?? 'root');
+define('DB_PASS',     $_ENV['DB_PASS'] ?? '');
 define('DB_CHARSET',  'utf8mb4');
 
 // Sécurité
-define('SECRET_KEY',  'rp_secret_2025_rdc_edtech_!@#$%^');
-define('BCRYPT_COST', 12);
+define('SECRET_KEY',  $_ENV['SECRET_KEY'] ?? 'changeme');
+define('BCRYPT_COST', (int)($_ENV['BCRYPT_COST'] ?? 12));
 
 // Plans & Tarifs (en CDF)
 define('PLANS', [
