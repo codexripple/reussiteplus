@@ -8,7 +8,7 @@ require_admin(); // Script restreint aux admins
  * RÉUSSITE+ — Seeder de données de démonstration
  * Accessible uniquement depuis localhost
  */
-if (php_sapi_name() !== 'cli' && !in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1','::1'])) {
+if (php_sapi_name() !== 'cli' && (!in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1','::1']) || ($_ENV['APP_ENV'] ?? 'production') !== 'development')) {
     http_response_code(403); die('Accès refusé.');
 }
 require_once __DIR__ . '/includes/config.php';
