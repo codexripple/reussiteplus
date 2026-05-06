@@ -19,9 +19,14 @@ function send_email(string $to, string $name, string $subject, string $html, str
     $from     = $_ENV['MAIL_FROM']      ?? 'noreply@reussiteplus.cd';
     $fromName = $_ENV['MAIL_FROM_NAME'] ?? 'RÉUSSITE+';
     $apiKey   = $_ENV['BREVO_API_KEY']  ?? '';
+    $mgKey    = $_ENV['MAILGUN_API_KEY'] ?? '';
+    $mgDomain = $_ENV['MAILGUN_DOMAIN'] ?? '';
 
     if ($apiKey) {
         return _send_brevo($to, $name, $subject, $html, $text, $from, $fromName, $apiKey);
+    }
+    if ($mgKey && $mgDomain) {
+        return _send_mailgun($to, $name, $subject, $html, $text, $from, $fromName, $mgKey, $mgDomain);
     }
 
     // Fallback : mail() PHP natif
@@ -78,6 +83,34 @@ function _send_brevo(
     $data = json_decode($resp, true);
     // Brevo renvoie {"messageId":"..."} en succès
     return isset($data['messageId']);
+}
+
+/**
+ * Envoi via l’API Mailgun (HTTP, sans dépendance externe)
+ */
+function _send_mailgun(
+    string $to, string $name, string $subject, string $html, string $text,
+    string $from, string $fromName, string $apiKey, string $domain
+): bool {
+    $url = "https://api.mailgun.net/v3/$domain/messages";
+    $post = [
+        'from'    => "$fromName <$from>",
+        'to'      => "$name <$to>",
+        'subject' => $subject,
+        'text'    => $text ?: strip_tags($html),
+        'html'    => $html,
+    ];
+    $opts = [
+        'http' => [
+            'method'  => 'POST',
+            'header'  => "Authorization: Basic " . base64_encode("api:$apiKey") . "\r\nContent-Type: application/x-www-form-urlencoded",
+            'content' => http_build_query($post),
+            'timeout' => 10,
+        ]
+    ];
+    $ctx = stream_context_create($opts);
+    $resp = @file_get_contents($url, false, $ctx);
+    return $resp && strpos($http_response_header[0] ?? '', '200') !== false;
 }
 
 /**
