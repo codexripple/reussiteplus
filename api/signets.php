@@ -23,46 +23,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Toggle signet — map type to actual column name
-    if ($type === 'ARCHIVE') {
-        $existing = dbRow(
-            "SELECT id FROM signets WHERE user_id=? AND archive_id=?",
-            [$user['id'], $refId]
-        );
-        if ($existing) {
-            dbQuery("DELETE FROM signets WHERE id=?", [$existing['id']]);
-            echo json_encode(['ok' => true, 'added' => false]);
-        } else {
-            dbInsert('signets', ['user_id' => $user['id'], 'archive_id' => $refId]);
-            echo json_encode(['ok' => true, 'added' => true]);
-        }
+    // Toggle signet
+    $existing = dbRow(
+        "SELECT id FROM signets WHERE user_id=? AND type=? AND ref_id=?",
+        [$user['id'], $type, $refId]
+    );
+
+    if ($existing) {
+        dbQuery("DELETE FROM signets WHERE id=?", [$existing['id']]);
+        echo json_encode(['ok' => true, 'added' => false]);
     } else {
-        $existing = dbRow(
-            "SELECT id FROM signets WHERE user_id=? AND question_id=?",
-            [$user['id'], $refId]
-        );
-        if ($existing) {
-            dbQuery("DELETE FROM signets WHERE id=?", [$existing['id']]);
-            echo json_encode(['ok' => true, 'added' => false]);
-        } else {
-            dbInsert('signets', ['user_id' => $user['id'], 'question_id' => $refId]);
-            echo json_encode(['ok' => true, 'added' => true]);
-        }
+        dbInsert('signets', [
+            'user_id' => $user['id'],
+            'type'    => $type,
+            'ref_id'  => $refId,
+        ]);
+        echo json_encode(['ok' => true, 'added' => true]);
     }
     exit;
 }
 
 // GET : liste des signets
 $type = $_GET['type'] ?? 'ARCHIVE';
-if ($type === 'ARCHIVE') {
-    $signets = dbAll(
-        "SELECT archive_id as ref_id FROM signets WHERE user_id=? AND archive_id IS NOT NULL",
-        [$user['id']]
-    );
-} else {
-    $signets = dbAll(
-        "SELECT question_id as ref_id FROM signets WHERE user_id=? AND question_id IS NOT NULL",
-        [$user['id']]
-    );
-}
+$signets = dbAll(
+    "SELECT ref_id FROM signets WHERE user_id=? AND type=?",
+    [$user['id'], $type]
+);
 echo json_encode(['ok' => true, 'signets' => array_column($signets, 'ref_id')]);

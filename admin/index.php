@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/auth.php';
@@ -59,316 +59,503 @@ include __DIR__ . '/../includes/header_app.php';
 ?>
 
 <style>
-/* -- ADMIN RESET & BASE ---------------------------------- */
-.adm-kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:22px; }
-.adm-kpi { background:var(--blanc); border:1.5px solid var(--gris-200); border-radius:16px; padding:20px 22px; position:relative; overflow:hidden; transition:.2s; }
-.adm-kpi:hover { box-shadow:0 6px 24px rgba(0,0,0,.09); transform:translateY(-2px); }
-.adm-kpi .accent-bar { position:absolute; left:0; top:0; bottom:0; width:4px; border-radius:16px 0 0 16px; }
-.adm-kpi .icon-wrap { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:12px; }
-.adm-kpi .val { font-family:var(--font-display); font-size:28px; font-weight:900; color:var(--gris-900); line-height:1; margin-bottom:4px; }
-.adm-kpi .lbl { font-size:12px; color:var(--gris-500); font-weight:600; text-transform:uppercase; letter-spacing:.4px; }
-.adm-kpi .sub { font-size:11px; margin-top:8px; }
-.adm-kpi .badge-growth { display:inline-flex; align-items:center; gap:3px; padding:2px 8px; border-radius:20px; font-size:10px; font-weight:700; }
+/* ======================================================
+   ADMIN DASHBOARD — Design propre et aligné
+   ====================================================== */
 
-.adm-section { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:22px; }
-.adm-card { background:var(--blanc); border:1.5px solid var(--gris-200); border-radius:16px; overflow:hidden; }
-.adm-card-hd { padding:16px 20px 14px; border-bottom:1px solid var(--gris-100); display:flex; align-items:center; justify-content:space-between; gap:10px; }
-.adm-card-title { font-family:var(--font-display); font-size:14px; font-weight:800; color:var(--gris-900); }
-.adm-card-body { padding:18px 20px; }
+/* KPI Grid — 4 colonnes auto-responsive */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.kpi-card {
+  background: var(--blanc);
+  border: 1px solid var(--gris-200);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  transition: box-shadow .2s, transform .2s;
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.08); transform: translateY(-2px); }
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--kpi-color, var(--primary));
+  border-radius: 14px 14px 0 0;
+}
+.kpi-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: var(--kpi-bg, rgba(0,122,94,.1));
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+}
+.kpi-icon i { width: 18px; height: 18px; stroke: var(--kpi-color, var(--primary)); }
+.kpi-value {
+  font-family: var(--font-display);
+  font-size: 26px; font-weight: 900;
+  color: var(--gris-900); line-height: 1;
+  margin-bottom: 4px;
+}
+.kpi-label {
+  font-size: 11px; font-weight: 600;
+  color: var(--gris-500);
+  text-transform: uppercase; letter-spacing: .5px;
+}
+.kpi-sub {
+  margin-top: 10px;
+  display: flex; align-items: center; gap: 6px;
+  flex-wrap: wrap;
+}
+.kpi-chip {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 2px 8px; border-radius: 20px;
+  font-size: 10px; font-weight: 700;
+  background: var(--kpi-bg, rgba(0,122,94,.1));
+  color: var(--kpi-color, var(--primary));
+}
 
-/* Chart bars */
-.bar-chart { display:flex; align-items:flex-end; gap:3px; height:90px; }
-.bar-chart .bar { flex:1; border-radius:4px 4px 0 0; transition:.3s; cursor:pointer; min-height:3px; }
-.bar-chart .bar:hover { opacity:.75; }
+/* Stats secondaires */
+.kpi-grid-sm {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.kpi-sm {
+  background: var(--blanc);
+  border: 1px solid var(--gris-200);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.kpi-sm-bar {
+  width: 4px; height: 36px;
+  border-radius: 4px;
+  background: var(--kpi-color, var(--primary));
+  flex-shrink: 0;
+}
+.kpi-sm-val {
+  font-family: var(--font-display);
+  font-size: 20px; font-weight: 900;
+  color: var(--gris-900); line-height: 1;
+}
+.kpi-sm-lbl {
+  font-size: 11px; color: var(--gris-500);
+  font-weight: 600; margin-top: 2px;
+}
 
-/* AI Panel */
-.ai-panel { background:linear-gradient(135deg,#0f172a,#1e1b4b); border:1.5px solid rgba(124,58,237,.3); border-radius:16px; overflow:hidden; margin-bottom:22px; }
-.ai-panel-hd { padding:16px 20px; border-bottom:1px solid rgba(255,255,255,.07); display:flex; align-items:center; justify-content:space-between; gap:10px; }
-.ai-dot { width:8px; height:8px; background:#a78bfa; border-radius:50%; animation:pulse-ai 2s infinite; }
-@keyframes pulse-ai { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.4)} }
-.ai-insight-item { display:flex; align-items:flex-start; gap:12px; padding:12px 20px; border-bottom:1px solid rgba(255,255,255,.05); }
-.ai-insight-item:last-child { border-bottom:none; }
-.ai-badge { padding:3px 10px; border-radius:6px; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; flex-shrink:0; margin-top:2px; }
+/* Section 2 colonnes */
+.grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 24px;
+}
 
-/* Table styling */
-.adm-table { width:100%; border-collapse:collapse; }
-.adm-table th { padding:9px 14px; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.6px; color:var(--gris-500); background:var(--gris-50); text-align:left; border-bottom:1px solid var(--gris-200); }
-.adm-table td { padding:10px 14px; font-size:13px; border-bottom:1px solid var(--gris-100); vertical-align:middle; }
-.adm-table tr:last-child td { border-bottom:none; }
-.adm-table tr:hover td { background:var(--gris-50); }
+/* Card standard */
+.dash-card {
+  background: var(--blanc);
+  border: 1px solid var(--gris-200);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.dash-card-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--gris-100);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.dash-card-title {
+  font-family: var(--font-display);
+  font-size: 13px; font-weight: 800;
+  color: var(--gris-900);
+  display: flex; align-items: center; gap: 7px;
+}
+.dash-card-title i { width: 14px; height: 14px; stroke: var(--primary); }
+.dash-card-body { padding: 16px 20px; }
 
-/* Plan pill */
-.plan-pill { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:20px; font-size:10px; font-weight:800; text-transform:uppercase; }
+/* Bar chart */
+.bar-chart { display: flex; align-items: flex-end; gap: 3px; height: 90px; }
+.bar-chart .bar { flex: 1; border-radius: 4px 4px 0 0; transition: .2s; cursor: pointer; min-height: 3px; }
+.bar-chart .bar:hover { opacity: .7; }
 
-/* Activity feed */
-.act-item { display:flex; align-items:flex-start; gap:10px; padding:10px 0; border-bottom:1px solid var(--gris-100); }
-.act-item:last-child { border-bottom:none; }
-.act-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+/* Tables admin */
+.adm-table { width: 100%; border-collapse: collapse; }
+.adm-table th {
+  padding: 9px 14px; font-size: 10px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .6px;
+  color: var(--gris-500); background: var(--gris-50);
+  text-align: left; border-bottom: 1px solid var(--gris-200);
+  white-space: nowrap;
+}
+.adm-table td {
+  padding: 10px 14px; font-size: 13px;
+  border-bottom: 1px solid var(--gris-100);
+  vertical-align: middle; color: var(--gris-700);
+}
+.adm-table tr:last-child td { border-bottom: none; }
+.adm-table tr:hover td { background: var(--gris-50); }
 
-@media(max-width:1100px) { .adm-kpi-grid { grid-template-columns:repeat(2,1fr); } .adm-section { grid-template-columns:1fr; } }
-@media(max-width:640px)  { .adm-kpi-grid { grid-template-columns:1fr 1fr; } }
+/* Plan badge */
+.plan-pill {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 2px 8px; border-radius: 20px;
+  font-size: 10px; font-weight: 800; text-transform: uppercase;
+}
+
+/* Activity list */
+.act-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 0; border-bottom: 1px solid var(--gris-100);
+}
+.act-item:last-child { border-bottom: none; }
+.act-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+
+/* Plan distribution bar */
+.plan-bar-row { margin-bottom: 12px; }
+.plan-bar-row:last-child { margin-bottom: 0; }
+.plan-bar-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.plan-bar-track { height: 6px; background: var(--gris-100); border-radius: 4px; overflow: hidden; }
+.plan-bar-fill { height: 100%; border-radius: 4px; }
+
+/* IA Section */
+.ia-card {
+  background: var(--blanc);
+  border: 1px solid var(--gris-200);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.ia-card-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--gris-100);
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(135deg, #F5F3FF, #EFF6FF);
+}
+.ia-dot { width: 7px; height: 7px; background: #7C3AED; border-radius: 50%; animation: pulse-ai 2s infinite; }
+@keyframes pulse-ai { 0%,100%{opacity:1} 50%{opacity:.3} }
+.ia-insights-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 16px 20px;
+}
+.ia-insight-card {
+  background: var(--gris-50);
+  border: 1px solid var(--gris-200);
+  border-radius: 10px;
+  padding: 14px;
+}
+.ia-insight-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 8px; border-radius: 6px;
+  font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .4px;
+  margin-bottom: 8px;
+}
+.ia-insight-text { font-size: 12px; color: var(--gris-700); line-height: 1.6; }
+.ia-result-box {
+  margin: 0 20px 16px;
+  background: var(--gris-50);
+  border: 1px solid var(--gris-200);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+/* Welcome banner */
+.welcome-banner {
+  background: linear-gradient(135deg, #007A5E 0%, #005A45 100%);
+  border-radius: 16px;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+}
+.welcome-banner::after {
+  content: '';
+  position: absolute; right: -60px; top: -60px;
+  width: 220px; height: 220px;
+  background: rgba(255,255,255,.06);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.welcome-text-main {
+  font-family: var(--font-display);
+  font-size: 20px; font-weight: 800;
+  color: #fff; margin-bottom: 4px;
+}
+.welcome-text-sub { font-size: 13px; color: rgba(255,255,255,.7); line-height: 1.6; }
+.welcome-kpis { display: flex; gap: 12px; flex-wrap: wrap; }
+.welcome-kpi-box {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 10px;
+  padding: 12px 18px;
+  text-align: center;
+  min-width: 110px;
+}
+.welcome-kpi-val { font-family: var(--font-display); font-size: 22px; font-weight: 900; color: #fff; }
+.welcome-kpi-lbl { font-size: 10px; color: rgba(255,255,255,.6); margin-top: 2px; }
+
+/* Alerte paiements */
+.alert-pay {
+  display: flex; align-items: center; gap: 12px;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+}
+.alert-pay-dot { width: 8px; height: 8px; background: #F59E0B; border-radius: 50%; flex-shrink: 0; animation: pulse-ai 1.5s infinite; }
+
+/* Quick actions */
+.quick-actions {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  padding: 16px 20px;
+  border-top: 1px solid var(--gris-100);
+  background: var(--gris-50);
+}
+
+@media(max-width: 1200px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .kpi-grid-sm { grid-template-columns: repeat(2, 1fr); }
+  .ia-insights-grid { grid-template-columns: 1fr 1fr; }
+}
+@media(max-width: 900px) {
+  .grid-2col { grid-template-columns: 1fr; }
+}
+@media(max-width: 640px) {
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .kpi-grid-sm { grid-template-columns: 1fr 1fr; }
+  .ia-insights-grid { grid-template-columns: 1fr; }
+  .welcome-banner { flex-direction: column; align-items: flex-start; }
+}
 </style>
 
+<?php
+/* Calcul pour les sections dynamiques */
+$paidUsers = 0;
+foreach ($planStats as $ps) if ($ps['plan'] !== 'GRATUIT') $paidUsers += $ps['nb'];
+$convRate = $adm['total_users'] > 0 ? round($paidUsers / $adm['total_users'] * 100, 1) : 0;
+$planColorsMap = ['GRATUIT'=>'#9CA3AF','BASIQUE'=>'#007A5E','PREMIUM'=>'#7C3AED','ECOLE'=>'#1E5FAD'];
+$planBgMap     = ['GRATUIT'=>'#F3F4F6','BASIQUE'=>'#E8F5F1','PREMIUM'=>'#EDE9FE','ECOLE'=>'#DBEAFE'];
+?>
+
 <?php if (isset($_GET['welcome'])): ?>
-<!-- ═══ BANNIÈRE DE BIENVENUE ADMIN ════════════════════════ -->
-<div style="background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 60%,#0f172a 100%);border:1px solid rgba(124,58,237,.3);border-radius:18px;padding:28px 32px;margin-bottom:22px;position:relative;overflow:hidden">
-  <!-- Fond décoratif -->
-  <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(124,58,237,.2) 0%,transparent 70%);pointer-events:none"></div>
-  <div style="position:absolute;bottom:-20px;left:200px;width:160px;height:160px;background:radial-gradient(circle,rgba(0,122,94,.15) 0%,transparent 70%);pointer-events:none"></div>
-  <div style="position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap">
-    <div>
-      <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(201,151,42,.15);border:1px solid rgba(201,151,42,.3);color:#C9972A;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;padding:4px 12px;border-radius:20px;margin-bottom:14px">
-        <span style="width:6px;height:6px;background:#C9972A;border-radius:50%;display:inline-block"></span>
-        Espace Administration
-      </div>
-      <div style="font-family:var(--font-display);font-size:22px;font-weight:900;color:white;margin-bottom:6px">
-        Bon retour, <?= e($user['prenom']??'Admin') ?> !
-        <span style="color:#a78bfa">&mdash;</span>
-        <span style="color:rgba(255,255,255,.5);font-size:16px;font-weight:600">Tout est sous contrôle.</span>
-      </div>
-      <div style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:22px;max-width:580px;line-height:1.7">
-        Voici votre centre de commande. Vous gérez <strong style="color:rgba(255,255,255,.8)"><?= number_format($adm['total_users']) ?> utilisateurs actifs</strong>,
-        <strong style="color:rgba(255,255,255,.8)"><?= number_format($adm['total_archives']) ?> archives</strong> et
-        <strong style="color:rgba(255,255,255,.8)"><?= number_format($adm['total_questions']) ?> questions</strong> dans la banque.
-        <?php if ($adm['paiements_att'] > 0): ?>
-        <span style="color:#fbbf24"> &mdash; <?= $adm['paiements_att'] ?> paiement<?= $adm['paiements_att']>1?'s':'' ?> en attente de validation.</span>
-        <?php endif; ?>
-      </div>
-      <!-- Guide rapide -->
-      <div style="display:flex;flex-wrap:wrap;gap:8px">
-        <?php
-        $guides = [
-          ['href'=>'/reussiteplus/admin/users.php','icon'=>'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>','label'=>'Gérer les utilisateurs','color'=>'#007A5E'],
-          ['href'=>'/reussiteplus/admin/paiements.php','icon'=>'<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>','label'=>'Valider les paiements','color'=>'#C9972A'],
-          ['href'=>'/reussiteplus/admin/archives.php','icon'=>'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/>','label'=>'Archives &amp; contenu','color'=>'#60a5fa'],
-          ['href'=>'/reussiteplus/admin/users.php','icon'=>'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>','label'=>'Export CSV','color'=>'#4ade80'],
-        ];
-        foreach ($guides as $g): ?>
-        <a href="<?= $g['href'] ?>" style="display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.75);padding:8px 14px;border-radius:9px;font-size:12px;font-weight:700;text-decoration:none;transition:.15s" onmouseover="this.style.background='rgba(255,255,255,.12)'" onmouseout="this.style.background='rgba(255,255,255,.06)'">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="<?= $g['color'] ?>" stroke-width="2.5"><?= $g['icon'] ?></svg>
-          <?= $g['label'] ?>
-        </a>
-        <?php endforeach; ?>
-        <button onclick="loadAiInsights()" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,rgba(124,58,237,.3),rgba(109,40,217,.2));border:1px solid rgba(124,58,237,.4);color:#a78bfa;padding:8px 14px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;transition:.15s" onmouseover="this.style.background='linear-gradient(135deg,rgba(124,58,237,.45),rgba(109,40,217,.35))'" onmouseout="this.style.background='linear-gradient(135deg,rgba(124,58,237,.3),rgba(109,40,217,.2))'">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-          Analyse IA Groq
-        </button>
-      </div>
+<!-- ══ BANNIÈRE BIENVENUE ═══════════════════════════════ -->
+<div class="welcome-banner" id="welcome-band">
+  <div style="flex:1;min-width:0">
+    <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">
+      Espace Administration
     </div>
-    <!-- KPI rapide droite -->
-    <div style="display:flex;flex-direction:column;gap:8px;min-width:160px">
-      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px 16px;text-align:center">
-        <div style="font-family:var(--font-display);font-size:26px;font-weight:900;color:#4ade80"><?= number_format($adm['exams_today']) ?></div>
-        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:3px">examens aujourd'hui</div>
-      </div>
-      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px 16px;text-align:center">
-        <div style="font-family:var(--font-display);font-size:26px;font-weight:900;color:#fbbf24"><?= number_format($adm['revenus_mois'],0,',',' ') ?></div>
-        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:3px">CDF ce mois</div>
-      </div>
+    <div class="welcome-text-main">
+      Bon retour, <?= e($user['prenom'] ?? 'Admin') ?> &mdash;
+      <span style="font-weight:400;font-size:16px;color:rgba(255,255,255,.75)">tout est sous contrôle.</span>
+    </div>
+    <div class="welcome-text-sub" style="margin-top:6px">
+      <?= number_format($adm['total_users']) ?> utilisateurs actifs &middot;
+      <?= number_format($adm['total_archives']) ?> archives &middot;
+      <?= number_format($adm['total_questions']) ?> questions en banque
+      <?php if ($adm['paiements_att'] > 0): ?>
+        &mdash; <strong style="color:#FDE68A"><?= $adm['paiements_att'] ?> paiement<?= $adm['paiements_att']>1?'s':'' ?> en attente</strong>
+      <?php endif; ?>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px">
+      <a href="/reussiteplus/admin/users.php" class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25)">Utilisateurs</a>
+      <a href="/reussiteplus/admin/paiements.php" class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25)">Paiements</a>
+      <a href="/reussiteplus/admin/archives.php" class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25)">Archives</a>
+      <button onclick="loadAiInsights()" class="btn btn-sm" style="background:rgba(124,58,237,.4);color:#e9d5ff;border:1px solid rgba(124,58,237,.5)">Analyse IA</button>
     </div>
   </div>
-  <button onclick="this.closest('div[style]').style.display='none'" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.4);width:28px;height:28px;border-radius:7px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center" title="Fermer">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  <div class="welcome-kpis">
+    <div class="welcome-kpi-box">
+      <div class="welcome-kpi-val"><?= $adm['exams_today'] ?></div>
+      <div class="welcome-kpi-lbl">Examens aujourd'hui</div>
+    </div>
+    <div class="welcome-kpi-box">
+      <div class="welcome-kpi-val"><?= number_format($adm['revenus_mois'], 0, ',', ' ') ?></div>
+      <div class="welcome-kpi-lbl">CDF ce mois</div>
+    </div>
+  </div>
+  <button onclick="document.getElementById('welcome-band').style.display='none'"
+    style="position:absolute;top:12px;right:12px;background:rgba(255,255,255,.15);border:none;color:rgba(255,255,255,.7);width:26px;height:26px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">
+    &#x2715;
   </button>
 </div>
 <?php endif; ?>
 
-<!-- -- PAGE HEADER -------------------------------------- -->
-<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:22px">
+<!-- ══ EN-TÊTE PAGE ════════════════════════════════════ -->
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px">
   <div>
-    <div style="font-family:var(--font-display);font-size:22px;font-weight:900;color:var(--gris-900)">Tableau de bord</div>
-    <div style="font-size:12px;color:var(--gris-500);margin-top:2px">
-      <?= date('l d F Y', time()) ?> &middot; Connect&eacute; en tant que <strong><?= e($user['prenom']??'') ?></strong>
-    </div>
+    <h2 style="font-family:var(--font-display);font-size:20px;font-weight:900;color:var(--gris-900);margin:0">Tableau de bord</h2>
+    <p style="font-size:12px;color:var(--gris-500);margin:3px 0 0">
+      <?= date('l d F Y') ?> &middot; Connecté en tant que <strong><?= e($user['prenom'] ?? '') ?></strong>
+    </p>
   </div>
-  <div style="display:flex;gap:10px;align-items:center">
+  <div style="display:flex;gap:8px;align-items:center">
     <?php if ($adm['paiements_att'] > 0): ?>
-    <a href="/reussiteplus/admin/paiements.php" class="btn btn-gold btn-sm" style="background:#C9972A;color:white;border:none">
+    <a href="/reussiteplus/admin/paiements.php" class="btn btn-sm" style="background:#C9972A;color:#fff;border:none;font-weight:700">
       <?= $adm['paiements_att'] ?> paiement<?= $adm['paiements_att']>1?'s':'' ?> en attente
     </a>
     <?php endif; ?>
-    <button onclick="loadAiInsights()" id="ai-btn" class="btn btn-sm" style="background:linear-gradient(135deg,#7C3AED,#6D28D9);color:white;border:none;font-weight:700">
-      Analyser avec l'IA
+    <button onclick="loadAiInsights()" id="ai-btn" class="btn btn-sm" style="background:#7C3AED;color:#fff;border:none;font-weight:700">
+      <i data-lucide="zap" style="width:13px;height:13px"></i> Analyse IA
     </button>
   </div>
 </div>
 
-<!-- -- KPI CARDS --------------------------------------- -->
-<div class="adm-kpi-grid">
+<!-- ══ KPI PRINCIPAUX ══════════════════════════════════ -->
+<div class="kpi-grid">
 
-  <!-- Utilisateurs actifs -->
-  <div class="adm-kpi">
-    <div class="accent-bar" style="background:#007A5E"></div>
-    <div class="icon-wrap" style="background:#E8F5F1;color:#007A5E">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-    </div>
-    <div class="val"><?= number_format($adm['total_users']) ?></div>
-    <div class="lbl">Utilisateurs actifs</div>
-    <div class="sub" style="color:var(--gris-500)">
-      <span class="badge-growth" style="background:#E8F5F1;color:#007A5E">+<?= $adm['users_7j'] ?> cette semaine</span>
-      &nbsp;<span style="color:var(--gris-400)">+<?= $adm['users_today'] ?> aujourd'hui</span>
+  <!-- Utilisateurs -->
+  <div class="kpi-card" style="--kpi-color:#007A5E;--kpi-bg:rgba(0,122,94,.1)">
+    <div class="kpi-icon"><i data-lucide="users"></i></div>
+    <div class="kpi-value"><?= number_format($adm['total_users']) ?></div>
+    <div class="kpi-label">Utilisateurs actifs</div>
+    <div class="kpi-sub">
+      <span class="kpi-chip">+<?= $adm['users_7j'] ?> cette semaine</span>
+      <span style="font-size:10px;color:var(--gris-400)">+<?= $adm['users_today'] ?> aujourd'hui</span>
     </div>
   </div>
 
-  <!-- Revenus du mois -->
-  <div class="adm-kpi">
-    <div class="accent-bar" style="background:#C9972A"></div>
-    <div class="icon-wrap" style="background:#FEF3D7;color:#C9972A">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-    </div>
-    <div class="val"><?= number_format($adm['revenus_mois'], 0, ',', ' ') ?></div>
-    <div class="lbl">Revenus ce mois (CDF)</div>
-    <div class="sub">
-      <?php $gc = $revGrowth; $gcPos = $gc >= 0; ?>
-      <span class="badge-growth" style="background:<?= $gcPos?'#E8F5F1':'#FEE2E2' ?>;color:<?= $gcPos?'#007A5E':'#DC2626' ?>">
-        <?= $gcPos?'+':'' ?><?= $gc ?>% vs mois dernier
+  <!-- Revenus -->
+  <div class="kpi-card" style="--kpi-color:#C9972A;--kpi-bg:rgba(201,151,42,.1)">
+    <div class="kpi-icon"><i data-lucide="trending-up"></i></div>
+    <div class="kpi-value"><?= number_format($adm['revenus_mois'], 0, ',', ' ') ?></div>
+    <div class="kpi-label">Revenus ce mois (CDF)</div>
+    <div class="kpi-sub">
+      <?php $gcPos = $revGrowth >= 0; ?>
+      <span class="kpi-chip" style="--kpi-color:<?= $gcPos ? '#007A5E' : '#DC2626' ?>;--kpi-bg:<?= $gcPos ? 'rgba(0,122,94,.1)' : 'rgba(220,38,38,.1)' ?>">
+        <?= $gcPos ? '+' : '' ?><?= $revGrowth ?>% vs mois dernier
       </span>
     </div>
   </div>
 
-  <!-- Examens aujourd'hui -->
-  <div class="adm-kpi">
-    <div class="accent-bar" style="background:#1E5FAD"></div>
-    <div class="icon-wrap" style="background:#DBEAFE;color:#1E5FAD">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
-    </div>
-    <div class="val"><?= number_format($adm['exams_today']) ?></div>
-    <div class="lbl">Examens aujourd'hui</div>
-    <div class="sub" style="color:var(--gris-500)">
-      <span class="badge-growth" style="background:#DBEAFE;color:#1E5FAD"><?= $adm['exams_7j'] ?> cette semaine</span>
+  <!-- Examens -->
+  <div class="kpi-card" style="--kpi-color:#1E5FAD;--kpi-bg:rgba(30,95,173,.1)">
+    <div class="kpi-icon"><i data-lucide="file-text"></i></div>
+    <div class="kpi-value"><?= $adm['exams_today'] ?></div>
+    <div class="kpi-label">Examens aujourd'hui</div>
+    <div class="kpi-sub">
+      <span class="kpi-chip"><?= $adm['exams_7j'] ?> cette semaine</span>
     </div>
   </div>
 
   <!-- Paiements en attente -->
-  <div class="adm-kpi" style="<?= $adm['paiements_att']>0?'border-color:#F59E0B;background:#FFFBEB':'' ?>">
-    <div class="accent-bar" style="background:<?= $adm['paiements_att']>0?'#F59E0B':'#9CA3AF' ?>"></div>
-    <div class="icon-wrap" style="background:<?= $adm['paiements_att']>0?'#FEF3C7':'var(--gris-100)' ?>;color:<?= $adm['paiements_att']>0?'#B45309':'var(--gris-500)' ?>">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-    </div>
-    <div class="val" style="color:<?= $adm['paiements_att']>0?'#B45309':'var(--gris-900)' ?>"><?= $adm['paiements_att'] ?></div>
-    <div class="lbl">Paiements en attente</div>
-    <div class="sub">
+  <div class="kpi-card" style="--kpi-color:<?= $adm['paiements_att']>0?'#B45309':'#9CA3AF' ?>;--kpi-bg:<?= $adm['paiements_att']>0?'rgba(180,83,9,.1)':'rgba(156,163,175,.1)' ?>;<?= $adm['paiements_att']>0?'border-color:#FDE68A;background:#FFFBEB':'' ?>">
+    <div class="kpi-icon"><i data-lucide="credit-card"></i></div>
+    <div class="kpi-value" style="color:<?= $adm['paiements_att']>0?'#B45309':'var(--gris-900)' ?>"><?= $adm['paiements_att'] ?></div>
+    <div class="kpi-label">Paiements en attente</div>
+    <div class="kpi-sub">
       <?php if ($adm['paiements_att'] > 0): ?>
-      <a href="/reussiteplus/admin/paiements.php" style="color:#B45309;font-size:11px;font-weight:700">Traiter maintenant &rarr;</a>
+        <a href="/reussiteplus/admin/paiements.php" style="font-size:11px;color:#B45309;font-weight:700">Traiter &rarr;</a>
       <?php else: ?>
-      <span style="font-size:11px;color:var(--gris-400)">Aucun paiement en attente</span>
+        <span style="font-size:11px;color:var(--gris-400)">Tout est à jour</span>
       <?php endif; ?>
     </div>
   </div>
 
 </div>
 
-<!-- Ligne 2 KPIs secondaires -->
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px">
+<!-- ══ KPI SECONDAIRES ════════════════════════════════ -->
+<div class="kpi-grid-sm">
   <?php
   $kpis2 = [
-    ['val'=>$adm['total_archives'], 'lbl'=>'Archives disponibles', 'link'=>'/reussiteplus/admin/archives.php', 'color'=>'#059669'],
-    ['val'=>number_format($adm['total_questions']), 'lbl'=>'Questions en banque', 'link'=>'', 'color'=>'#7C3AED'],
-    ['val'=>$adm['classes_actives'], 'lbl'=>'Classes actives', 'link'=>'', 'color'=>'#1E5FAD'],
-    ['val'=>$adm['messages_contact'], 'lbl'=>'Messages (48h)', 'link'=>'', 'color'=>'#DC2626'],
+    ['val'=>$adm['total_archives'],           'lbl'=>'Archives',        'color'=>'#059669', 'link'=>'/reussiteplus/admin/archives.php'],
+    ['val'=>number_format($adm['total_questions']), 'lbl'=>'Questions',  'color'=>'#7C3AED', 'link'=>''],
+    ['val'=>$adm['classes_actives'],          'lbl'=>'Classes actives', 'color'=>'#1E5FAD', 'link'=>''],
+    ['val'=>$adm['messages_contact'],         'lbl'=>'Messages (48h)', 'color'=>'#DC2626', 'link'=>''],
   ];
   foreach ($kpis2 as $k):
   ?>
-  <div style="background:var(--blanc);border:1.5px solid var(--gris-200);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:12px">
-    <div style="width:10px;height:40px;background:<?= $k['color'] ?>;border-radius:4px;flex-shrink:0;opacity:.7"></div>
+  <div class="kpi-sm" style="--kpi-color:<?= $k['color'] ?>">
+    <div class="kpi-sm-bar"></div>
     <div>
-      <div style="font-family:var(--font-display);font-size:22px;font-weight:900;color:var(--gris-900);line-height:1"><?= $k['val'] ?></div>
-      <div style="font-size:11px;color:var(--gris-500);margin-top:3px;font-weight:600"><?= $k['lbl'] ?></div>
-      <?php if ($k['link']): ?><a href="<?= $k['link'] ?>" style="font-size:10px;color:<?= $k['color'] ?>;font-weight:700">Voir &rarr;</a><?php endif; ?>
+      <div class="kpi-sm-val"><?= $k['val'] ?></div>
+      <div class="kpi-sm-lbl"><?= $k['lbl'] ?></div>
+      <?php if ($k['link']): ?>
+        <a href="<?= $k['link'] ?>" style="font-size:10px;color:<?= $k['color'] ?>;font-weight:700;margin-top:2px;display:inline-block">Voir &rarr;</a>
+      <?php endif; ?>
     </div>
   </div>
   <?php endforeach; ?>
 </div>
 
-<!-- -- IA ANALYSE --------------------------------------- -->
-<div class="ai-panel" id="ai-panel">
-  <div class="ai-panel-hd">
-    <div style="display:flex;align-items:center;gap:10px">
-      <div class="ai-dot"></div>
-      <span style="font-family:var(--font-display);font-size:14px;font-weight:800;color:white">Intelligence Artificielle &mdash; Analyse de la plateforme</span>
+<!-- ══ ANALYSE IA ═════════════════════════════════════ -->
+<div class="ia-card" id="ai-panel">
+  <div class="ia-card-header">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="ia-dot"></div>
+      <span style="font-family:var(--font-display);font-size:13px;font-weight:800;color:var(--gris-900)">Analyse intelligente de la plateforme</span>
     </div>
-    <span style="font-size:11px;color:rgba(255,255,255,.3)">Llama 3.1 &middot; Groq</span>
+    <span style="font-size:11px;color:var(--gris-400)">Llama 3.1 · Groq</span>
   </div>
-  <div id="ai-content" style="padding:20px">
-    <!-- Insights automatiques basï¿½s sur les donnï¿½es -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px" id="ai-auto">
-      <?php
-      // Insight 1 : plan le plus populaire
-      $topPlan = $planStats[0] ?? null;
-      $paidUsers = 0;
-      foreach ($planStats as $ps) if ($ps['plan'] !== 'GRATUIT') $paidUsers += $ps['nb'];
-      $convRate = $adm['total_users'] > 0 ? round($paidUsers / $adm['total_users'] * 100, 1) : 0;
-
-      $aiInsights = [
-        [
-          'type' => 'TENDANCE',
-          'color' => '#a78bfa',
-          'bg'    => 'rgba(124,58,237,.15)',
-          'title' => 'Conversion payant',
-          'text'  => "Taux de conversion : <strong style='color:#a78bfa'>{$convRate}%</strong> des utilisateurs sont sur un plan payant. " . ($convRate < 20 ? "Optimisation de l'onboarding recommand&eacute;e." : "Excellent taux &mdash; maintenir la qualit&eacute; du contenu.")
-        ],
-        [
-          'type' => 'REVENU',
-          'color' => '#34d399',
-          'bg'    => 'rgba(52,211,153,.12)',
-          'title' => 'Performance revenus',
-          'text'  => "Revenus mensuels : <strong style='color:#34d399'>" . number_format($adm['revenus_mois'],0,',',' ') . " CDF</strong>. " . ($revGrowth >= 0 ? "Croissance de +{$revGrowth}% par rapport au mois pr&eacute;c&eacute;dent." : "Baisse de {$revGrowth}% &mdash; r&eacute;viser la strat&eacute;gie tarifaire.")
-        ],
-        [
-          'type' => 'ACTIVITE',
-          'color' => '#60a5fa',
-          'bg'    => 'rgba(96,165,250,.12)',
-          'title' => 'Engagement utilisateurs',
-          'text'  => "<strong style='color:#60a5fa'>{$adm['exams_today']}</strong> examens lanc&eacute;s aujourd'hui. " . ($adm['exams_today'] >= 10 ? "Bonne activit&eacute; journali&egrave;re." : "Activit&eacute; faible &mdash; envisager des notifications push ou emails d'encouragement.")
-        ],
-      ];
-      foreach ($aiInsights as $ins):
-      ?>
-      <div style="background:<?= $ins['bg'] ?>;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-          <span style="background:<?= $ins['color'] ?>22;color:<?= $ins['color'] ?>;font-size:9px;font-weight:800;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.5px"><?= $ins['type'] ?></span>
-        </div>
-        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.6);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px"><?= $ins['title'] ?></div>
-        <div style="font-size:13px;color:rgba(255,255,255,.8);line-height:1.6"><?= $ins['text'] ?></div>
-      </div>
-      <?php endforeach; ?>
+  <div class="ia-insights-grid">
+    <?php
+    $iaInsights = [
+      ['tag'=>'Conversion','tagColor'=>'#7C3AED','tagBg'=>'#EDE9FE',
+       'text'=>"Taux de conversion payant : <strong style='color:#7C3AED'>{$convRate}%</strong>. " . ($convRate < 20 ? "Améliorer l'onboarding pour convertir plus." : "Excellent — maintenir la qualité du contenu.")],
+      ['tag'=>'Revenus','tagColor'=>'#C9972A','tagBg'=>'#FEF3C7',
+       'text'=>"Revenus ce mois : <strong style='color:#C9972A'>" . number_format($adm['revenus_mois'],0,',',' ') . " CDF</strong>. " . ($revGrowth >= 0 ? "Croissance +{$revGrowth}% vs mois dernier." : "Baisse de {$revGrowth}% — revoir la stratégie.")],
+      ['tag'=>'Activité','tagColor'=>'#1E5FAD','tagBg'=>'#DBEAFE',
+       'text'=>"<strong style='color:#1E5FAD'>{$adm['exams_today']}</strong> examens lancés aujourd'hui. " . ($adm['exams_today'] >= 5 ? "Bonne activité journalière." : "Activité faible — envisager des notifications.")],
+    ];
+    foreach ($iaInsights as $ins):
+    ?>
+    <div class="ia-insight-card">
+      <span class="ia-insight-tag" style="background:<?= $ins['tagBg'] ?>;color:<?= $ins['tagColor'] ?>"><?= $ins['tag'] ?></span>
+      <p class="ia-insight-text"><?= $ins['text'] ?></p>
     </div>
-
-    <!-- Analyse IA Groq (chargï¿½e ï¿½ la demande) -->
-    <div id="ai-groq-result" style="display:none;margin-top:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px">
-      <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Analyse approfondie &mdash; IA Groq</div>
-      <div id="ai-groq-text" style="font-size:14px;color:rgba(255,255,255,.8);line-height:1.8"></div>
-    </div>
-    <div id="ai-loading" style="display:none;text-align:center;padding:20px;color:rgba(255,255,255,.4);font-size:13px">
-      <span style="display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.2);border-top-color:#a78bfa;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-4px;margin-right:8px"></span>
-      Analyse en cours via Groq AI...
-    </div>
+    <?php endforeach; ?>
+  </div>
+  <div id="ai-loading" style="display:none;text-align:center;padding:16px 20px;color:var(--gris-500);font-size:13px">
+    <span style="display:inline-block;width:16px;height:16px;border:2px solid var(--gris-200);border-top-color:#7C3AED;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-3px;margin-right:8px"></span>
+    Analyse Groq AI en cours...
+  </div>
+  <div id="ai-groq-result" style="display:none" class="ia-result-box">
+    <div style="font-size:10px;font-weight:700;color:var(--gris-400);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Analyse approfondie — Groq AI</div>
+    <div id="ai-groq-text" style="font-size:13px;color:var(--gris-700);line-height:1.8"></div>
   </div>
 </div>
 
-<!-- -- CHARTS ------------------------------------------- -->
-<div class="adm-section">
+<!-- ══ GRAPHIQUES ═════════════════════════════════════ -->
+<div class="grid-2col">
 
-  <!-- Inscriptions 30 jours -->
-  <div class="adm-card">
-    <div class="adm-card-hd">
-      <div>
-        <div class="adm-card-title">Inscriptions &mdash; 30 derniers jours</div>
-        <div style="font-size:11px;color:var(--gris-400);margin-top:2px"><?= array_sum(array_values($inscMap)) ?> nouvelles inscriptions</div>
+  <!-- Inscriptions 30j -->
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <div class="dash-card-title">
+        <i data-lucide="bar-chart-2"></i>
+        Inscriptions — 30 derniers jours
       </div>
+      <span style="font-size:11px;color:var(--gris-400)"><?= array_sum(array_values($inscMap)) ?> nouvelles</span>
     </div>
-    <div class="adm-card-body">
-      <?php
-      $maxI = max(1, max(array_merge([1], array_values($inscMap))));
-      ?>
-      <div class="bar-chart" id="chart-insc">
+    <div class="dash-card-body">
+      <?php $maxI = max(1, max(array_merge([1], array_values($inscMap)))); ?>
+      <div class="bar-chart">
         <?php for ($d = 29; $d >= 0; $d--):
           $jour = date('Y-m-d', strtotime("-{$d} days"));
-          $nb = $inscMap[$jour] ?? 0;
-          $h = $nb > 0 ? max(8, (int)(($nb / $maxI) * 80)) : 3;
+          $nb   = $inscMap[$jour] ?? 0;
+          $h    = $nb > 0 ? max(6, (int)(($nb / $maxI) * 80)) : 3;
         ?>
-        <div class="bar" style="height:<?= $h ?>px;background:<?= $nb>0?'var(--primary)':'var(--gris-200)' ?>;opacity:<?= $nb>0?'1':'.5' ?>"
-             title="<?= date('d/m', strtotime($jour)) ?> &mdash; <?= $nb ?> inscription<?= $nb>1?'s':'' ?>"
+        <div class="bar" style="height:<?= $h ?>px;background:<?= $nb>0?'var(--primary)':'var(--gris-200)' ?>"
              onmouseover="showTip(this,'<?= date('d/m', strtotime($jour)) ?> : <?= $nb ?> inscription<?= $nb>1?'s':'' ?>')"
              onmouseout="hideTip()"></div>
         <?php endfor; ?>
@@ -380,33 +567,30 @@ include __DIR__ . '/../includes/header_app.php';
   </div>
 
   <!-- Revenus 6 mois -->
-  <div class="adm-card">
-    <div class="adm-card-hd">
-      <div>
-        <div class="adm-card-title">Revenus &mdash; 6 derniers mois</div>
-        <div style="font-size:11px;color:var(--gris-400);margin-top:2px">CDF confirm&eacute;s</div>
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <div class="dash-card-title">
+        <i data-lucide="trending-up"></i>
+        Revenus — 6 derniers mois
       </div>
+      <span style="font-size:11px;color:var(--gris-400)">CDF confirmés</span>
     </div>
-    <div class="adm-card-body">
+    <div class="dash-card-body">
       <?php
-      $revMap = [];
-      foreach ($rev6m as $r) $revMap[$r['mois']] = (float)$r['total'];
-      $maxR = max(1, max(array_merge([1], array_values($revMap))));
-      $moisLabels = [];
-      for ($m = 5; $m >= 0; $m--) {
-          $moisLabels[] = date('Y-m', strtotime("-{$m} month"));
-      }
+      $revMap = array_column($rev6m, 'total', 'mois');
+      $maxR   = max(1, max(array_merge([1], array_values($revMap))));
+      $moisL  = [];
+      for ($m = 5; $m >= 0; $m--) $moisL[] = date('Y-m', strtotime("-{$m} month"));
+      $shortM = ['01'=>'Jan','02'=>'Fév','03'=>'Mar','04'=>'Avr','05'=>'Mai','06'=>'Jun','07'=>'Jul','08'=>'Août','09'=>'Sep','10'=>'Oct','11'=>'Nov','12'=>'Déc'];
       ?>
       <div class="bar-chart">
-        <?php foreach ($moisLabels as $mois):
-          $v = $revMap[$mois] ?? 0;
-          $h = $v > 0 ? max(8, (int)(($v / $maxR) * 80)) : 3;
-          $shortM = ['01'=>'Jan','02'=>'F&eacute;v','03'=>'Mar','04'=>'Avr','05'=>'Mai','06'=>'Jun','07'=>'Jul','08'=>'Ao&ucirc;t','09'=>'Sep','10'=>'Oct','11'=>'Nov','12'=>'D&eacute;c'];
+        <?php foreach ($moisL as $mois):
+          $v = (float)($revMap[$mois] ?? 0);
+          $h = $v > 0 ? max(6, (int)(($v / $maxR) * 80)) : 3;
           $lbl = $shortM[substr($mois,5,2)] ?? substr($mois,5,2);
         ?>
         <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px">
-          <div class="bar" style="width:100%;height:<?= $h ?>px;background:<?= $v>0?'#C9972A':'var(--gris-200)' ?>;opacity:<?= $v>0?'1':'.5' ?>"
-               title="<?= $lbl ?> <?= substr($mois,0,4) ?> &mdash; <?= number_format($v,0,',',' ') ?> CDF"
+          <div class="bar" style="width:100%;height:<?= $h ?>px;background:<?= $v>0?'#C9972A':'var(--gris-200)' ?>"
                onmouseover="showTip(this,'<?= $lbl ?> : <?= number_format($v,0,',',' ') ?> CDF')"
                onmouseout="hideTip()"></div>
           <div style="font-size:9px;color:var(--gris-400)"><?= $lbl ?></div>
@@ -418,66 +602,70 @@ include __DIR__ . '/../includes/header_app.php';
 
 </div>
 
-<!-- -- PLANS + ACTIVITE --------------------------------- -->
-<div class="adm-section">
+<!-- ══ PLANS + ACTIVITÉ ══════════════════════════════ -->
+<div class="grid-2col">
 
-  <!-- Rï¿½partition plans -->
-  <div class="adm-card">
-    <div class="adm-card-hd">
-      <div class="adm-card-title">R&eacute;partition des abonnements</div>
-      <div style="font-size:11px;color:var(--gris-500)"><?= number_format($totalUsers) ?> utilisateurs</div>
+  <!-- Plans -->
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <div class="dash-card-title">
+        <i data-lucide="pie-chart"></i>
+        Répartition des abonnements
+      </div>
+      <span style="font-size:11px;color:var(--gris-400)"><?= number_format($totalUsers) ?> utilisateurs</span>
     </div>
-    <div class="adm-card-body">
-      <?php
-      $planColors = ['GRATUIT'=>['#9CA3AF','#F3F4F6'],'BASIQUE'=>['#007A5E','#E8F5F1'],'PREMIUM'=>['#7C3AED','#EDE9FE'],'ECOLE'=>['#1E5FAD','#DBEAFE']];
-      foreach ($planStats as $ps):
+    <div class="dash-card-body">
+      <?php foreach ($planStats as $ps):
         $pct = round(($ps['nb'] / $totalUsers) * 100, 1);
-        [$fc, $bg] = $planColors[$ps['plan']] ?? ['#9CA3AF','#F3F4F6'];
-        $info = PLANS[$ps['plan']] ?? ['nom' => $ps['plan']];
+        $fc  = $planColorsMap[$ps['plan']] ?? '#9CA3AF';
+        $nom = (PLANS[$ps['plan']] ?? ['nom'=>$ps['plan']])['nom'];
       ?>
-      <div style="margin-bottom:14px">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
-          <div style="display:flex;align-items:center;gap:8px">
-            <div style="width:10px;height:10px;background:<?= $fc ?>;border-radius:50%"></div>
-            <span style="font-size:13px;font-weight:700;color:var(--gris-800)"><?= e($info['nom']) ?></span>
+      <div class="plan-bar-row">
+        <div class="plan-bar-label">
+          <div style="display:flex;align-items:center;gap:7px">
+            <span style="width:8px;height:8px;background:<?= $fc ?>;border-radius:50%;display:inline-block"></span>
+            <span style="font-size:13px;font-weight:600;color:var(--gris-800)"><?= e($nom) ?></span>
           </div>
-          <div style="text-align:right">
-            <span style="font-family:var(--font-display);font-size:15px;font-weight:900;color:var(--gris-900)"><?= $ps['nb'] ?></span>
+          <div>
+            <strong style="font-size:13px;color:var(--gris-900)"><?= $ps['nb'] ?></strong>
             <span style="font-size:11px;color:var(--gris-400);margin-left:4px"><?= $pct ?>%</span>
           </div>
         </div>
-        <div style="height:7px;background:var(--gris-100);border-radius:4px;overflow:hidden">
-          <div style="width:<?= $pct ?>%;height:100%;background:<?= $fc ?>;border-radius:4px;transition:width 1s ease"></div>
+        <div class="plan-bar-track">
+          <div class="plan-bar-fill" style="width:<?= $pct ?>%;background:<?= $fc ?>"></div>
         </div>
       </div>
       <?php endforeach; ?>
     </div>
   </div>
 
-  <!-- Activitï¿½ rï¿½cente -->
-  <div class="adm-card">
-    <div class="adm-card-hd">
-      <div class="adm-card-title">Activit&eacute; &mdash; Examens du jour</div>
-      <span style="background:var(--primary);color:white;font-size:10px;font-weight:800;padding:2px 8px;border-radius:8px"><?= $adm['exams_today'] ?></span>
+  <!-- Examens du jour -->
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <div class="dash-card-title">
+        <i data-lucide="activity"></i>
+        Activité — Examens du jour
+      </div>
+      <span style="background:var(--primary);color:#fff;font-size:10px;font-weight:800;padding:2px 8px;border-radius:8px"><?= $adm['exams_today'] ?></span>
     </div>
-    <div class="adm-card-body" style="padding:12px 20px">
-      <?php if ($examSessions): ?>
-      <?php foreach ($examSessions as $es): ?>
+    <div style="padding:8px 16px">
+      <?php if ($examSessions): foreach ($examSessions as $es): ?>
       <div class="act-item">
-        <div class="act-dot" style="background:<?= $es['statut']==='TERMINE'?'#007A5E':'#F59E0B' ?>"></div>
+        <div class="act-dot" style="background:<?= ($es['statut']??'')===  'TERMINE'?'#007A5E':'#F59E0B' ?>"></div>
         <div style="flex:1;min-width:0">
-          <div style="font-size:13px;font-weight:700;color:var(--gris-800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+          <div style="font-size:13px;font-weight:600;color:var(--gris-800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
             <?= e(($es['prenom']??'').' '.($es['nom']??'')) ?>
           </div>
           <div style="font-size:11px;color:var(--gris-500)">
-            <?= e($es['titre_custom'] ?? 'Examen') ?>
-            <?= $es['score'] !== null ? '&middot; ' . round((float)$es['score']) . '%' : '' ?>
+            <?= e($es['titre_custom']??'Examen') ?>
+            <?= $es['score'] !== null ? ' &middot; '.round((float)$es['score']).'%' : '' ?>
           </div>
         </div>
-        <div style="font-size:10px;color:var(--gris-400);white-space:nowrap"><?= $es['started_at'] ? date('H:i', strtotime($es['started_at'])) : '' ?></div>
+        <div style="font-size:10px;color:var(--gris-400);white-space:nowrap;flex-shrink:0">
+          <?= $es['started_at'] ? date('H:i', strtotime($es['started_at'])) : '' ?>
+        </div>
       </div>
-      <?php endforeach; ?>
-      <?php else: ?>
+      <?php endforeach; else: ?>
       <div style="text-align:center;padding:28px;color:var(--gris-400);font-size:13px">Aucune session aujourd'hui</div>
       <?php endif; ?>
     </div>
@@ -485,48 +673,42 @@ include __DIR__ . '/../includes/header_app.php';
 
 </div>
 
-<!-- -- PAIEMENTS EN ATTENTE ----------------------------- -->
+<!-- ══ PAIEMENTS EN ATTENTE ══════════════════════════ -->
 <?php if ($paiementsAtt): ?>
-<div class="adm-card" style="margin-bottom:22px;border-color:#F59E0B">
-  <div class="adm-card-hd" style="background:#FFFBEB">
-    <div style="display:flex;align-items:center;gap:10px">
-      <div style="width:8px;height:8px;background:#F59E0B;border-radius:50%;animation:pulse-ai 1.5s infinite"></div>
-      <div class="adm-card-title" style="color:#92400E">Paiements en attente de confirmation</div>
+<div class="dash-card" style="margin-bottom:24px;border-color:#FDE68A">
+  <div class="dash-card-header" style="background:#FFFBEB">
+    <div class="dash-card-title" style="color:#92400E">
+      <span class="ia-dot" style="background:#F59E0B;flex-shrink:0"></span>
+      Paiements en attente de confirmation
     </div>
-    <a href="/reussiteplus/admin/paiements.php" class="btn btn-sm" style="background:#C9972A;color:white;border:none;font-weight:700">Tout voir</a>
+    <a href="/reussiteplus/admin/paiements.php" class="btn btn-sm" style="background:#C9972A;color:#fff;border:none">Tout voir</a>
   </div>
   <div style="overflow-x:auto">
     <table class="adm-table">
       <thead>
         <tr>
-          <th>R&eacute;f&eacute;rence</th>
-          <th>Utilisateur</th>
-          <th>Plan</th>
-          <th>Montant</th>
-          <th>M&eacute;thode</th>
-          <th>Date</th>
-          <th>Actions</th>
+          <th>Référence</th><th>Utilisateur</th><th>Plan</th>
+          <th>Montant</th><th>Méthode</th><th>Date</th><th>Actions</th>
         </tr>
       </thead>
       <tbody>
       <?php foreach ($paiementsAtt as $p):
         $planInfo = PLANS[$p['plan']] ?? ['nom'=>$p['plan']];
-        $planColors2 = ['GRATUIT'=>'#9CA3AF','BASIQUE'=>'#007A5E','PREMIUM'=>'#7C3AED','ECOLE'=>'#1E5FAD'];
-        $pc = $planColors2[$p['plan']] ?? '#9CA3AF';
+        $pc = $planColorsMap[$p['plan']] ?? '#9CA3AF';
       ?>
       <tr>
-        <td><code style="font-size:11px;background:var(--gris-100);padding:2px 6px;border-radius:4px"><?= e(substr($p['reference_paiement'],0,20)) ?></code></td>
+        <td><code style="font-size:11px;background:var(--gris-100);padding:2px 6px;border-radius:4px"><?= e(substr($p['reference_paiement']??'',0,18)) ?></code></td>
         <td>
-          <div style="font-weight:700"><?= e($p['prenom'].' '.$p['nom']) ?></div>
+          <div style="font-weight:600"><?= e($p['prenom'].' '.$p['nom']) ?></div>
           <div style="font-size:11px;color:var(--gris-500)"><?= e($p['email']) ?></div>
         </td>
-        <td><span class="plan-pill" style="background:<?= $pc ?>20;color:<?= $pc ?>"><?= e($planInfo['nom']) ?></span></td>
-        <td style="font-family:var(--font-display);font-weight:900;color:var(--gris-900)"><?= number_format((float)$p['montant'],0,',',' ') ?> <span style="font-size:10px;font-weight:400;color:var(--gris-500)">CDF</span></td>
+        <td><span class="plan-pill" style="background:<?= $pc ?>22;color:<?= $pc ?>"><?= e($planInfo['nom']) ?></span></td>
+        <td style="font-weight:800;white-space:nowrap"><?= number_format((float)$p['montant'],0,',',' ') ?> <span style="font-size:10px;color:var(--gris-400)">CDF</span></td>
         <td style="font-size:12px"><?= e(METHODES_PAIEMENT[$p['methode_paiement']]['nom'] ?? $p['methode_paiement']) ?></td>
         <td style="font-size:11px;color:var(--gris-500)"><?= date('d/m H:i', strtotime($p['created_at'])) ?></td>
         <td style="white-space:nowrap">
-          <a href="/reussiteplus/admin/paiements.php?action=confirmer&id=<?= e($p['id']) ?>" class="btn btn-sm" style="background:#E8F5F1;color:#007A5E;border:none;font-weight:700" onclick="return confirm('Confirmer ce paiement ?')">Confirmer</a>
-          <a href="/reussiteplus/admin/paiements.php?action=refuser&id=<?= e($p['id']) ?>" class="btn btn-sm" style="background:#FEE2E2;color:#DC2626;border:none;font-weight:700;margin-left:4px" onclick="return confirm('Refuser ce paiement ?')">Refuser</a>
+          <a href="/reussiteplus/admin/paiements.php?action=confirmer&id=<?= e($p['id']) ?>" class="btn btn-sm" style="background:#E8F5F1;color:#007A5E;border:none" onclick="return confirm('Confirmer ?')">✓</a>
+          <a href="/reussiteplus/admin/paiements.php?action=refuser&id=<?= e($p['id']) ?>" class="btn btn-sm" style="background:#FEE2E2;color:#DC2626;border:none;margin-left:4px" onclick="return confirm('Refuser ?')">✕</a>
         </td>
       </tr>
       <?php endforeach; ?>
@@ -536,13 +718,16 @@ include __DIR__ . '/../includes/header_app.php';
 </div>
 <?php endif; ?>
 
-<!-- -- DERNIERS INSCRITS + MESSAGES -------------------- -->
-<div class="adm-section">
+<!-- ══ DERNIERS INSCRITS + MESSAGES ══════════════════ -->
+<div class="grid-2col">
 
-  <!-- Derniers inscrits -->
-  <div class="adm-card">
-    <div class="adm-card-hd">
-      <div class="adm-card-title">Derniers inscrits</div>
+  <!-- Inscrits -->
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <div class="dash-card-title">
+        <i data-lucide="user-plus"></i>
+        Derniers inscrits
+      </div>
       <a href="/reussiteplus/admin/users.php" class="btn btn-ghost btn-sm">Voir tous</a>
     </div>
     <div style="overflow-x:auto">
@@ -552,23 +737,23 @@ include __DIR__ . '/../includes/header_app.php';
         </thead>
         <tbody>
         <?php foreach ($lastUsers as $u):
-          $pc = $planColors2[$u['plan']] ?? '#9CA3AF';
-          $planInfo2 = PLANS[$u['plan']] ?? ['nom'=>$u['plan']];
+          $pc2 = $planColorsMap[$u['plan']] ?? '#9CA3AF';
+          $pi2 = PLANS[$u['plan']] ?? ['nom'=>$u['plan']];
         ?>
         <tr>
           <td>
             <div style="display:flex;align-items:center;gap:9px">
-              <div style="width:32px;height:32px;border-radius:50%;background:<?= $pc ?>20;color:<?= $pc ?>;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0">
+              <div style="width:30px;height:30px;border-radius:50%;background:<?= $pc2 ?>22;color:<?= $pc2 ?>;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0">
                 <?= strtoupper(mb_substr($u['prenom']??'?',0,1)) ?>
               </div>
               <div>
-                <div style="font-weight:700;font-size:13px"><?= e($u['prenom'].' '.$u['nom']) ?></div>
+                <div style="font-weight:600;font-size:13px"><?= e($u['prenom'].' '.$u['nom']) ?></div>
                 <div style="font-size:11px;color:var(--gris-500)"><?= e($u['email']) ?></div>
               </div>
             </div>
           </td>
-          <td><span class="plan-pill" style="background:<?= $pc ?>20;color:<?= $pc ?>"><?= e($planInfo2['nom']) ?></span></td>
-          <td style="font-size:11px;color:var(--gris-500)"><?= temps_relatif($u['created_at']) ?></td>
+          <td><span class="plan-pill" style="background:<?= $pc2 ?>22;color:<?= $pc2 ?>"><?= e($pi2['nom']) ?></span></td>
+          <td style="font-size:11px;color:var(--gris-500);white-space:nowrap"><?= temps_relatif($u['created_at']) ?></td>
         </tr>
         <?php endforeach; ?>
         </tbody>
@@ -576,75 +761,61 @@ include __DIR__ . '/../includes/header_app.php';
     </div>
   </div>
 
-  <!-- Messages de contact -->
-  <div class="adm-card">
-    <div class="adm-card-hd">
-      <div class="adm-card-title">Messages de contact r&eacute;cents</div>
+  <!-- Messages -->
+  <div class="dash-card">
+    <div class="dash-card-header">
+      <div class="dash-card-title">
+        <i data-lucide="message-square"></i>
+        Messages de contact récents
+      </div>
       <?php if ($adm['messages_contact'] > 0): ?>
       <span style="background:#FEE2E2;color:#DC2626;font-size:10px;font-weight:800;padding:2px 8px;border-radius:8px"><?= $adm['messages_contact'] ?> nouveaux</span>
       <?php endif; ?>
     </div>
-    <div class="adm-card-body" style="padding:0">
-      <?php if ($lastMessages): ?>
-      <?php foreach ($lastMessages as $msg):
-        $sujetColor = ['PLAN'=>'#007A5E','TECHNIQUE'=>'#DC2626','PARTENARIAT'=>'#7C3AED','PRESSE'=>'#1E5FAD','AUTRE'=>'#9CA3AF'];
-        $sc = $sujetColor[$msg['sujet']??'AUTRE'] ?? '#9CA3AF';
-      ?>
-      <div style="padding:12px 20px;border-bottom:1px solid var(--gris-100);cursor:pointer" onclick="this.nextElementSibling&&this.nextElementSibling.classList.toggle('hidden')">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
-          <div style="display:flex;align-items:center;gap:8px;min-width:0">
-            <div style="width:8px;height:8px;background:<?= $sc ?>;border-radius:50%;flex-shrink:0"></div>
-            <div style="font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><?= e($msg['nom']) ?></div>
-            <span style="background:<?= $sc ?>20;color:<?= $sc ?>;font-size:9px;font-weight:800;padding:1px 6px;border-radius:4px;flex-shrink:0"><?= e($msg['sujet']??'') ?></span>
-          </div>
-          <div style="font-size:10px;color:var(--gris-400);white-space:nowrap"><?= temps_relatif($msg['created_at']) ?></div>
+    <?php if ($lastMessages): foreach ($lastMessages as $msg):
+      $sujetCol = ['PLAN'=>'#007A5E','TECHNIQUE'=>'#DC2626','PARTENARIAT'=>'#7C3AED','PRESSE'=>'#1E5FAD','AUTRE'=>'#9CA3AF'];
+      $sc = $sujetCol[$msg['sujet']??'AUTRE'] ?? '#9CA3AF';
+    ?>
+    <div style="padding:11px 20px;border-bottom:1px solid var(--gris-100)">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <div style="display:flex;align-items:center;gap:7px;min-width:0">
+          <span style="width:7px;height:7px;background:<?= $sc ?>;border-radius:50%;flex-shrink:0"></span>
+          <span style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><?= e($msg['nom']??'') ?></span>
+          <span style="background:<?= $sc ?>22;color:<?= $sc ?>;font-size:9px;font-weight:800;padding:1px 6px;border-radius:4px;flex-shrink:0"><?= e($msg['sujet']??'') ?></span>
         </div>
-        <div style="font-size:12px;color:var(--gris-600);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><?= e(mb_strimwidth($msg['message']??'',0,80,'...')) ?></div>
+        <span style="font-size:10px;color:var(--gris-400);white-space:nowrap;flex-shrink:0"><?= temps_relatif($msg['created_at']) ?></span>
       </div>
-      <?php endforeach; ?>
-      <?php else: ?>
-      <div style="text-align:center;padding:28px;color:var(--gris-400);font-size:13px">Aucun message r&eacute;cent</div>
-      <?php endif; ?>
+      <p style="font-size:12px;color:var(--gris-600);margin:4px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><?= e(mb_strimwidth($msg['message']??'',0,80,'...')) ?></p>
     </div>
+    <?php endforeach; else: ?>
+    <div style="text-align:center;padding:28px;color:var(--gris-400);font-size:13px">Aucun message récent</div>
+    <?php endif; ?>
   </div>
 
 </div>
 
-<!-- -- ACTIONS RAPIDES ---------------------------------- -->
-<div style="background:var(--gris-50);border:1.5px solid var(--gris-200);border-radius:16px;padding:20px;margin-bottom:22px">
-  <div style="font-family:var(--font-display);font-size:13px;font-weight:800;color:var(--gris-700);margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px">Actions rapides</div>
-  <div style="display:flex;gap:10px;flex-wrap:wrap">
-    <a href="/reussiteplus/admin/users.php" class="btn btn-ghost btn-sm" style="font-weight:700">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-      G&eacute;rer les utilisateurs
-    </a>
-    <a href="/reussiteplus/admin/paiements.php" class="btn btn-ghost btn-sm" style="font-weight:700">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-      Paiements
-    </a>
-    <a href="/reussiteplus/admin/archives.php" class="btn btn-ghost btn-sm" style="font-weight:700">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
-      G&eacute;rer archives
-    </a>
-    <a href="/reussiteplus/tarifs.php" target="_blank" class="btn btn-ghost btn-sm" style="font-weight:700">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-      Page tarifs
-    </a>
-    <button onclick="exportCsv()" class="btn btn-ghost btn-sm" style="font-weight:700">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-2px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      Exporter CSV
-    </button>
-    <button onclick="loadAiInsights()" class="btn btn-sm" style="background:linear-gradient(135deg,#7C3AED,#6D28D9);color:white;border:none;font-weight:700">
-      Rapport IA complet
-    </button>
+<!-- ══ ACTIONS RAPIDES ════════════════════════════════ -->
+<div class="dash-card" style="margin-bottom:24px">
+  <div class="dash-card-header">
+    <div class="dash-card-title">
+      <i data-lucide="zap"></i>
+      Actions rapides
+    </div>
+  </div>
+  <div class="quick-actions">
+    <a href="/reussiteplus/admin/users.php" class="btn btn-ghost btn-sm"><i data-lucide="users" style="width:13px;height:13px"></i> Utilisateurs</a>
+    <a href="/reussiteplus/admin/paiements.php" class="btn btn-ghost btn-sm"><i data-lucide="credit-card" style="width:13px;height:13px"></i> Paiements</a>
+    <a href="/reussiteplus/admin/archives.php" class="btn btn-ghost btn-sm"><i data-lucide="folder-open" style="width:13px;height:13px"></i> Archives</a>
+    <a href="/reussiteplus/tarifs.php" target="_blank" class="btn btn-ghost btn-sm"><i data-lucide="tag" style="width:13px;height:13px"></i> Tarifs</a>
+    <button onclick="window.location='/reussiteplus/admin/users.php?export=csv'" class="btn btn-ghost btn-sm"><i data-lucide="download" style="width:13px;height:13px"></i> Exporter CSV</button>
+    <button onclick="loadAiInsights()" class="btn btn-sm" style="background:#7C3AED;color:#fff;border:none"><i data-lucide="zap" style="width:13px;height:13px"></i> Rapport IA</button>
   </div>
 </div>
 
 <!-- Tooltip -->
-<div id="tooltip" style="display:none;position:fixed;background:rgba(0,0,0,.85);color:white;font-size:11px;padding:5px 10px;border-radius:6px;pointer-events:none;z-index:1000"></div>
+<div id="tooltip" style="display:none;position:fixed;background:rgba(15,23,42,.9);color:#fff;font-size:11px;padding:5px 10px;border-radius:6px;pointer-events:none;z-index:9999"></div>
 
 <script>
-// Tooltip on chart bars
 function showTip(el, text) {
   const t = document.getElementById('tooltip');
   t.textContent = text;
@@ -661,18 +832,15 @@ function hideTip() {
   document.removeEventListener('mousemove', moveTip);
 }
 
-// IA Groq Analysis
 async function loadAiInsights() {
   const btn    = document.getElementById('ai-btn');
   const result = document.getElementById('ai-groq-result');
   const loader = document.getElementById('ai-loading');
   const text   = document.getElementById('ai-groq-text');
-
-  btn.disabled  = true;
-  btn.textContent = 'Analyse en cours...';
-  loader.style.display  = 'block';
-  result.style.display  = 'none';
-
+  btn.disabled = true;
+  btn.innerHTML = '<i data-lucide="loader" style="width:13px;height:13px;animation:spin .7s linear infinite"></i> Analyse...';
+  loader.style.display = 'block';
+  result.style.display = 'none';
   try {
     const resp = await fetch('/reussiteplus/admin/ai_insights.php', {
       method: 'POST',
@@ -694,22 +862,16 @@ async function loadAiInsights() {
       text.innerHTML = data.analyse.replace(/\n/g,'<br>');
       result.style.display = 'block';
     }
-  } catch (e) {
-    text.innerHTML = '<span style="color:#f87171">Impossible de contacter l\'IA. V&eacute;rifiez la cl&eacute; GROQ_API_KEY.</span>';
+  } catch(e) {
+    text.innerHTML = '<span style="color:#DC2626">Impossible de contacter l\'IA. Vérifiez la clé GROQ_API_KEY.</span>';
     result.style.display = 'block';
   }
-
   loader.style.display = 'none';
   btn.disabled = false;
-  btn.textContent = 'Analyser avec l\'IA';
+  btn.innerHTML = '<i data-lucide="zap" style="width:13px;height:13px"></i> Analyse IA';
+  if (typeof lucide !== 'undefined') lucide.createIcons();
   result.scrollIntoView({behavior:'smooth', block:'center'});
 }
-
-// Export CSV basique
-function exportCsv() {
-  window.location = '/reussiteplus/admin/users.php?export=csv';
-}
 </script>
-<style>@keyframes spin { to { transform:rotate(360deg); } }</style>
-
+<style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 <?php include __DIR__ . '/../includes/footer_app.php'; ?>

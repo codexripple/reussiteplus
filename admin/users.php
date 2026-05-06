@@ -211,9 +211,9 @@ include __DIR__ . '/../includes/header_app.php';
   </div>
 
   <!-- Pagination -->
-  <?php if ($pagination['total_pages'] > 1): ?>
+  <?php if (($pagination['pages'] ?? 1) > 1): ?>
   <div style="display:flex;justify-content:center;gap:6px;padding:16px;flex-wrap:wrap">
-    <?php for ($i = 1; $i <= $pagination['total_pages']; $i++): ?>
+    <?php for ($i = 1; $i <= $pagination['pages']; $i++): ?>
     <a href="?q=<?= urlencode($search) ?>&plan=<?= urlencode($filPlan) ?>&role=<?= urlencode($filRole) ?>&actif=<?= urlencode($filActif) ?>&page=<?= $i ?>" class="btn <?= $i == $page ? 'btn-primary' : 'btn-ghost' ?> btn-sm"><?= $i ?></a>
     <?php endfor; ?>
   </div>

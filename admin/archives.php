@@ -161,84 +161,136 @@ include __DIR__ . '/../includes/header_app.php';
 <div class="alert alert-success"><?= e($success) ?></div>
 <?php endif; ?>
 
-<div style="display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:start">
-  <!-- Liste -->
-  <div>
-    <form method="GET" style="display:flex;gap:8px;margin-bottom:16px">
-      <input class="form-control" name="q" value="<?= e($search) ?>" placeholder="Rechercher...">
-      <button type="submit" class="btn btn-ghost">Rechercher</button>
-    </form>
+<style>
+/* --- ADMIN ARCHIVES DESIGN UPGRADE --- */
+.admin-archives-grid { display: grid; grid-template-columns: 1fr 400px; gap: 32px; align-items: flex-start; }
+@media (max-width: 1100px) { .admin-archives-grid { grid-template-columns: 1fr; } }
 
-    <div class="card">
-      <div class="card-header">
-        <div class="card-title">Archives (<?= $total ?>)</div>
-        <a href="/reussiteplus/admin/archives.php" class="btn btn-primary btn-sm">+ Nouvelle archive</a>
-      </div>
-      <div class="table-wrap">
-        <table class="table">
-          <thead><tr><th>Titre</th><th>Type</th><th>Année</th><th>Matière</th><th>Statut</th><th>DL</th><th></th></tr></thead>
-          <tbody>
-          <?php foreach ($archives as $a): ?>
-          <tr>
-            <td style="font-size:13px;font-weight:500;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
-              <?= e($a['titre']) ?>
-              <?php if ($a['verifie']): ?><i data-lucide="check-circle" style="width:11px;height:11px;stroke:var(--primary);vertical-align:-1px;margin-left:3px"></i><?php endif; ?>
-            </td>
-            <td><span class="badge badge-gray" style="font-size:10px"><?= e($a['exam_type']) ?></span></td>
-            <td style="font-size:12px"><?= $a['annee'] ?></td>
-            <td style="font-size:11px;color:var(--gris-500)"><?= e($a['matiere_nom'] ?? '—') ?></td>
-            <td>
-              <?php
-                $stColors = ['PUBLIE'=>'#007A5E','BROUILLON'=>'#6B7280','REVISION'=>'#C9972A','ARCHIVE'=>'#4A5568'];
-                $sc = $stColors[$a['status']] ?? '#6B7280';
-              ?>
-              <span style="font-size:10px;background:<?= $sc ?>15;color:<?= $sc ?>;padding:2px 7px;border-radius:20px;font-weight:600"><?= e($a['status']) ?></span>
-            </td>
-            <td style="font-size:12px"><?= number_format((int)$a['telechargements']) ?></td>
-            <td style="white-space:nowrap">
-              <a href="?edit=<?= e($a['id']) ?>" class="btn btn-ghost btn-sm">Modifier</a>
-              <form method="POST" style="display:inline" onsubmit="return confirm('Supprimer cette archive ?')">
-                <?= csrf_field() ?>
-                <input type="hidden" name="action" value="delete_archive">
-                <input type="hidden" name="delete_id" value="<?= e($a['id']) ?>">
-                <button type="submit" class="btn btn-danger btn-sm">Suppr.</button>
-              </form>
-            </td>
-          </tr>
-          <?php endforeach; ?>
-          </tbody>
-        </table>
-      </div>
-      <?php if ($total > $limit): ?>
-      <div style="display:flex;justify-content:center;gap:6px;padding:16px">
-        <?php for ($i = 1; $i <= ceil($total/$limit); $i++): ?>
-        <a href="?q=<?= urlencode($search) ?>&page=<?= $i ?>" class="btn <?= $i==$page?'btn-primary':'btn-ghost' ?> btn-sm"><?= $i ?></a>
-        <?php endfor; ?>
-      </div>
-      <?php endif; ?>
-    </div>
+.admin-archives-form {
+  background: var(--blanc);
+  border: 1.5px solid var(--gris-200);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.04);
+  padding: 0;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+.admin-archives-form .form-section {
+  border-bottom: 1px solid var(--gris-100);
+  padding: 22px 24px 0 24px;
+  margin-bottom: 0;
+}
+.admin-archives-form .form-section:last-child { border-bottom: none; }
+.admin-archives-form .form-title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--gris-900);
+  margin-bottom: 18px;
+  margin-top: 0;
+}
+.admin-archives-form .form-group { margin-bottom: 16px; }
+.admin-archives-form label.form-label { font-size: 13px; font-weight: 600; color: var(--gris-700); margin-bottom: 6px; }
+.admin-archives-form input[type="file"] { background: var(--gris-50); border: 1.5px solid var(--gris-200); border-radius: 8px; }
+.admin-archives-form .form-actions { padding: 18px 24px 24px 24px; background: var(--gris-50); border-radius: 0 0 16px 16px; }
+
+.admin-archives-table-wrap { background: var(--blanc); border: 1.5px solid var(--gris-200); border-radius: 16px; overflow-x: auto; }
+.admin-archives-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+.admin-archives-table th, .admin-archives-table td { padding: 10px 12px; font-size: 13px; }
+.admin-archives-table th { background: var(--gris-50); font-size: 11px; font-weight: 700; color: var(--gris-500); text-transform: uppercase; letter-spacing: .5px; position: sticky; top: 0; z-index: 2; }
+.admin-archives-table tr { transition: background .15s; }
+.admin-archives-table tr:hover { background: #F8FAFC; }
+.admin-archives-table td { border-bottom: 1px solid var(--gris-100); }
+.admin-archives-table td .badge { font-size: 10px; padding: 2px 8px; border-radius: 12px; font-weight: 700; }
+.admin-archives-table td .badge-pub { background: #007A5E15; color: #007A5E; }
+.admin-archives-table td .badge-brouillon { background: #6B728015; color: #6B7280; }
+.admin-archives-table td .badge-revision { background: #C9972A15; color: #C9972A; }
+.admin-archives-table td .badge-archive { background: #4A556815; color: #4A5568; }
+.admin-archives-table td .badge-premium { background: #C9972A15; color: #C9972A; }
+.admin-archives-table td .badge-verifie { background: #007A5E15; color: #007A5E; margin-left: 4px; }
+@media (max-width: 900px) {
+  .admin-archives-grid { grid-template-columns: 1fr; }
+  .admin-archives-form, .admin-archives-table-wrap { border-radius: 10px; }
+  .admin-archives-form .form-section, .admin-archives-form .form-actions { padding: 16px; }
+}
+</style>
+
+<div class="admin-archives-grid">
+  <!-- Table archives -->
+  <div class="admin-archives-table-wrap">
+    <table class="admin-archives-table">
+      <thead>
+        <tr>
+          <th>Titre</th>
+          <th>Type</th>
+          <th>Année</th>
+          <th>Matière</th>
+          <th>Statut</th>
+          <th>DL</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($archives as $a): ?>
+        <tr>
+          <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+            <?= e($a['titre']) ?>
+            <?php if ($a['verifie']): ?><span class="badge badge-verifie"><i data-lucide="check-circle" style="width:11px;height:11px;vertical-align:-2px"></i> Vérifié</span><?php endif; ?>
+          </td>
+          <td><span class="badge badge-gray"><?= e($a['exam_type']) ?></span></td>
+          <td><?= $a['annee'] ?></td>
+          <td><?= e($a['matiere_nom'] ?? '—') ?></td>
+          <td>
+            <?php
+              $st = $a['status'] ?? 'PUBLIE';
+              $stMap = [
+                'PUBLIE'   => ['Publié','badge-pub'],
+                'BROUILLON'=> ['Brouillon','badge-brouillon'],
+                'REVISION' => ['En révision','badge-revision'],
+                'ARCHIVE'  => ['Archivé','badge-archive'],
+              ];
+              [$lbl, $cls] = $stMap[$st] ?? ['Publié','badge-pub'];
+            ?>
+            <span class="badge <?= $cls ?>"><?= $lbl ?></span>
+            <?php if ($a['premium_only']): ?><span class="badge badge-premium">Premium</span><?php endif; ?>
+          </td>
+          <td><?= number_format((int)$a['telechargements']) ?></td>
+          <td style="white-space:nowrap">
+            <a href="?edit=<?= e($a['id']) ?>" class="btn btn-ghost btn-sm">Modifier</a>
+            <form method="POST" style="display:inline" onsubmit="return confirm('Supprimer cette archive ?')">
+              <?= csrf_field() ?>
+              <input type="hidden" name="action" value="delete_archive">
+              <input type="hidden" name="delete_id" value="<?= e($a['id']) ?>">
+              <button type="submit" class="btn btn-danger btn-sm">Suppr.</button>
+            </form>
+          </td>
+        </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
   </div>
 
   <!-- Formulaire création/édition -->
-  <div class="card" style="position:sticky;top:80px;max-height:calc(100vh - 100px);overflow-y:auto">
-    <div class="card-header" style="position:sticky;top:0;background:var(--blanc);z-index:2">
-      <div class="card-title"><?= $editArchive ? 'Modifier l\'archive' : 'Nouvelle archive' ?></div>
-      <?php if ($editArchive): ?><a href="/reussiteplus/admin/archives.php" class="btn btn-ghost btn-sm">Annuler</a><?php endif; ?>
-    </div>
-    <div style="padding:20px">
-    <form method="POST" enctype="multipart/form-data">
-      <?= csrf_field() ?>
-      <input type="hidden" name="action" value="save_archive">
-      <?php if ($editArchive): ?>
-      <input type="hidden" name="edit_id" value="<?= e($editArchive['id']) ?>">
-      <?php endif; ?>
+  <form class="admin-archives-form" method="POST" enctype="multipart/form-data">
+    <?= csrf_field() ?>
+    <input type="hidden" name="action" value="save_archive">
+    <?php if ($editArchive): ?>
+    <input type="hidden" name="edit_id" value="<?= e($editArchive['id']) ?>">
+    <?php endif; ?>
 
-      <div class="form-group">
-        <label class="form-label">Titre *</label>
-        <input class="form-control" name="titre" required value="<?= e($editArchive['titre'] ?? $_POST['titre'] ?? '') ?>" placeholder="Ex: ENAFEP 2024 — Mathématiques">
+    <div class="form-section">
+      <div class="form-title">Informations générales</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="form-group">
+          <label class="form-label">Titre *</label>
+          <input class="form-control" name="titre" required value="<?= e($editArchive['titre'] ?? $_POST['titre'] ?? '') ?>" placeholder="Ex: ENAFEP 2024 — Mathématiques">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Année *</label>
+          <input class="form-control" type="number" name="annee" min="1990" max="2100" value="<?= $editArchive['annee'] ?? date('Y') ?>" required>
+        </div>
       </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
         <div class="form-group">
           <label class="form-label">Type *</label>
           <select class="form-control" name="exam_type" required>
@@ -256,23 +308,7 @@ include __DIR__ . '/../includes/header_app.php';
           </select>
         </div>
       </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div class="form-group">
-          <label class="form-label">Année *</label>
-          <input class="form-control" type="number" name="annee" min="1990" max="2100" value="<?= $editArchive['annee'] ?? date('Y') ?>" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Statut</label>
-          <select class="form-control" name="status">
-            <?php foreach (['PUBLIE'=>'Publié','BROUILLON'=>'Brouillon','REVISION'=>'En révision','ARCHIVE'=>'Archivé'] as $v=>$l): ?>
-            <option value="<?= $v ?>" <?= ($editArchive['status']??'PUBLIE') === $v ? 'selected' : '' ?>><?= $l ?></option>
-            <?php endforeach; ?>
-          </select>
-        </div>
-      </div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
         <div class="form-group">
           <label class="form-label">Matière *</label>
           <select class="form-control" name="matiere_id" required>
@@ -292,60 +328,67 @@ include __DIR__ . '/../includes/header_app.php';
           </select>
         </div>
       </div>
-
-      <!-- Upload PDF Sujet -->
       <div class="form-group">
-        <label class="form-label"><i data-lucide="file-text" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"></i> Sujet PDF</label>
-        <?php if (!empty($editArchive['sujet_url'])): ?>
-        <div style="font-size:11px;color:var(--primary);margin-bottom:5px;display:flex;align-items:center;gap:5px">
-          <i data-lucide="check-circle" style="width:11px;height:11px"></i>
-          <a href="<?= e($editArchive['sujet_url']) ?>" target="_blank" style="color:var(--primary)">Fichier actuel</a>
-          — remplacer ci-dessous
-        </div>
-        <?php endif; ?>
-        <input class="form-control" type="file" name="sujet_file" accept="application/pdf" style="padding:6px">
-        <div style="font-size:11px;color:var(--gris-400);margin-top:3px">ou URL directe :</div>
-        <input class="form-control" type="url" name="sujet_url" value="<?= e($editArchive['sujet_url'] ?? '') ?>" placeholder="https://..." style="margin-top:5px">
-        <div style="display:flex;gap:8px;margin-top:5px">
-          <div style="flex:1">
+        <label class="form-label">Statut</label>
+        <select class="form-control" name="status">
+          <?php foreach (['PUBLIE'=>'Publié','BROUILLON'=>'Brouillon','REVISION'=>'En révision','ARCHIVE'=>'Archivé'] as $v=>$l): ?>
+          <option value="<?= $v ?>" <?= ($editArchive['status']??'PUBLIE') === $v ? 'selected' : '' ?>><?= $l ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-title">Fichiers PDF</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="form-group">
+          <label class="form-label"><i data-lucide="file-text" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"></i> Sujet PDF</label>
+          <?php if (!empty($editArchive['sujet_url'])): ?>
+          <div style="font-size:11px;color:var(--primary);margin-bottom:5px;display:flex;align-items:center;gap:5px">
+            <i data-lucide="check-circle" style="width:11px;height:11px"></i>
+            <a href="<?= e($editArchive['sujet_url']) ?>" target="_blank" style="color:var(--primary)">Fichier actuel</a>
+            — remplacer ci-dessous
+          </div>
+          <?php endif; ?>
+          <input class="form-control" type="file" name="sujet_file" accept="application/pdf">
+          <div style="font-size:11px;color:var(--gris-400);margin-top:3px">ou URL directe :</div>
+          <input class="form-control" type="url" name="sujet_url" value="<?= e($editArchive['sujet_url'] ?? '') ?>" placeholder="https://..." style="margin-top:5px">
+          <div style="margin-top:5px">
             <label class="form-label" style="font-size:11px">Nb pages</label>
             <input class="form-control" type="number" name="sujet_pages" min="1" value="<?= $editArchive['sujet_pages'] ?? '' ?>" placeholder="0">
           </div>
         </div>
-      </div>
-
-      <!-- Upload PDF Corrigé -->
-      <div class="form-group">
-        <label class="form-label"><i data-lucide="check-square" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"></i> Corrigé PDF</label>
-        <?php if (!empty($editArchive['corrige_url'])): ?>
-        <div style="font-size:11px;color:var(--gold);margin-bottom:5px;display:flex;align-items:center;gap:5px">
-          <i data-lucide="check-circle" style="width:11px;height:11px;stroke:var(--gold)"></i>
-          <a href="<?= e($editArchive['corrige_url']) ?>" target="_blank" style="color:var(--gold)">Fichier actuel</a>
-          — remplacer ci-dessous
-        </div>
-        <?php endif; ?>
-        <input class="form-control" type="file" name="corrige_file" accept="application/pdf" style="padding:6px">
-        <div style="font-size:11px;color:var(--gris-400);margin-top:3px">ou URL directe :</div>
-        <input class="form-control" type="url" name="corrige_url" value="<?= e($editArchive['corrige_url'] ?? '') ?>" placeholder="https://..." style="margin-top:5px">
-        <div style="display:flex;gap:8px;margin-top:5px">
-          <div style="flex:1">
+        <div class="form-group">
+          <label class="form-label"><i data-lucide="check-square" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"></i> Corrigé PDF</label>
+          <?php if (!empty($editArchive['corrige_url'])): ?>
+          <div style="font-size:11px;color:var(--gold);margin-bottom:5px;display:flex;align-items:center;gap:5px">
+            <i data-lucide="check-circle" style="width:11px;height:11px;stroke:var(--gold)"></i>
+            <a href="<?= e($editArchive['corrige_url']) ?>" target="_blank" style="color:var(--gold)">Fichier actuel</a>
+            — remplacer ci-dessous
+          </div>
+          <?php endif; ?>
+          <input class="form-control" type="file" name="corrige_file" accept="application/pdf">
+          <div style="font-size:11px;color:var(--gris-400);margin-top:3px">ou URL directe :</div>
+          <input class="form-control" type="url" name="corrige_url" value="<?= e($editArchive['corrige_url'] ?? '') ?>" placeholder="https://..." style="margin-top:5px">
+          <div style="margin-top:5px">
             <label class="form-label" style="font-size:11px">Nb pages</label>
             <input class="form-control" type="number" name="corrige_pages" min="1" value="<?= $editArchive['corrige_pages'] ?? '' ?>" placeholder="0">
           </div>
         </div>
       </div>
+    </div>
 
+    <div class="form-section">
+      <div class="form-title">Description & options</div>
       <div class="form-group">
         <label class="form-label">Description</label>
         <textarea class="form-control" name="description" rows="2"><?= e($editArchive['description'] ?? '') ?></textarea>
       </div>
-
       <div class="form-group">
         <label class="form-label">Source / Référence</label>
         <input class="form-control" name="source" value="<?= e($editArchive['source'] ?? '') ?>" placeholder="Ex: MEPST, Ministère de l'Éducation…">
       </div>
-
-      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px">
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
           <input type="checkbox" name="premium_only" value="1" <?= ($editArchive['premium_only'] ?? 0) ? 'checked' : '' ?>>
           Réserver aux abonnés Premium
@@ -355,11 +398,11 @@ include __DIR__ . '/../includes/header_app.php';
           <i data-lucide="check-circle" style="width:13px;height:13px;stroke:var(--primary)"></i> Contenu vérifié
         </label>
       </div>
-
-      <button type="submit" class="btn btn-primary btn-full"><?= $editArchive ? 'Mettre à jour' : 'Créer l\'archive' ?></button>
-    </form>
     </div>
-  </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary btn-full" style="font-size:15px;font-weight:700"><?= $editArchive ? 'Mettre à jour' : 'Créer l\'archive' ?></button>
+    </div>
+  </form>
 </div>
 
 <?php include __DIR__ . '/../includes/footer_app.php'; ?>

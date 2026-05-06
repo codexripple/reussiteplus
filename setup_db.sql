@@ -325,7 +325,6 @@ CREATE TABLE IF NOT EXISTS notifications (
   message    TEXT NOT NULL,
   lien       VARCHAR(300),
   lu         TINYINT(1) DEFAULT 0,
-  lu_at      DATETIME DEFAULT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES utilisateurs(id) ON DELETE CASCADE,
   INDEX idx_user_lu (user_id, lu),
@@ -345,7 +344,6 @@ CREATE TABLE IF NOT EXISTS signets (
   FOREIGN KEY (archive_id) REFERENCES archives(id) ON DELETE CASCADE,
   FOREIGN KEY (question_id) REFERENCES question_bank(id) ON DELETE CASCADE,
   UNIQUE KEY uq_user_archive (user_id, archive_id),
-  UNIQUE KEY uq_user_question (user_id, question_id),
   INDEX idx_user (user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -367,21 +365,3 @@ CREATE TABLE IF NOT EXISTS admin_logs (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 SET FOREIGN_KEY_CHECKS = 1;
-
--- ============================================================
--- MESSAGES DE CONTACT
--- ============================================================
-CREATE TABLE IF NOT EXISTS contact_messages (
-  id          CHAR(36) PRIMARY KEY DEFAULT (UUID()),
-  nom         VARCHAR(100) NOT NULL,
-  email       VARCHAR(200) NOT NULL,
-  telephone   VARCHAR(30),
-  sujet       ENUM('PLAN','TECHNIQUE','PARTENARIAT','PRESSE','AUTRE') DEFAULT 'AUTRE',
-  message     TEXT NOT NULL,
-  statut      ENUM('NOUVEAU','LU','REPONDU') DEFAULT 'NOUVEAU',
-  ip          VARCHAR(45),
-  created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
-  INDEX idx_statut (statut),
-  INDEX idx_email (email),
-  INDEX idx_date (created_at DESC)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

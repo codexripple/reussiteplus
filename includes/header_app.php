@@ -279,6 +279,10 @@ if (is_admin()) {
       <div class="sidebar-upgrade-sub">Accès illimité dès 10 000 CDF/mois</div>
     </a>
     <?php endif; ?>
+    <button onclick="forcerReloadCss()" class="nav-item" style="margin-top:8px;background:rgba(0,122,94,.08);color:#007A5E;font-weight:700;gap:8px">
+      <div class="nav-icon"><i data-lucide="refresh-ccw"></i></div>
+      <span class="nav-label">Forcer le rechargement du design</span>
+    </button>
     <a href="/reussiteplus/deconnexion.php" class="nav-item" style="margin-top:8px">
       <div class="nav-icon"><i data-lucide="log-out"></i></div>
       <span class="nav-label">Déconnexion</span>
@@ -298,6 +302,20 @@ if (is_admin()) {
         <span></span><span></span><span></span>
       </span>
     </button>
+
+<script>
+function forcerReloadCss() {
+  // Sélectionne toutes les feuilles de style locales et force le rechargement
+  document.querySelectorAll('link[rel="stylesheet"]').forEach(function(link) {
+    if (link.href.includes('/assets/css/app.css')) {
+      const url = new URL(link.href);
+      url.searchParams.set('v', Date.now());
+      link.href = url.toString();
+    }
+  });
+  alert('Le design a été rechargé ! Si le problème persiste, videz le cache du navigateur.');
+}
+</script>
 
     <h1 class="topbar-title"><?= e($pageTitle) ?></h1>
     <form class="search-bar" action="/reussiteplus/recherche.php" method="GET">
@@ -328,7 +346,3 @@ if (is_admin()) {
   <!-- PAGE CONTENT -->
   <main class="page-content">
     <?= show_flash() ?>
-  </main>
-</div>
-</body>
-</html>
