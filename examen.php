@@ -57,13 +57,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             [$score, $scoreMax, $pct, $temps, $sessionId]
         );
 
-        // Mettre à jour stats utilisateur
+        // Mettre à jour stats utilisateur (corrige race condition)
+        $uStats = dbRow("SELECT total_examens, total_questions, score_moyen, examens_mois FROM utilisateurs WHERE id=?", [$user['id']]);
+        $newTotalExamens = (int)$uStats['total_examens'] + 1;
+        $newTotalQuestions = (int)$uStats['total_questions'] + count($answers);
+        $newExamensMois = (int)$uStats['examens_mois'] + 1;
+        $newScoreMoyen = $newTotalExamens > 0
+            ? round((($uStats['score_moyen'] * (int)$uStats['total_examens']) + $pct) / $newTotalExamens, 2)
+            : $pct;
         dbQuery(
-            "UPDATE utilisateurs SET total_examens=total_examens+1, total_questions=total_questions+?,
-             score_moyen = (score_moyen * total_examens + ?) / (total_examens + 1),
-             examens_mois = examens_mois + 1
-             WHERE id=?",
-            [count($answers), $pct, $user['id']]
+            "UPDATE utilisateurs SET total_examens=?, total_questions=?, score_moyen=?, examens_mois=? WHERE id=?",
+            [$newTotalExamens, $newTotalQuestions, $newScoreMoyen, $newExamensMois, $user['id']]
         );
 
         // Mettre à jour progression par matière
