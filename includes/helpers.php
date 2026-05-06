@@ -220,12 +220,12 @@ function log_activite(string $userId, int $examens = 0, int $questions = 0): voi
 
 // ── Redirection sécurisée ──────────────────────────────────
 function safe_redirect(string $url): string {
-    // N'accepter que les chemins relatifs du site
+    // Rejeter les URL absolues externes (http://, https://, //)
     $parsed = parse_url($url);
     if (!empty($parsed['scheme']) || !empty($parsed['host'])) {
-        return 'dashboard.php'; // URL absolue externe → refusé
+        return '/reussiteplus/dashboard.php';
     }
-    // Nettoyer les tentatives ../ 
-    $clean = ltrim(preg_replace('#\.+/#', '', $url), '/');
-    return $clean ?: 'dashboard.php';
+    // Nettoyer les tentatives de traversal (../), sans supprimer le slash initial
+    $clean = preg_replace('#\.+/#', '', $url);
+    return $clean ?: '/reussiteplus/dashboard.php';
 }

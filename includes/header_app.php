@@ -104,8 +104,12 @@ if (is_admin()) {
       <div class="nav-icon"><i data-lucide="clipboard"></i></div>
       <span class="nav-label">Mes Devoirs</span>
     </a>
-    <a href="/reussiteplus/mes_cours.php" class="nav-item <?= $pageActive === 'mes_cours' ? 'active' : '' ?>">
+    <a href="/reussiteplus/cours/index.php" class="nav-item <?= $pageActive === 'cours' ? 'active' : '' ?>">
       <div class="nav-icon"><i data-lucide="book-open"></i></div>
+      <span class="nav-label">Cours</span>
+    </a>
+    <a href="/reussiteplus/mes_cours.php" class="nav-item <?= $pageActive === 'mes_cours' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="graduation-cap"></i></div>
       <span class="nav-label">Mes Cours</span>
     </a>
     <a href="/reussiteplus/mes_exercices.php" class="nav-item <?= $pageActive === 'mes_exercices' ? 'active' : '' ?>">
@@ -340,7 +344,7 @@ function forcerReloadCss() {
     </a>
     <?php endif; ?>
     <!-- Bouton dark mode -->
-    <button id="themeToggle" class="topbar-btn" title="Changer le thème" onclick="toggleTheme()"><i data-lucide="moon"></i></button>
+    <button id="themeToggle" class="topbar-btn" title="Changer le thème"><i data-lucide="moon"></i></button>
   </header>
 
   <!-- PAGE CONTENT -->

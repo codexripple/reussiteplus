@@ -10,39 +10,47 @@ $user = require_admin();
 
 // Actions confirmer / refuser
 if (isset($_GET['action'], $_GET['id'])) {
-    $action = $_GET['action'];
-    $id     = $_GET['id'];
-    $abon = dbRow("SELECT a.*, u.id as uid, u.prenom FROM abonnements a JOIN utilisateurs u ON a.user_id=u.id WHERE a.id=?", [$id]);
-    if (!$abon) redirect('/reussiteplus/admin/paiements.php', 'error', 'Paiement introuvable.');
-    if ($action === 'confirmer' && $abon['statut'] === 'EN_ATTENTE') {
-        dbQuery("UPDATE abonnements SET statut='CONFIRME', confirmed_at=NOW(), confirmed_by=? WHERE id=?", [$user['id'], $id]);
-        dbQuery("UPDATE utilisateurs SET plan=?, plan_expire_at=? WHERE id=?", [$abon['plan'], $abon['date_fin'], $abon['uid']]);
-        $dateFinFmt = $abon['date_fin'] ? date('d/m/Y', strtotime($abon['date_fin'])) : '?';
-        dbInsert('notifications', [
-            'user_id' => $abon['uid'],
-            'type'    => 'PAIEMENT',
-            'titre'   => 'Abonnement ' . $abon['plan'] . ' activé !',
-            'message' => 'Votre paiement a été confirmé. Votre abonnement ' . $abon['plan'] . ' est actif jusqu\'au ' . $dateFinFmt . '.',
-            'lien'    => '/reussiteplus/abonnement.php',
-        ]);
-        dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'CONFIRMER_PAIEMENT','details'=>"ID=$id"]);
-        redirect('/reussiteplus/admin/paiements.php', 'success', 'Paiement confirmé et plan activé.');
-    } elseif ($action === 'refuser' && $abon['statut'] === 'EN_ATTENTE') {
-        dbQuery("UPDATE abonnements SET statut='ECHEC' WHERE id=?", [$id]);
-        dbInsert('notifications', [
-            'user_id' => $abon['uid'],
-            'type'    => 'PAIEMENT',
-            'titre'   => 'Paiement non vérifié',
-            'message' => 'Votre paiement n\'a pas pu être vérifié. Contactez support@reussiteplus.cd.',
-            'lien'    => '/reussiteplus/abonnement.php',
-        ]);
-        dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'REFUSER_PAIEMENT','details'=>"ID=$id"]);
-        redirect('/reussiteplus/admin/paiements.php', 'success', 'Paiement refusé.');
-    }
+  // Vérification CSRF
+  if (empty($_GET['csrf']) || empty($_SESSION['csrf_admin']) || !hash_equals($_SESSION['csrf_admin'], $_GET['csrf'])) {
+    redirect('/reussiteplus/admin/paiements.php', 'error', 'Action non autorisée (CSRF).');
+  }
+  $action = $_GET['action'];
+  $id     = $_GET['id'];
+  $abon = dbRow("SELECT a.*, u.id as uid, u.prenom FROM abonnements a JOIN utilisateurs u ON a.user_id=u.id WHERE a.id=?", [$id]);
+  if (!$abon) redirect('/reussiteplus/admin/paiements.php', 'error', 'Paiement introuvable.');
+  if ($action === 'confirmer' && $abon['statut'] === 'EN_ATTENTE') {
+    dbQuery("UPDATE abonnements SET statut='CONFIRME', confirmed_at=NOW(), confirmed_by=? WHERE id=?", [$user['id'], $id]);
+    dbQuery("UPDATE utilisateurs SET plan=?, plan_expire_at=? WHERE id=?", [$abon['plan'], $abon['date_fin'], $abon['uid']]);
+    $dateFinFmt = $abon['date_fin'] ? date('d/m/Y', strtotime($abon['date_fin'])) : '?';
+    dbInsert('notifications', [
+      'user_id' => $abon['uid'],
+      'type'    => 'PAIEMENT',
+      'titre'   => 'Abonnement ' . $abon['plan'] . ' activé !',
+      'message' => 'Votre paiement a été confirmé. Votre abonnement ' . $abon['plan'] . ' est actif jusqu\'au ' . $dateFinFmt . '.',
+      'lien'    => '/reussiteplus/abonnement.php',
+    ]);
+    dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'CONFIRMER_PAIEMENT','details'=>"ID=$id"]);
+    redirect('/reussiteplus/admin/paiements.php', 'success', 'Paiement confirmé et plan activé.');
+  } elseif ($action === 'refuser' && $abon['statut'] === 'EN_ATTENTE') {
+    dbQuery("UPDATE abonnements SET statut='ECHEC' WHERE id=?", [$id]);
+    dbInsert('notifications', [
+      'user_id' => $abon['uid'],
+      'type'    => 'PAIEMENT',
+      'titre'   => 'Paiement non vérifié',
+      'message' => 'Votre paiement n\'a pas pu être vérifié. Contactez support@reussiteplus.cd.',
+      'lien'    => '/reussiteplus/abonnement.php',
+    ]);
+    dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'REFUSER_PAIEMENT','details'=>"ID=$id"]);
+    redirect('/reussiteplus/admin/paiements.php', 'success', 'Paiement refusé.');
+  }
 }
 
 // Export CSV
 if (isset($_GET['export']) && $_GET['export'] === 'csv') {
+  // Vérification CSRF
+  if (empty($_GET['csrf']) || empty($_SESSION['csrf_admin']) || !hash_equals($_SESSION['csrf_admin'], $_GET['csrf'])) {
+    redirect('/reussiteplus/admin/paiements.php', 'error', 'Action non autorisée (CSRF).');
+  }
     $rows = dbAll("SELECT a.reference_paiement, u.prenom, u.nom, u.email, a.plan, a.montant, a.devise, a.methode_paiement, a.telephone, a.statut, a.date_debut, a.date_fin, a.created_at FROM abonnements a JOIN utilisateurs u ON a.user_id=u.id ORDER BY a.created_at DESC") ?? [];
     $tmp = fopen('php://temp', 'r+');
     fwrite($tmp, "\xEF\xBB\xBF");

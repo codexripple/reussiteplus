@@ -6,7 +6,13 @@ require_once __DIR__ . '/../includes/helpers.php';
 
 $pageTitle  = 'Administration';
 $pageActive = 'admin';
+
 $user = require_admin();
+// CSRF token pour actions critiques
+if (empty($_SESSION['csrf_admin'])) {
+  $_SESSION['csrf_admin'] = bin2hex(random_bytes(32));
+}
+$csrf_token = $_SESSION['csrf_admin'];
 
 // -- Statistiques principales ----------------------------
 $adm = [
@@ -683,7 +689,7 @@ $planBgMap     = ['GRATUIT'=>'#F3F4F6','BASIQUE'=>'#E8F5F1','PREMIUM'=>'#EDE9FE'
     </div>
     <a href="/reussiteplus/admin/paiements.php" class="btn btn-sm" style="background:#C9972A;color:#fff;border:none">Tout voir</a>
   </div>
-  <div style="overflow-x:auto">
+  <div class="adm-table-wrap">
     <table class="adm-table">
       <thead>
         <tr>
@@ -707,8 +713,8 @@ $planBgMap     = ['GRATUIT'=>'#F3F4F6','BASIQUE'=>'#E8F5F1','PREMIUM'=>'#EDE9FE'
         <td style="font-size:12px"><?= e(METHODES_PAIEMENT[$p['methode_paiement']]['nom'] ?? $p['methode_paiement']) ?></td>
         <td style="font-size:11px;color:var(--gris-500)"><?= date('d/m H:i', strtotime($p['created_at'])) ?></td>
         <td style="white-space:nowrap">
-          <a href="/reussiteplus/admin/paiements.php?action=confirmer&id=<?= e($p['id']) ?>" class="btn btn-sm" style="background:#E8F5F1;color:#007A5E;border:none" onclick="return confirm('Confirmer ?')">✓</a>
-          <a href="/reussiteplus/admin/paiements.php?action=refuser&id=<?= e($p['id']) ?>" class="btn btn-sm" style="background:#FEE2E2;color:#DC2626;border:none;margin-left:4px" onclick="return confirm('Refuser ?')">✕</a>
+          <a href="/reussiteplus/admin/paiements.php?action=confirmer&id=<?= e($p['id']) ?>&csrf=<?= $csrf_token ?>" class="btn btn-sm" style="background:#E8F5F1;color:#007A5E;border:none" onclick="return confirm('Confirmer ?')">✓</a>
+          <a href="/reussiteplus/admin/paiements.php?action=refuser&id=<?= e($p['id']) ?>&csrf=<?= $csrf_token ?>" class="btn btn-sm" style="background:#FEE2E2;color:#DC2626;border:none;margin-left:4px" onclick="return confirm('Refuser ?')">✕</a>
         </td>
       </tr>
       <?php endforeach; ?>
@@ -730,7 +736,7 @@ $planBgMap     = ['GRATUIT'=>'#F3F4F6','BASIQUE'=>'#E8F5F1','PREMIUM'=>'#EDE9FE'
       </div>
       <a href="/reussiteplus/admin/users.php" class="btn btn-ghost btn-sm">Voir tous</a>
     </div>
-    <div style="overflow-x:auto">
+    <div class="adm-table-wrap">
       <table class="adm-table">
         <thead>
           <tr><th>Utilisateur</th><th>Plan</th><th>Inscrit</th></tr>
@@ -803,12 +809,12 @@ $planBgMap     = ['GRATUIT'=>'#F3F4F6','BASIQUE'=>'#E8F5F1','PREMIUM'=>'#EDE9FE'
     </div>
   </div>
   <div class="quick-actions">
-    <a href="/reussiteplus/admin/users.php" class="btn btn-ghost btn-sm"><i data-lucide="users" style="width:13px;height:13px"></i> Utilisateurs</a>
-    <a href="/reussiteplus/admin/paiements.php" class="btn btn-ghost btn-sm"><i data-lucide="credit-card" style="width:13px;height:13px"></i> Paiements</a>
-    <a href="/reussiteplus/admin/archives.php" class="btn btn-ghost btn-sm"><i data-lucide="folder-open" style="width:13px;height:13px"></i> Archives</a>
-    <a href="/reussiteplus/tarifs.php" target="_blank" class="btn btn-ghost btn-sm"><i data-lucide="tag" style="width:13px;height:13px"></i> Tarifs</a>
-    <button onclick="window.location='/reussiteplus/admin/users.php?export=csv'" class="btn btn-ghost btn-sm"><i data-lucide="download" style="width:13px;height:13px"></i> Exporter CSV</button>
-    <button onclick="loadAiInsights()" class="btn btn-sm" style="background:#7C3AED;color:#fff;border:none"><i data-lucide="zap" style="width:13px;height:13px"></i> Rapport IA</button>
+    <a href="/reussiteplus/admin/users.php" class="btn btn-ghost btn-sm" aria-label="Voir les utilisateurs"><i data-lucide="users" style="width:13px;height:13px"></i> Utilisateurs</a>
+    <a href="/reussiteplus/admin/paiements.php" class="btn btn-ghost btn-sm" aria-label="Voir les paiements"><i data-lucide="credit-card" style="width:13px;height:13px"></i> Paiements</a>
+    <a href="/reussiteplus/admin/archives.php" class="btn btn-ghost btn-sm" aria-label="Voir les archives"><i data-lucide="folder-open" style="width:13px;height:13px"></i> Archives</a>
+    <a href="/reussiteplus/tarifs.php" target="_blank" class="btn btn-ghost btn-sm" aria-label="Voir les tarifs"><i data-lucide="tag" style="width:13px;height:13px"></i> Tarifs</a>
+    <button onclick="window.location='/reussiteplus/admin/users.php?export=csv&csrf=<?= $csrf_token ?>'" class="btn btn-ghost btn-sm" aria-label="Exporter les utilisateurs en CSV"><i data-lucide="download" style="width:13px;height:13px"></i> Exporter CSV</button>
+    <button onclick="loadAiInsights()" class="btn btn-sm" style="background:#7C3AED;color:#fff;border:none" aria-label="Rapport IA"><i data-lucide="zap" style="width:13px;height:13px"></i> Rapport IA</button>
   </div>
 </div>
 
