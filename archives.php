@@ -143,17 +143,17 @@ include __DIR__ . '/includes/header_app.php';
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <?php if ($detail['sujet_url']): ?>
         <div class="card" style="border:2px solid var(--primary-subtle);padding:20px">
-          <div style="font-size:28px;margin-bottom:8px">📄</div>
+          <div style="margin-bottom:8px"><i data-lucide="file-text" style="width:28px;height:28px;stroke:var(--primary)"></i></div>
           <div style="font-weight:700;margin-bottom:4px">Sujet de l'examen</div>
           <div style="font-size:12px;color:var(--gris-500);margin-bottom:12px"><?= $detail['sujet_pages'] ? $detail['sujet_pages'] . ' pages' : 'PDF' ?></div>
           <a href="<?= e($detail['sujet_url']) ?>" target="_blank" class="btn btn-primary btn-sm btn-full"
              onclick="incrementDownload('<?= e($detail['id']) ?>')">
-            ⬇️ Télécharger le sujet
+            <i data-lucide="download" style="width:13px;height:13px;vertical-align:-2px;margin-right:5px"></i> Télécharger le sujet
           </a>
         </div>
         <?php else: ?>
         <div class="card" style="background:var(--gris-50);padding:20px;text-align:center">
-          <div style="font-size:28px;margin-bottom:8px;opacity:.4">📄</div>
+          <div style="margin-bottom:8px;opacity:.4"><i data-lucide="file-text" style="width:28px;height:28px;stroke:var(--gris-400)"></i></div>
           <div style="font-size:13px;color:var(--gris-400)">Sujet non disponible</div>
         </div>
         <?php endif; ?>
@@ -166,24 +166,24 @@ include __DIR__ . '/includes/header_app.php';
         <div class="card <?= !$canCorrige ? 'premium-lock' : '' ?>" style="border:2px solid var(--gold-light);padding:20px">
           <?php if (!$canCorrige): ?>
           <div class="lock-overlay" style="border-radius:var(--radius-lg)">
-            <div style="font-size:32px;margin-bottom:8px">⭐</div>
+            <div style="margin-bottom:8px"><i data-lucide="lock" style="width:32px;height:32px;stroke:var(--gold-dark)"></i></div>
             <div style="font-weight:700;margin-bottom:4px">Réservé Premium</div>
             <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-sm">Déverrouiller</a>
           </div>
           <?php endif; ?>
-          <div style="font-size:28px;margin-bottom:8px">✅</div>
+          <div style="margin-bottom:8px"><i data-lucide="check-circle" style="width:28px;height:28px;stroke:#C9972A"></i></div>
           <div style="font-weight:700;margin-bottom:4px">Corrigé officiel</div>
           <div style="font-size:12px;color:var(--gris-500);margin-bottom:12px"><?= $detail['corrige_pages'] ? $detail['corrige_pages'] . ' pages' : 'PDF' ?></div>
           <?php if ($canCorrige): ?>
           <a href="<?= e($detail['corrige_url']) ?>" target="_blank" class="btn btn-gold btn-sm btn-full"
              onclick="incrementDownload('<?= e($detail['id']) ?>')">
-            ⬇️ Télécharger le corrigé
+            <i data-lucide="download" style="width:13px;height:13px;vertical-align:-2px;margin-right:5px"></i> Télécharger le corrigé
           </a>
           <?php endif; ?>
         </div>
         <?php else: ?>
         <div class="card" style="background:var(--gris-50);padding:20px;text-align:center">
-          <div style="font-size:28px;margin-bottom:8px;opacity:.4">✅</div>
+          <div style="margin-bottom:8px;opacity:.4"><i data-lucide="check-circle" style="width:28px;height:28px;stroke:var(--gris-400)"></i></div>
           <div style="font-size:13px;color:var(--gris-400)">Corrigé non disponible</div>
         </div>
         <?php endif; ?>
@@ -194,16 +194,16 @@ include __DIR__ . '/includes/header_app.php';
   <!-- Sidebar détail -->
   <div>
     <div class="card" style="margin-bottom:16px">
-      <div class="card-title" style="margin-bottom:16px">🎯 S'entraîner avec cet examen</div>
+      <div class="card-title" style="margin-bottom:16px"><i data-lucide="target" style="width:15px;height:15px;vertical-align:-2px;margin-right:6px;stroke:var(--primary)"></i> S'entraîner avec cet examen</div>
       <a href="/reussiteplus/examen.php?archive=<?= e($detail['id']) ?>" class="btn btn-primary btn-full">
-        ✏️ Passer l'examen en ligne
+        <i data-lucide="pencil-line" style="width:14px;height:14px;vertical-align:-2px;margin-right:5px"></i> Passer l'examen en ligne
       </a>
       <div style="font-size:11px;color:var(--gris-500);text-align:center;margin-top:8px">Questions interactives chronométrées</div>
     </div>
 
     <?php if ($user['plan'] === 'GRATUIT'): ?>
     <div class="card" style="background:linear-gradient(135deg,#F5E6C0,#FFF7E6);border:1px solid rgba(201,151,42,.3)">
-      <div style="font-size:24px;margin-bottom:8px">⭐</div>
+      <div style="margin-bottom:8px"><i data-lucide="star" style="width:24px;height:24px;stroke:#C9972A"></i></div>
       <div style="font-weight:700;color:var(--gold-dark);margin-bottom:6px">Accédez aux corrigés</div>
       <p style="font-size:13px;color:var(--gris-600);margin-bottom:12px">Déverrouillez tous les corrigés officiels avec un plan Basique ou Premium.</p>
       <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-sm btn-full">Voir les offres →</a>
@@ -219,7 +219,7 @@ include __DIR__ . '/includes/header_app.php';
 <div class="card" style="margin-bottom:24px;padding:20px">
   <form method="GET" action="" style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
     <div style="flex:2;min-width:200px">
-      <label class="form-label">🔍 Recherche</label>
+      <label class="form-label">Recherche</label>
       <input class="form-control" type="text" name="q" placeholder="Ex: mathématiques, géométrie..." value="<?= e($search) ?>">
     </div>
     <div style="min-width:140px">
@@ -264,8 +264,8 @@ include __DIR__ . '/includes/header_app.php';
     <?php if ($search): ?> pour "<em><?= e($search) ?></em>"<?php endif; ?>
   </div>
   <?php if ($user['plan'] === 'GRATUIT'): ?>
-  <div style="font-size:12px;background:var(--gold-light);color:var(--gold-dark);padding:4px 12px;border-radius:20px">
-    ⭐ Contenus premium masqués — <a href="/reussiteplus/tarifs.php" style="font-weight:600;color:var(--gold-dark)">Déverrouiller</a>
+  <div style="font-size:12px;background:var(--gold-light);color:var(--gold-dark);padding:4px 12px;border-radius:20px;display:inline-flex;align-items:center;gap:5px">
+    <i data-lucide="lock" style="width:11px;height:11px"></i> Contenus premium masqués — <a href="/reussiteplus/tarifs.php" style="font-weight:600;color:var(--gold-dark)">Déverrouiller</a>
   </div>
   <?php endif; ?>
 </div>
@@ -288,9 +288,9 @@ include __DIR__ . '/includes/header_app.php';
       <div class="exam-meta">
         <span class="exam-meta-item"><i data-lucide="book" style="width:12px;height:12px;vertical-align:-2px;margin-right:3px"></i> <?= e($arc['matiere_nom']) ?></span>
         <?php if ($arc['province_nom']): ?>
-        <span class="exam-meta-item">📍 <?= e($arc['province_nom']) ?></span>
+        <span class="exam-meta-item"><i data-lucide="map-pin" style="width:11px;height:11px;vertical-align:-2px;margin-right:2px"></i><?= e($arc['province_nom']) ?></span>
         <?php endif; ?>
-        <span class="exam-meta-item">👁️ <?= number_format($arc['vues']) ?></span>
+        <span class="exam-meta-item"><i data-lucide="eye" style="width:11px;height:11px;vertical-align:-2px;margin-right:2px"></i><?= number_format($arc['vues']) ?></span>
       </div>
     </div>
     <div class="exam-card-footer" style="justify-content:space-between">

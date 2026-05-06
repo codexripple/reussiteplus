@@ -27,7 +27,7 @@ $q            = trim($_GET['q'] ?? '');
 $exercices = [];
 if ($classeIds) {
     $inPlaceholders = implode(',', array_fill(0, count($classeIds), '?'));
-    $params = [$user['id']], $extra = '';
+    $params = [$user['id']]; $extra = '';
 
     if ($filtreClasse) { $extra .= ' AND (e.classe_id=?)';  $params[] = $filtreClasse; }
     if ($filtreType)   { $extra .= ' AND e.type=?';         $params[] = $filtreType; }
