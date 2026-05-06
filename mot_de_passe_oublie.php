@@ -153,7 +153,7 @@ body{font-family:var(--font-body);display:flex;min-height:100vh;background:var(-
       Un lien de réinitialisation a été envoyé à votre adresse email. <strong>Il est valable 1 heure.</strong><br><br>
       Vérifiez aussi votre dossier <strong>Spam / Indésirables</strong>.
     </p>
-    <?php if ($devUrl): ?>
+    <?php if ($devUrl && is_localhost()): ?>
     <!-- Mode développement : afficher le lien directement -->
     <div class="dev-box">
       <span class="dev-label">⚙ Mode développement (localhost)</span>
