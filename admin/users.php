@@ -94,10 +94,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
 }
 
 // Filtres
-$search  = trim($_GET['q'] ?? '');
-$filPlan = $_GET['plan'] ?? '';
-$page    = max(1, (int)($_GET['page'] ?? 1));
-$limit   = 25;
+$search    = trim($_GET['q'] ?? '');
+$filPlan   = $_GET['plan'] ?? '';
+$filRole   = $_GET['role'] ?? '';
+$filActif  = $_GET['actif'] ?? '';
+$page      = max(1, (int)($_GET['page'] ?? 1));
+$limit     = 25;
 
 $conditions = ['1=1'];
 $params     = [];
@@ -110,6 +112,14 @@ if ($filPlan && array_key_exists($filPlan, PLANS)) {
     $conditions[] = "u.plan=?";
     $params[] = $filPlan;
 }
+if ($filRole) {
+    $conditions[] = "u.role=?";
+    $params[] = $filRole;
+}
+if ($filActif !== '') {
+    $conditions[] = "u.is_active=?";
+    $params[] = (int)$filActif;
+}
 $where = implode(' AND ', $conditions);
 
 $total = dbRow("SELECT COUNT(*) as n FROM utilisateurs u WHERE $where", $params)['n'];
@@ -119,7 +129,7 @@ $users = dbAll(
      FROM utilisateurs u WHERE $where ORDER BY u.created_at DESC LIMIT $limit OFFSET $offset",
     $params
 );
-$pagination = paginate($total, $limit, $page);
+$pagination = paginate($total, $page, $limit);
 
 include __DIR__ . '/../includes/header_app.php';
 ?>
@@ -141,8 +151,25 @@ include __DIR__ . '/../includes/header_app.php';
       <?php endforeach; ?>
     </select>
   </div>
+  <div>
+    <label class="form-label">Rôle</label>
+    <select class="form-control" name="role">
+      <option value="">Tous les rôles</option>
+      <?php foreach (['ELEVE','ENSEIGNANT','ADMIN_ECOLE','MODERATEUR','SUPER_ADMIN'] as $r): ?>
+      <option value="<?= $r ?>" <?= $filRole === $r ? 'selected' : '' ?>><?= $r ?></option>
+      <?php endforeach; ?>
+    </select>
+  </div>
+  <div>
+    <label class="form-label">Statut</label>
+    <select class="form-control" name="actif">
+      <option value="">Tous</option>
+      <option value="1" <?= $filActif === '1' ? 'selected' : '' ?>>Actifs</option>
+      <option value="0" <?= $filActif === '0' ? 'selected' : '' ?>>Désactivés</option>
+    </select>
+  </div>
   <button type="submit" class="btn btn-primary">Filtrer</button>
-  <?php if ($search || $filPlan): ?>
+  <?php if ($search || $filPlan || $filRole || $filActif !== ''): ?>
   <a href="/reussiteplus/admin/users.php" class="btn btn-ghost">Réinitialiser</a>
   <?php endif; ?>
 </form>
@@ -150,7 +177,7 @@ include __DIR__ . '/../includes/header_app.php';
 <div class="card">
   <div class="card-header">
     <div class="card-title">Utilisateurs (<?= $total ?>)</div>
-    <div style="font-size:12px;color:var(--gris-500)">Page <?= $page ?>/<?= $pagination['total_pages'] ?></div>
+    <div style="font-size:12px;color:var(--gris-500)">Page <?= $page ?>/<?= $pagination['pages'] ?></div>
   </div>
 
   <div class="table-wrap">
@@ -187,7 +214,7 @@ include __DIR__ . '/../includes/header_app.php';
   <?php if ($pagination['total_pages'] > 1): ?>
   <div style="display:flex;justify-content:center;gap:6px;padding:16px;flex-wrap:wrap">
     <?php for ($i = 1; $i <= $pagination['total_pages']; $i++): ?>
-    <a href="?q=<?= urlencode($search) ?>&plan=<?= urlencode($filPlan) ?>&page=<?= $i ?>" class="btn <?= $i == $page ? 'btn-primary' : 'btn-ghost' ?> btn-sm"><?= $i ?></a>
+    <a href="?q=<?= urlencode($search) ?>&plan=<?= urlencode($filPlan) ?>&role=<?= urlencode($filRole) ?>&actif=<?= urlencode($filActif) ?>&page=<?= $i ?>" class="btn <?= $i == $page ? 'btn-primary' : 'btn-ghost' ?> btn-sm"><?= $i ?></a>
     <?php endfor; ?>
   </div>
   <?php endif; ?>

@@ -14,19 +14,25 @@ $error   = null;
 $classe  = null;
 
 if ($code) {
-    $classe = dbRow("SELECT c.*, u.nom as admin_nom, u.prenom as admin_prenom FROM classes_ecole c JOIN users u ON u.id=c.admin_id WHERE c.code_invitation=? AND c.actif=1", [strtoupper($code)]);
+    $classe = dbRow("SELECT c.*, u.nom as admin_nom, u.prenom as admin_prenom FROM classes_ecole c JOIN utilisateurs u ON u.id=c.admin_id WHERE c.code_invitation=? AND c.actif=1", [strtoupper($code)]);
     if (!$classe) { $error = "Code d'invitation invalide ou classe introuvable."; }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $classe && !$error) {
     if (!csrf_verify()) { http_response_code(403); exit; }
     // Vérifier que l'élève n'est pas déjà dans la classe
-    $already = dbRow("SELECT id FROM classe_membres WHERE classe_id=? AND user_id=?", [$classe['id'], $user['id']]);
+    $already = dbRow("SELECT id FROM classe_membres WHERE classe_id=? AND eleve_id=?", [$classe['id'], $user['id']]);
     if ($already) {
         $error = "Vous êtes déjà inscrit dans cette classe.";
     } else {
-        dbRun("INSERT INTO classe_membres (classe_id, user_id) VALUES (?,?)", [$classe['id'], $user['id']]);
-        $success = true;
+        // Vérifier la limite d'élèves
+        $nbEleves = (int)(dbRow("SELECT COUNT(*) as n FROM classe_membres WHERE classe_id=? AND statut='ACTIF'", [$classe['id']])['n'] ?? 0);
+        if ($classe['max_eleves'] && $nbEleves >= $classe['max_eleves']) {
+            $error = 'Cette classe est complète (' . $classe['max_eleves'] . ' élèves maximum).';
+        } else {
+            dbInsert('classe_membres', ['classe_id' => $classe['id'], 'eleve_id' => $user['id'], 'statut' => 'ACTIF']);
+            $success = true;
+        }
     }
 }
 
