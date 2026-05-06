@@ -672,15 +672,7 @@ a { text-decoration: none; color: inherit; }
         <div class="testimonial-stars" style="color:#F59E0B;font-size:15px;margin-bottom:12px">★★★★★</div>
         <p class="testimonial-text">"J'avais raté l'Examen d'État en 2023. J'ai repris les révisions sur RÉUSSITE+ pendant 4 mois — sujets corrigés, QCM chaque soir depuis mon Tecno. 74 % en 2024. C'est tout ce dont j'avais besoin."</p>
         <div class="testimonial-author">
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius:50%;flex-shrink:0">
-            <rect width="48" height="48" rx="24" fill="#5C3317"/>
-            <circle cx="24" cy="18" r="8.5" fill="#8B5E3C"/>
-            <ellipse cx="24" cy="41" rx="13" ry="8" fill="#7A4A28"/>
-            <circle cx="21" cy="17" r="1.8" fill="#1A0A00"/>
-            <circle cx="27" cy="17" r="1.8" fill="#1A0A00"/>
-            <path d="M20.5 22 Q24 25.5 27.5 22" stroke="#1A0A00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            <path d="M16 13 Q24 8 32 13" stroke="#3D1A00" stroke-width="3" fill="none" stroke-linecap="round"/>
-          </svg>
+          <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=96&h=96&fit=crop&crop=faces&auto=format&q=80" alt="Kalombo Mutombo" width="48" height="48" style="border-radius:50%;object-fit:cover;flex-shrink:0">
           <div>
             <div class="testimonial-name">Kalombo Mutombo</div>
             <div class="testimonial-school">Lycée Roi Baudouin, Kinshasa &middot; Exam. d'État 2024 &middot; <strong style="color:var(--primary)">74 %</strong></div>
@@ -692,15 +684,7 @@ a { text-decoration: none; color: inherit; }
         <div class="testimonial-stars" style="color:#F59E0B;font-size:15px;margin-bottom:12px">★★★★★</div>
         <p class="testimonial-text">"Avant, je cherchais les anciens sujets dans des photocopies mal lisibles. Là tout est classé, corrigé, avec le détail de chaque étape. J'ai eu mon TENASOSP du premier coup."</p>
         <div class="testimonial-author">
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius:50%;flex-shrink:0">
-            <rect width="48" height="48" rx="24" fill="#3B1A08"/>
-            <circle cx="24" cy="18" r="8.5" fill="#6B3A1F"/>
-            <ellipse cx="24" cy="41" rx="13" ry="8" fill="#5A2E10"/>
-            <circle cx="21" cy="17" r="1.8" fill="#0A0500"/>
-            <circle cx="27" cy="17" r="1.8" fill="#0A0500"/>
-            <path d="M20.5 22 Q24 25.5 27.5 22" stroke="#0A0500" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            <path d="M16 12 C18 8 20 10 22 8 C24 10 26 8 28 10 C30 8 32 10 32 13" stroke="#1A0800" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          </svg>
+          <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=96&h=96&fit=crop&crop=faces&auto=format&q=80" alt="Bénédicte Nzuzi" width="48" height="48" style="border-radius:50%;object-fit:cover;flex-shrink:0">
           <div>
             <div class="testimonial-name">Bénédicte Nzuzi</div>
             <div class="testimonial-school">Institut Kyondo, Lubumbashi &middot; TENASOSP 2025 &middot; <strong style="color:var(--primary)">1er essai</strong></div>
@@ -712,15 +696,7 @@ a { text-decoration: none; color: inherit; }
         <div class="testimonial-stars" style="color:#F59E0B;font-size:15px;margin-bottom:12px">★★★★★</div>
         <p class="testimonial-text">"Je prépare mes élèves à Goma depuis 5 ans. J'utilise la banque de questions pour les exercices du soir. Ils passent les QCM depuis leurs téléphones sans même avoir besoin du WiFi. Résultat : 11 reçus sur 13 cette année."</p>
         <div class="testimonial-author">
-          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius:50%;flex-shrink:0">
-            <rect width="48" height="48" rx="24" fill="#2C1A0E"/>
-            <circle cx="24" cy="18" r="8.5" fill="#4A2C14"/>
-            <ellipse cx="24" cy="41" rx="13" ry="8" fill="#3A1E08"/>
-            <circle cx="21" cy="17" r="1.8" fill="#0A0500"/>
-            <circle cx="27" cy="17" r="1.8" fill="#0A0500"/>
-            <path d="M20.5 22 Q24 25 27.5 22" stroke="#0A0500" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            <path d="M18 24 Q24 28 30 24" stroke="#1A0800" stroke-width="2" fill="none" stroke-linecap="round"/>
-          </svg>
+          <img src="https://images.unsplash.com/photo-1507152927626-13d6a1ee8614?w=96&h=96&fit=crop&crop=faces&auto=format&q=80" alt="Dieumerci Bauma" width="48" height="48" style="border-radius:50%;object-fit:cover;flex-shrink:0">
           <div>
             <div class="testimonial-name">Dieumerci Bauma</div>
             <div class="testimonial-school">Répétiteur, Goma &middot; 5 ans &middot; <strong style="color:var(--primary)">11/13 reçus en 2025</strong></div>
