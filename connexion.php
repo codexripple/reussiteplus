@@ -299,8 +299,8 @@ body{font-family:var(--ff-body);background:var(--n100);color:var(--n900);line-he
     </div>
 
     <div class="left-content">
-      <div class="left-title">Prépare ton<br>examen avec<br><em>confiance.</em></div>
-      <div class="left-sub">Archives officielles, QCM adaptatifs et révision IA — tout ce qu'il faut pour décrocher ton diplôme en RDC.</div>
+      <div class="left-title">Reprends là<br>où tu t'es<br><em>arrêté.</em></div>
+      <div class="left-sub">Tous tes résultats, ton historique d'examens et tes révisions t'attendent. Ta prochaine session commence ici.</div>
 
       <!-- ── Carousel ── -->
       <div class="carousel" id="carousel">
@@ -317,24 +317,28 @@ body{font-family:var(--ff-body);background:var(--n100);color:var(--n900);line-he
               </div>
               <div class="slide-label">Archives officielles</div>
             </div>
-            <div class="slide-title">Tous les sujets d'examen<br>depuis 2010</div>
-            <div class="slide-body">Examen d'État, TENASOSP, ENAFEP — corrigés détaillés par matière.</div>
-            <!-- Mock: liste de matières avec barres -->
+            <div class="slide-title">Examen d'État, TENAFEP,<br>ENAFEP — tout y est</div>
+            <div class="slide-body">Sujets corrigés de 2008 à 2024 classés par matière, section et province.</div>
             <div style="display:flex;flex-direction:column;gap:7px">
               <div style="display:flex;align-items:center;gap:8px">
-                <span style="font-size:11px;color:rgba(255,255,255,.5);width:68px">Maths</span>
-                <div class="mock-bar" style="flex:1"><div class="mock-bar-fill" style="width:92%;background:#60A5FA"></div></div>
-                <span style="font-size:11px;color:rgba(255,255,255,.5);width:28px">92%</span>
+                <span style="font-size:11px;color:rgba(255,255,255,.5);width:80px">Mathématiques</span>
+                <div class="mock-bar" style="flex:1"><div class="mock-bar-fill" style="width:88%;background:#60A5FA"></div></div>
+                <span style="font-size:11px;color:rgba(255,255,255,.5);width:28px">88%</span>
               </div>
               <div style="display:flex;align-items:center;gap:8px">
-                <span style="font-size:11px;color:rgba(255,255,255,.5);width:68px">Français</span>
-                <div class="mock-bar" style="flex:1"><div class="mock-bar-fill" style="width:78%;background:#60A5FA"></div></div>
-                <span style="font-size:11px;color:rgba(255,255,255,.5);width:28px">78%</span>
+                <span style="font-size:11px;color:rgba(255,255,255,.5);width:80px">Biologie</span>
+                <div class="mock-bar" style="flex:1"><div class="mock-bar-fill" style="width:74%;background:#60A5FA"></div></div>
+                <span style="font-size:11px;color:rgba(255,255,255,.5);width:28px">74%</span>
               </div>
               <div style="display:flex;align-items:center;gap:8px">
-                <span style="font-size:11px;color:rgba(255,255,255,.5);width:68px">Chimie</span>
-                <div class="mock-bar" style="flex:1"><div class="mock-bar-fill" style="width:85%;background:#60A5FA"></div></div>
-                <span style="font-size:11px;color:rgba(255,255,255,.5);width:28px">85%</span>
+                <span style="font-size:11px;color:rgba(255,255,255,.5);width:80px">Français</span>
+                <div class="mock-bar" style="flex:1"><div class="mock-bar-fill" style="width:81%;background:#60A5FA"></div></div>
+                <span style="font-size:11px;color:rgba(255,255,255,.5);width:28px">81%</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:11px;color:rgba(255,255,255,.5);width:80px">Chimie</span>
+                <div class="mock-bar" style="flex:1"><div class="mock-bar-fill" style="width:67%;background:#60A5FA"></div></div>
+                <span style="font-size:11px;color:rgba(255,255,255,.5);width:28px">67%</span>
               </div>
             </div>
           </div>
@@ -347,22 +351,22 @@ body{font-family:var(--ff-body);background:var(--n100);color:var(--n900);line-he
                   <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
                 </svg>
               </div>
-              <div class="slide-label">QCM interactifs</div>
+              <div class="slide-label">Examen blanc — 6ème sec.</div>
             </div>
-            <div class="slide-title">Entraîne-toi avec<br>des vrais QCM</div>
-            <div class="slide-body">Chronomètre intégré, explication des bonnes réponses, suivi de score.</div>
-            <!-- Mock: question QCM -->
+            <div class="slide-title">QCM tirés des vrais<br>sujets d'Examen d'État</div>
+            <div class="slide-body">Chaque question est datée, sourcée et expliquée après soumission.</div>
             <div style="background:rgba(255,255,255,.06);border-radius:10px;padding:12px">
-              <div style="font-size:12px;color:rgba(255,255,255,.8);margin-bottom:10px;font-weight:500">Quelle est la formule de l'eau ?</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.45);margin-bottom:6px">Chimie · Éd. 2022 · Section Scientifique</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.85);margin-bottom:10px;font-weight:500">Un atome de carbone possède 6 protons. Son nombre de masse est 12. Combien a-t-il de neutrons ?</div>
               <div style="display:flex;flex-direction:column;gap:6px">
                 <div style="display:flex;align-items:center;gap:8px;background:rgba(82,183,136,.2);border:1px solid rgba(82,183,136,.4);border-radius:7px;padding:7px 10px">
-                  <span style="width:18px;height:18px;border-radius:50%;background:#52B788;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0">A</span>
-                  <span style="font-size:12px;color:#fff">H₂O</span>
+                  <span style="width:18px;height:18px;border-radius:50%;background:#52B788;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0">B</span>
+                  <span style="font-size:12px;color:#fff">6 neutrons</span>
                   <svg style="margin-left:auto;width:13px;height:13px;stroke:#52B788" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                 </div>
-                <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:7px;padding:7px 10px">
-                  <span style="width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(255,255,255,.6);flex-shrink:0">B</span>
-                  <span style="font-size:12px;color:rgba(255,255,255,.5)">CO₂</span>
+                <div style="display:flex;align-items:center;gap:8px;background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.25);border-radius:7px;padding:7px 10px">
+                  <span style="width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(255,255,255,.6);flex-shrink:0">A</span>
+                  <span style="font-size:12px;color:rgba(255,255,255,.45)">12 neutrons</span>
                 </div>
               </div>
             </div>
@@ -396,31 +400,25 @@ body{font-family:var(--ff-body);background:var(--n100);color:var(--n900);line-he
             </div>
           </div>
 
-          <!-- Slide 4 — Progression -->
+          <!-- Slide 4 — Témoignage -->
           <div class="slide">
             <div class="slide-icon-row">
               <div class="slide-icon-wrap" style="background:rgba(82,183,136,.2)">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#52B788" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                 </svg>
               </div>
-              <div class="slide-label">Suivi de progression</div>
+              <div class="slide-label">Témoignage · Lubumbashi</div>
             </div>
-            <div class="slide-title">Vois ta progression<br>en temps réel</div>
-            <div class="slide-body">Tableau de bord avec historique, classement et badges de réussite.</div>
-            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">
-              <div class="mock-pill">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
-                15 examens réussis
+            <div class="slide-title">«&nbsp;J'ai eu 68&nbsp;% à<br>mon Exam d'État.&nbsp;»</div>
+            <div class="slide-body" style="margin-bottom:14px">Je révisais depuis mon téléphone chaque soir. Les QCM m'ont vraiment aidé à voir mes lacunes en physique avant le grand jour.</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#52B788,#007A5E);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0">BM</div>
+              <div>
+                <div style="font-size:12px;font-weight:700;color:#fff">Bénédiction M.</div>
+                <div style="font-size:11px;color:rgba(255,255,255,.45)">6ème Sc. Exp. · Institut Kyondo, Lubumbashi</div>
               </div>
-              <div class="mock-pill">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                +23 pts ce mois
-              </div>
-              <div class="mock-pill">
-                <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                Plan IA actif
-              </div>
+              <div style="margin-left:auto;background:rgba(82,183,136,.2);border:1px solid rgba(82,183,136,.35);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;color:#52B788">68 %</div>
             </div>
           </div>
 
@@ -444,7 +442,7 @@ body{font-family:var(--ff-body);background:var(--n100);color:var(--n900);line-he
           <div class="av3">EM</div>
           <div class="av4">PK</div>
         </div>
-        <div class="avatar-label">Rejoint par <strong>+12 000 élèves</strong> de la RDC</div>
+        <div class="avatar-label"><strong>14 238 élèves</strong> de Kinshasa, Lubumbashi, Goma et au-delà</div>
       </div>
     </div>
   </div>
@@ -471,8 +469,8 @@ body{font-family:var(--ff-body);background:var(--n100);color:var(--n900);line-he
           </svg>
           Connexion sécurisée
         </div>
-        <h1 class="form-h1">Bon retour<br>parmi nous</h1>
-        <p class="form-desc">Continuez votre préparation là où vous l'avez laissée.</p>
+        <h1 class="form-h1">Content de te<br>revoir !</h1>
+        <p class="form-desc">Tes révisions, tes scores et tes archives t'attendent. Reprends là où tu t'es arrêté.</p>
       </div>
 
       <?php if ($errors): ?>

@@ -95,11 +95,9 @@ $evol = dbAll("
         m.nom AS matiere,
         COUNT(s.id)                        AS nb
     FROM exam_sessions s
-    JOIN question_bank qb ON qb.id IN (
-        SELECT qid FROM exam_session_questions WHERE session_id = s.id LIMIT 1
-    )
-    JOIN matieres m ON m.id = qb.matiere_id
+    JOIN matieres m ON m.id = s.matiere_id
     WHERE s.started_at >= DATE_SUB(CURDATE(), INTERVAL 5 MONTH)
+      AND s.matiere_id IS NOT NULL
     GROUP BY mois, m.id
     ORDER BY mois ASC
 ") ?? [];
@@ -108,6 +106,49 @@ $evol = dbAll("
 $totalSessions = array_sum(array_column($examStats, 'nb_sessions'));
 $totalEleves   = (int)dbRow("SELECT COUNT(DISTINCT user_id) as n FROM exam_sessions")['n'];
 $totalQuestions = array_sum(array_column($qStats, 'nb_questions'));
+
+// ── Export CSV ────────────────────────────────────────────
+if (($_GET['export'] ?? '') === 'csv') {
+    $periodeLabel = ['7'=>'7 jours','30'=>'30 jours','90'=>'3 mois','365'=>'1 an','all'=>'Tout'][$periode] ?? $periode;
+    $filename = 'stats_matieres_' . $periode . '_' . date('Ymd') . '.csv';
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    header('Pragma: no-cache');
+    $out = fopen('php://output', 'w');
+    fprintf($out, chr(0xEF).chr(0xBB).chr(0xBF)); // BOM UTF-8
+    fputcsv($out, ['Rapport statistiques RÉUSSITE+ — Période : ' . $periodeLabel . ' — Généré le ' . date('d/m/Y H:i')]);
+    fputcsv($out, []);
+    // Tableau principal
+    fputcsv($out, ['Matière','Sessions','Élèves distincts','Score moyen (%)','Taux réussite (%)','Questions en banque','Archives publiées','Téléchargements archives']);
+    foreach ($examStats as $m) {
+        $arc  = $archMap[$m['id']] ?? ['nb_archives'=>0,'total_vues'=>0,'total_dl'=>0];
+        $q    = $qMap[$m['id']]   ?? ['nb_questions'=>0];
+        $taux = $m['nb_termines'] > 0 ? round($m['nb_reussi'] / $m['nb_termines'] * 100) : '';
+        fputcsv($out, [
+            $m['nom'],
+            $m['nb_sessions'],
+            $m['nb_eleves'],
+            $m['score_moyen'] ?? '',
+            $taux,
+            $q['nb_questions'],
+            $arc['nb_archives'],
+            $arc['total_dl'],
+        ]);
+    }
+    fputcsv($out, []);
+    // Totaux
+    fputcsv($out, ['TOTAUX','Total sessions','Total élèves distincts','—','—','Total questions','—','—']);
+    fputcsv($out, ['', $totalSessions, $totalEleves, '', '', $totalQuestions, '', '']);
+    fputcsv($out, []);
+    // Questions difficiles
+    fputcsv($out, ['Questions les plus échouées (taux réussite < 40%)']);
+    fputcsv($out, ['Matière','Énoncé (extrait)','Taux réussite (%)']);
+    foreach ($topDifficiles as $q) {
+        fputcsv($out, [$q['matiere_nom'], mb_strimwidth($q['enonce'], 0, 120, '…'), $q['taux_reussite_pct']]);
+    }
+    fclose($out);
+    exit;
+}
 
 include __DIR__ . '/../includes/header_app.php';
 ?>
@@ -143,6 +184,16 @@ include __DIR__ . '/../includes/header_app.php';
     <?php foreach (['7'=>'7 jours','30'=>'30 jours','90'=>'3 mois','365'=>'1 an','all'=>'Tout'] as $v=>$l): ?>
     <a href="?periode=<?= $v ?>" class="btn <?= $periode===$v ? 'btn-primary' : 'btn-ghost' ?> btn-sm"><?= $l ?></a>
     <?php endforeach; ?>
+    <a href="?periode=<?= $periode ?>&export=csv"
+       class="btn btn-ghost btn-sm"
+       style="display:inline-flex;align-items:center;gap:5px;border:1px solid var(--gris-300);margin-left:8px">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Exporter CSV
+    </a>
   </div>
 </div>
 

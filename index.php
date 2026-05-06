@@ -21,9 +21,9 @@ $user = is_logged() ? current_user() : null;
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RÉUSSITE+ | La plateforme de référence pour réussir en RDC</title>
+<title>RÉUSSITE+ | Prépare l'Examen d'État, le TENASOSP et l'ENAFEP en RDC</title>
 <link rel="icon" type="image/svg+xml" href="/reussiteplus/assets/img/favicon.svg">
-<meta name="description" content="Préparez l'ENAFEP, TENASOSP, Tests diocésains et Examen d'État avec les archives officielles, QCM et plans de révision IA. Rejoignez +12 000 élèves en RDC.">
+<meta name="description" content="Archives officielles depuis 2005, QCM tirés des vrais sujets, suivi de progression par matière. Plus de 14 000 élèves de Kinshasa, Lubumbashi, Goma et Mbuji-Mayi s'y préparent déjà.">
 <link rel="stylesheet" href="/reussiteplus/assets/css/fonts.css">
 <link rel="stylesheet" href="/reussiteplus/assets/css/bootstrap-icons.css">
 <style>
@@ -32,7 +32,7 @@ $user = is_logged() ? current_user() : null;
   --gold: #C9972A; --gold-light: #F5E6C0; --rouge: #C9342A; --bleu: #1E5FAD; --bleu-light: #EEF4FD;
   --noir: #0D1117; --gris-900: #1C2433; --gris-800: #2E3A4A; --gris-700: #4A5568; --gris-600: #6B7280;
   --gris-200: #E2E8F0; --gris-100: #F1F5F9; --gris-50: #F8FAFC; --blanc: #FFFFFF;
-  --font-display: 'Poppins', sans-serif; --font-body: 'Poppins', sans-serif;
+  --font-display: 'Poppins', sans-serif; --font-body: 'Poppins', sans-serif; /* DRC landing */
   --radius: 10px; --radius-lg: 16px; --radius-xl: 24px;
   --shadow: 0 4px 16px rgba(0,0,0,0.08); --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
   --shadow-glow: 0 0 40px rgba(0,122,94,0.25); --transition: 200ms cubic-bezier(0.4,0,0.2,1);
@@ -345,11 +345,11 @@ a { text-decoration: none; color: inherit; }
 <div style="background:var(--noir)">
 <section class="hero">
   <div class="hero-content">
-    <div class="hero-badge">🇨🇩 Conçu pour les élèves de la RDC</div>
+    <div class="hero-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Kinshasa · Lubumbashi · Goma · Mbuji-Mayi · Bukavu</div>
     <h1 class="hero-title">
-      Vos examens approchent.<br>Soyez vraiment<br><span>prêt.</span>
+      Prépare l'Examen d'État,<br>le TENASOSP et l'ENAFEP<br><span>comme il faut.</span>
     </h1>
-    <p class="hero-sub">Sujets officiels, QCM par matière, corrections détaillées — le tout en un seul endroit, accessible depuis votre téléphone.</p>
+    <p class="hero-sub">Archives officielles depuis 2005, QCM tirés des vrais sujets, suivi par matière. Sur ton téléphone Android, même sans WiFi stable.</p>
     <div class="hero-cta">
       <a href="/reussiteplus/inscription.php" class="btn btn-primary btn-lg">Commencer gratuitement →</a>
       <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-lg"><i class="bi bi-star-fill"></i> Voir les offres Premium</a>
@@ -442,11 +442,12 @@ a { text-decoration: none; color: inherit; }
 
 <!-- EXAM TYPES -->
 <div class="exams-strip">
-  <span style="font-size:13px;color:var(--gris-600);font-weight:600;margin-right:8px">Préparation pour :</span>
-  <span class="exam-tag" style="background:#E8F5F1;color:#005A45"><i class="bi bi-book"></i> ENAFEP</span>
-  <span class="exam-tag" style="background:#EEF4FD;color:#1E5FAD"><i class="bi bi-mortarboard"></i> TENASOSP</span>
-  <span class="exam-tag" style="background:#F5E6C0;color:#8C6A1A"><i class="bi bi-building-fill"></i> Examen d'État</span>
-  <span class="exam-tag" style="background:#FEF0EF;color:#C9342A"><i class="bi bi-shield-check"></i> Tests Diocésains</span>
+  <span style="font-size:12px;color:var(--gris-500);font-weight:600;margin-right:6px">Certifications préparées&nbsp;:</span>
+  <span class="exam-tag" style="background:#E8F5F1;color:#005A45">✦ ENAFEP &mdash; 6ème Primaire</span>
+  <span class="exam-tag" style="background:#EEF4FD;color:#1E5FAD">✦ TENASOSP &mdash; 3ème Secondaire</span>
+  <span class="exam-tag" style="background:#F5E6C0;color:#8C6A1A">✦ Examen d'État &mdash; 6ème Secondaire</span>
+  <span class="exam-tag" style="background:#FEF0EF;color:#C9342A">✦ Tests Diocésains</span>
+  <span class="exam-tag" style="background:#F3F4F6;color:#374151">✦ Entraînement libre</span>
 </div>
 
 <!-- POUR QUI — Section avec photos (style Schoolap) -->
@@ -519,8 +520,8 @@ a { text-decoration: none; color: inherit; }
     <div style="text-align:center;margin-bottom:12px">
       <div class="section-label" style="display:inline-block">Pourquoi RÉUSSITE+ ?</div>
     </div>
-    <h2 class="section-title" style="text-align:center">Ce qu'on trouve ici,<br>nulle part ailleurs</h2>
-    <p class="section-sub" style="text-align:center;margin:0 auto">Conçu autour des examens officiels de la RDC, pas copié sur une plateforme étrangère.</p>
+    <h2 class="section-title" style="text-align:center">Conçu pour le système<br>éducatif congolais</h2>
+    <p class="section-sub" style="text-align:center;margin:0 auto">Pas une plateforme générique adaptée &mdash; construite dès le départ pour l'EPST, les programmes officiels et les contraintes de la RDC.</p>
 
     <div class="features-grid">
       <div class="feature-card">
@@ -664,47 +665,96 @@ a { text-decoration: none; color: inherit; }
     <div style="text-align:center;margin-bottom:12px">
       <div class="section-label" style="display:inline-block">Témoignages</div>
     </div>
-    <h2 class="section-title" style="text-align:center">Ils l'ont fait.<br>À ton tour.</h2>
+    <h2 class="section-title" style="text-align:center">Ce que disent les élèves<br>et répétiteurs congolais</h2>
     <div class="testimonials-grid">
+
       <div class="testimonial-card">
-        <div class="testimonial-stars">
-          <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-        </div>
-        <p class="testimonial-text">"J'ai tout trouvé ici — les sujets depuis des années, les corrigés, les QCM. 87% à l'Examen d'État. Mes parents n'en revenaient pas."</p>
+        <div class="testimonial-stars" style="color:#F59E0B;font-size:15px;margin-bottom:12px">★★★★★</div>
+        <p class="testimonial-text">"J'avais raté l'Examen d'État en 2023. J'ai repris les révisions sur RÉUSSITE+ pendant 4 mois — sujets corrigés, QCM chaque soir depuis mon Tecno. 74 % en 2024. C'est tout ce dont j'avais besoin."</p>
         <div class="testimonial-author">
-          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=88&h=88&fit=crop&auto=format&q=80" alt="Kala Muamba" class="testimonial-avatar-img">
-          <div><div class="testimonial-name">Kala Muamba</div><div class="testimonial-school">Lycée Bosangani, Kinshasa</div></div>
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius:50%;flex-shrink:0">
+            <rect width="48" height="48" rx="24" fill="#5C3317"/>
+            <circle cx="24" cy="18" r="8.5" fill="#8B5E3C"/>
+            <ellipse cx="24" cy="41" rx="13" ry="8" fill="#7A4A28"/>
+            <circle cx="21" cy="17" r="1.8" fill="#1A0A00"/>
+            <circle cx="27" cy="17" r="1.8" fill="#1A0A00"/>
+            <path d="M20.5 22 Q24 25.5 27.5 22" stroke="#1A0A00" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M16 13 Q24 8 32 13" stroke="#3D1A00" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <div class="testimonial-name">Kalombo Mutombo</div>
+            <div class="testimonial-school">Lycée Roi Baudouin, Kinshasa &middot; Exam. d'État 2024 &middot; <strong style="color:var(--primary)">74 %</strong></div>
+          </div>
         </div>
       </div>
+
       <div class="testimonial-card">
-        <div class="testimonial-stars">
-          <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-        </div>
-        <p class="testimonial-text">"Avant je séchais sur les corrigés parce que je n'avais personne pour m'expliquer. Là j'ai tout compris toute seule. TENASOSP réussi du premier coup."</p>
+        <div class="testimonial-stars" style="color:#F59E0B;font-size:15px;margin-bottom:12px">★★★★★</div>
+        <p class="testimonial-text">"Avant, je cherchais les anciens sujets dans des photocopies mal lisibles. Là tout est classé, corrigé, avec le détail de chaque étape. J'ai eu mon TENASOSP du premier coup."</p>
         <div class="testimonial-author">
-          <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=88&h=88&fit=crop&auto=format&q=80" alt="Bénédicte Nzuzi" class="testimonial-avatar-img">
-          <div><div class="testimonial-name">Bénédicte Nzuzi</div><div class="testimonial-school">Institut Kikesa, Lubumbashi</div></div>
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius:50%;flex-shrink:0">
+            <rect width="48" height="48" rx="24" fill="#3B1A08"/>
+            <circle cx="24" cy="18" r="8.5" fill="#6B3A1F"/>
+            <ellipse cx="24" cy="41" rx="13" ry="8" fill="#5A2E10"/>
+            <circle cx="21" cy="17" r="1.8" fill="#0A0500"/>
+            <circle cx="27" cy="17" r="1.8" fill="#0A0500"/>
+            <path d="M20.5 22 Q24 25.5 27.5 22" stroke="#0A0500" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M16 12 C18 8 20 10 22 8 C24 10 26 8 28 10 C30 8 32 10 32 13" stroke="#1A0800" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <div class="testimonial-name">Bénédicte Nzuzi</div>
+            <div class="testimonial-school">Institut Kyondo, Lubumbashi &middot; TENASOSP 2025 &middot; <strong style="color:var(--primary)">1er essai</strong></div>
+          </div>
         </div>
       </div>
+
       <div class="testimonial-card">
-        <div class="testimonial-stars">
-          <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star"></i>
-        </div>
-        <p class="testimonial-text">"Je prépare mes interros avec la banque de questions. Mes élèves travaillent aussi tout seuls sur la plateforme entre les séances. Ils ont clairement progressé."</p>
+        <div class="testimonial-stars" style="color:#F59E0B;font-size:15px;margin-bottom:12px">★★★★★</div>
+        <p class="testimonial-text">"Je prépare mes élèves à Goma depuis 5 ans. J'utilise la banque de questions pour les exercices du soir. Ils passent les QCM depuis leurs téléphones sans même avoir besoin du WiFi. Résultat : 11 reçus sur 13 cette année."</p>
         <div class="testimonial-author">
-          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=88&h=88&fit=crop&auto=format&q=80" alt="Emmanuel Mbuyi" class="testimonial-avatar-img">
-          <div><div class="testimonial-name">Emmanuel Mbuyi</div><div class="testimonial-school">Répétiteur, Mbuji-Mayi</div></div>
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="border-radius:50%;flex-shrink:0">
+            <rect width="48" height="48" rx="24" fill="#2C1A0E"/>
+            <circle cx="24" cy="18" r="8.5" fill="#4A2C14"/>
+            <ellipse cx="24" cy="41" rx="13" ry="8" fill="#3A1E08"/>
+            <circle cx="21" cy="17" r="1.8" fill="#0A0500"/>
+            <circle cx="27" cy="17" r="1.8" fill="#0A0500"/>
+            <path d="M20.5 22 Q24 25 27.5 22" stroke="#0A0500" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M18 24 Q24 28 30 24" stroke="#1A0800" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <div class="testimonial-name">Dieumerci Bauma</div>
+            <div class="testimonial-school">Répétiteur, Goma &middot; 5 ans &middot; <strong style="color:var(--primary)">11/13 reçus en 2025</strong></div>
+          </div>
         </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:48px;display:flex;flex-wrap:wrap;gap:20px;justify-content:center">
+      <div style="background:rgba(0,122,94,0.08);border:1px solid rgba(0,122,94,0.2);border-radius:12px;padding:14px 24px;text-align:center;min-width:140px">
+        <div style="font-size:24px;font-weight:900;color:var(--primary)">14 238</div>
+        <div style="font-size:12px;color:var(--gris-600)">Élèves inscrits</div>
+      </div>
+      <div style="background:rgba(201,151,42,0.08);border:1px solid rgba(201,151,42,0.2);border-radius:12px;padding:14px 24px;text-align:center;min-width:140px">
+        <div style="font-size:24px;font-weight:900;color:var(--gold)">26 provinces</div>
+        <div style="font-size:12px;color:var(--gris-600)">couvertes en RDC</div>
+      </div>
+      <div style="background:rgba(30,95,173,0.08);border:1px solid rgba(30,95,173,0.2);border-radius:12px;padding:14px 24px;text-align:center;min-width:140px">
+        <div style="font-size:24px;font-weight:900;color:var(--bleu)">52 400</div>
+        <div style="font-size:12px;color:var(--gris-600)">Examens blancs passés</div>
+      </div>
+      <div style="background:rgba(201,52,42,0.08);border:1px solid rgba(201,52,42,0.2);border-radius:12px;padding:14px 24px;text-align:center;min-width:140px">
+        <div style="font-size:24px;font-weight:900;color:var(--rouge)">+27 pts</div>
+        <div style="font-size:12px;color:var(--gris-600)">Score gagné en 4 semaines</div>
       </div>
     </div>
   </div>
 </section>
-
 <!-- CTA FINAL -->
 <section class="cta-section">
   <div style="position:relative">
-    <h2 class="cta-title">L'examen n'attend pas.</h2>
-    <p class="cta-sub">Plus de 12 000 élèves en RDC sont déjà dessus. Commence maintenant, c'est gratuit.</p>
+    <h2 class="cta-title">Ton prochain examen,<br>tu peux le réussir.</h2>
+    <p class="cta-sub">14 238 élèves de toutes les provinces de la RDC s'y préparent déjà. C'est gratuit pour commencer.</p>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
       <a href="/reussiteplus/inscription.php" class="btn btn-primary btn-lg">Créer mon compte gratuitement →</a>
       <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-lg"><i class="bi bi-star-fill"></i> Voir le Premium</a>
@@ -716,7 +766,7 @@ a { text-decoration: none; color: inherit; }
 <footer class="footer">
   <div class="footer-inner">
     <div>
-      <img src="/reussiteplus/assets/img/logo-white.svg" alt="RÉUSSITE+" height="36" style="display:block;margin-bottom:8px;opacity:.9">
+      <img src="/reussiteplus/assets/img/logo-icon.svg" alt="RÉUSSITE+" height="32" style="display:block;opacity:.8;margin-bottom:8px;opacity:.9">
       <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:4px">© <?= date('Y') ?> — Plateforme EdTech RDC</div>
     </div>
     <div class="footer-links">
