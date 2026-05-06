@@ -49,9 +49,9 @@ function insertQ(PDO $pdo, string $matiereId, string $examType, int $annee,
     if ($exists->fetch()) { $skipped++; return; }
 
     $qId = strtolower(sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-        mt_rand(0,0xffff),mt_rand(0,0xffff),mt_rand(0,0xffff),
-        mt_rand(0,0x0fff)|0x4000,mt_rand(0,0x3fff)|0x8000,
-        mt_rand(0,0xffff),mt_rand(0,0xffff),mt_rand(0,0xffff)));
+        random_int(0,0xffff),random_int(0,0xffff),random_int(0,0xffff),
+        random_int(0,0x0fff)|0x4000,random_int(0,0x3fff)|0x8000,
+        random_int(0,0xffff),random_int(0,0xffff),random_int(0,0xffff)));
 
     $stQ = $pdo->prepare(
         "INSERT INTO question_bank (id,matiere_id,exam_type,annee_source,enonce,difficulte,points,objectif,status,type_question)
@@ -76,7 +76,7 @@ function insertQ(PDO $pdo, string $matiereId, string $examType, int $annee,
 // â–ˆâ–ˆ  ENAFEP â€” FIN DE PRIMAIRE (6Ã¨me annÃ©e)
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-// â”€â”€ ENAFEP MathÃ©matiques â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â”€â”€ ENAFEP MathÃ©matiques â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $enafepMaths = [
     // 2024
     [2024,'Quelle est la valeur de 5Â² + 3Â² ?',[
@@ -165,7 +165,7 @@ foreach ($enafepFr as [$an, $enonce, $opts, $diff, $pts]) {
     insertQ($pdo, $M['francais'], 'ENAFEP', $an, $enonce, $opts, $diff, $pts, 'FranÃ§ais ENAFEP');
 }
 
-// â”€â”€ ENAFEP Sciences Naturelles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â”€â”€ ENAFEP Sciences Naturelles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $enafepSci = [
     [2024,'Quel organe du corps humain pompe le sang ?',[
         ['A','Le foie',false],['B','Le cÅ“ur',true,'Le cÅ“ur est le muscle qui pompe le sang dans tout le corps.'],['C','Les poumons',false],['D','Le cerveau',false]],'ELEMENTAIRE',1.0],
@@ -193,7 +193,7 @@ foreach ($enafepSci as [$an, $enonce, $opts, $diff, $pts]) {
     insertQ($pdo, $M['sciences'], 'ENAFEP', $an, $enonce, $opts, $diff, $pts, 'Sciences Naturelles ENAFEP');
 }
 
-// â”€â”€ ENAFEP Histoire-GÃ©ographie â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â”€â”€ ENAFEP Histoire-GÃ©ographie â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $enafepHG = [
     [2024,'Quelle est la capitale de la RÃ©publique DÃ©mocratique du Congo ?',[
         ['A','Brazzaville',false],['B','Lubumbashi',false],['C','Kinshasa',true,'Kinshasa est la capitale et la plus grande ville de la RDC, anciennement appelÃ©e LÃ©opoldville.'],['D','Kisangani',false]],'ELEMENTAIRE',1.0],
@@ -251,7 +251,7 @@ foreach ($enafepAnglais as [$an, $enonce, $opts, $diff, $pts]) {
 // â–ˆâ–ˆ  TENASOSP â€” FIN DE SECONDAIRE (HumanitÃ©s)
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-// â”€â”€ TENASOSP MathÃ©matiques â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â”€â”€ TENASOSP MathÃ©matiques â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $tenasospMaths = [
     [2024,'RÃ©soudre l\'Ã©quation : 3x + 7 = 22',[
         ['A','x = 4',false],['B','x = 5',true,'3x = 22âˆ’7 = 15, donc x = 15Ã·3 = 5.'],['C','x = 6',false],['D','x = 3',false]],'ELEMENTAIRE',1.0],
@@ -342,7 +342,7 @@ foreach ($tenasospPhysique as [$an, $enonce, $opts, $diff, $pts]) {
 // â”€â”€ TENASOSP Biologie â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $tenasospBio = [
     [2024,'Quel est le rÃ´le de l\'ADN dans la cellule ?',[
-        ['A','Produire l\'Ã©nergie',false],['B','Porter l\'information gÃ©nÃ©tique',true,'L\'ADN (acide dÃ©soxyribonuclÃ©ique) contient le code gÃ©nÃ©tique qui contrÃ´le le dÃ©veloppement et le fonctionnement des organismes.'],['C','Transporter l\'oxygÃ¨ne',false],['D','SynthÃ©tiser les lipides',false]],'ELEMENTAIRE',1.0],
+        ['A','Produire l\'Ã©nergie',false],['B','Porter l\'information gÃ©nÃ©tique',true,'L\'ADN (acide dÃ©soxyribonuclÃ©ique) contient le code gÃ©nÃ©tique qui contrÃ´le le dÃ©veloppement et le fonctionnement des organismes.'],['C','Transporter l\'oxygÃ¨ne',false],['D','SynthÃ¨se des lipides',false]],'ELEMENTAIRE',1.0],
     [2024,'Combien de chromosomes possÃ¨de une cellule humaine normale ?',[
         ['A','23',false],['B','46',true,'Les cellules humaines somatiques contiennent 46 chromosomes (23 paires). Les gamÃ¨tes en ont 23.'],['C','48',false],['D','92',false]],'ELEMENTAIRE',1.0],
     [2024,'Quel organite cellulaire est responsable de la synthÃ¨se des protÃ©ines ?',[
@@ -387,7 +387,7 @@ foreach ($tenasospFr as [$an, $enonce, $opts, $diff, $pts]) {
 // â–ˆâ–ˆ  EXAMEN D'Ã‰TAT â€” Fin secondaire (toutes sections)
 // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-// â”€â”€ EXAMEN D'Ã‰TAT MathÃ©matiques â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â”€â”€ EXAMEN D'Ã‰TAT MathÃ©matiques â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $etatMaths = [
     [2024,'RÃ©soudre : 2xÂ² âˆ’ 8 = 0',[
         ['A','x = Â±4',false],['B','x = Â±2',true,'2xÂ² = 8, xÂ² = 4, x = Â±2.'],['C','x = Â±8',false],['D','x = 2 seulement',false]],'ELEMENTAIRE',1.0],
@@ -417,7 +417,7 @@ foreach ($etatMaths as [$an, $enonce, $opts, $diff, $pts]) {
     insertQ($pdo, $M['maths'], 'EXAMEN_ETAT', $an, $enonce, $opts, $diff, $pts, 'MathÃ©matiques Examen d\'Ã‰tat');
 }
 
-// â”€â”€ EXAMEN D'Ã‰TAT FranÃ§ais â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â”€â”€ EXAMEN D'Ã‰TAT FranÃ§ais â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $etatFr = [
     [2024,'Quelle figure de style apparaÃ®t dans : Â« Le vent hurlait dans la nuit Â» ?',[
         ['A','MÃ©taphore',false],['B','Personnification',true,'Attribuer des actions humaines (hurler) Ã  une chose inanimÃ©e (le vent) est une personnification.'],['C','AllitÃ©ration',false],['D','Hyperbole',false]],'INTERMEDIAIRE',1.0],
@@ -439,7 +439,7 @@ foreach ($etatFr as [$an, $enonce, $opts, $diff, $pts]) {
     insertQ($pdo, $M['francais'], 'EXAMEN_ETAT', $an, $enonce, $opts, $diff, $pts, 'FranÃ§ais Examen d\'Ã‰tat');
 }
 
-// â”€â”€ EXAMEN D'Ã‰TAT Chimie â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â”€â”€ EXAMEN D'Ã‰TAT Chimie â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $etatChimie = [
     [2024,'Quel est le principe de la conservation de la masse dans une rÃ©action chimique ?',[
         ['A','La masse augmente pendant la rÃ©action',false],['B','La masse des rÃ©actifs = masse des produits',true,'Loi de Lavoisier : Â« Rien ne se perd, rien ne se crÃ©e, tout se transforme. Â» La masse totale est conservÃ©e.'],['C','La masse des produits est toujours infÃ©rieure',false],['D','Les rÃ©actifs disparaissent complÃ¨tement',false]],'ELEMENTAIRE',1.0],
@@ -505,7 +505,7 @@ foreach ($etatBio as [$an, $enonce, $opts, $diff, $pts]) {
     insertQ($pdo, $M['biologie'], 'EXAMEN_ETAT', $an, $enonce, $opts, $diff, $pts, 'Biologie Examen d\'Ã‰tat');
 }
 
-// â”€â”€ EXAMEN D'Ã‰TAT Histoire-GÃ©o â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â”€â”€ EXAMEN D'Ã‰TAT Histoire-GÃ©o â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $etatHG = [
     [2024,'Quand et oÃ¹ a Ã©tÃ© fondÃ©e l\'Organisation des Nations Unies (ONU) ?',[
         ['A','1919, Paris',false],['B','1945, San Francisco',true,'L\'ONU a Ã©tÃ© fondÃ©e le 24 octobre 1945 Ã  San Francisco aprÃ¨s la Seconde Guerre mondiale.'],['C','1948, GenÃ¨ve',false],['D','1950, New York',false]],'ELEMENTAIRE',1.0],
@@ -527,7 +527,7 @@ foreach ($etatHG as [$an, $enonce, $opts, $diff, $pts]) {
     insertQ($pdo, $M['histgeo'], 'EXAMEN_ETAT', $an, $enonce, $opts, $diff, $pts, 'Histoire-GÃ©o Examen d\'Ã‰tat');
 }
 
-// â”€â”€ EXAMEN D'Ã‰TAT Anglais â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â”€â”€ EXAMEN D'Ã‰TAT Anglais â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $etatAnglais = [
     [2024,'Rewrite in passive voice: "The teacher corrects the tests."',[
         ['A','The tests corrected by the teacher.',false],['B','The tests are corrected by the teacher.',true,'Passive voice: subject + to be + past participle + by + agent. Present: are corrected.'],['C','The tests were corrected by the teacher.',false],['D','The teacher is corrected the tests.',false]],'INTERMEDIAIRE',1.0],

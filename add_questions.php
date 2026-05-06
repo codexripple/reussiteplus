@@ -41,6 +41,9 @@ function addQ(PDO $pdo, PDOStatement $stQ, PDOStatement $stO, string $matId, str
         $r->execute([$enonce]);
         $qid = $r->fetchColumn();
     }
+    if (!$qid) {
+        $qid = bin2hex(random_bytes(16)); // Generate UUID as a fallback
+    }
     foreach ($opts as [$l,$t,$ok]) $stO->execute([$qid,$l,$t,$ok]);
 }
 
@@ -133,7 +136,7 @@ $questions_sc = [
     ["Quelle glande sÃ©crÃ¨te le suc gastrique ?", 'INTERMEDIAIRE', 'TENASOSP', [['A','L\'estomac',1],['B','Le pancrÃ©as',0],['C','L\'intestin grÃªle',0],['D','Le foie',0]]],
     ["La respiration cellulaire produit :", 'INTERMEDIAIRE', 'TENASOSP', [['A','ATP, COâ‚‚ et Hâ‚‚O',1],['B','Oâ‚‚ et glucose',0],['C','Glucose et COâ‚‚',0],['D','ATP et Oâ‚‚',0]]],
     ["Quelle est la principale cause de la malaria en RDC ?", 'DEBUTANT', 'ENAFEP', [['A','Plasmodium falciparum via les moustiques',1],['B','Un virus',0],['C','Les bactÃ©ries de l\'eau',0],['D','Les tiques',0]]],
-    ["Quel sens utilise les rÃ©cepteurs de la rÃ©tine ?", 'ELEMENTAIRE', 'ENAFEP', [['A','La vue',1],['B','L\'odorat',0],['C','Le toucher',0],['D','Le goÃ»t',0]]],
+    ["Quel sens utilise les rÃ©cepteurs de la rÃ©tine ?", 'ELEMENTAIRE', 'ENAFEP', [['A','La vue',1],['B','L\'odorat',0],['C','Le toucher',0],['D','Le goÃ…t',0]]],
     ["La division cellulaire par mitose produit :", 'AVANCE', 'EXAMEN_ETAT', [['A','Deux cellules filles gÃ©nÃ©tiquement identiques',1],['B','Quatre cellules haploÃ¯des',0],['C','Deux cellules diffÃ©rentes',0],['D','Une seule cellule',0]]],
     ["Quel est le pH du sang humain normal ?", 'AVANCE', 'TENASOSP', [['A','7,35 â€“ 7,45',1],['B','6,8 â€“ 7,0',0],['C','7,8 â€“ 8,2',0],['D','5,5 â€“ 6,5',0]]],
     ["La chlorophylle absorbe principalement la lumiÃ¨re :", 'INTERMEDIAIRE', 'TENASOSP', [['A','Rouge et bleue',1],['B','Verte',0],['C','Blanche',0],['D','Ultraviolette',0]]],
@@ -208,9 +211,9 @@ $questions_hg = [
     ["L'agriculture de subsistance est caractÃ©risÃ©e par :", 'ELEMENTAIRE', 'ENAFEP', [['A','La production destinÃ©e Ã  l\'autoconsommation',1],['B','La production pour l\'exportation',0],['C','L\'utilisation intensive de machines',0],['D','La monoculture',0]]],
 ];
 foreach ($questions_hg as $q) { addQ($pdo, $stQ, $stO, $matMap[$m], ...$q); $added++; }
-echo "Histoire-GÃ©o: +" . ($added-$prevAdded) . " questions\n";
+echo "Histoire-GÃ‰O: +" . ($added-$prevAdded) . " questions\n";
 
-/* â•â• CHIMIE (besoin ~38 pour atteindre 125) â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* â•â• CHIMIE (besoin ~38 pour atteindre 125) â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 $prevAdded = $added;
 $m = 'chimie';
 $questions_ch = [
@@ -306,7 +309,7 @@ $questions_bio = [
     ["L'ADN se trouve principalement dans :", 'ELEMENTAIRE', 'ENAFEP', [['A','Le noyau de la cellule',1],['B','Les mitochondries',0],['C','Le cytoplasme',0],['D','La membrane',0]]],
     ["Quelle est la base azotÃ©e complÃ©mentaire de l'adÃ©nine dans l'ADN ?", 'AVANCE', 'EXAMEN_ETAT', [['A','Thymine',1],['B','Guanine',0],['C','Cytosine',0],['D','Uracile',0]]],
     ["Les organismes autotrophes produisent leur matiÃ¨re organique grÃ¢ce Ã  :", 'INTERMEDIAIRE', 'TENASOSP', [['A','La photosynthÃ¨se (Ã©nergie lumineuse)',1],['B','La consommation d\'autres organismes',0],['C','La fermentation',0],['D','La dÃ©composition',0]]],
-    ["La respiration cellulaire aÃ©robie utilise :", 'INTERMEDIAIRE', 'TENASOSP', [['A','Oâ‚‚ et glucose',1],['B','COâ‚‚ et eau uniquement',0],['C','LumiÃ¨re et chlorophylle',0],['D','ATP uniquement',0]]],
+    ["La respiration cellulaire aÃ‰robie utilise :", 'INTERMEDIAIRE', 'TENASOSP', [['A','Oâ‚‚ et glucose',1],['B','COâ‚‚ et eau uniquement',0],['C','LumiÃ¨re et chlorophylle',0],['D','ATP uniquement',0]]],
     ["Quelle est la fonction des ribosomes ?", 'INTERMEDIAIRE', 'TENASOSP', [['A','SynthÃ¨se des protÃ©ines',1],['B','Production d\'ATP',0],['C','Digestion cellulaire',0],['D','Division cellulaire',0]]],
     ["La gÃ©nÃ©tique est la science qui Ã©tudie :", 'DEBUTANT', 'ENAFEP', [['A','L\'hÃ©rÃ©ditÃ© et la variation gÃ©nÃ©tique',1],['B','Les maladies infectieuses',0],['C','Le dÃ©veloppement des embryons',0],['D','La structure cellulaire',0]]],
     ["Le gÃ¨ne dominant s'exprime :", 'INTERMEDIAIRE', 'TENASOSP', [['A','MÃªme en prÃ©sence d\'un seul allÃ¨le',1],['B','Uniquement en homozygotie',0],['C','Jamais en prÃ©sence d\'un allÃ¨le rÃ©cessif',0],['D','Seulement chez les femmes',0]]],
@@ -314,7 +317,7 @@ $questions_bio = [
     ["La classification de LinnÃ© repose sur :", 'INTERMEDIAIRE', 'TENASOSP', [['A','Des critÃ¨res morphologiques et gÃ©nÃ©tiques',1],['B','La couleur et la taille',0],['C','Uniquement le milieu de vie',0],['D','Le mode de reproduction',0]]],
     ["Quel est le rÃ´le de l'enzyme dans une rÃ©action biochimique ?", 'INTERMEDIAIRE', 'TENASOSP', [['A','Catalyser (accÃ©lÃ©rer) la rÃ©action sans Ãªtre consommÃ©',1],['B','Fournir l\'Ã©nergie',0],['C','Bloquer la rÃ©action',0],['D','Fixer le pH',0]]],
     ["La glycolyse se dÃ©roule dans :", 'AVANCE', 'EXAMEN_ETAT', [['A','Le cytoplasme',1],['B','Les mitochondries',0],['C','Le noyau',0],['D','Le rÃ©ticulum',0]]],
-    ["La fÃ©condation est la fusion de :", 'ELEMENTAIRE', 'ENAFEP', [['A','Un gamÃ¨te mÃ¢le et un gamÃ¨te femelle',1],['B','Deux cellules somatiques',0],['C','Deux noyaux quelconques',0],['D','Deux cellules haploÃ¯des identiques',0]]],
+    ["La fÃ©condation est la fusion de :", 'ELEMENTAIRE', 'ENAFEP', [['A','Un gamÃ¨te mÃle et un gamÃ¨te femelle',1],['B','Deux cellules somatiques',0],['C','Deux noyaux quelconques',0],['D','Deux cellules haploÃ¯des identiques',0]]],
     ["Quelle est la taille approximative d'une cellule eucaryote typique ?", 'AVANCE', 'TENASOSP', [['A','10 â€“ 100 Î¼m',1],['B','1 â€“ 5 nm',0],['C','1 â€“ 5 mm',0],['D','100 Î¼m â€“ 1 cm',0]]],
     ["Le chromosome Y chez l'homme dÃ©termine :", 'INTERMEDIAIRE', 'TENASOSP', [['A','Le sexe masculin',1],['B','Le groupe sanguin',0],['C','La couleur des yeux',0],['D','La taille',0]]],
     ["Les antibiotiques agissent sur :", 'ELEMENTAIRE', 'ENAFEP', [['A','Les bactÃ©ries',1],['B','Les virus',0],['C','Les champignons',0],['D','Les parasites',0]]],

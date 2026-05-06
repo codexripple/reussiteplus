@@ -160,6 +160,14 @@ $tc = $cert ? ($typeConfig[$cert['type']] ?? $typeConfig['REUSSITE']) : null;
   <span class="badge-public">Service public gratuit</span>
 </nav>
 
+<!-- Bouton retour -->
+  <div style="margin-bottom: 20px;">
+    <a href="/reussiteplus/index.php" class="bouton-verifier" style="text-decoration: none;">
+      <i data-lucide="arrow-left" style="width:16px;height:16px"></i>
+      Retour
+    </a>
+  </div>
+
 <!-- Conteneur principal -->
 <div class="conteneur">
 

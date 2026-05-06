@@ -49,6 +49,9 @@ function insert_q(PDO $pdo, int $matId, string $enonce, string $diff, string $sr
                           VALUES (?,?,?,?,1,NOW())");
     $stQ->execute([$matId, $enonce, $diff, $src]);
     $qId = (int)$pdo->lastInsertId();
+    if (!$qId) {
+        $qId = bin2hex(random_bytes(16)); // Generate UUID as a fallback
+    }
 
     $stO = $pdo->prepare("INSERT INTO options_reponse (question_id,lettre,texte,est_correcte)
                           VALUES (?,?,?,?)");
@@ -59,9 +62,6 @@ function insert_q(PDO $pdo, int $matId, string $enonce, string $diff, string $sr
 }
 
 /* â”€â”€ Chargement des matiÃ¨res â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-log_msg("â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•");
-log_msg("  RÃ‰USSITE+ â€” seed_questions.php");
-log_msg("  DÃ©marrage : " . date('Y-m-d H:i:s'));
 log_msg("â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•\n");
 
 $matMapping = [
@@ -91,7 +91,7 @@ $dataset = [
 
   /* â•â•â•â•â•â•â•â•â•â•â•â• MATHÃ‰MATIQUES (10) â•â•â•â•â•â•â•â•â•â•â•â• */
   [$matIds['maths'], 'Quel est le PGCD de 84 et 56 ?',                                               'ELEMENTAIRE',   'ENAFEP',     [['A','28',1], ['B','14',0], ['C','42',0], ['D','7',0]]],
-  [$matIds['maths'], 'Un article coÃ»te 1 200 CDF. AprÃ¨s une remise de 15 %, il vaut :',              'ELEMENTAIRE',   'ENAFEP',     [['A','1 020 CDF',1], ['B','1 020 CDF',0], ['C','1 080 CDF',0], ['D','1 008 CDF',0]]],
+  [$matIds['maths'], 'Un article coÃ…t 1 200 CDF. AprÃ¨s une remise de 15 %, il vaut :',              'ELEMENTAIRE',   'ENAFEP',     [['A','1 020 CDF',1], ['B','1 020 CDF',0], ['C','1 080 CDF',0], ['D','1 008 CDF',0]]],
   [$matIds['maths'], 'Quelle est l\'Ã©quation du cercle de centre O(2;-1) et de rayon 3 ?',          'AVANCE',        'EXAMEN_ETAT',[['A','(x-2)Â²+(y+1)Â²=9',1], ['B','(x+2)Â²+(y-1)Â²=9',0], ['C','(x-2)Â²+(y+1)Â²=3',0], ['D','xÂ²+yÂ²=9',0]]],
   [$matIds['maths'], 'Calculer la limite de (xÂ²-4)/(x-2) quand xâ†’2.',                                'AVANCE',        'EXAMEN_ETAT',[['A','4',1], ['B','0',0], ['C','âˆž',0], ['D','2',0]]],
   [$matIds['maths'], 'Un triangle rectangle a des cathÃ¨tes 6 et 8. Son hypotÃ©nuse vaut :',           'ELEMENTAIRE',   'ENAFEP',     [['A','10',1], ['B','14',0], ['C','7',0], ['D','âˆš100',0]]],
@@ -106,7 +106,7 @@ $dataset = [
   [$matIds['francais'], 'Conjuguer "se souvenir" au passÃ© composÃ©, 1Ã¨re pers. sing. :',             'ELEMENTAIRE',   'ENAFEP',     [['A','je me suis souvenu(e)',1], ['B','je me souvins',0], ['C','j\'ai souvenu',0], ['D','je me souviendrais',0]]],
   [$matIds['francais'], '"Il ne cesse de parler." â€” La nÃ©gation "ne...de" est-elle standard ?',     'AVANCE',        'EXAMEN_ETAT',[['A','Oui, forme standard : ne...de + infinitif',1], ['B','Non, incorrecte',0], ['C','Registre familier uniquement',0], ['D','Appartient au vieux franÃ§ais',0]]],
   [$matIds['francais'], 'Quel est le sens du prÃ©fixe "mal-" dans "malchance" ?',                    'DEBUTANT',      'ENAFEP',     [['A','Mauvais / contraire positif',1], ['B','Sous',0], ['C','TrÃ¨s',0], ['D','Avec',0]]],
-  [$matIds['francais'], 'La phrase "Il fait chaud." est de type :',                                  'ELEMENTAIRE',   'ENAFEP',     [['A','DÃ©clarative',1], ['B','Interrogative',0], ['C','Exclamative',0], ['D','ImpÃ©rative',0]]],
+  [$matIds['francais'], 'La phrase "Il fait chaud." est de type :',                                  'ELEMENTAIRE',   'ENAFEP',     [['A','DÃ©clarative',1], ['B','Interrogative',0], ['C','Exclamative',0], ['D','ImpÃ‰rative',0]]],
   [$matIds['francais'], 'Dans "Vouloir, c\'est pouvoir.", le sujet du verbe "est" est :',            'AVANCE',        'EXAMEN_ETAT',[['A','Vouloir (proposition infinitive)',1], ['B','c\'',0], ['C','pouvoir',0], ['D','Il (absent)',0]]],
   [$matIds['francais'], 'Identifier la mÃ©tonymie dans : "Il a lu tout Voltaire."',                   'AVANCE',        'EXAMEN_ETAT',[['A','Voltaire = l\'Å“uvre de Voltaire',1], ['B','Voltaire = la ville de Voltaire',0], ['C','C\'est une hyperbole',0], ['D','C\'est une synecdoque',0]]],
   [$matIds['francais'], 'Quel est le pluriel de "bail" ?',                                           'INTERMEDIAIRE', 'ENAFEP',     [['A','baux',1], ['B','bails',0], ['C','bailes',0], ['D','baulx',0]]],
@@ -153,13 +153,13 @@ $dataset = [
   [$matIds['histgeo'], 'En quelle annÃ©e la RDC a-t-elle accÃ©dÃ© Ã  l\'indÃ©pendance ?',                'DEBUTANT',      'ENAFEP',     [['A','1960',1], ['B','1958',0], ['C','1962',0], ['D','1965',0]]],
   [$matIds['histgeo'], 'La rÃ©volution franÃ§aise a dÃ©butÃ© en :',                                      'ELEMENTAIRE',   'ENAFEP',     [['A','1789',1], ['B','1776',0], ['C','1799',0], ['D','1815',0]]],
   [$matIds['histgeo'], 'Quel est le plus grand pays d\'Afrique par superficie ?',                    'ELEMENTAIRE',   'ENAFEP',     [['A','AlgÃ©rie',1], ['B','RDC',0], ['C','Soudan',0], ['D','Libye',0]]],
-  [$matIds['histgeo'], 'La ligne de l\'Ã©quateur passe par la RDC. Cela lui confÃ¨re un climat :',    'ELEMENTAIRE',   'ENAFEP',     [['A','Ã‰quatorial (chaud et humide) dans le bassin central',1], ['B','DÃ©sertique',0], ['C','MÃ©diterranÃ©en',0], ['D','TempÃ©rÃ©',0]]],
+  [$matIds['histgeo'], 'La ligne de l\'Ã©quateur passe par la RDC. Cela lui confÃ¨re un climat :',    'ELEMENTAIRE',   'ENAFEP',     [['A','Ã‰quatorial (chaud et humide) dans le bassin central',1], ['B','DÃ©sertique',0], ['C','MÃ‰diterranÃ©en',0], ['D','TempÃ‚rÃ‚',0]]],
   [$matIds['histgeo'], 'Quelle est la population estimÃ©e de la RDC (2025) ?',                        'INTERMEDIAIRE', 'ENAFEP',     [['A','~110-115 millions hab.',1], ['B','~50 millions',0], ['C','~200 millions',0], ['D','~80 millions',0]]],
   [$matIds['histgeo'], 'Quel est l\'organe principal de l\'ONU chargÃ© de la paix et sÃ©curitÃ© ?',    'INTERMEDIAIRE', 'EXAMEN_ETAT',[['A','Le Conseil de sÃ©curitÃ©',1], ['B','L\'AssemblÃ©e gÃ©nÃ©rale',0], ['C','La Cour internationale de justice',0], ['D','Le SecrÃ©tariat gÃ©nÃ©ral',0]]],
-  [$matIds['histgeo'], 'La confÃ©rence de Berlin (1884-1885) a :',                                    'INTERMEDIAIRE', 'EXAMEN_ETAT',[['A','PartagÃ© l\'Afrique entre puissances europÃ©ennes',1], ['B','LibÃ©rÃ© l\'Afrique',0], ['C','FondÃ© l\'OUA',0], ['D','Mis fin Ã  la traite nÃ©griÃ¨re',0]]],
-  [$matIds['histgeo'], 'Le vol SP500 du mont Nyiragongo (RDC) de 2021 a provoquÃ© :',                'ELEMENTAIRE',   'ENAFEP',     [['A','Une Ã©ruption volcanique menaÃ§ant Goma',1], ['B','Un tremblement de terre Ã  Kinshasa',0], ['C','Une inondation du lac Kivu',0], ['D','Une sÃ©cheresse au Katanga',0]]],
-  [$matIds['histgeo'], 'Quelle est la diffÃ©rence entre latitude et longitude ?',                     'ELEMENTAIRE',   'ENAFEP',     [['A','Latitude = N/S (parallÃ¨les) ; Longitude = E/O (mÃ©ridiens)',1], ['B','Latitude = E/O ; Longitude = N/S',0], ['C','Elles sont identiques',0], ['D','Latitude = altitude',0]]],
-  [$matIds['histgeo'], 'La SADC est une organisation rÃ©gionale d\'Afrique :',                        'INTERMEDIAIRE', 'ENAFEP',     [['A','Australe',1], ['B','Occidentale',0], ['C','Centrale uniquement',0], ['D','Orientale',0]]],
+  [$matIds['histgeo'], 'La confÃ©rence de Berlin (1884-1885) a :',                                    'INTERMEDIAIRE', 'EXAMEN_ETAT',[['A','PartagÃ‚ l\'Afrique entre puissances europÃ‚ennes',1], ['B','LibÃ‚rÃ‚ l\'Afrique',0], ['C','FondÃ‚ l\'OUA',0], ['D','Mis fin Ã  la traite nÃ‚griÃ‚re',0]]],
+  [$matIds['histgeo'], 'Le vol SP500 du mont Nyiragongo (RDC) de 2021 a provoquÃ‚ :',                'ELEMENTAIRE',   'ENAFEP',     [['A','Une Ã‚ruption volcanique menaÃ‚ant Goma',1], ['B','Un tremblement de terre Ã‚à Kinshasa',0], ['C','Une inondation du lac Kivu',0], ['D','Une sÃ‚cheresse au Katanga',0]]],
+  [$matIds['histgeo'], 'Quelle est la diffÃ‚rence entre latitude et longitude ?',                     'ELEMENTAIRE',   'ENAFEP',     [['A','Latitude = N/S (parallÃ‚les) ; Longitude = E/O (mÃ‚ridiens)',1], ['B','Latitude = E/O ; Longitude = N/S',0], ['C','Elles sont identiques',0], ['D','Latitude = altitude',0]]],
+  [$matIds['histgeo'], 'La SADC est une organisation rÃ‚gionale d\'Afrique :',                        'INTERMEDIAIRE', 'ENAFEP',     [['A','Australe',1], ['B','Occidentale',0], ['C','Centrale uniquement',0], ['D','Orientale',0]]],
 
   /* â•â•â•â•â•â•â•â•â•â•â•â• ANGLAIS (7) â•â•â•â•â•â•â•â•â•â•â•â• */
   [$matIds['anglais'], 'Choose the correct form: "She has been working here ___ 2018."',             'ELEMENTAIRE',   'ENAFEP',     [['A','since',1], ['B','for',0], ['C','from',0], ['D','during',0]]],
@@ -174,11 +174,11 @@ $dataset = [
   [$matIds['sciences'], 'Quelle est l\'Ã©chelle de tempÃ©rature utilisÃ©e en sciences (absolue) ?',    'ELEMENTAIRE',   'TENASOSP',   [['A','Kelvin (K)',1], ['B','Celsius',0], ['C','Fahrenheit',0], ['D','Rankine',0]]],
   [$matIds['sciences'], 'Un atome neutre a autant de protons que de :',                              'DEBUTANT',      'ENAFEP',     [['A','Ã‰lectrons',1], ['B','Neutrons',0], ['C','Noyaux',0], ['D','Quarks',0]]],
   [$matIds['sciences'], 'La photovoltaÃ¯que convertit :',                                             'ELEMENTAIRE',   'ENAFEP',     [['A','L\'Ã©nergie solaire en Ã©nergie Ã©lectrique',1], ['B','La chaleur en lumiÃ¨re',0], ['C','L\'eau en hydrogÃ¨ne',0], ['D','La biomasse en gaz',0]]],
-  [$matIds['sciences'], 'Quelle est la diffÃ©rence entre une Ã©toile et une planÃ¨te ?',               'ELEMENTAIRE',   'ENAFEP',     [['A','Une Ã©toile produit sa propre lumiÃ¨re par fusion nuclÃ©aire ; une planÃ¨te non',1], ['B','Une planÃ¨te est plus grande',0], ['C','Une Ã©toile tourne autour d\'une planÃ¨te',0], ['D','Elles sont identiques',0]]],
-  [$matIds['sciences'], 'Le bÃ©ton est un mÃ©lange de :',                                              'ELEMENTAIRE',   'ENAFEP',     [['A','Ciment, sable, gravier et eau',1], ['B','PlÃ¢tre et sable',0], ['C','Calcaire et argile',0], ['D','Ciment et pÃ©trole',0]]],
-  [$matIds['sciences'], 'Quelle est la principale cause des pluies acides ?',                        'INTERMEDIAIRE', 'TENASOSP',   [['A','Ã‰missions de SOâ‚‚ et NOâ‚“ (combustion fossile)',1], ['B','L\'ozone',0], ['C','Le COâ‚‚ seul',0], ['D','L\'Ã©rosion des sols',0]]],
-  [$matIds['sciences'], 'L\'ADN recombinant est utilisÃ© pour :',                                     'AVANCE',        'EXAMEN_ETAT',[['A','InsÃ©rer un gÃ¨ne d\'un organisme dans un autre (OGM, thÃ©rapie gÃ©nique)',1], ['B','Amplifier l\'ARN',0], ['C','SÃ©quencer des protÃ©ines',0], ['D','Fabriquer des lipides',0]]],
-  [$matIds['sciences'], 'Quelle est la diffÃ©rence entre un vaccin et un antibiotique ?',             'ELEMENTAIRE',   'ENAFEP',     [['A','Vaccin = prÃ©vention (immunisation) ; antibiotique = traitement bactÃ©rien',1], ['B','Les deux traitent les virus',0], ['C','Antibiotique = prÃ©vention',0], ['D','Ils sont synonymes',0]]],
+  [$matIds['sciences'], 'Quelle est la diffÃ‚rence entre une Ã‚toile et une planÃ‚te ?',               'ELEMENTAIRE',   'ENAFEP',     [['A','Une Ã‚toile produit sa propre lumiÃ‚re par fusion nuclÃ‚aire ; une planÃ‚te non',1], ['B','Une planÃ‚te est plus grande',0], ['C','Une Ã‚toile tourne autour d\'une planÃ‚te',0], ['D','Elles sont identiques',0]]],
+  [$matIds['sciences'], 'Le bÃ‚ton est un mÃ‚lange de :',                                              'ELEMENTAIRE',   'ENAFEP',     [['A','Ciment, sable, gravier et eau',1], ['B','PlÃ‚tre et sable',0], ['C','Calcaire et argile',0], ['D','Ciment et pÃ‚trole',0]]],
+  [$matIds['sciences'], 'Quelle est la principale cause des pluies acides ?',                        'INTERMEDIAIRE', 'TENASOSP',   [['A','Ã‰missions de SOâ‚‚ et NOâ‚“ (combustion fossile)',1], ['B','L\'ozone',0], ['C','Le COâ‚‚ seul',0], ['D','L\'Ã‚rosion des sols',0]]],
+  [$matIds['sciences'], 'L\'ADN recombinant est utilisÃ‚ pour :',                                     'AVANCE',        'EXAMEN_ETAT',[['A','InsÃ‚rer un gÃ‚ne d\'un organisme dans un autre (OGM, thÃ‚rapie gÃ‚nique)',1], ['B','Amplifier l\'ARN',0], ['C','SÃ‚quencer des protÃ‚ines',0], ['D','Fabriquer des lipides',0]]],
+  [$matIds['sciences'], 'Quelle est la diffÃ‚rence entre un vaccin et un antibiotique ?',             'ELEMENTAIRE',   'ENAFEP',     [['A','Vaccin = prÃ‚vention (immunisation) ; antibiotique = traitement bactÃ‚rien',1], ['B','Les deux traitent les virus',0], ['C','Antibiotique = prÃ‚vention',0], ['D','Ils sont synonymes',0]]],
 ];
 
 /* â”€â”€ Insertion â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */

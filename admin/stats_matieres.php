@@ -39,7 +39,7 @@ $examStats = dbAll("
         COUNT(CASE WHEN s.statut = 'TERMINE' THEN 1 END) AS nb_termines
     FROM matieres m
     LEFT JOIN question_bank qb ON qb.matiere_id = m.id
-    LEFT JOIN exam_sessions s ON s.questionnaire_id IS NOT NULL $whereDate
+    LEFT JOIN exam_sessions s ON s.matiere_id = m.id $whereDate
     GROUP BY m.id, m.nom, m.icone, m.couleur
     ORDER BY nb_sessions DESC
 ") ?? [];
@@ -68,9 +68,9 @@ $qStats = dbAll("
     SELECT
         m.id,
         COUNT(qb.id)   AS nb_questions,
-        ROUND(AVG(CASE WHEN qb.difficulte='FACILE' THEN 1 WHEN qb.difficulte='MOYEN' THEN 2 ELSE 3 END), 2) AS difficulte_moy
+        ROUND(AVG(CASE WHEN qb.difficulte='DEBUTANT' THEN 1 WHEN qb.difficulte='ELEMENTAIRE' THEN 2 WHEN qb.difficulte='INTERMEDIAIRE' THEN 3 WHEN qb.difficulte='AVANCE' THEN 4 ELSE 5 END), 2) AS difficulte_moy
     FROM matieres m
-    LEFT JOIN question_bank qb ON qb.matiere_id = m.id AND qb.actif = 1
+    LEFT JOIN question_bank qb ON qb.matiere_id = m.id AND qb.status = 'PUBLIE'
     GROUP BY m.id
 ") ?? [];
 $qMap = [];
@@ -79,11 +79,11 @@ foreach ($qStats as $r) $qMap[$r['id']] = $r;
 // ── Top questions difficiles par matière ──────────────────
 $topDifficiles = dbAll("
     SELECT qb.id, qb.enonce, qb.difficulte, m.nom AS matiere_nom, m.icone,
-           qb.taux_reussite_pct
+           qb.success_rate AS taux_reussite_pct
     FROM question_bank qb
     JOIN matieres m ON m.id = qb.matiere_id
-    WHERE qb.actif = 1 AND qb.taux_reussite_pct IS NOT NULL AND qb.taux_reussite_pct < 40
-    ORDER BY qb.taux_reussite_pct ASC
+    WHERE qb.status = 'PUBLIE' AND qb.success_rate IS NOT NULL AND qb.success_rate < 40
+    ORDER BY qb.success_rate ASC
     LIMIT 10
 ") ?? [];
 
@@ -170,7 +170,7 @@ include __DIR__ . '/../includes/header_app.php';
 <div class="card" style="margin-bottom:24px">
   <div class="card-header">
     <div class="card-title">Performance par matière</div>
-    <span style="font-size:12px;color:var(--gris-500)">Période : <?= ['7'=>'7 derniers jours','30'=>'30 derniers jours','90'=>'3 derniers mois','365'=>'Dernière année','all'=>'Tout le temps'][$periode] ?></span>
+    <span style="font-size:12px;color:var(--gris-500);margin:0">Période : <?= ['7'=>'7 derniers jours','30'=>'30 derniers jours','90'=>'3 derniers mois','365'=>'Dernière année','all'=>'Tout le temps'][$periode] ?></span>
   </div>
   <div style="overflow-x:auto;padding:0 20px 20px">
 

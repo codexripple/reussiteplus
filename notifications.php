@@ -8,6 +8,12 @@ $pageTitle  = 'Notifications';
 $pageActive = 'notifications';
 $user = require_login();
 
+// ── Rediriger les admins vers leur page dédiée ──────────────
+if (is_admin()) {
+    header('Location: /reussiteplus/admin/notifications.php');
+    exit;
+}
+
 // ── Marquer tout comme lu ───────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'mark_all_read' && csrf_verify()) {
     dbQuery("UPDATE notifications SET lu = 1, lu_at = NOW() WHERE user_id = ?", [$user['id']]);
@@ -34,7 +40,7 @@ $notifsList = dbAll(
     [$user['id']]
 );
 $pagination = paginate($total, $page, $limit);
-$nonLues   = (int)(dbRow("SELECT COUNT(*) as n FROM notifications WHERE user_id=? AND lu=0", [$user['id']])['n'] ?? 0);
+$nonLues    = (int)(dbRow("SELECT COUNT(*) as n FROM notifications WHERE user_id=? AND lu=0", [$user['id']])['n'] ?? 0);
 
 include __DIR__ . '/includes/header_app.php';
 ?>

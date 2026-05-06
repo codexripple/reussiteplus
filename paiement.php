@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['confirmer_paiement']
             }
 
             $montantFinal = max(0, $sousTotal - $remiseDuree - $remisePromo);
-            $ref          = 'RP-' . strtoupper(substr(md5(uniqid((string)mt_rand(), true)), 0, 8));
+            $ref          = 'RP-' . strtoupper(substr(md5(uniqid((string)random_int(0, PHP_INT_MAX), true)), 0, 8));
 
             dbInsert('abonnements', [
                 'user_id'            => $user['id'],

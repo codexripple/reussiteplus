@@ -22,9 +22,9 @@ $pdo->exec("SET FOREIGN_KEY_CHECKS=0");
 function seed_log(string $msg): void { echo "[" . date('H:i:s') . "] $msg\n"; ob_flush(); flush(); }
 function make_uuid(): string {
     return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-        mt_rand(0,0xffff),mt_rand(0,0xffff),mt_rand(0,0xffff),
-        mt_rand(0,0x0fff)|0x4000,mt_rand(0,0x3fff)|0x8000,
-        mt_rand(0,0xffff),mt_rand(0,0xffff),mt_rand(0,0xffff));
+        random_int(0,0xffff),random_int(0,0xffff),random_int(0,0xffff),
+        random_int(0,0x0fff)|0x4000,random_int(0,0x3fff)|0x8000,
+        random_int(0,0xffff),random_int(0,0xffff),random_int(0,0xffff));
 }
 
 seed_log("🚀 Démarrage du seeder RÉUSSITE+\n");
