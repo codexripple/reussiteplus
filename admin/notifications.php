@@ -19,18 +19,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
     }
     // Valider un paiement
     if ($action === 'confirm_pay' && !empty($_POST['id'])) {
-        dbQuery(
-            "UPDATE abonnements SET statut='CONFIRME', confirmed_by=?, confirmed_at=NOW() WHERE id=? AND statut='EN_ATTENTE'",
-            [$user['id'], $_POST['id']]
+        $abon = dbRow(
+            "SELECT a.*, u.id as uid, u.prenom FROM abonnements a JOIN utilisateurs u ON a.user_id=u.id WHERE a.id=? AND a.statut='EN_ATTENTE'",
+            [$_POST['id']]
         );
-        redirect('/reussiteplus/admin/notifications.php', 'success', 'Paiement valid&eacute;.');
+        if ($abon) {
+            dbQuery("UPDATE abonnements SET statut='CONFIRME', confirmed_by=?, confirmed_at=NOW() WHERE id=?", [$user['id'], $abon['id']]);
+            dbQuery("UPDATE utilisateurs SET plan=?, plan_expire_at=? WHERE id=?", [$abon['plan'], $abon['date_fin'], $abon['uid']]);
+            dbInsert('notifications', [
+                'user_id' => $abon['uid'],
+                'type'    => 'PAIEMENT',
+                'titre'   => 'Abonnement ' . $abon['plan'] . ' activé !',
+                'message' => 'Votre paiement a été confirmé. Votre abonnement ' . $abon['plan'] . ' est actif jusqu\'au ' . date('d/m/Y', strtotime($abon['date_fin'])) . '.',
+                'lien'    => '/reussiteplus/abonnement.php',
+            ]);
+            dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => 'CONFIRMER_PAIEMENT', 'details' => 'ID=' . $abon['id']]);
+        }
+        redirect('/reussiteplus/admin/notifications.php', 'success', 'Paiement valid&eacute; et plan activ&eacute;.');
     }
     // Rejeter un paiement
     if ($action === 'reject_pay' && !empty($_POST['id'])) {
-        dbQuery(
-            "UPDATE abonnements SET statut='ECHEC', confirmed_by=?, confirmed_at=NOW() WHERE id=? AND statut='EN_ATTENTE'",
-            [$user['id'], $_POST['id']]
-        );
+        $abon = dbRow("SELECT a.*, u.id as uid FROM abonnements a JOIN utilisateurs u ON a.user_id=u.id WHERE a.id=? AND a.statut='EN_ATTENTE'", [$_POST['id']]);
+        if ($abon) {
+            dbQuery("UPDATE abonnements SET statut='ECHEC' WHERE id=?", [$abon['id']]);
+            dbInsert('notifications', [
+                'user_id' => $abon['uid'],
+                'type'    => 'PAIEMENT',
+                'titre'   => 'Paiement non vérifié',
+                'message' => 'Votre paiement n\'a pas pu être vérifié. Contactez support@reussiteplus.cd.',
+                'lien'    => '/reussiteplus/abonnement.php',
+            ]);
+            dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => 'REFUSER_PAIEMENT', 'details' => 'ID=' . $abon['id']]);
+        }
         redirect('/reussiteplus/admin/notifications.php', 'warning', 'Paiement refus&eacute;.');
     }
 }

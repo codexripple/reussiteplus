@@ -228,6 +228,10 @@ if (is_admin()) {
       <div class="nav-icon adm-icon"><i data-lucide="help-circle"></i></div>
       <span class="nav-label">Questions</span>
     </a>
+    <a href="/reussiteplus/admin/codes_promo.php" class="nav-item adm-nav <?= $pageActive === 'admin_promos' ? 'active adm-active' : '' ?>">
+      <div class="nav-icon adm-icon"><i data-lucide="ticket"></i></div>
+      <span class="nav-label">Codes promo</span>
+    </a>
     <a href="/reussiteplus/tarifs.php" target="_blank" class="nav-item adm-nav">
       <div class="nav-icon adm-icon"><i data-lucide="tag"></i></div>
       <span class="nav-label">Tarifs &amp; Plans</span>

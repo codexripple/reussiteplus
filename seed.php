@@ -1,4 +1,9 @@
 ﻿<?php
+
+require_once __DIR__ . '/includes/config.php';
+require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/auth.php';
+require_admin(); // Script restreint aux admins
 /**
  * RÉUSSITE+ — Seeder de données de démonstration
  * Accessible uniquement depuis localhost
@@ -192,3 +197,4 @@ echo "  xenora@reussiteplus.cd → Admin2025!\n";
 echo "  prof@reussiteplus.cd  → Prof2025!\n";
 echo "  Code promo : BIENVENUE2025 (20%)\n";
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+

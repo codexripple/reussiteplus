@@ -74,6 +74,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
             dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => 'CHANGE_ROLE', 'details' => "uid=$uid role=$newRole"]);
             redirect('/reussiteplus/admin/users.php', 'success', 'Rôle mis à jour.');
         }
+    } elseif ($action === 'delete_user' && $uid) {
+        // Seul SUPER_ADMIN peut supprimer, ne peut pas se supprimer lui-même
+        if ($user['role'] === 'SUPER_ADMIN' && $uid !== $user['id']) {
+            $target = dbRow("SELECT email, prenom, nom FROM utilisateurs WHERE id=?", [$uid]);
+            if ($target) {
+                // Cascade : on supprime d'abord les données liées pour éviter les FK errors
+                dbQuery("DELETE FROM notifications   WHERE user_id=?", [$uid]);
+                dbQuery("DELETE FROM abonnements     WHERE user_id=?", [$uid]);
+                dbQuery("DELETE FROM exam_sessions   WHERE user_id=?", [$uid]);
+                dbQuery("DELETE FROM utilisateurs    WHERE id=?",      [$uid]);
+                dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => 'DELETE_USER', 'details' => "email={$target['email']}"]);
+                redirect('/reussiteplus/admin/users.php', 'success', "Utilisateur {$target['prenom']} {$target['nom']} supprimé.");
+            }
+        } else {
+            redirect('/reussiteplus/admin/users.php', 'error', 'Action non autorisée.');
+        }
     }
 }
 
@@ -209,6 +225,11 @@ include __DIR__ . '/../includes/header_app.php';
         <button type="submit" name="action" value="change_role" class="btn btn-ghost btn-full" onclick="document.getElementById('modal-form').querySelector('[name=action]').value='change_role'">Changer rôle</button>
       </div>
       <button type="submit" name="action" value="toggle_active" class="btn btn-danger btn-full" style="margin-top:8px" id="toggle-btn">Désactiver le compte</button>
+      <?php if ($user['role'] === 'SUPER_ADMIN'): ?>
+      <button type="submit" name="action" value="delete_user" class="btn btn-full" style="margin-top:6px;background:#7f1d1d;color:white;border:none" id="delete-btn" onclick="return confirm('⚠️ Supprimer définitivement cet utilisateur et toutes ses données ? Cette action est irréversible.')">
+        <i data-lucide="trash-2" style="width:13px;height:13px"></i> Supprimer définitivement
+      </button>
+      <?php endif; ?>
     </form>
     <button onclick="closeModal()" class="btn btn-ghost btn-full" style="margin-top:8px">Annuler</button>
   </div>

@@ -1,10 +1,15 @@
-<?php
+﻿<?php
+
+require_once __DIR__ . '/includes/config.php';
+require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/auth.php';
+require_admin(); // Script restreint aux admins
 // ============================================================
-// RÉUSSITE+ | Seed Questions Batch 2 — 120 nouvelles questions
-// Accès local uniquement
+// RÃ‰USSITE+ | Seed Questions Batch 2 â€” 120 nouvelles questions
+// AccÃ¨s local uniquement
 // ============================================================
 if (php_uname('n') !== gethostname() && !in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1'])) {
-    http_response_code(403); exit('Accès refusé.');
+    http_response_code(403); exit('AccÃ¨s refusÃ©.');
 }
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/db.php';
@@ -12,7 +17,7 @@ require_once __DIR__ . '/includes/db.php';
 $inserted = 0;
 $skipped  = 0;
 
-// IDs matières
+// IDs matiÃ¨res
 $M = [
     'maths'   => '0d8077c4-47bd-11f1-84f5-f0d5bfbb3a4f',
     'francais'=> '0d80fad3-47bd-11f1-84f5-f0d5bfbb3a4f',
@@ -58,7 +63,7 @@ function addQ(array $M, int &$inserted, int &$skipped,
 }
 
 // ============================================================
-// ENAFEP — Fin Primaire (40 questions)
+// ENAFEP â€” Fin Primaire (40 questions)
 // ============================================================
 
 // MATHS ENAFEP (15)
@@ -67,457 +72,457 @@ addQ($M,$inserted,$skipped,"La valeur de 3/4 + 1/2 est :",
     '3/4 + 1/2 = 3/4 + 2/4 = 5/4 = 1,25');
 
 addQ($M,$inserted,$skipped,"Un rectangle a une longueur de 8 cm et une largeur de 5 cm. Son aire est :",
-    'maths','ENAFEP',2025,['26 cm²','13 cm²','40 cm²','30 cm²'],'C',
-    'Aire = longueur × largeur = 8 × 5 = 40 cm²');
+    'maths','ENAFEP',2025,['26 cmÂ²','13 cmÂ²','40 cmÂ²','30 cmÂ²'],'C',
+    'Aire = longueur Ã— largeur = 8 Ã— 5 = 40 cmÂ²');
 
-addQ($M,$inserted,$skipped,"45% de 200 est égal à :",
+addQ($M,$inserted,$skipped,"45% de 200 est Ã©gal Ã  :",
     'maths','ENAFEP',2025,['80','85','95','90'],'D',
-    '45/100 × 200 = 90');
+    '45/100 Ã— 200 = 90');
 
-addQ($M,$inserted,$skipped,"Le plus grand nombre premier inférieur à 20 est :",
+addQ($M,$inserted,$skipped,"Le plus grand nombre premier infÃ©rieur Ã  20 est :",
     'maths','ENAFEP',2025,['17','16','18','19'],'D',
     '19 est premier (divisible uniquement par 1 et 19)');
 
-addQ($M,$inserted,$skipped,"2,5 × 4 = ?",
+addQ($M,$inserted,$skipped,"2,5 Ã— 4 = ?",
     'maths','ENAFEP',2025,['8','8,5','10','9'],'C',
-    '2,5 × 4 = 10');
+    '2,5 Ã— 4 = 10');
 
-addQ($M,$inserted,$skipped,"Un train roule à 120 km/h. En 2h30min, il parcourt :",
+addQ($M,$inserted,$skipped,"Un train roule Ã  120 km/h. En 2h30min, il parcourt :",
     'maths','ENAFEP',2025,['240 km','260 km','280 km','300 km'],'D',
-    '2h30min = 2,5h. Distance = 120 × 2,5 = 300 km');
+    '2h30min = 2,5h. Distance = 120 Ã— 2,5 = 300 km');
 
-addQ($M,$inserted,$skipped,"L'angle intérieur d'un carré vaut :",
-    'maths','ENAFEP',2025,['45°','60°','90°','180°'],'C',
-    'Un carré a 4 angles droits, chacun valant 90°');
+addQ($M,$inserted,$skipped,"L'angle intÃ©rieur d'un carrÃ© vaut :",
+    'maths','ENAFEP',2025,['45Â°','60Â°','90Â°','180Â°'],'C',
+    'Un carrÃ© a 4 angles droits, chacun valant 90Â°');
 
-addQ($M,$inserted,$skipped,"3² + 4² = ?",
+addQ($M,$inserted,$skipped,"3Â² + 4Â² = ?",
     'maths','ENAFEP',2025,['14','25','49','7'],'B',
-    '3² = 9, 4² = 16, 9 + 16 = 25');
+    '3Â² = 9, 4Â² = 16, 9 + 16 = 25');
 
-addQ($M,$inserted,$skipped,"Un article coûte 3 600 CDF avec une remise de 25%. Le prix à payer est :",
+addQ($M,$inserted,$skipped,"Un article coÃ»te 3 600 CDF avec une remise de 25%. Le prix Ã  payer est :",
     'maths','ENAFEP',2025,['2 800 CDF','3 000 CDF','2 700 CDF','2 400 CDF'],'C',
-    'Remise = 25% × 3600 = 900 CDF. Prix = 3600 - 900 = 2 700 CDF');
+    'Remise = 25% Ã— 3600 = 900 CDF. Prix = 3600 - 900 = 2 700 CDF');
 
 addQ($M,$inserted,$skipped,"La moyenne des nombres 12, 16, 18 et 14 est :",
     'maths','ENAFEP',2025,['14','16','13','15'],'D',
-    '(12+16+18+14) ÷ 4 = 60 ÷ 4 = 15');
+    '(12+16+18+14) Ã· 4 = 60 Ã· 4 = 15');
 
 addQ($M,$inserted,$skipped,"Combien de faces a un cube ?",
     'maths','ENAFEP',2025,['4','8','12','6'],'D',
-    'Un cube a 6 faces carrées');
+    'Un cube a 6 faces carrÃ©es');
 
-addQ($M,$inserted,$skipped,"1 000 millilitres équivalent à :",
+addQ($M,$inserted,$skipped,"1 000 millilitres Ã©quivalent Ã  :",
     'maths','ENAFEP',2025,['10 L','100 L','0,1 L','1 L'],'D',
     '1 000 mL = 1 L');
 
-addQ($M,$inserted,$skipped,"Le périmètre d'un cercle de rayon 7 cm est (π ≈ 22/7) :",
-    'maths','ENAFEP',2025,['44 cm','22 cm','28 cm','154 cm²'],'A',
-    'Périmètre = 2πr = 2 × (22/7) × 7 = 44 cm');
+addQ($M,$inserted,$skipped,"Le pÃ©rimÃ¨tre d'un cercle de rayon 7 cm est (Ï€ â‰ˆ 22/7) :",
+    'maths','ENAFEP',2025,['44 cm','22 cm','28 cm','154 cmÂ²'],'A',
+    'PÃ©rimÃ¨tre = 2Ï€r = 2 Ã— (22/7) Ã— 7 = 44 cm');
 
-addQ($M,$inserted,$skipped,"72 ÷ 8 × 3 = ?",
+addQ($M,$inserted,$skipped,"72 Ã· 8 Ã— 3 = ?",
     'maths','ENAFEP',2025,['3','21','24','27'],'D',
-    'On calcule de gauche à droite : 72 ÷ 8 = 9, puis 9 × 3 = 27');
+    'On calcule de gauche Ã  droite : 72 Ã· 8 = 9, puis 9 Ã— 3 = 27');
 
-addQ($M,$inserted,$skipped,"Un élève obtient 48 sur 80. Sa note sur 20 est :",
+addQ($M,$inserted,$skipped,"Un Ã©lÃ¨ve obtient 48 sur 80. Sa note sur 20 est :",
     'maths','ENAFEP',2025,['10','11','12','13'],'C',
-    '(48 ÷ 80) × 20 = 12');
+    '(48 Ã· 80) Ã— 20 = 12');
 
-// FRANÇAIS ENAFEP (15)
-addQ($M,$inserted,$skipped,"Le pluriel de « cheval » est :",
+// FRANÃ‡AIS ENAFEP (15)
+addQ($M,$inserted,$skipped,"Le pluriel de Â« cheval Â» est :",
     'francais','ENAFEP',2025,['chevals','chevales','chevaus','chevaux'],'D',
-    'Cheval → chevaux (pluriel irrégulier en -aux)');
+    'Cheval â†’ chevaux (pluriel irrÃ©gulier en -aux)');
 
-addQ($M,$inserted,$skipped,"Dans la phrase « Le chat mange la souris », « la souris » est :",
-    'francais','ENAFEP',2025,['sujet','attribut','complément d\'objet indirect','complément d\'objet direct'],'D',
-    'La souris répond à la question « mange quoi ? » → COD');
+addQ($M,$inserted,$skipped,"Dans la phrase Â« Le chat mange la souris Â», Â« la souris Â» est :",
+    'francais','ENAFEP',2025,['sujet','attribut','complÃ©ment d\'objet indirect','complÃ©ment d\'objet direct'],'D',
+    'La souris rÃ©pond Ã  la question Â« mange quoi ? Â» â†’ COD');
 
-addQ($M,$inserted,$skipped,"Le contraire de « généreux » est :",
+addQ($M,$inserted,$skipped,"Le contraire de Â« gÃ©nÃ©reux Â» est :",
     'francais','ENAFEP',2025,['avare','courageux','aimable','riche'],'A',
-    'Généreux ↔ avare');
+    'GÃ©nÃ©reux â†” avare');
 
-addQ($M,$inserted,$skipped,"« Il faisait beau » est à quel temps verbal ?",
-    'francais','ENAFEP',2025,['passé composé','présent','futur','imparfait'],'D',
+addQ($M,$inserted,$skipped,"Â« Il faisait beau Â» est Ã  quel temps verbal ?",
+    'francais','ENAFEP',2025,['passÃ© composÃ©','prÃ©sent','futur','imparfait'],'D',
     'Faisait = imparfait de l\'indicatif du verbe faire');
 
-addQ($M,$inserted,$skipped,"Le synonyme le plus proche de « rapide » est :",
-    'francais','ENAFEP',2025,['lent','hâtif','prompt','vif'],'C',
+addQ($M,$inserted,$skipped,"Le synonyme le plus proche de Â« rapide Â» est :",
+    'francais','ENAFEP',2025,['lent','hÃ¢tif','prompt','vif'],'C',
     'Prompt signifie qui agit ou se produit rapidement');
 
-addQ($M,$inserted,$skipped,"Le féminin de « instituteur » est :",
+addQ($M,$inserted,$skipped,"Le fÃ©minin de Â« instituteur Â» est :",
     'francais','ENAFEP',2025,['instituteuse','institutrisse','instituteure','institutrice'],'D',
-    'Instituteur → institutrice');
+    'Instituteur â†’ institutrice');
 
 addQ($M,$inserted,$skipped,"Quelle phrase contient une faute grammaticale ?",
     'francais','ENAFEP',2025,['Il chante bien','Nous mangeons','Vous dormez','Elle sont parties'],'D',
-    'Le sujet « Elle » est singulier, il faut écrire « Elle est partie »');
+    'Le sujet Â« Elle Â» est singulier, il faut Ã©crire Â« Elle est partie Â»');
 
-addQ($M,$inserted,$skipped,"« Il a mangé » est au :",
-    'francais','ENAFEP',2025,['imparfait','plus-que-parfait','futur antérieur','passé composé'],'D',
-    'A + participe passé = passé composé');
+addQ($M,$inserted,$skipped,"Â« Il a mangÃ© Â» est au :",
+    'francais','ENAFEP',2025,['imparfait','plus-que-parfait','futur antÃ©rieur','passÃ© composÃ©'],'D',
+    'A + participe passÃ© = passÃ© composÃ©');
 
-addQ($M,$inserted,$skipped,"Dans « La belle rose rouge », « belle » et « rouge » sont des :",
+addQ($M,$inserted,$skipped,"Dans Â« La belle rose rouge Â», Â« belle Â» et Â« rouge Â» sont des :",
     'francais','ENAFEP',2025,['noms','verbes','adverbes','adjectifs'],'D',
-    'Belle et rouge qualifient le nom rose → adjectifs qualificatifs');
+    'Belle et rouge qualifient le nom rose â†’ adjectifs qualificatifs');
 
 addQ($M,$inserted,$skipped,"Quel signe de ponctuation termine une question ?",
     'francais','ENAFEP',2025,['.','!',';','?'],'D',
     'Une phrase interrogative se termine par un point d\'interrogation');
 
-addQ($M,$inserted,$skipped,"Le pluriel de « voix » est :",
+addQ($M,$inserted,$skipped,"Le pluriel de Â« voix Â» est :",
     'francais','ENAFEP',2025,['voixs','vois','voixt','voix'],'D',
-    'Voix se termine déjà par x, son pluriel est identique : voix');
+    'Voix se termine dÃ©jÃ  par x, son pluriel est identique : voix');
 
-addQ($M,$inserted,$skipped,"Le mot « immobile » signifie :",
-    'francais','ENAFEP',2025,['très mobile','qui bouge lentement','difficile à bouger','qui ne bouge pas'],'D',
-    'Im- est un préfixe négatif. Immobile = qui ne bouge pas');
+addQ($M,$inserted,$skipped,"Le mot Â« immobile Â» signifie :",
+    'francais','ENAFEP',2025,['trÃ¨s mobile','qui bouge lentement','difficile Ã  bouger','qui ne bouge pas'],'D',
+    'Im- est un prÃ©fixe nÃ©gatif. Immobile = qui ne bouge pas');
 
-addQ($M,$inserted,$skipped,"« Vite » est un :",
+addQ($M,$inserted,$skipped,"Â« Vite Â» est un :",
     'francais','ENAFEP',2025,['nom','adjectif','verbe','adverbe'],'D',
-    'Vite modifie un verbe ou un adjectif → c\'est un adverbe');
+    'Vite modifie un verbe ou un adjectif â†’ c\'est un adverbe');
 
-addQ($M,$inserted,$skipped,"Le mot « bibliothèque » vient du grec « biblion » qui signifie :",
+addQ($M,$inserted,$skipped,"Le mot Â« bibliothÃ¨que Â» vient du grec Â« biblion Â» qui signifie :",
     'francais','ENAFEP',2025,['lecture','savoir','papier','livre'],'D',
-    'Biblion = livre en grec ; thèque = armoire/lieu de rangement');
+    'Biblion = livre en grec ; thÃ¨que = armoire/lieu de rangement');
 
-addQ($M,$inserted,$skipped,"Dans la phrase « Les oiseaux chantent joyeusement », le sujet est :",
+addQ($M,$inserted,$skipped,"Dans la phrase Â« Les oiseaux chantent joyeusement Â», le sujet est :",
     'francais','ENAFEP',2025,['chantent','joyeusement','les oiseaux','oiseaux'],'C',
-    'Le sujet répond à la question « qui est-ce qui chante ? » → les oiseaux');
+    'Le sujet rÃ©pond Ã  la question Â« qui est-ce qui chante ? Â» â†’ les oiseaux');
 
 // SCIENCES ENAFEP (10)
-addQ($M,$inserted,$skipped,"La photosynthèse se produit principalement dans :",
+addQ($M,$inserted,$skipped,"La photosynthÃ¨se se produit principalement dans :",
     'sciences','ENAFEP',2025,['les racines','les fleurs','les graines','les feuilles'],'D',
-    'Les feuilles contiennent la chlorophylle qui capte l\'énergie solaire');
+    'Les feuilles contiennent la chlorophylle qui capte l\'Ã©nergie solaire');
 
 addQ($M,$inserted,$skipped,"L'organe qui pompe le sang dans le corps est :",
-    'sciences','ENAFEP',2025,['le poumon','le foie','le rein','le cœur'],'D',
-    'Le cœur est la pompe du système circulatoire');
+    'sciences','ENAFEP',2025,['le poumon','le foie','le rein','le cÅ“ur'],'D',
+    'Le cÅ“ur est la pompe du systÃ¨me circulatoire');
 
-addQ($M,$inserted,$skipped,"L'eau entre en ébullition à :",
-    'sciences','ENAFEP',2025,['0 °C','50 °C','200 °C','100 °C'],'D',
-    'À pression normale, l\'eau bout à 100 °C');
+addQ($M,$inserted,$skipped,"L'eau entre en Ã©bullition Ã  :",
+    'sciences','ENAFEP',2025,['0 Â°C','50 Â°C','200 Â°C','100 Â°C'],'D',
+    'Ã€ pression normale, l\'eau bout Ã  100 Â°C');
 
-addQ($M,$inserted,$skipped,"Parmi ces animaux, lequel est un mammifère ?",
+addQ($M,$inserted,$skipped,"Parmi ces animaux, lequel est un mammifÃ¨re ?",
     'sciences','ENAFEP',2025,['le crocodile','le perroquet','la grenouille','la baleine'],'D',
-    'La baleine respire à l\'air, allaite ses petits → mammifère marin');
+    'La baleine respire Ã  l\'air, allaite ses petits â†’ mammifÃ¨re marin');
 
 addQ($M,$inserted,$skipped,"Le Soleil est :",
-    'sciences','ENAFEP',2025,['une planète','une lune','une comète','une étoile'],'D',
-    'Le Soleil est une étoile de type naine jaune');
+    'sciences','ENAFEP',2025,['une planÃ¨te','une lune','une comÃ¨te','une Ã©toile'],'D',
+    'Le Soleil est une Ã©toile de type naine jaune');
 
 addQ($M,$inserted,$skipped,"L'organe principal de la respiration est :",
-    'sciences','ENAFEP',2025,['l\'estomac','le cœur','le foie','le poumon'],'D',
-    'Les poumons permettent les échanges gazeux O₂/CO₂');
+    'sciences','ENAFEP',2025,['l\'estomac','le cÅ“ur','le foie','le poumon'],'D',
+    'Les poumons permettent les Ã©changes gazeux Oâ‚‚/COâ‚‚');
 
-addQ($M,$inserted,$skipped,"L'eau gèle à :",
-    'sciences','ENAFEP',2025,['-10 °C','4 °C','100 °C','0 °C'],'D',
-    'Le point de congélation de l\'eau est 0 °C à pression normale');
+addQ($M,$inserted,$skipped,"L'eau gÃ¨le Ã  :",
+    'sciences','ENAFEP',2025,['-10 Â°C','4 Â°C','100 Â°C','0 Â°C'],'D',
+    'Le point de congÃ©lation de l\'eau est 0 Â°C Ã  pression normale');
 
 addQ($M,$inserted,$skipped,"Le squelette humain adulte compte environ :",
     'sciences','ENAFEP',2025,['106 os','306 os','406 os','206 os'],'D',
-    'Le corps humain adulte possède en moyenne 206 os');
+    'Le corps humain adulte possÃ¨de en moyenne 206 os');
 
-addQ($M,$inserted,$skipped,"La planète la plus proche du Soleil est :",
-    'sciences','ENAFEP',2025,['Vénus','Terre','Mars','Mercure'],'D',
-    'Mercure est la planète la plus proche du Soleil dans le système solaire');
+addQ($M,$inserted,$skipped,"La planÃ¨te la plus proche du Soleil est :",
+    'sciences','ENAFEP',2025,['VÃ©nus','Terre','Mars','Mercure'],'D',
+    'Mercure est la planÃ¨te la plus proche du Soleil dans le systÃ¨me solaire');
 
-addQ($M,$inserted,$skipped,"Les plantes produisent de l'oxygène grâce à :",
-    'sciences','ENAFEP',2025,['la respiration','la transpiration','la digestion','la photosynthèse'],'D',
-    'La photosynthèse utilise CO₂ + eau + lumière pour produire glucose + O₂');
+addQ($M,$inserted,$skipped,"Les plantes produisent de l'oxygÃ¨ne grÃ¢ce Ã  :",
+    'sciences','ENAFEP',2025,['la respiration','la transpiration','la digestion','la photosynthÃ¨se'],'D',
+    'La photosynthÃ¨se utilise COâ‚‚ + eau + lumiÃ¨re pour produire glucose + Oâ‚‚');
 
 // ============================================================
-// TENASOSP — Fin Secondaire (40 questions)
+// TENASOSP â€” Fin Secondaire (40 questions)
 // ============================================================
 
 // MATHS TENASOSP (10)
-addQ($M,$inserted,$skipped,"La dérivée de f(x) = x³ − 2x + 1 est :",
-    'maths','TENASOSP',2025,['3x²','x² − 2','3x + 1','3x² − 2'],'D',
-    'Règle de dérivation : d/dx(xⁿ) = nxⁿ⁻¹ et d/dx(cste) = 0 → 3x² − 2');
+addQ($M,$inserted,$skipped,"La dÃ©rivÃ©e de f(x) = xÂ³ âˆ’ 2x + 1 est :",
+    'maths','TENASOSP',2025,['3xÂ²','xÂ² âˆ’ 2','3x + 1','3xÂ² âˆ’ 2'],'D',
+    'RÃ¨gle de dÃ©rivation : d/dx(xâ¿) = nxâ¿â»Â¹ et d/dx(cste) = 0 â†’ 3xÂ² âˆ’ 2');
 
-addQ($M,$inserted,$skipped,"log₁₀(1 000) = ?",
+addQ($M,$inserted,$skipped,"logâ‚â‚€(1 000) = ?",
     'maths','TENASOSP',2025,['2','4','10','3'],'D',
-    '10³ = 1 000 donc log₁₀(1 000) = 3');
+    '10Â³ = 1 000 donc logâ‚â‚€(1 000) = 3');
 
-addQ($M,$inserted,$skipped,"sin²(x) + cos²(x) = ?",
+addQ($M,$inserted,$skipped,"sinÂ²(x) + cosÂ²(x) = ?",
     'maths','TENASOSP',2025,['0','2','sin(2x)','1'],'D',
-    'Identité fondamentale de la trigonométrie');
+    'IdentitÃ© fondamentale de la trigonomÃ©trie');
 
-addQ($M,$inserted,$skipped,"L'équation x² − 5x + 6 = 0 a pour solutions :",
-    'maths','TENASOSP',2025,['x=1 et x=6','x=−2 et x=−3','x=2 et x=−3','x=2 et x=3'],'D',
-    'Discriminant Δ = 25 − 24 = 1. x = (5±1)/2 → x=3 ou x=2');
+addQ($M,$inserted,$skipped,"L'Ã©quation xÂ² âˆ’ 5x + 6 = 0 a pour solutions :",
+    'maths','TENASOSP',2025,['x=1 et x=6','x=âˆ’2 et x=âˆ’3','x=2 et x=âˆ’3','x=2 et x=3'],'D',
+    'Discriminant Î” = 25 âˆ’ 24 = 1. x = (5Â±1)/2 â†’ x=3 ou x=2');
 
-addQ($M,$inserted,$skipped,"∫ 2x dx = ?",
-    'maths','TENASOSP',2025,['2','2x² + C','x + C','x² + C'],'D',
-    'Règle d\'intégration : ∫xⁿ dx = xⁿ⁺¹/(n+1) → ∫2x dx = x² + C');
+addQ($M,$inserted,$skipped,"âˆ« 2x dx = ?",
+    'maths','TENASOSP',2025,['2','2xÂ² + C','x + C','xÂ² + C'],'D',
+    'RÃ¨gle d\'intÃ©gration : âˆ«xâ¿ dx = xâ¿âºÂ¹/(n+1) â†’ âˆ«2x dx = xÂ² + C');
 
-addQ($M,$inserted,$skipped,"La limite de (x² − 1)/(x − 1) quand x → 1 est :",
-    'maths','TENASOSP',2025,['0','1','indéfinie','2'],'D',
-    'x²−1 = (x−1)(x+1), donc la fraction = x+1 → limite = 1+1 = 2');
+addQ($M,$inserted,$skipped,"La limite de (xÂ² âˆ’ 1)/(x âˆ’ 1) quand x â†’ 1 est :",
+    'maths','TENASOSP',2025,['0','1','indÃ©finie','2'],'D',
+    'xÂ²âˆ’1 = (xâˆ’1)(x+1), donc la fraction = x+1 â†’ limite = 1+1 = 2');
 
-addQ($M,$inserted,$skipped,"Dans une série statistique, la valeur la plus fréquente est :",
-    'maths','TENASOSP',2025,['la moyenne','la médiane','l\'étendue','le mode'],'D',
-    'Le mode est la valeur qui apparaît le plus souvent dans la série');
+addQ($M,$inserted,$skipped,"Dans une sÃ©rie statistique, la valeur la plus frÃ©quente est :",
+    'maths','TENASOSP',2025,['la moyenne','la mÃ©diane','l\'Ã©tendue','le mode'],'D',
+    'Le mode est la valeur qui apparaÃ®t le plus souvent dans la sÃ©rie');
 
-addQ($M,$inserted,$skipped,"Le nombre complexe (2 + 3i)(2 − 3i) vaut :",
-    'maths','TENASOSP',2025,['4 − 9i²','1','4 + 9','13'],'D',
-    '(2+3i)(2−3i) = 4 − 9i² = 4 − 9(−1) = 4 + 9 = 13');
+addQ($M,$inserted,$skipped,"Le nombre complexe (2 + 3i)(2 âˆ’ 3i) vaut :",
+    'maths','TENASOSP',2025,['4 âˆ’ 9iÂ²','1','4 + 9','13'],'D',
+    '(2+3i)(2âˆ’3i) = 4 âˆ’ 9iÂ² = 4 âˆ’ 9(âˆ’1) = 4 + 9 = 13');
 
-addQ($M,$inserted,$skipped,"Si P(A) = 0,3 et P(B) = 0,5 avec A et B indépendants, P(A ∩ B) = ?",
+addQ($M,$inserted,$skipped,"Si P(A) = 0,3 et P(B) = 0,5 avec A et B indÃ©pendants, P(A âˆ© B) = ?",
     'maths','TENASOSP',2025,['0,8','0,2','0,35','0,15'],'D',
-    'P(A ∩ B) = P(A) × P(B) = 0,3 × 0,5 = 0,15');
+    'P(A âˆ© B) = P(A) Ã— P(B) = 0,3 Ã— 0,5 = 0,15');
 
-addQ($M,$inserted,$skipped,"Un vecteur de module 5 faisant 60° avec l'axe x a pour composante horizontale :",
-    'maths','TENASOSP',2025,['5','2,5','5√3/2','5√2/2'],'B',
-    'Composante x = 5 × cos(60°) = 5 × 0,5 = 2,5');
+addQ($M,$inserted,$skipped,"Un vecteur de module 5 faisant 60Â° avec l'axe x a pour composante horizontale :",
+    'maths','TENASOSP',2025,['5','2,5','5âˆš3/2','5âˆš2/2'],'B',
+    'Composante x = 5 Ã— cos(60Â°) = 5 Ã— 0,5 = 2,5');
 
 // CHIMIE TENASOSP (10)
-addQ($M,$inserted,$skipped,"Le numéro atomique de l'oxygène est :",
+addQ($M,$inserted,$skipped,"Le numÃ©ro atomique de l'oxygÃ¨ne est :",
     'chimie','TENASOSP',2025,['6','7','16','8'],'D',
-    'L\'oxygène (O) a 8 protons dans son noyau → Z = 8');
+    'L\'oxygÃ¨ne (O) a 8 protons dans son noyau â†’ Z = 8');
 
-addQ($M,$inserted,$skipped,"Un acide de Brønsted est une substance qui :",
-    'chimie','TENASOSP',2025,['libère des OH⁻','est neutre','réagit avec les métaux','libère des H⁺'],'D',
-    'Selon Brønsted-Lowry, un acide est un donneur de protons H⁺');
+addQ($M,$inserted,$skipped,"Un acide de BrÃ¸nsted est une substance qui :",
+    'chimie','TENASOSP',2025,['libÃ¨re des OHâ»','est neutre','rÃ©agit avec les mÃ©taux','libÃ¨re des Hâº'],'D',
+    'Selon BrÃ¸nsted-Lowry, un acide est un donneur de protons Hâº');
 
 addQ($M,$inserted,$skipped,"Le pH d'une solution neutre est :",
     'chimie','TENASOSP',2025,['0','5','14','7'],'D',
-    'Une solution neutre a [H⁺] = [OH⁻] = 10⁻⁷ mol/L → pH = 7');
+    'Une solution neutre a [Hâº] = [OHâ»] = 10â»â· mol/L â†’ pH = 7');
 
 addQ($M,$inserted,$skipped,"La formule du dioxyde de carbone est :",
-    'chimie','TENASOSP',2025,['CO','C₂O','C₂O₃','CO₂'],'D',
-    'Un atome de carbone lié à deux atomes d\'oxygène → CO₂');
+    'chimie','TENASOSP',2025,['CO','Câ‚‚O','Câ‚‚Oâ‚ƒ','COâ‚‚'],'D',
+    'Un atome de carbone liÃ© Ã  deux atomes d\'oxygÃ¨ne â†’ COâ‚‚');
 
-addQ($M,$inserted,$skipped,"En nomenclature organique, le suffixe « -ane » désigne :",
-    'chimie','TENASOSP',2025,['les alcools','les alcènes','les aldéhydes','les alcanes'],'D',
-    'Les alcanes sont des hydrocarbures saturés (ex: méthane, éthane, propane)');
+addQ($M,$inserted,$skipped,"En nomenclature organique, le suffixe Â« -ane Â» dÃ©signe :",
+    'chimie','TENASOSP',2025,['les alcools','les alcÃ¨nes','les aldÃ©hydes','les alcanes'],'D',
+    'Les alcanes sont des hydrocarbures saturÃ©s (ex: mÃ©thane, Ã©thane, propane)');
 
 addQ($M,$inserted,$skipped,"La mole contient environ :",
-    'chimie','TENASOSP',2025,['6,02×10²²','6,02×10²⁴','6,02×10²⁰','6,02×10²³'],'D',
-    'Le nombre d\'Avogadro NA = 6,02×10²³ entités par mole');
+    'chimie','TENASOSP',2025,['6,02Ã—10Â²Â²','6,02Ã—10Â²â´','6,02Ã—10Â²â°','6,02Ã—10Â²Â³'],'D',
+    'Le nombre d\'Avogadro NA = 6,02Ã—10Â²Â³ entitÃ©s par mole');
 
-addQ($M,$inserted,$skipped,"L'élément avec l'électronégativité la plus élevée est :",
-    'chimie','TENASOSP',2025,['l\'oxygène','l\'azote','le chlore','le fluor'],'D',
-    'Le fluor (F) est l\'élément le plus électronégatif selon l\'échelle de Pauling');
+addQ($M,$inserted,$skipped,"L'Ã©lÃ©ment avec l'Ã©lectronÃ©gativitÃ© la plus Ã©levÃ©e est :",
+    'chimie','TENASOSP',2025,['l\'oxygÃ¨ne','l\'azote','le chlore','le fluor'],'D',
+    'Le fluor (F) est l\'Ã©lÃ©ment le plus Ã©lectronÃ©gatif selon l\'Ã©chelle de Pauling');
 
-addQ($M,$inserted,$skipped,"La réaction de saponification entre un corps gras et NaOH produit :",
-    'chimie','TENASOSP',2025,['une amine','un ester','un acide','du savon et de la glycérine'],'D',
-    'Corps gras + NaOH → savon (sel d\'acide gras) + glycérine');
+addQ($M,$inserted,$skipped,"La rÃ©action de saponification entre un corps gras et NaOH produit :",
+    'chimie','TENASOSP',2025,['une amine','un ester','un acide','du savon et de la glycÃ©rine'],'D',
+    'Corps gras + NaOH â†’ savon (sel d\'acide gras) + glycÃ©rine');
 
 addQ($M,$inserted,$skipped,"La formule chimique de l'acide sulfurique est :",
-    'chimie','TENASOSP',2025,['HCl','H₂SO₃','HNO₃','H₂SO₄'],'D',
-    'L\'acide sulfurique est H₂SO₄ (diprôtique, très corrosif)');
+    'chimie','TENASOSP',2025,['HCl','Hâ‚‚SOâ‚ƒ','HNOâ‚ƒ','Hâ‚‚SOâ‚„'],'D',
+    'L\'acide sulfurique est Hâ‚‚SOâ‚„ (diprÃ´tique, trÃ¨s corrosif)');
 
-addQ($M,$inserted,$skipped,"Dans la réaction Zn + 2HCl → ZnCl₂ + H₂, le zinc est :",
-    'chimie','TENASOSP',2025,['réduit','oxydé et réduit','ni oxydé ni réduit','oxydé'],'D',
-    'Zn → Zn²⁺ : perd 2 électrons → il est oxydé');
+addQ($M,$inserted,$skipped,"Dans la rÃ©action Zn + 2HCl â†’ ZnClâ‚‚ + Hâ‚‚, le zinc est :",
+    'chimie','TENASOSP',2025,['rÃ©duit','oxydÃ© et rÃ©duit','ni oxydÃ© ni rÃ©duit','oxydÃ©'],'D',
+    'Zn â†’ ZnÂ²âº : perd 2 Ã©lectrons â†’ il est oxydÃ©');
 
 // PHYSIQUE TENASOSP (10)
-addQ($M,$inserted,$skipped,"Si m = 5 kg et g = 10 m/s², la force gravitationnelle F = mg vaut :",
+addQ($M,$inserted,$skipped,"Si m = 5 kg et g = 10 m/sÂ², la force gravitationnelle F = mg vaut :",
     'physique','TENASOSP',2025,['2 N','15 N','5 N','50 N'],'D',
-    'F = 5 × 10 = 50 N');
+    'F = 5 Ã— 10 = 50 N');
 
-addQ($M,$inserted,$skipped,"La vitesse de la lumière dans le vide est approximativement :",
-    'physique','TENASOSP',2025,['3×10⁶ m/s','3×10¹⁰ m/s','3×10⁴ m/s','3×10⁸ m/s'],'D',
-    'c ≈ 3×10⁸ m/s = 300 000 km/s');
+addQ($M,$inserted,$skipped,"La vitesse de la lumiÃ¨re dans le vide est approximativement :",
+    'physique','TENASOSP',2025,['3Ã—10â¶ m/s','3Ã—10Â¹â° m/s','3Ã—10â´ m/s','3Ã—10â¸ m/s'],'D',
+    'c â‰ˆ 3Ã—10â¸ m/s = 300 000 km/s');
 
-addQ($M,$inserted,$skipped,"La résistance équivalente de R₁ = 6 Ω et R₂ = 3 Ω en parallèle est :",
-    'physique','TENASOSP',2025,['9 Ω','3 Ω','18 Ω','2 Ω'],'D',
-    '1/Req = 1/6 + 1/3 = 1/6 + 2/6 = 3/6 = 1/2 → Req = 2 Ω');
+addQ($M,$inserted,$skipped,"La rÃ©sistance Ã©quivalente de Râ‚ = 6 Î© et Râ‚‚ = 3 Î© en parallÃ¨le est :",
+    'physique','TENASOSP',2025,['9 Î©','3 Î©','18 Î©','2 Î©'],'D',
+    '1/Req = 1/6 + 1/3 = 1/6 + 2/6 = 3/6 = 1/2 â†’ Req = 2 Î©');
 
-addQ($M,$inserted,$skipped,"La loi d'Ohm s'écrit :",
-    'physique','TENASOSP',2025,['P = UI','F = ma','E = mc²','U = RI'],'D',
-    'U = tension (V), R = résistance (Ω), I = intensité (A)');
+addQ($M,$inserted,$skipped,"La loi d'Ohm s'Ã©crit :",
+    'physique','TENASOSP',2025,['P = UI','F = ma','E = mcÂ²','U = RI'],'D',
+    'U = tension (V), R = rÃ©sistance (Î©), I = intensitÃ© (A)');
 
 addQ($M,$inserted,$skipped,"Un miroir plan forme une image :",
-    'physique','TENASOSP',2025,['réelle et droite','virtuelle et renversée','réelle et renversée','virtuelle et droite'],'D',
-    'L\'image dans un miroir plan est virtuelle (derrière le miroir), droite et de même taille');
+    'physique','TENASOSP',2025,['rÃ©elle et droite','virtuelle et renversÃ©e','rÃ©elle et renversÃ©e','virtuelle et droite'],'D',
+    'L\'image dans un miroir plan est virtuelle (derriÃ¨re le miroir), droite et de mÃªme taille');
 
-addQ($M,$inserted,$skipped,"L'unité de la fréquence est :",
-    'physique','TENASOSP',2025,['mètre','watt','newton','hertz'],'D',
+addQ($M,$inserted,$skipped,"L'unitÃ© de la frÃ©quence est :",
+    'physique','TENASOSP',2025,['mÃ¨tre','watt','newton','hertz'],'D',
     '1 Hz = 1 cycle par seconde');
 
-addQ($M,$inserted,$skipped,"L'énergie cinétique d'un objet de masse m et vitesse v est :",
-    'physique','TENASOSP',2025,['mgh','RI²','QV','½mv²'],'D',
-    'Ec = ½mv² (en joules si m en kg et v en m/s)');
+addQ($M,$inserted,$skipped,"L'Ã©nergie cinÃ©tique d'un objet de masse m et vitesse v est :",
+    'physique','TENASOSP',2025,['mgh','RIÂ²','QV','Â½mvÂ²'],'D',
+    'Ec = Â½mvÂ² (en joules si m en kg et v en m/s)');
 
-addQ($M,$inserted,$skipped,"Un courant de 2 A traverse une résistance de 4 Ω. La tension est :",
+addQ($M,$inserted,$skipped,"Un courant de 2 A traverse une rÃ©sistance de 4 Î©. La tension est :",
     'physique','TENASOSP',2025,['2 V','6 V','0,5 V','8 V'],'D',
-    'U = R × I = 4 × 2 = 8 V');
+    'U = R Ã— I = 4 Ã— 2 = 8 V');
 
-addQ($M,$inserted,$skipped,"La réfraction de la lumière obéit à la loi de :",
+addQ($M,$inserted,$skipped,"La rÃ©fraction de la lumiÃ¨re obÃ©it Ã  la loi de :",
     'physique','TENASOSP',2025,['Ohm','Newton','Faraday','Snell-Descartes'],'D',
-    'n₁·sin(θ₁) = n₂·sin(θ₂) est la loi de Snell-Descartes');
+    'nâ‚Â·sin(Î¸â‚) = nâ‚‚Â·sin(Î¸â‚‚) est la loi de Snell-Descartes');
 
-addQ($M,$inserted,$skipped,"La période d'un pendule simple dépend principalement de :",
+addQ($M,$inserted,$skipped,"La pÃ©riode d'un pendule simple dÃ©pend principalement de :",
     'physique','TENASOSP',2025,['sa masse','son amplitude','sa couleur','sa longueur'],'D',
-    'T = 2π√(l/g) : la période ne dépend que de la longueur l et de g');
+    'T = 2Ï€âˆš(l/g) : la pÃ©riode ne dÃ©pend que de la longueur l et de g');
 
 // BIOLOGIE TENASOSP (10)
 addQ($M,$inserted,$skipped,"L'ADN se trouve principalement dans :",
     'biologie','TENASOSP',2025,['la mitochondrie','le cytoplasme','la membrane','le noyau'],'D',
-    'Le noyau contient l\'ADN organisé en chromosomes');
+    'Le noyau contient l\'ADN organisÃ© en chromosomes');
 
-addQ($M,$inserted,$skipped,"La respiration cellulaire aérobie produit :",
-    'biologie','TENASOSP',2025,['O₂ et H₂O','O₂ et CO₂','H₂O et glucose','CO₂ et H₂O'],'D',
-    'Glucose + O₂ → CO₂ + H₂O + énergie (ATP)');
+addQ($M,$inserted,$skipped,"La respiration cellulaire aÃ©robie produit :",
+    'biologie','TENASOSP',2025,['Oâ‚‚ et Hâ‚‚O','Oâ‚‚ et COâ‚‚','Hâ‚‚O et glucose','COâ‚‚ et Hâ‚‚O'],'D',
+    'Glucose + Oâ‚‚ â†’ COâ‚‚ + Hâ‚‚O + Ã©nergie (ATP)');
 
-addQ($M,$inserted,$skipped,"Le nombre de chromosomes dans une cellule humaine diploïde est :",
+addQ($M,$inserted,$skipped,"Le nombre de chromosomes dans une cellule humaine diploÃ¯de est :",
     'biologie','TENASOSP',2025,['23','44','48','46'],'D',
     '2n = 46 chromosomes (23 paires) dans les cellules somatiques humaines');
 
 addQ($M,$inserted,$skipped,"La mitose produit :",
-    'biologie','TENASOSP',2025,['4 cellules haploïdes','4 cellules diploïdes','2 cellules haploïdes','2 cellules diploïdes identiques'],'D',
-    'La mitose est une division cellulaire produisant 2 cellules filles génétiquement identiques à la cellule mère');
+    'biologie','TENASOSP',2025,['4 cellules haploÃ¯des','4 cellules diploÃ¯des','2 cellules haploÃ¯des','2 cellules diploÃ¯des identiques'],'D',
+    'La mitose est une division cellulaire produisant 2 cellules filles gÃ©nÃ©tiquement identiques Ã  la cellule mÃ¨re');
 
 addQ($M,$inserted,$skipped,"L'enzyme qui catalyse la digestion de l'amidon est :",
-    'biologie','TENASOSP',2025,['la lipase','la pepsine','la protéase','l\'amylase'],'D',
-    'L\'amylase (salivaire et pancréatique) hydrolyse l\'amidon en maltose');
+    'biologie','TENASOSP',2025,['la lipase','la pepsine','la protÃ©ase','l\'amylase'],'D',
+    'L\'amylase (salivaire et pancrÃ©atique) hydrolyse l\'amidon en maltose');
 
 addQ($M,$inserted,$skipped,"Le groupe sanguin O est donneur universel car ses globules rouges :",
-    'biologie','TENASOSP',2025,['contiennent les deux antigènes A et B','contiennent l\'antigène O','ont plus d\'hémoglobine','ne portent ni antigène A ni antigène B'],'D',
-    'L\'absence d\'antigènes A et B évite les réactions immunitaires chez le receveur');
+    'biologie','TENASOSP',2025,['contiennent les deux antigÃ¨nes A et B','contiennent l\'antigÃ¨ne O','ont plus d\'hÃ©moglobine','ne portent ni antigÃ¨ne A ni antigÃ¨ne B'],'D',
+    'L\'absence d\'antigÃ¨nes A et B Ã©vite les rÃ©actions immunitaires chez le receveur');
 
-addQ($M,$inserted,$skipped,"L'insuline est sécrétée par :",
-    'biologie','TENASOSP',2025,['le foie','les reins','la thyroïde','le pancréas'],'D',
-    'Les cellules bêta des îlots de Langerhans du pancréas sécrètent l\'insuline');
+addQ($M,$inserted,$skipped,"L'insuline est sÃ©crÃ©tÃ©e par :",
+    'biologie','TENASOSP',2025,['le foie','les reins','la thyroÃ¯de','le pancrÃ©as'],'D',
+    'Les cellules bÃªta des Ã®lots de Langerhans du pancrÃ©as sÃ©crÃ¨tent l\'insuline');
 
-addQ($M,$inserted,$skipped,"La membrane plasmique contrôle :",
-    'biologie','TENASOSP',2025,['la synthèse d\'ADN','la production d\'énergie','la division cellulaire','les échanges entre la cellule et son milieu'],'D',
-    'La membrane est sélectivement perméable et régule les entrées/sorties');
+addQ($M,$inserted,$skipped,"La membrane plasmique contrÃ´le :",
+    'biologie','TENASOSP',2025,['la synthÃ¨se d\'ADN','la production d\'Ã©nergie','la division cellulaire','les Ã©changes entre la cellule et son milieu'],'D',
+    'La membrane est sÃ©lectivement permÃ©able et rÃ©gule les entrÃ©es/sorties');
 
-addQ($M,$inserted,$skipped,"La méiose est une division qui produit :",
-    'biologie','TENASOSP',2025,['2 cellules diploïdes','8 cellules haploïdes','2 cellules haploïdes','4 cellules haploïdes'],'D',
-    'La méiose comporte 2 divisions successives et produit 4 cellules haploïdes (gamètes)');
+addQ($M,$inserted,$skipped,"La mÃ©iose est une division qui produit :",
+    'biologie','TENASOSP',2025,['2 cellules diploÃ¯des','8 cellules haploÃ¯des','2 cellules haploÃ¯des','4 cellules haploÃ¯des'],'D',
+    'La mÃ©iose comporte 2 divisions successives et produit 4 cellules haploÃ¯des (gamÃ¨tes)');
 
-addQ($M,$inserted,$skipped,"Les virus sont des entités :",
-    'biologie','TENASOSP',2025,['procaryotes','eucaryotes','bactériennes','acellulaires'],'D',
-    'Les virus ne possèdent pas de structure cellulaire propre, ils sont acellulaires');
+addQ($M,$inserted,$skipped,"Les virus sont des entitÃ©s :",
+    'biologie','TENASOSP',2025,['procaryotes','eucaryotes','bactÃ©riennes','acellulaires'],'D',
+    'Les virus ne possÃ¨dent pas de structure cellulaire propre, ils sont acellulaires');
 
 // ============================================================
-// EXAMEN D'ÉTAT (40 questions)
+// EXAMEN D'Ã‰TAT (40 questions)
 // ============================================================
 
 // MATHS EXAMEN_ETAT (10)
-addQ($M,$inserted,$skipped,"La dérivée de f(x) = e^(2x) est :",
+addQ($M,$inserted,$skipped,"La dÃ©rivÃ©e de f(x) = e^(2x) est :",
     'maths','EXAMEN_ETAT',2025,['e^(2x)','e^(2x)/2','2xe^x','2e^(2x)'],'D',
-    'Règle de dérivation des fonctions composées : f\'(x) = 2·e^(2x)');
+    'RÃ¨gle de dÃ©rivation des fonctions composÃ©es : f\'(x) = 2Â·e^(2x)');
 
-addQ($M,$inserted,$skipped,"∫₀¹ x² dx = ?",
+addQ($M,$inserted,$skipped,"âˆ«â‚€Â¹ xÂ² dx = ?",
     'maths','EXAMEN_ETAT',2025,['1','1/2','2/3','1/3'],'D',
-    '[x³/3]₀¹ = 1/3 − 0 = 1/3');
+    '[xÂ³/3]â‚€Â¹ = 1/3 âˆ’ 0 = 1/3');
 
-addQ($M,$inserted,$skipped,"ln(e³) = ?",
-    'maths','EXAMEN_ETAT',2025,['3e','e³','1','3'],'D',
-    'ln et exp sont des fonctions réciproques → ln(e³) = 3');
+addQ($M,$inserted,$skipped,"ln(eÂ³) = ?",
+    'maths','EXAMEN_ETAT',2025,['3e','eÂ³','1','3'],'D',
+    'ln et exp sont des fonctions rÃ©ciproques â†’ ln(eÂ³) = 3');
 
-addQ($M,$inserted,$skipped,"La somme d'une progression géométrique de raison 2, premier terme 1, sur 5 termes est :",
+addQ($M,$inserted,$skipped,"La somme d'une progression gÃ©omÃ©trique de raison 2, premier terme 1, sur 5 termes est :",
     'maths','EXAMEN_ETAT',2025,['15','63','32','31'],'D',
-    'S = 1+2+4+8+16 = 31. Formule : Sn = a(rⁿ−1)/(r−1) = 1×(32−1)/1 = 31');
+    'S = 1+2+4+8+16 = 31. Formule : Sn = a(râ¿âˆ’1)/(râˆ’1) = 1Ã—(32âˆ’1)/1 = 31');
 
-addQ($M,$inserted,$skipped,"Le déterminant de la matrice [[1, 2], [3, 4]] est :",
-    'maths','EXAMEN_ETAT',2025,['2','−4','10','−2'],'D',
-    'det = 1×4 − 2×3 = 4 − 6 = −2');
+addQ($M,$inserted,$skipped,"Le dÃ©terminant de la matrice [[1, 2], [3, 4]] est :",
+    'maths','EXAMEN_ETAT',2025,['2','âˆ’4','10','âˆ’2'],'D',
+    'det = 1Ã—4 âˆ’ 2Ã—3 = 4 âˆ’ 6 = âˆ’2');
 
-addQ($M,$inserted,$skipped,"La tangente à la courbe y = x² au point (2, 4) a pour équation :",
-    'maths','EXAMEN_ETAT',2025,['y = 2x','y = 4x','y = 4x + 4','y = 4x − 4'],'D',
-    'f\'(2) = 2×2 = 4 (pente). Équation : y − 4 = 4(x − 2) → y = 4x − 4');
+addQ($M,$inserted,$skipped,"La tangente Ã  la courbe y = xÂ² au point (2, 4) a pour Ã©quation :",
+    'maths','EXAMEN_ETAT',2025,['y = 2x','y = 4x','y = 4x + 4','y = 4x âˆ’ 4'],'D',
+    'f\'(2) = 2Ã—2 = 4 (pente). Ã‰quation : y âˆ’ 4 = 4(x âˆ’ 2) â†’ y = 4x âˆ’ 4');
 
-addQ($M,$inserted,$skipped,"P(X = k) = C(n,k)·pᵏ·(1−p)^(n−k) est la loi :",
-    'maths','EXAMEN_ETAT',2025,['de Poisson','normale','géométrique','binomiale'],'D',
+addQ($M,$inserted,$skipped,"P(X = k) = C(n,k)Â·páµÂ·(1âˆ’p)^(nâˆ’k) est la loi :",
+    'maths','EXAMEN_ETAT',2025,['de Poisson','normale','gÃ©omÃ©trique','binomiale'],'D',
     'C\'est la formule de la loi binomiale B(n, p)');
 
-addQ($M,$inserted,$skipped,"L'ensemble des solutions de |2x − 1| < 3 est :",
-    'maths','EXAMEN_ETAT',2025,['[−1, 2]',']−∞, −1[ ∪ ]2, +∞[',']1, 3[',']−1, 2['],'D',
-    '−3 < 2x−1 < 3 → −2 < 2x < 4 → −1 < x < 2');
+addQ($M,$inserted,$skipped,"L'ensemble des solutions de |2x âˆ’ 1| < 3 est :",
+    'maths','EXAMEN_ETAT',2025,['[âˆ’1, 2]',']âˆ’âˆž, âˆ’1[ âˆª ]2, +âˆž[',']1, 3[',']âˆ’1, 2['],'D',
+    'âˆ’3 < 2xâˆ’1 < 3 â†’ âˆ’2 < 2x < 4 â†’ âˆ’1 < x < 2');
 
-addQ($M,$inserted,$skipped,"Si les vecteurs (1, 2) et (k, −3) sont perpendiculaires, alors k vaut :",
-    'maths','EXAMEN_ETAT',2025,['−6','3','−3','6'],'D',
-    'Produit scalaire nul : 1·k + 2·(−3) = 0 → k = 6');
+addQ($M,$inserted,$skipped,"Si les vecteurs (1, 2) et (k, âˆ’3) sont perpendiculaires, alors k vaut :",
+    'maths','EXAMEN_ETAT',2025,['âˆ’6','3','âˆ’3','6'],'D',
+    'Produit scalaire nul : 1Â·k + 2Â·(âˆ’3) = 0 â†’ k = 6');
 
-addQ($M,$inserted,$skipped,"La solution générale de l'équation différentielle y' = 3y est :",
-    'maths','EXAMEN_ETAT',2025,['y = Ce^(x/3)','y = 3Cx','y = C·ln(x)','y = Ce^(3x)'],'D',
-    'y\'/y = 3 → ln|y| = 3x + K → y = Ce^(3x)');
+addQ($M,$inserted,$skipped,"La solution gÃ©nÃ©rale de l'Ã©quation diffÃ©rentielle y' = 3y est :",
+    'maths','EXAMEN_ETAT',2025,['y = Ce^(x/3)','y = 3Cx','y = CÂ·ln(x)','y = Ce^(3x)'],'D',
+    'y\'/y = 3 â†’ ln|y| = 3x + K â†’ y = Ce^(3x)');
 
-// FRANÇAIS EXAMEN_ETAT (10)
-addQ($M,$inserted,$skipped,"La figure de style dans « La vie est un long fleuve tranquille » est :",
-    'francais','EXAMEN_ETAT',2025,['une métonymie','une comparaison','une hyperbole','une métaphore'],'D',
-    'Assimilation sans outil comparatif de la vie à un fleuve → métaphore');
+// FRANÃ‡AIS EXAMEN_ETAT (10)
+addQ($M,$inserted,$skipped,"La figure de style dans Â« La vie est un long fleuve tranquille Â» est :",
+    'francais','EXAMEN_ETAT',2025,['une mÃ©tonymie','une comparaison','une hyperbole','une mÃ©taphore'],'D',
+    'Assimilation sans outil comparatif de la vie Ã  un fleuve â†’ mÃ©taphore');
 
-addQ($M,$inserted,$skipped,"L'auteur des « Misérables » est :",
-    'francais','EXAMEN_ETAT',2025,['Émile Zola','Honoré de Balzac','Gustave Flaubert','Victor Hugo'],'D',
-    'Les Misérables (1862) est l\'œuvre majeure de Victor Hugo');
+addQ($M,$inserted,$skipped,"L'auteur des Â« MisÃ©rables Â» est :",
+    'francais','EXAMEN_ETAT',2025,['Ã‰mile Zola','HonorÃ© de Balzac','Gustave Flaubert','Victor Hugo'],'D',
+    'Les MisÃ©rables (1862) est l\'Å“uvre majeure de Victor Hugo');
 
-addQ($M,$inserted,$skipped,"La proposition subordonnée relative dans « L'homme qui rit est heureux » est :",
+addQ($M,$inserted,$skipped,"La proposition subordonnÃ©e relative dans Â« L'homme qui rit est heureux Â» est :",
     'francais','EXAMEN_ETAT',2025,['L\'homme','est heureux','L\'homme qui rit','qui rit'],'D',
-    'La relative est introduite par le pronom relatif « qui » et qualifie « l\'homme »');
+    'La relative est introduite par le pronom relatif Â« qui Â» et qualifie Â« l\'homme Â»');
 
-addQ($M,$inserted,$skipped,"Le mouvement littéraire du XIXe siècle qui valorise la nature et les sentiments est :",
-    'francais','EXAMEN_ETAT',2025,['le classicisme','le surréalisme','le naturalisme','le romantisme'],'D',
-    'Le romantisme (1800-1850) exalte la sensibilité, la nature et l\'imagination');
+addQ($M,$inserted,$skipped,"Le mouvement littÃ©raire du XIXe siÃ¨cle qui valorise la nature et les sentiments est :",
+    'francais','EXAMEN_ETAT',2025,['le classicisme','le surrÃ©alisme','le naturalisme','le romantisme'],'D',
+    'Le romantisme (1800-1850) exalte la sensibilitÃ©, la nature et l\'imagination');
 
-addQ($M,$inserted,$skipped,'Le discours indirect de « Il dit : "Je viendrai demain" » est :',
+addQ($M,$inserted,$skipped,'Le discours indirect de Â« Il dit : "Je viendrai demain" Â» est :',
     'francais','EXAMEN_ETAT',2025,["Il dit qu'il vient demain","Il dit qu'il est venu","Il dit qu'il viendra demain","Il dit qu'il viendrait le lendemain"],'D',
-    'Concordance des temps : venir au futur → conditionnel. Demain → le lendemain');
+    'Concordance des temps : venir au futur â†’ conditionnel. Demain â†’ le lendemain');
 
 addQ($M,$inserted,$skipped,"Une anaphore est :",
-    'francais','EXAMEN_ETAT',2025,['la répétition d\'un mot en fin de vers','l\'omission d\'un mot','l\'inversion syntaxique','la répétition d\'un mot ou groupe en début de phrase/vers'],'D',
-    'Ex: « Je veux la paix, je veux la justice, je veux la liberté »');
+    'francais','EXAMEN_ETAT',2025,['la rÃ©pÃ©tition d\'un mot en fin de vers','l\'omission d\'un mot','l\'inversion syntaxique','la rÃ©pÃ©tition d\'un mot ou groupe en dÃ©but de phrase/vers'],'D',
+    'Ex: Â« Je veux la paix, je veux la justice, je veux la libertÃ© Â»');
 
-addQ($M,$inserted,$skipped,"« Les sanglots longs des violons de l'automne » est extrait de :",
-    'francais','EXAMEN_ETAT',2025,['Rimbaud, Le Bateau ivre','Baudelaire, Spleen','Hugo, Demain dès l\'aube','Verlaine, Chanson d\'automne'],'D',
-    'Ce vers ouvre le poème « Chanson d\'automne » de Paul Verlaine (1866)');
+addQ($M,$inserted,$skipped,"Â« Les sanglots longs des violons de l'automne Â» est extrait de :",
+    'francais','EXAMEN_ETAT',2025,['Rimbaud, Le Bateau ivre','Baudelaire, Spleen','Hugo, Demain dÃ¨s l\'aube','Verlaine, Chanson d\'automne'],'D',
+    'Ce vers ouvre le poÃ¨me Â« Chanson d\'automne Â» de Paul Verlaine (1866)');
 
-addQ($M,$inserted,$skipped,"Le futur antérieur de « avoir » à la 1ère personne du singulier est :",
+addQ($M,$inserted,$skipped,"Le futur antÃ©rieur de Â« avoir Â» Ã  la 1Ã¨re personne du singulier est :",
     'francais','EXAMEN_ETAT',2025,['j\'avais eu','j\'aurais eu','j\'ai eu','j\'aurai eu'],'D',
-    'Futur antérieur = auxiliaire au futur simple + participe passé : j\'aurai eu');
+    'Futur antÃ©rieur = auxiliaire au futur simple + participe passÃ© : j\'aurai eu');
 
-addQ($M,$inserted,$skipped,"L'hyperbole est une figure de style qui consiste à :",
-    'francais','EXAMEN_ETAT',2025,['atténuer la réalité','comparer deux éléments','exagérer une réalité pour insister','inverser l\'ordre des mots'],'C',
-    'Ex: « Je t\'ai dit mille fois ! » → exagération volontaire pour renforcer l\'effet');
+addQ($M,$inserted,$skipped,"L'hyperbole est une figure de style qui consiste Ã  :",
+    'francais','EXAMEN_ETAT',2025,['attÃ©nuer la rÃ©alitÃ©','comparer deux Ã©lÃ©ments','exagÃ©rer une rÃ©alitÃ© pour insister','inverser l\'ordre des mots'],'C',
+    'Ex: Â« Je t\'ai dit mille fois ! Â» â†’ exagÃ©ration volontaire pour renforcer l\'effet');
 
-addQ($M,$inserted,$skipped,"Dans « Il pleuvait des cordes », le verbe « pleuvait des cordes » est :",
-    'francais','EXAMEN_ETAT',2025,['une litote','une périphrase','une allégorie','une métaphore lexicalisée'],'D',
-    'Expression figée décrivant une forte pluie → métaphore lexicalisée (figée dans la langue)');
+addQ($M,$inserted,$skipped,"Dans Â« Il pleuvait des cordes Â», le verbe Â« pleuvait des cordes Â» est :",
+    'francais','EXAMEN_ETAT',2025,['une litote','une pÃ©riphrase','une allÃ©gorie','une mÃ©taphore lexicalisÃ©e'],'D',
+    'Expression figÃ©e dÃ©crivant une forte pluie â†’ mÃ©taphore lexicalisÃ©e (figÃ©e dans la langue)');
 
-// HISTOIRE-GÉOGRAPHIE EXAMEN_ETAT (10)
-addQ($M,$inserted,$skipped,"La Conférence de Berlin (1884-1885) a principalement :",
-    'histgeo','EXAMEN_ETAT',2025,['mis fin à l\'esclavage','créé la Société des Nations','établi les frontières européennes','partagé l\'Afrique entre puissances européennes'],'D',
-    'Organisée par Bismarck, elle a fixé les règles du partage de l\'Afrique');
+// HISTOIRE-GÃ‰OGRAPHIE EXAMEN_ETAT (10)
+addQ($M,$inserted,$skipped,"La ConfÃ©rence de Berlin (1884-1885) a principalement :",
+    'histgeo','EXAMEN_ETAT',2025,['mis fin Ã  l\'esclavage','crÃ©Ã© la SociÃ©tÃ© des Nations','Ã©tabli les frontiÃ¨res europÃ©ennes','partagÃ© l\'Afrique entre puissances europÃ©ennes'],'D',
+    'OrganisÃ©e par Bismarck, elle a fixÃ© les rÃ¨gles du partage de l\'Afrique');
 
-addQ($M,$inserted,$skipped,"L'indépendance du Congo-Kinshasa a eu lieu le :",
+addQ($M,$inserted,$skipped,"L'indÃ©pendance du Congo-Kinshasa a eu lieu le :",
     'histgeo','EXAMEN_ETAT',2025,['1er juillet 1960','30 juin 1962','30 juin 1958','30 juin 1960'],'D',
-    'Le 30 juin 1960, le Congo belge accède à l\'indépendance sous Joseph Kasavubu');
+    'Le 30 juin 1960, le Congo belge accÃ¨de Ã  l\'indÃ©pendance sous Joseph Kasavubu');
 
-addQ($M,$inserted,$skipped,"Le fleuve Congo est le deuxième fleuve du monde par :",
-    'histgeo','EXAMEN_ETAT',2025,['sa longueur','son bassin','sa largeur','son débit'],'D',
-    'Le Congo a un débit moyen de ~41 000 m³/s, second après l\'Amazone');
+addQ($M,$inserted,$skipped,"Le fleuve Congo est le deuxiÃ¨me fleuve du monde par :",
+    'histgeo','EXAMEN_ETAT',2025,['sa longueur','son bassin','sa largeur','son dÃ©bit'],'D',
+    'Le Congo a un dÃ©bit moyen de ~41 000 mÂ³/s, second aprÃ¨s l\'Amazone');
 
-addQ($M,$inserted,$skipped,"La Première Guerre mondiale a débuté en :",
+addQ($M,$inserted,$skipped,"La PremiÃ¨re Guerre mondiale a dÃ©butÃ© en :",
     'histgeo','EXAMEN_ETAT',2025,['1910','1918','1920','1914'],'D',
-    'L\'assassinat de l\'archiduc François-Ferdinand le 28 juin 1914 déclenche la guerre');
+    'L\'assassinat de l\'archiduc FranÃ§ois-Ferdinand le 28 juin 1914 dÃ©clenche la guerre');
 
-addQ($M,$inserted,$skipped,"L'ONU a été fondée en :",
+addQ($M,$inserted,$skipped,"L'ONU a Ã©tÃ© fondÃ©e en :",
     'histgeo','EXAMEN_ETAT',2025,['1919','1939','1950','1945'],'D',
-    'La Charte des Nations Unies est signée à San Francisco le 26 juin 1945');
+    'La Charte des Nations Unies est signÃ©e Ã  San Francisco le 26 juin 1945');
 
 addQ($M,$inserted,$skipped,"La capitale administrative de l'Afrique du Sud est :",
     'histgeo','EXAMEN_ETAT',2025,['Johannesburg','Le Cap','Durban','Pretoria'],'D',
-    'L\'Afrique du Sud a 3 capitales : Pretoria (administrative), Le Cap (législative), Bloemfontein (judiciaire)');
+    'L\'Afrique du Sud a 3 capitales : Pretoria (administrative), Le Cap (lÃ©gislative), Bloemfontein (judiciaire)');
 
-addQ($M,$inserted,$skipped,"La population mondiale est estimée à environ :",
+addQ($M,$inserted,$skipped,"La population mondiale est estimÃ©e Ã  environ :",
     'histgeo','EXAMEN_ETAT',2025,['6 milliards','7 milliards','9 milliards','8 milliards'],'D',
     'En 2022-2024 la population mondiale a franchi le cap des 8 milliards');
 
 addQ($M,$inserted,$skipped,"Kinshasa se trouve sur le fleuve :",
-    'histgeo','EXAMEN_ETAT',2025,['Kasaï','Ubangi','Lualaba','Congo'],'D',
-    'Kinshasa est bâtie sur la rive gauche du fleuve Congo, face à Brazzaville');
+    'histgeo','EXAMEN_ETAT',2025,['KasaÃ¯','Ubangi','Lualaba','Congo'],'D',
+    'Kinshasa est bÃ¢tie sur la rive gauche du fleuve Congo, face Ã  Brazzaville');
 
-addQ($M,$inserted,$skipped,"La décolonisation africaine a majoritairement eu lieu dans :",
-    'histgeo','EXAMEN_ETAT',2025,['les années 1940','les années 1930','les années 1970','les années 1950-1960'],'D',
-    'La vague des indépendances africaines se concentre dans les années 1957-1965 (« Année de l\'Afrique » = 1960)');
+addQ($M,$inserted,$skipped,"La dÃ©colonisation africaine a majoritairement eu lieu dans :",
+    'histgeo','EXAMEN_ETAT',2025,['les annÃ©es 1940','les annÃ©es 1930','les annÃ©es 1970','les annÃ©es 1950-1960'],'D',
+    'La vague des indÃ©pendances africaines se concentre dans les annÃ©es 1957-1965 (Â« AnnÃ©e de l\'Afrique Â» = 1960)');
 
-addQ($M,$inserted,$skipped,"L'Union Africaine (UA) a remplacé l'Organisation de l'Unité Africaine (OUA) en :",
+addQ($M,$inserted,$skipped,"L'Union Africaine (UA) a remplacÃ© l'Organisation de l'UnitÃ© Africaine (OUA) en :",
     'histgeo','EXAMEN_ETAT',2025,['1999','2000','2005','2002'],'D',
-    'L\'UA a été officiellement créée lors du sommet de Durban le 9 juillet 2002');
+    'L\'UA a Ã©tÃ© officiellement crÃ©Ã©e lors du sommet de Durban le 9 juillet 2002');
 
 // ANGLAIS EXAMEN_ETAT (10)
 addQ($M,$inserted,$skipped,"The passive voice of 'She writes a letter' is:",
@@ -560,5 +565,6 @@ addQ($M,$inserted,$skipped,"PHOTOSYNTHESIS broken into Greek roots means:",
     'anglais','EXAMEN_ETAT',2025,['light + action','dark + growth','sun + process','light + putting together'],'D',
     'Photo = light (Greek: phos/photos), synthesis = putting together (Greek: synthesis)');
 
-echo "<h2 style='font-family:sans-serif;color:#007A5E'>✓ Terminé</h2>";
-echo "<p style='font-family:sans-serif'><strong>$inserted</strong> questions insérées, <strong>$skipped</strong> doublons ignorés.</p>";
+echo "<h2 style='font-family:sans-serif;color:#007A5E'>âœ“ TerminÃ©</h2>";
+echo "<p style='font-family:sans-serif'><strong>$inserted</strong> questions insÃ©rÃ©es, <strong>$skipped</strong> doublons ignorÃ©s.</p>";
+

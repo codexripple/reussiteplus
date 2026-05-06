@@ -1,4 +1,9 @@
-<?php
+﻿<?php
+
+require_once __DIR__ . '/includes/config.php';
+require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/auth.php';
+require_admin(); // Script restreint aux admins
 require 'includes/config.php';
 require 'includes/db.php';
 
@@ -11,3 +16,4 @@ echo 'TOTAL: ' . $total['n'] . "\n\n";
 $byMat = dbAll('SELECT m.nom, qb.status, COUNT(*) as n FROM question_bank qb LEFT JOIN matieres m ON qb.matiere_id=m.id GROUP BY m.nom, qb.status ORDER BY m.nom, qb.status');
 echo "Par matiere+statut:\n";
 foreach($byMat as $r) echo '  ' . ($r['nom']??'NULL') . ' [' . $r['status'] . ']: ' . $r['n'] . "\n";
+
