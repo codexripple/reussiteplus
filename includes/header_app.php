@@ -224,6 +224,10 @@ if (is_admin()) {
       <div class="nav-icon adm-icon"><i data-lucide="folder-open"></i></div>
       <span class="nav-label">Archives</span>
     </a>
+    <a href="/reussiteplus/admin/stats_matieres.php" class="nav-item adm-nav <?= $pageActive === 'admin_stats_matieres' ? 'active adm-active' : '' ?>">
+      <div class="nav-icon adm-icon"><i data-lucide="bar-chart-2"></i></div>
+      <span class="nav-label">Stats matières</span>
+    </a>
     <a href="/reussiteplus/questions.php" class="nav-item adm-nav <?= $pageActive === 'admin_questions' ? 'active adm-active' : '' ?>">
       <div class="nav-icon adm-icon"><i data-lucide="help-circle"></i></div>
       <span class="nav-label">Questions</span>
@@ -324,3 +328,7 @@ if (is_admin()) {
   <!-- PAGE CONTENT -->
   <main class="page-content">
     <?= show_flash() ?>
+  </main>
+</div>
+</body>
+</html>

@@ -4,6 +4,7 @@
 // ============================================================
 
 require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/mailer.php';
 
 // ── Connexion ──────────────────────────────────────────────
 function auth_login(string $email, string $password): array {
@@ -203,21 +204,22 @@ function auth_request_password_reset(string $email): array {
               . '&email=' . urlencode($email);
 
     // ── Envoi email ──────────────────────────────────────────
-    // En production : utiliser un service SMTP (PHPMailer, SendGrid, etc.)
-    // En développement (localhost) : on expose le lien directement
     $emailSent = false;
+    $subject   = 'Réinitialisation de votre mot de passe — RÉUSSITE+';
+    $btnHtml   = email_btn($resetUrl, 'Créer un nouveau mot de passe');
+    $html      = email_template(
+        'Réinitialisation de mot de passe',
+        "<p style=\"margin:0 0 16px;font-size:15px;color:#4A5568\">Bonjour <strong>{$user['prenom']}</strong>,</p>"
+        . "<p style=\"margin:0 0 16px;font-size:15px;color:#4A5568\">Nous avons reçu une demande de réinitialisation de mot de passe pour votre compte RÉUSSITE+.</p>"
+        . $btnHtml
+        . "<p style=\"margin:0;font-size:13px;color:#A0AEC0\">Ce lien est valable <strong>1 heure</strong>. Si vous n'avez pas fait cette demande, ignorez cet email — votre mot de passe restera inchangé.</p>",
+        'Réinitialisez votre mot de passe RÉUSSITE+ en un clic.'
+    );
+    $text  = "Bonjour {$user['prenom']},\n\nCliquez sur ce lien pour créer un nouveau mot de passe :\n"
+           . $resetUrl . "\n\nCe lien est valable 1 heure.\n\n— L'équipe RÉUSSITE+";
+
     if (APP_ENV !== 'development') {
-        $subject = 'Réinitialisation de votre mot de passe — RÉUSSITE+';
-        $body    = "Bonjour {$user['prenom']},\n\n"
-                 . "Cliquez sur ce lien pour créer un nouveau mot de passe :\n"
-                 . $resetUrl . "\n\n"
-                 . "Ce lien est valable 1 heure.\n\n"
-                 . "Si vous n'avez pas fait cette demande, ignorez cet email.\n\n"
-                 . "— L'équipe RÉUSSITE+";
-        $headers  = "From: noreply@reussiteplus.cd\r\n";
-        $headers .= "Reply-To: noreply@reussiteplus.cd\r\n";
-        $headers .= "X-Mailer: PHP/" . PHP_VERSION;
-        $emailSent = @mail($user['email'], $subject, $body, $headers);
+        $emailSent = send_email($user['email'], $user['prenom'] . ' ' . $user['nom'], $subject, $html, $text);
     }
 
     return [

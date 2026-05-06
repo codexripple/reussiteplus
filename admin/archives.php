@@ -11,6 +11,31 @@ $user = require_admin();
 $errors  = [];
 $success = '';
 
+// ── Helper upload PDF ──────────────────────────────────────
+function upload_pdf(string $field, string $prefix): ?string {
+    if (empty($_FILES[$field]['name'])) return null;
+    $file = $_FILES[$field];
+    if ($file['error'] !== UPLOAD_ERR_OK) return null;
+
+    // Vérification MIME réelle
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mime  = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+    if ($mime !== 'application/pdf') return null;
+
+    // Taille max 25 Mo
+    if ($file['size'] > 25 * 1024 * 1024) return null;
+
+    $dir = rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/reussiteplus/uploads/archives/';
+    if (!is_dir($dir)) mkdir($dir, 0755, true);
+
+    $name = $prefix . '-' . bin2hex(random_bytes(8)) . '.pdf';
+    if (move_uploaded_file($file['tmp_name'], $dir . $name)) {
+        return APP_URL . '/uploads/archives/' . $name;
+    }
+    return null;
+}
+
 // Créer / éditer une archive
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
     $action = $_POST['action'] ?? '';
@@ -19,38 +44,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
         $titre       = trim($_POST['titre'] ?? '');
         $annee       = (int)($_POST['annee'] ?? date('Y'));
         $examType    = $_POST['exam_type'] ?? '';
+        $sessionType = $_POST['session_type'] ?? 'ORDINAIRE';
         $matiereId   = $_POST['matiere_id'] ?? null;
+        $provinceId  = trim($_POST['province_id'] ?? '') ?: null;
         $description = trim($_POST['description'] ?? '');
         $urlSujet    = trim($_POST['sujet_url'] ?? '');
         $urlCorrige  = trim($_POST['corrige_url'] ?? '');
+        $sujetPages  = (int)($_POST['sujet_pages'] ?? 0) ?: null;
+        $corrigePages= (int)($_POST['corrige_pages'] ?? 0) ?: null;
+        $source      = trim($_POST['source'] ?? '');
         $premium     = isset($_POST['premium_only']) ? 1 : 0;
+        $verifie     = isset($_POST['verifie']) ? 1 : 0;
+        $status      = $_POST['status'] ?? 'PUBLIE';
         $editId      = $_POST['edit_id'] ?? null;
 
-        $validTypes = ['ENAFEP', 'TENASOSP', 'EXAMEN_ETAT', 'DIOCESAIN', 'AUTRE'];
-        if (!$titre)                              $errors[] = 'Titre requis.';
-        if ($annee < 1990 || $annee > 2100)       $errors[] = 'Année invalide.';
-        if (!in_array($examType, $validTypes))    $errors[] = 'Type d\'examen invalide.';
-        if (!$matiereId)                          $errors[] = 'Matière requise.';
+        // Upload PDF sujet
+        $uploadedSujet   = upload_pdf('sujet_file', 'sujet');
+        $uploadedCorrige = upload_pdf('corrige_file', 'corrige');
+        if ($uploadedSujet)   $urlSujet   = $uploadedSujet;
+        if ($uploadedCorrige) $urlCorrige = $uploadedCorrige;
+
+        $validTypes    = ['ENAFEP', 'TENASOSP', 'EXAMEN_ETAT', 'DIOCESAIN', 'AUTRE'];
+        $validSessions = ['ORDINAIRE', 'RATTRAPAGE', 'SPECIALE'];
+        $validStatuts  = ['BROUILLON', 'REVISION', 'PUBLIE', 'ARCHIVE'];
+        if (!$titre)                                    $errors[] = 'Titre requis.';
+        if ($annee < 1990 || $annee > 2100)             $errors[] = 'Année invalide.';
+        if (!in_array($examType, $validTypes))          $errors[] = 'Type d\'examen invalide.';
+        if (!in_array($sessionType, $validSessions))    $errors[] = 'Session invalide.';
+        if (!in_array($status, $validStatuts))          $errors[] = 'Statut invalide.';
+        if (!$matiereId)                                $errors[] = 'Matière requise.';
 
         if (!$errors) {
             $data = [
-                'titre'        => $titre,
-                'annee'        => $annee,
-                'exam_type'    => $examType,
-                'matiere_id'   => $matiereId,
-                'description'  => $description,
-                'sujet_url'    => $urlSujet,
-                'corrige_url'  => $urlCorrige,
-                'premium_only' => $premium,
+                'titre'         => $titre,
+                'annee'         => $annee,
+                'exam_type'     => $examType,
+                'session_type'  => $sessionType,
+                'matiere_id'    => $matiereId,
+                'province_id'   => $provinceId,
+                'description'   => $description,
+                'sujet_url'     => $urlSujet,
+                'corrige_url'   => $urlCorrige,
+                'sujet_pages'   => $sujetPages,
+                'corrige_pages' => $corrigePages,
+                'source'        => $source,
+                'premium_only'  => $premium,
+                'verifie'       => $verifie,
+                'status'        => $status,
+                'created_by'    => $user['id'],
             ];
             if ($editId) {
+                unset($data['created_by']); // ne pas écraser à l'édition
                 dbUpdate('archives', $data, 'id', $editId);
                 $success = 'Archive mise à jour.';
                 dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'EDIT_ARCHIVE','details'=>"id=$editId"]);
             } else {
                 $slug = preg_replace('/[^a-z0-9]+/', '-', strtolower(iconv('UTF-8','ASCII//TRANSLIT',$titre))) . '-' . time();
-                $data['slug']   = $slug;
-                $data['status'] = 'PUBLIE';
+                $data['slug'] = $slug;
                 dbInsert('archives', $data);
                 $success = 'Archive créée avec succès.';
                 dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'CREATE_ARCHIVE','details'=>"titre=$titre"]);
@@ -62,6 +112,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
             dbQuery("DELETE FROM archives WHERE id=?", [$delId]);
             dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'DELETE_ARCHIVE','details'=>"id=$delId"]);
             $success = 'Archive supprimée.';
+        }
+    } elseif ($action === 'toggle_status') {
+        $arcId  = $_POST['arc_id'] ?? '';
+        $newSt  = $_POST['new_status'] ?? '';
+        if ($arcId && in_array($newSt, ['PUBLIE','ARCHIVE','BROUILLON'])) {
+            dbQuery("UPDATE archives SET status=? WHERE id=?", [$newSt, $arcId]);
+            $success = 'Statut mis à jour.';
         }
     }
 }
@@ -91,7 +148,8 @@ $archives = dbAll(
     $params
 );
 
-$matieres = dbAll("SELECT id, nom FROM matieres WHERE actif=1 ORDER BY nom ASC");
+$matieres  = dbAll("SELECT id, nom FROM matieres WHERE actif=1 ORDER BY nom ASC");
+$provinces = dbAll("SELECT id, nom FROM provinces ORDER BY nom ASC");
 
 include __DIR__ . '/../includes/header_app.php';
 ?>
@@ -118,15 +176,24 @@ include __DIR__ . '/../includes/header_app.php';
       </div>
       <div class="table-wrap">
         <table class="table">
-          <thead><tr><th>Titre</th><th>Type</th><th>Année</th><th>Matière</th><th>Premium</th><th>DL</th><th></th></tr></thead>
+          <thead><tr><th>Titre</th><th>Type</th><th>Année</th><th>Matière</th><th>Statut</th><th>DL</th><th></th></tr></thead>
           <tbody>
           <?php foreach ($archives as $a): ?>
           <tr>
-            <td style="font-size:13px;font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><?= e($a['titre']) ?></td>
+            <td style="font-size:13px;font-weight:500;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+              <?= e($a['titre']) ?>
+              <?php if ($a['verifie']): ?><i data-lucide="check-circle" style="width:11px;height:11px;stroke:var(--primary);vertical-align:-1px;margin-left:3px"></i><?php endif; ?>
+            </td>
             <td><span class="badge badge-gray" style="font-size:10px"><?= e($a['exam_type']) ?></span></td>
             <td style="font-size:12px"><?= $a['annee'] ?></td>
             <td style="font-size:11px;color:var(--gris-500)"><?= e($a['matiere_nom'] ?? '—') ?></td>
-            <td><?= $a['premium_only'] ? '<span style="color:var(--gold);font-size:11px;font-weight:700">PREMIUM</span>' : '<span style="font-size:12px;color:var(--gris-400)">—</span>' ?></td>
+            <td>
+              <?php
+                $stColors = ['PUBLIE'=>'#007A5E','BROUILLON'=>'#6B7280','REVISION'=>'#C9972A','ARCHIVE'=>'#4A5568'];
+                $sc = $stColors[$a['status']] ?? '#6B7280';
+              ?>
+              <span style="font-size:10px;background:<?= $sc ?>15;color:<?= $sc ?>;padding:2px 7px;border-radius:20px;font-weight:600"><?= e($a['status']) ?></span>
+            </td>
             <td style="font-size:12px"><?= number_format((int)$a['telechargements']) ?></td>
             <td style="white-space:nowrap">
               <a href="?edit=<?= e($a['id']) ?>" class="btn btn-ghost btn-sm">Modifier</a>
@@ -153,9 +220,13 @@ include __DIR__ . '/../includes/header_app.php';
   </div>
 
   <!-- Formulaire création/édition -->
-  <div class="card" style="position:sticky;top:80px">
-    <div class="card-title" style="margin-bottom:20px"><?= $editArchive ? 'Modifier l\'archive' : 'Nouvelle archive' ?></div>
-    <form method="POST">
+  <div class="card" style="position:sticky;top:80px;max-height:calc(100vh - 100px);overflow-y:auto">
+    <div class="card-header" style="position:sticky;top:0;background:var(--blanc);z-index:2">
+      <div class="card-title"><?= $editArchive ? 'Modifier l\'archive' : 'Nouvelle archive' ?></div>
+      <?php if ($editArchive): ?><a href="/reussiteplus/admin/archives.php" class="btn btn-ghost btn-sm">Annuler</a><?php endif; ?>
+    </div>
+    <div style="padding:20px">
+    <form method="POST" enctype="multipart/form-data">
       <?= csrf_field() ?>
       <input type="hidden" name="action" value="save_archive">
       <?php if ($editArchive): ?>
@@ -172,34 +243,96 @@ include __DIR__ . '/../includes/header_app.php';
           <label class="form-label">Type *</label>
           <select class="form-control" name="exam_type" required>
             <?php foreach (['ENAFEP','TENASOSP','EXAMEN_ETAT','DIOCESAIN','AUTRE'] as $t): ?>
-            <option value="<?= $t ?>" <?= ($editArchive['exam_type']??'') === $t || ($_POST['exam_type']??'') === $t ? 'selected' : '' ?>><?= $t ?></option>
+            <option value="<?= $t ?>" <?= ($editArchive['exam_type']??'') === $t ? 'selected' : '' ?>><?= $t ?></option>
             <?php endforeach; ?>
           </select>
         </div>
         <div class="form-group">
-          <label class="form-label">Année *</label>
-          <input class="form-control" type="number" name="annee" min="1990" max="2100" value="<?= $editArchive['annee'] ?? date('Y') ?>" required>
+          <label class="form-label">Session</label>
+          <select class="form-control" name="session_type">
+            <?php foreach (['ORDINAIRE'=>'Ordinaire','RATTRAPAGE'=>'Rattrapage','SPECIALE'=>'Spéciale'] as $v=>$l): ?>
+            <option value="<?= $v ?>" <?= ($editArchive['session_type']??'ORDINAIRE') === $v ? 'selected' : '' ?>><?= $l ?></option>
+            <?php endforeach; ?>
+          </select>
         </div>
       </div>
 
-      <div class="form-group">
-        <label class="form-label">Matière</label>
-        <select class="form-control" name="matiere_id">
-          <option value="">Toutes matières</option>
-          <?php foreach ($matieres as $m): ?>
-          <option value="<?= e($m['id']) ?>" <?= ($editArchive['matiere_id']??'') === $m['id'] ? 'selected' : '' ?>><?= e($m['nom']) ?></option>
-          <?php endforeach; ?>
-        </select>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="form-group">
+          <label class="form-label">Année *</label>
+          <input class="form-control" type="number" name="annee" min="1990" max="2100" value="<?= $editArchive['annee'] ?? date('Y') ?>" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Statut</label>
+          <select class="form-control" name="status">
+            <?php foreach (['PUBLIE'=>'Publié','BROUILLON'=>'Brouillon','REVISION'=>'En révision','ARCHIVE'=>'Archivé'] as $v=>$l): ?>
+            <option value="<?= $v ?>" <?= ($editArchive['status']??'PUBLIE') === $v ? 'selected' : '' ?>><?= $l ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label class="form-label">URL Sujet PDF</label>
-        <input class="form-control" type="url" name="sujet_url" value="<?= e($editArchive['sujet_url'] ?? '') ?>" placeholder="https://...">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="form-group">
+          <label class="form-label">Matière *</label>
+          <select class="form-control" name="matiere_id" required>
+            <option value="">-- choisir --</option>
+            <?php foreach ($matieres as $m): ?>
+            <option value="<?= e($m['id']) ?>" <?= ($editArchive['matiere_id']??'') === $m['id'] ? 'selected' : '' ?>><?= e($m['nom']) ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Province</label>
+          <select class="form-control" name="province_id">
+            <option value="">Nationale</option>
+            <?php foreach ($provinces as $p): ?>
+            <option value="<?= e($p['id']) ?>" <?= ($editArchive['province_id']??'') === $p['id'] ? 'selected' : '' ?>><?= e($p['nom']) ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
       </div>
 
+      <!-- Upload PDF Sujet -->
       <div class="form-group">
-        <label class="form-label">URL Corrigé PDF</label>
-        <input class="form-control" type="url" name="corrige_url" value="<?= e($editArchive['corrige_url'] ?? '') ?>" placeholder="https://...">
+        <label class="form-label"><i data-lucide="file-text" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"></i> Sujet PDF</label>
+        <?php if (!empty($editArchive['sujet_url'])): ?>
+        <div style="font-size:11px;color:var(--primary);margin-bottom:5px;display:flex;align-items:center;gap:5px">
+          <i data-lucide="check-circle" style="width:11px;height:11px"></i>
+          <a href="<?= e($editArchive['sujet_url']) ?>" target="_blank" style="color:var(--primary)">Fichier actuel</a>
+          — remplacer ci-dessous
+        </div>
+        <?php endif; ?>
+        <input class="form-control" type="file" name="sujet_file" accept="application/pdf" style="padding:6px">
+        <div style="font-size:11px;color:var(--gris-400);margin-top:3px">ou URL directe :</div>
+        <input class="form-control" type="url" name="sujet_url" value="<?= e($editArchive['sujet_url'] ?? '') ?>" placeholder="https://..." style="margin-top:5px">
+        <div style="display:flex;gap:8px;margin-top:5px">
+          <div style="flex:1">
+            <label class="form-label" style="font-size:11px">Nb pages</label>
+            <input class="form-control" type="number" name="sujet_pages" min="1" value="<?= $editArchive['sujet_pages'] ?? '' ?>" placeholder="0">
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload PDF Corrigé -->
+      <div class="form-group">
+        <label class="form-label"><i data-lucide="check-square" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"></i> Corrigé PDF</label>
+        <?php if (!empty($editArchive['corrige_url'])): ?>
+        <div style="font-size:11px;color:var(--gold);margin-bottom:5px;display:flex;align-items:center;gap:5px">
+          <i data-lucide="check-circle" style="width:11px;height:11px;stroke:var(--gold)"></i>
+          <a href="<?= e($editArchive['corrige_url']) ?>" target="_blank" style="color:var(--gold)">Fichier actuel</a>
+          — remplacer ci-dessous
+        </div>
+        <?php endif; ?>
+        <input class="form-control" type="file" name="corrige_file" accept="application/pdf" style="padding:6px">
+        <div style="font-size:11px;color:var(--gris-400);margin-top:3px">ou URL directe :</div>
+        <input class="form-control" type="url" name="corrige_url" value="<?= e($editArchive['corrige_url'] ?? '') ?>" placeholder="https://..." style="margin-top:5px">
+        <div style="display:flex;gap:8px;margin-top:5px">
+          <div style="flex:1">
+            <label class="form-label" style="font-size:11px">Nb pages</label>
+            <input class="form-control" type="number" name="corrige_pages" min="1" value="<?= $editArchive['corrige_pages'] ?? '' ?>" placeholder="0">
+          </div>
+        </div>
       </div>
 
       <div class="form-group">
@@ -208,17 +341,24 @@ include __DIR__ . '/../includes/header_app.php';
       </div>
 
       <div class="form-group">
+        <label class="form-label">Source / Référence</label>
+        <input class="form-control" name="source" value="<?= e($editArchive['source'] ?? '') ?>" placeholder="Ex: MEPST, Ministère de l'Éducation…">
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
           <input type="checkbox" name="premium_only" value="1" <?= ($editArchive['premium_only'] ?? 0) ? 'checked' : '' ?>>
           Réserver aux abonnés Premium
         </label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+          <input type="checkbox" name="verifie" value="1" <?= ($editArchive['verifie'] ?? 0) ? 'checked' : '' ?>>
+          <i data-lucide="check-circle" style="width:13px;height:13px;stroke:var(--primary)"></i> Contenu vérifié
+        </label>
       </div>
 
       <button type="submit" class="btn btn-primary btn-full"><?= $editArchive ? 'Mettre à jour' : 'Créer l\'archive' ?></button>
-      <?php if ($editArchive): ?>
-      <a href="/reussiteplus/admin/archives.php" class="btn btn-ghost btn-full" style="margin-top:8px">Annuler</a>
-      <?php endif; ?>
     </form>
+    </div>
   </div>
 </div>
 
