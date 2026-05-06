@@ -117,3 +117,14 @@ CREATE INDEX idx_matieres_actif ON matieres(actif);
 -- (À compléter selon besoins)
 -- ============================================================
 -- ...
+
+-- ============================================================
+-- TABLE : RATE LIMITS (anti-abus)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS rate_limits (
+  id      INT AUTO_INCREMENT PRIMARY KEY,
+  action  VARCHAR(32) NOT NULL,
+  rate_key VARCHAR(64) NOT NULL,
+  ts      INT NOT NULL,
+  INDEX idx_action_key_ts (action, rate_key, ts)
+);

@@ -3,6 +3,7 @@ require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/includes/rate_limit.php';
 
 // Rediriger si déjà connecté
 if (is_logged()) { header('Location: /reussiteplus/dashboard.php'); exit; }
@@ -11,7 +12,10 @@ $errors   = [];
 $redirect = safe_redirect($_GET['redirect'] ?? '/reussiteplus/dashboard.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!csrf_verify()) { $errors[] = 'Token de sécurité invalide. Rechargez la page.'; }
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    if (!rate_limit_check('login', $ip, 5, 600)) {
+        $errors[] = 'Trop de tentatives. Réessayez dans quelques minutes.';
+    } elseif (!csrf_verify()) { $errors[] = 'Token de sécurité invalide. Rechargez la page.'; }
     else {
         $result = auth_login(
             trim($_POST['email'] ?? ''),

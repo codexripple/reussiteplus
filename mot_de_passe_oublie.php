@@ -3,6 +3,7 @@ require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/includes/rate_limit.php';
 
 if (is_logged()) { header('Location: /reussiteplus/dashboard.php'); exit; }
 
@@ -11,7 +12,10 @@ $success = null;
 $devUrl  = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!csrf_verify()) {
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    if (!rate_limit_check('reset', $ip, 3, 1800)) {
+        $errors[] = 'Trop de demandes de réinitialisation. Réessayez plus tard.';
+    } elseif (!csrf_verify()) {
         $errors[] = 'Token de sécurité invalide. Rechargez la page.';
     } else {
         $email  = trim($_POST['email'] ?? '');
