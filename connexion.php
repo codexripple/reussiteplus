@@ -8,7 +8,7 @@ require_once __DIR__ . '/includes/helpers.php';
 if (is_logged()) { header('Location: /reussiteplus/dashboard.php'); exit; }
 
 $errors   = [];
-$redirect = $_GET['redirect'] ?? '/reussiteplus/dashboard.php';
+$redirect = safe_redirect($_GET['redirect'] ?? '/reussiteplus/dashboard.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_verify()) { $errors[] = 'Token de sécurité invalide. Rechargez la page.'; }
