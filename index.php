@@ -504,13 +504,13 @@ strong { font-weight: 700; }
       </div>
 
       <div class="hero-carousel-slide">
-        <img src="https://images.unsplash.com/photo-1507152927626-13d6a1ee8614?w=800&auto=format&q=80&fit=crop&crop=center" alt="Enseignant avec ses élèves" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=800&auto=format&q=80&fit=crop&crop=center" alt="Enseignant avec ses élèves" loading="lazy">
         <div class="hero-carousel-label"><i class="bi bi-pencil-square"></i> QCM officiels</div>
         <div class="hero-carousel-caption">Questions tirées des vrais sujets ENAFEP, TENASOSP, Exam d’État</div>
       </div>
 
       <div class="hero-carousel-slide">
-        <img src="https://images.unsplash.com/photo-1507152927626-13d6a1ee8614?w=800&auto=format&q=80&fit=crop&crop=center" alt="Répétiteur de Goma" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=800&auto=format&q=80&fit=crop&crop=center" alt="Répétiteur de Goma" loading="lazy">
         <div class="hero-carousel-label"><i class="bi bi-phone"></i> Goma · 11/13 reçus</div>
         <div class="hero-carousel-caption">«&nbsp;Mes élèves passent les QCM depuis leurs téléphones, même sans WiFi.&nbsp;»</div>
       </div>
@@ -616,7 +616,7 @@ strong { font-weight: 700; }
     <!-- Bloc 2 : Enseignants / Répétiteurs -->
     <div class="who-block who-block-reverse">
       <div class="who-img-wrap" style="position:relative">
-        <img src="https://images.unsplash.com/photo-1507152927626-13d6a1ee8614?w=900&auto=format&q=85&fit=crop&crop=center" alt="Enseignant congolais avec ses élèves" class="who-img" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=900&auto=format&q=85&fit=crop&crop=center" alt="Enseignant congolais avec ses élèves" class="who-img" loading="lazy">
         <div style="position:absolute;bottom:20px;right:20px;background:rgba(0,0,0,.65);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 16px;color:#fff;text-align:right;max-width:280px">
           <div style="font-size:10px;font-family:var(--font-body);font-weight:600;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Dieumerci · Goma · Répétiteur</div>
           <div style="font-size:13px;font-family:var(--font-editorial);font-style:italic;line-height:1.5">"11 reçus sur 13. Mon meilleur taux depuis 5 ans."</div>
@@ -725,17 +725,17 @@ strong { font-weight: 700; }
     ['1522529599102-193c0d76b5b6', 'Kalombo · Kinshasa', 'Exam d\'État 74%'],
     ['1531123897727-8f129e1688ce', 'Bénédicte · Lubumbashi', 'TENASOSP réussi'],
     ['1580582932707-520aed937b7b', 'Classe · Goma', 'Révision collective'],
-    ['1507152927626-13d6a1ee8614', 'Dieumerci · Goma', 'Répétiteur 11/13'],
-    ['1507152927626-13d6a1ee8614', 'Institut · Bukavu', 'ENAFEP 6ème primaire'],
-    ['1434030216411-0b5816edd9fb', 'Examen blanc', 'QCM officiels'],
+    ['1434030216411-0b5816edd9fb', 'Dieumerci · Goma', 'Répétiteur 11/13'],
+    ['1523050854058-8df90110c9f1', 'Institut · Bukavu', 'ENAFEP 6ème primaire'],
+    ['1503676260728-1c00da094a0b', 'Bibliothèque · Kinshasa', 'Archives 2008-2024'],
   ];
   $galleryRow2 = [
-    ['1503676260728-1c00da094a0b', 'Bibliothèque · Kin', 'Archives 2008-2024'],
-    ['1588072432836-e10032774350', 'Mobile-first', 'Révision sur téléphone'],
-    ['1523050854058-8df90110c9f1', 'Remise des diplômes', 'Promotion 2025'],
-    ['1571260899304-425eee4c7efc', 'Campus · Mbuji-Mayi', 'Étudiants RDC'],
+    ['1588072432836-e10032774350', 'Mobile-first · RDC', 'Révision sur téléphone'],
     ['1531123897727-8f129e1688ce', 'Préparation intensive', 'Plan de révision IA'],
+    ['1571260899304-425eee4c7efc', 'Campus · Mbuji-Mayi', 'Étudiants RDC'],
     ['1522529599102-193c0d76b5b6', 'Kinshasa · RDC', 'Score +27 pts en 4 sem.'],
+    ['1580582932707-520aed937b7b', 'Examen blanc', 'QCM en conditions réelles'],
+    ['1434030216411-0b5816edd9fb', 'Révision · Bukavu', 'Questions corrigées'],
   ];
   ?>
 
@@ -861,7 +861,7 @@ strong { font-weight: 700; }
         <div class="testimonial-stars" style="color:#F59E0B;font-size:15px;margin-bottom:12px">★★★★★</div>
         <p class="testimonial-text" style="font-family:var(--font-editorial);font-style:italic;font-size:15px;line-height:1.75">"Je répète à Goma depuis 5 ans. Cette année, j'ai intégré RÉUSSITE+ dans les séances du soir. Les élèves passaient les QCM depuis leurs téléphones — sans WiFi, sans ordinateur. 11 reçus sur 13. C'est mon meilleur taux. Et ce n'est pas un hasard."</p>
         <div class="testimonial-author">
-          <img src="https://images.unsplash.com/photo-1507152927626-13d6a1ee8614?w=96&h=96&fit=crop&crop=center&auto=format&q=80" alt="Dieumerci Bauma" width="48" height="48" style="border-radius:50%;object-fit:cover;flex-shrink:0">
+          <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=96&h=96&fit=crop&crop=center&auto=format&q=80" alt="Dieumerci Bauma" width="48" height="48" style="border-radius:50%;object-fit:cover;flex-shrink:0">
           <div>
             <div class="testimonial-name">Dieumerci Bauma</div>
             <div class="testimonial-school">Répétiteur, Goma &middot; 5 ans &middot; <strong style="color:var(--primary)">11/13 reçus en 2025</strong></div>

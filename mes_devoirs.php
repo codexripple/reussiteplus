@@ -8,6 +8,10 @@ $pageTitle  = 'Mes Devoirs';
 $pageActive = 'mes_devoirs';
 $user = require_login();
 
+if ($user['plan'] === 'GRATUIT') {
+    redirect('/reussiteplus/tarifs.php', 'warning', 'Les devoirs sont disponibles à partir du plan Basique.');
+}
+
 // ── Soumission d'un devoir ────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_verify()) { http_response_code(403); exit; }

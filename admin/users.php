@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
         $newPlan = $_POST['plan'] ?? '';
         if (array_key_exists($newPlan, PLANS)) {
             dbQuery("UPDATE utilisateurs SET plan=? WHERE id=?", [$newPlan, $uid]);
-            dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => 'CHANGE_PLAN', 'details' => "uid=$uid plan=$newPlan"]);
+            dbInsert('admin_logs', ['user_id' => $user['id'], 'action' => 'CHANGE_PLAN', 'details' => "uid=$uid plan=$newPlan"]);
             redirect('/reussiteplus/admin/users.php', 'success', 'Plan mis à jour.');
         }
     } elseif ($action === 'toggle_active' && $uid) {
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
         if ($current) {
             $newState = $current['is_active'] ? 0 : 1;
             dbQuery("UPDATE utilisateurs SET is_active=? WHERE id=?", [$newState, $uid]);
-            dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => $newState ? 'ACTIVER_USER' : 'DESACTIVER_USER', 'details' => "uid=$uid"]);
+            dbInsert('admin_logs', ['user_id' => $user['id'], 'action' => $newState ? 'ACTIVER_USER' : 'DESACTIVER_USER', 'details' => "uid=$uid"]);
             redirect('/reussiteplus/admin/users.php', 'success', 'Statut utilisateur mis à jour.');
         }
     } elseif ($action === 'change_role' && $uid) {
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
         $newRole = $_POST['role'] ?? '';
         if (in_array($newRole, $validRoles, true)) {
             dbQuery("UPDATE utilisateurs SET role=? WHERE id=?", [$newRole, $uid]);
-            dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => 'CHANGE_ROLE', 'details' => "uid=$uid role=$newRole"]);
+            dbInsert('admin_logs', ['user_id' => $user['id'], 'action' => 'CHANGE_ROLE', 'details' => "uid=$uid role=$newRole"]);
             redirect('/reussiteplus/admin/users.php', 'success', 'Rôle mis à jour.');
         }
     } elseif ($action === 'delete_user' && $uid) {
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
                 dbQuery("DELETE FROM abonnements     WHERE user_id=?", [$uid]);
                 dbQuery("DELETE FROM exam_sessions   WHERE user_id=?", [$uid]);
                 dbQuery("DELETE FROM utilisateurs    WHERE id=?",      [$uid]);
-                dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => 'DELETE_USER', 'details' => "email={$target['email']}"]);
+                dbInsert('admin_logs', ['user_id' => $user['id'], 'action' => 'DELETE_USER', 'details' => "email={$target['email']}"]);
                 redirect('/reussiteplus/admin/users.php', 'success', "Utilisateur {$target['prenom']} {$target['nom']} supprimé.");
             }
         } else {

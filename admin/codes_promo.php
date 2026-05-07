@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
                 'date_expiration' => $expire,
                 'actif'           => 1,
             ]);
-            dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => 'CREATE_PROMO', 'details' => "code=$code"]);
+            dbInsert('admin_logs', ['user_id' => $user['id'], 'action' => 'CREATE_PROMO', 'details' => "code=$code"]);
             redirect('/reussiteplus/admin/codes_promo.php', 'success', "Code promo <strong>$code</strong> créé.");
         }
         // On passe les erreurs à la vue
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
     // Supprimer
     if ($action === 'delete' && !empty($_POST['id'])) {
         dbQuery("DELETE FROM codes_promo WHERE id=?", [$_POST['id']]);
-        dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => 'DELETE_PROMO', 'details' => 'id=' . $_POST['id']]);
+        dbInsert('admin_logs', ['user_id' => $user['id'], 'action' => 'DELETE_PROMO', 'details' => 'id=' . $_POST['id']]);
         redirect('/reussiteplus/admin/codes_promo.php', 'success', 'Code promo supprimé.');
     }
 }

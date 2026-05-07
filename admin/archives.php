@@ -97,20 +97,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
                 unset($data['created_by']); // ne pas écraser à l'édition
                 dbUpdate('archives', $data, 'id', $editId);
                 $success = 'Archive mise à jour.';
-                dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'EDIT_ARCHIVE','details'=>"id=$editId"]);
+                dbInsert('admin_logs', ['user_id'=>$user['id'],'action'=>'EDIT_ARCHIVE','details'=>"id=$editId"]);
             } else {
                 $slug = preg_replace('/[^a-z0-9]+/', '-', strtolower(iconv('UTF-8','ASCII//TRANSLIT',$titre))) . '-' . time();
                 $data['slug'] = $slug;
                 dbInsert('archives', $data);
                 $success = 'Archive créée avec succès.';
-                dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'CREATE_ARCHIVE','details'=>"titre=$titre"]);
+                dbInsert('admin_logs', ['user_id'=>$user['id'],'action'=>'CREATE_ARCHIVE','details'=>"titre=$titre"]);
             }
         }
     } elseif ($action === 'delete_archive') {
         $delId = $_POST['delete_id'] ?? '';
         if ($delId) {
             dbQuery("DELETE FROM archives WHERE id=?", [$delId]);
-            dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'DELETE_ARCHIVE','details'=>"id=$delId"]);
+            dbInsert('admin_logs', ['user_id'=>$user['id'],'action'=>'DELETE_ARCHIVE','details'=>"id=$delId"]);
             $success = 'Archive supprimée.';
         }
     } elseif ($action === 'toggle_status') {

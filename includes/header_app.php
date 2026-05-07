@@ -100,6 +100,7 @@ if (is_admin()) {
       <div class="nav-icon"><i data-lucide="user-circle"></i></div>
       <span class="nav-label">Mon Profil</span>
     </a>
+    <?php if (($user['plan'] ?? 'GRATUIT') !== 'GRATUIT'): ?>
     <a href="/reussiteplus/mes_devoirs.php" class="nav-item <?= $pageActive === 'mes_devoirs' ? 'active' : '' ?>">
       <div class="nav-icon"><i data-lucide="clipboard"></i></div>
       <span class="nav-label">Mes Devoirs</span>
@@ -116,6 +117,7 @@ if (is_admin()) {
       <div class="nav-icon"><i data-lucide="brain"></i></div>
       <span class="nav-label">Exercices</span>
     </a>
+    <?php endif; ?>
 
     <?php if (($user['plan'] ?? '') === 'ECOLE'): ?>
     <div class="nav-section-title" style="margin-top:12px">Mon École</div>

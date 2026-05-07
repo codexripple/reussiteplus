@@ -8,6 +8,10 @@ $pageTitle  = 'Mes Exercices';
 $pageActive = 'mes_exercices';
 $user = require_login();
 
+if ($user['plan'] === 'GRATUIT') {
+    redirect('/reussiteplus/tarifs.php', 'warning', 'Les exercices sont disponibles à partir du plan Basique.');
+}
+
 // Mes classes actives
 $mesClasses = dbAll(
     "SELECT c.id, c.nom FROM classe_membres cm JOIN classes_ecole c ON c.id=cm.classe_id

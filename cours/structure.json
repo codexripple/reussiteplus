@@ -1,0 +1,497 @@
+﻿{
+  "description": "Cours RDC — contenu pédagogique intégré",
+  "matieres": [
+    {
+      "nom": "Mathématiques",
+      "couleur": "#007A5E",
+      "icone": "calculator",
+      "lecons": [
+        {
+          "id": "maths-01",
+          "titre": "Fractions et décimaux",
+          "niveau": "Primaire 5e",
+          "duree": "45 min",
+          "objectifs": ["Définir une fraction", "Simplifier une fraction", "Convertir fraction ↔ décimal"],
+          "contenu": "<h3>1. Qu'est-ce qu'une fraction ?</h3><p>Une fraction représente une partie d'un tout. Elle s'écrit sous la forme <strong>a/b</strong> où <em>a</em> est le numérateur et <em>b</em> est le dénominateur (b ≠ 0).</p><p><strong>Exemple :</strong> Si on coupe une pomme en 4 parts égales et qu'on en prend 3, on a pris <strong>3/4</strong> de la pomme.</p><h3>2. Simplification</h3><p>On simplifie en divisant le numérateur et le dénominateur par leur PGCD.</p><p><strong>Exemple :</strong> 6/9 → PGCD(6,9) = 3 → 6÷3 / 9÷3 = <strong>2/3</strong></p><h3>3. Conversion fraction → décimal</h3><p>On divise le numérateur par le dénominateur : 3/4 = 3 ÷ 4 = <strong>0,75</strong></p>",
+          "exemple": "3/4 de 20 = 20 × 3 ÷ 4 = 15",
+          "qcm": [
+            {"q": "Quelle est la forme simplifiée de 12/16 ?", "options": ["3/4", "6/8", "2/3", "4/5"], "rep": 0},
+            {"q": "Quel est le décimal de 1/4 ?", "options": ["0,14", "0,25", "0,50", "0,75"], "rep": 1},
+            {"q": "3/5 + 1/5 = ?", "options": ["4/10", "4/5", "3/10", "6/5"], "rep": 1}
+          ],
+          "fichiers": ["fractions.pdf"]
+        },
+        {
+          "id": "maths-02",
+          "titre": "Géométrie de base",
+          "niveau": "Primaire 5e",
+          "duree": "45 min",
+          "objectifs": ["Connaître les formes géométriques", "Calculer périmètre et aire", "Distinguer figures planes et solides"],
+          "contenu": "<h3>1. Les figures planes</h3><p><strong>Carré :</strong> 4 côtés égaux, 4 angles droits. Périmètre = 4×c, Aire = c²</p><p><strong>Rectangle :</strong> 4 angles droits, côtés opposés égaux. Périmètre = 2(L+l), Aire = L×l</p><p><strong>Triangle :</strong> 3 côtés. Périmètre = a+b+c, Aire = (base×hauteur)/2</p><p><strong>Cercle :</strong> Périmètre = 2πr, Aire = πr²</p><h3>2. Exemples</h3><p>Un rectangle de 6 cm sur 4 cm : Périmètre = 2(6+4) = <strong>20 cm</strong>, Aire = 6×4 = <strong>24 cm²</strong></p>",
+          "exemple": "Triangle base=8cm, hauteur=5cm → Aire = (8×5)/2 = 20 cm²",
+          "qcm": [
+            {"q": "Quelle est l'aire d'un carré de côté 5 cm ?", "options": ["20 cm²", "25 cm²", "10 cm²", "15 cm²"], "rep": 1},
+            {"q": "Le périmètre d'un rectangle 3×7 est ?", "options": ["21", "10", "20", "14"], "rep": 2},
+            {"q": "La formule de l'aire du cercle est ?", "options": ["2πr", "πr²", "πd", "2πr²"], "rep": 1}
+          ],
+          "fichiers": ["geometrie.pdf"]
+        },
+        {
+          "id": "maths-03",
+          "titre": "Les puissances et racines",
+          "niveau": "Secondaire 1e",
+          "duree": "50 min",
+          "objectifs": ["Calculer une puissance", "Utiliser les propriétés des puissances", "Calculer une racine carrée"],
+          "contenu": "<h3>1. Les puissances</h3><p>aⁿ = a × a × a ... (n fois). On lit : « a exposant n »</p><p>Exemples : 2³ = 8 ; 10² = 100 ; 5⁰ = 1</p><h3>2. Propriétés importantes</h3><ul><li>aᵐ × aⁿ = aᵐ⁺ⁿ</li><li>aᵐ ÷ aⁿ = aᵐ⁻ⁿ</li><li>(aᵐ)ⁿ = aᵐˣⁿ</li><li>a⁻ⁿ = 1/aⁿ</li></ul><h3>3. Racine carrée</h3><p>√a est le nombre positif dont le carré est a. √25 = 5 car 5² = 25</p>",
+          "exemple": "2⁴ × 2³ = 2⁷ = 128",
+          "qcm": [
+            {"q": "3⁴ = ?", "options": ["12", "64", "81", "27"], "rep": 2},
+            {"q": "√144 = ?", "options": ["12", "14", "11", "13"], "rep": 0},
+            {"q": "5² × 5³ = ?", "options": ["5⁵", "5⁶", "25⁵", "5²"], "rep": 0}
+          ],
+          "fichiers": ["puissances.pdf"]
+        },
+        {
+          "id": "maths-04",
+          "titre": "Équations du premier degré",
+          "niveau": "Secondaire 2e",
+          "duree": "55 min",
+          "objectifs": ["Résoudre une équation ax+b=0", "Vérifier une solution", "Résoudre des problèmes par équation"],
+          "contenu": "<h3>1. Définition</h3><p>Une équation du premier degré est de la forme <strong>ax + b = 0</strong> avec a ≠ 0.</p><h3>2. Méthode de résolution</h3><p>Pour résoudre ax + b = c :</p><ol><li>Rassembler les termes en x d'un côté</li><li>Rassembler les constantes de l'autre</li><li>Diviser par le coefficient de x</li></ol><p><strong>Exemple :</strong> 3x + 5 = 14<br>→ 3x = 14 - 5 = 9<br>→ x = 9/3 = <strong>3</strong></p><h3>3. Vérification</h3><p>On remplace x par la valeur trouvée : 3(3)+5 = 9+5 = 14 ✓</p>",
+          "exemple": "2x - 7 = 11 → 2x = 18 → x = 9",
+          "qcm": [
+            {"q": "Résoudre : x + 4 = 9", "options": ["x=5", "x=13", "x=4", "x=3"], "rep": 0},
+            {"q": "Résoudre : 2x = 14", "options": ["x=28", "x=7", "x=12", "x=8"], "rep": 1},
+            {"q": "Résoudre : 3x - 6 = 9", "options": ["x=1", "x=3", "x=5", "x=4"], "rep": 2}
+          ],
+          "fichiers": ["equations.pdf"]
+        },
+        {
+          "id": "maths-05",
+          "titre": "Statistiques descriptives",
+          "niveau": "Secondaire 3e",
+          "duree": "60 min",
+          "objectifs": ["Calculer moyenne, médiane, mode", "Interpréter des données statistiques", "Construire un tableau de fréquences"],
+          "contenu": "<h3>1. La moyenne</h3><p>Somme des valeurs divisée par leur nombre.</p><p>Exemple : Notes = {10, 14, 12, 16, 8} → Moyenne = (10+14+12+16+8)/5 = 60/5 = <strong>12</strong></p><h3>2. La médiane</h3><p>Valeur du milieu après tri. Si n pair, moyenne des deux valeurs centrales.</p><p>Exemple trié : {8, 10, 12, 14, 16} → Médiane = <strong>12</strong></p><h3>3. Le mode</h3><p>La valeur la plus fréquente. Exemple : {3,5,5,7,5,9} → Mode = <strong>5</strong></p>",
+          "exemple": "Données: 5,8,8,9,10 → Moy=8 ; Méd=8 ; Mode=8",
+          "qcm": [
+            {"q": "Moyenne de {4, 6, 8, 10, 12} ?", "options": ["8", "10", "7", "9"], "rep": 0},
+            {"q": "Médiane de {3,1,4,1,5,9,2} triés ?", "options": ["1", "3", "4", "5"], "rep": 2},
+            {"q": "Le mode de {2,3,3,4,5,3} est ?", "options": ["2", "4", "3", "5"], "rep": 2}
+          ],
+          "fichiers": ["statistiques.pdf"]
+        }
+      ]
+    },
+    {
+      "nom": "Français",
+      "couleur": "#1E5FAD",
+      "icone": "book",
+      "lecons": [
+        {
+          "id": "fr-01",
+          "titre": "Conjugaison : le présent de l'indicatif",
+          "niveau": "Primaire 4e",
+          "duree": "45 min",
+          "objectifs": ["Conjuguer les verbes au présent", "Distinguer les groupes de verbes", "Utiliser correctement les terminaisons"],
+          "contenu": "<h3>1. Les trois groupes</h3><p><strong>1er groupe :</strong> infinitif en -ER (sauf aller) → Ex : parler, manger, chanter</p><p><strong>2e groupe :</strong> infinitif en -IR, participe présent en -issant → Ex : finir, choisir</p><p><strong>3e groupe :</strong> tous les autres → Ex : être, avoir, aller, faire, dire</p><h3>2. Terminaisons du 1er groupe</h3><table border='1' style='border-collapse:collapse;width:100%'><tr><th>Pronom</th><th>Terminaison</th><th>Exemple (parler)</th></tr><tr><td>je</td><td>-e</td><td>parle</td></tr><tr><td>tu</td><td>-es</td><td>parles</td></tr><tr><td>il/elle</td><td>-e</td><td>parle</td></tr><tr><td>nous</td><td>-ons</td><td>parlons</td></tr><tr><td>vous</td><td>-ez</td><td>parlez</td></tr><tr><td>ils/elles</td><td>-ent</td><td>parlent</td></tr></table>",
+          "exemple": "Je mange, tu manges, il mange, nous mangeons...",
+          "qcm": [
+            {"q": "\"Finir\" appartient à quel groupe ?", "options": ["1er", "2e", "3e", "aucun"], "rep": 1},
+            {"q": "Conjuguez 'chanter' à 'nous' ?", "options": ["chantez", "chantons", "chantent", "chante"], "rep": 1},
+            {"q": "Quelle terminaison pour 'je' au 1er groupe ?", "options": ["-is", "-e", "-s", "-ai"], "rep": 1}
+          ],
+          "fichiers": ["conjugaison.pdf"]
+        },
+        {
+          "id": "fr-02",
+          "titre": "L'accord du participe passé",
+          "niveau": "Secondaire 1e",
+          "duree": "50 min",
+          "objectifs": ["Appliquer les règles d'accord avec être", "Appliquer les règles avec avoir", "Identifier le COD"],
+          "contenu": "<h3>1. Avec l'auxiliaire ÊTRE</h3><p>Le participe passé s'accorde en genre et en nombre avec le sujet.</p><p>Exemples :</p><ul><li>Marie est <strong>partie</strong>. (féminin singulier → -e)</li><li>Les élèves sont <strong>arrivés</strong>. (masculin pluriel → -s)</li></ul><h3>2. Avec l'auxiliaire AVOIR</h3><p>Le participe passé s'accorde avec le COD <strong>seulement si le COD est placé avant le verbe</strong>.</p><p>Exemples :</p><ul><li>J'ai <strong>mangé</strong> des pommes. (COD après → pas d'accord)</li><li>Les pommes que j'ai <strong>mangées</strong>. (COD avant → accord)</li></ul>",
+          "exemple": "Elle est venue. / Les lettres qu'il a écrites.",
+          "qcm": [
+            {"q": "\"Les filles sont arrivé___ ?\"", "options": ["arrivé", "arrivés", "arrivées", "arrivée"], "rep": 2},
+            {"q": "\"J'ai mangé des fruits\" - accord ?", "options": ["mangés", "mangées", "mangé", "mangée"], "rep": 2},
+            {"q": "\"Les livres qu'elle a lu___\"", "options": ["lu", "lus", "lue", "lues"], "rep": 1}
+          ],
+          "fichiers": ["participe.pdf"]
+        },
+        {
+          "id": "fr-03",
+          "titre": "La rédaction : structure d'un texte",
+          "niveau": "Secondaire 2e",
+          "duree": "60 min",
+          "objectifs": ["Structurer un texte en introduction/développement/conclusion", "Utiliser les connecteurs logiques", "Rédiger un paragraphe cohérent"],
+          "contenu": "<h3>1. Structure d'un texte</h3><p>Tout texte bien construit comprend :</p><ul><li><strong>Introduction :</strong> présentation du sujet, accroche, annonce du plan</li><li><strong>Développement :</strong> 2 ou 3 paragraphes avec idée principale + arguments + exemples</li><li><strong>Conclusion :</strong> bilan, réponse à la problématique, ouverture</li></ul><h3>2. Les connecteurs logiques</h3><p><strong>Addition :</strong> de plus, également, en outre, par ailleurs</p><p><strong>Opposition :</strong> mais, cependant, néanmoins, en revanche</p><p><strong>Cause :</strong> car, parce que, puisque, en raison de</p><p><strong>Conséquence :</strong> donc, ainsi, par conséquent, c'est pourquoi</p>",
+          "exemple": "Introduction → 3 paragraphes → Conclusion",
+          "qcm": [
+            {"q": "Quel connecteur exprime la conséquence ?", "options": ["mais", "donc", "car", "de plus"], "rep": 1},
+            {"q": "Combien de parties dans un texte structuré ?", "options": ["2", "4", "3", "5"], "rep": 2},
+            {"q": "\"J'aime lire ___ cela développe l'imagination\"", "options": ["mais", "donc", "car", "cependant"], "rep": 2}
+          ],
+          "fichiers": ["redaction.pdf"]
+        },
+        {
+          "id": "fr-04",
+          "titre": "Les figures de style",
+          "niveau": "Secondaire 3e",
+          "duree": "50 min",
+          "objectifs": ["Identifier les figures de style", "Comprendre leur effet", "Les utiliser dans une rédaction"],
+          "contenu": "<h3>1. La métaphore et la comparaison</h3><p><strong>Comparaison :</strong> rapprochement avec un outil de comparaison (comme, tel que...)<br>Ex : « Il est <em>fort comme</em> un lion »</p><p><strong>Métaphore :</strong> comparaison sans outil de comparaison<br>Ex : « C'est un lion » (parlant d'un homme courageux)</p><h3>2. L'hyperbole</h3><p>Exagération pour renforcer une idée. Ex : « Je meurs de faim »</p><h3>3. La personnification</h3><p>Attribuer des caractéristiques humaines à une chose.<br>Ex : « Le vent <em>hurle</em> dans la nuit »</p><h3>4. L'anaphore</h3><p>Répétition d'un mot en début de phrase.<br>Ex : « J'ai un rêve... J'ai un rêve... »</p>",
+          "exemple": "Ses yeux sont des étoiles → métaphore",
+          "qcm": [
+            {"q": "\"Rapide comme l'éclair\" est une ?", "options": ["Métaphore", "Hyperbole", "Comparaison", "Anaphore"], "rep": 2},
+            {"q": "\"Je t'ai dit mille fois\" est une ?", "options": ["Métaphore", "Hyperbole", "Comparaison", "Personnification"], "rep": 1},
+            {"q": "\"La mer chante\" est une ?", "options": ["Hyperbole", "Anaphore", "Personnification", "Métaphore"], "rep": 2}
+          ],
+          "fichiers": ["figures_style.pdf"]
+        },
+        {
+          "id": "fr-05",
+          "titre": "Les types de phrases",
+          "niveau": "Primaire 5e",
+          "duree": "40 min",
+          "objectifs": ["Identifier les 4 types de phrases", "Les transformer", "Utiliser la ponctuation correcte"],
+          "contenu": "<h3>Les 4 types de phrases</h3><p><strong>1. Déclarative :</strong> énonce un fait → ponctuation : point<br>Ex : « Le soleil brille. »</p><p><strong>2. Interrogative :</strong> pose une question → ponctuation : point d'interrogation<br>Ex : « Est-ce qu'il fait beau ? »</p><p><strong>3. Exclamative :</strong> exprime un sentiment fort → ponctuation : point d'exclamation<br>Ex : « Quel beau temps ! »</p><p><strong>4. Impérative (injonctive) :</strong> donne un ordre ou un conseil<br>Ex : « Ferme la fenêtre. »</p>",
+          "exemple": "Il pleut. → déclarative ; Pleut-il ? → interrogative",
+          "qcm": [
+            {"q": "\"Viens ici !\" est une phrase ?", "options": ["Déclarative", "Interrogative", "Impérative", "Exclamative"], "rep": 2},
+            {"q": "Quel signe termine une phrase interrogative ?", "options": [".", "!", "?", ","], "rep": 2},
+            {"q": "\"Quelle belle journée !\" est ?", "options": ["Impérative", "Exclamative", "Déclarative", "Interrogative"], "rep": 1}
+          ],
+          "fichiers": ["types_phrases.pdf"]
+        }
+      ]
+    },
+    {
+      "nom": "Sciences",
+      "couleur": "#7C3AED",
+      "icone": "flask-conical",
+      "lecons": [
+        {
+          "id": "sci-01",
+          "titre": "La cellule vivante",
+          "niveau": "Secondaire 1e",
+          "duree": "55 min",
+          "objectifs": ["Décrire la structure d'une cellule", "Distinguer cellule animale et végétale", "Expliquer la fonction de chaque organite"],
+          "contenu": "<h3>1. Définition</h3><p>La cellule est l'unité structurale et fonctionnelle du vivant. Tout être vivant est composé d'une ou plusieurs cellules.</p><h3>2. Structure cellulaire</h3><ul><li><strong>Membrane plasmique :</strong> enveloppe la cellule, contrôle les échanges</li><li><strong>Noyau :</strong> contient l'ADN, centre de contrôle de la cellule</li><li><strong>Cytoplasme :</strong> milieu liquide dans lequel baignent les organites</li><li><strong>Mitochondries :</strong> produisent l'énergie (ATP)</li><li><strong>Ribosomes :</strong> synthèse des protéines</li></ul><h3>3. Cellule végétale (spécificités)</h3><ul><li><strong>Paroi cellulosique :</strong> rigidité</li><li><strong>Chloroplastes :</strong> photosynthèse</li><li><strong>Vacuole :</strong> réservoir d'eau</li></ul>",
+          "exemple": "1 grain de sable ≈ 10 000 cellules",
+          "qcm": [
+            {"q": "Quel organite produit l'énergie ?", "options": ["Noyau", "Ribosome", "Mitochondrie", "Vacuole"], "rep": 2},
+            {"q": "La photosynthèse se fait dans ?", "options": ["Mitochondrie", "Chloroplaste", "Noyau", "Membrane"], "rep": 1},
+            {"q": "La cellule animale a-t-elle une paroi ?", "options": ["Oui", "Non", "Parfois", "Ça dépend"], "rep": 1}
+          ],
+          "fichiers": ["biologie_cellulaire.pdf"]
+        },
+        {
+          "id": "sci-02",
+          "titre": "La photosynthèse",
+          "niveau": "Secondaire 2e",
+          "duree": "55 min",
+          "objectifs": ["Expliquer la réaction de photosynthèse", "Identifier les réactifs et produits", "Comprendre l'importance écologique"],
+          "contenu": "<h3>1. Définition</h3><p>La photosynthèse est le processus par lequel les plantes convertissent l'énergie lumineuse en énergie chimique.</p><h3>2. Équation de la photosynthèse</h3><div style='background:#f0fdf4;padding:12px;border-radius:8px;text-align:center;font-size:16px;margin:12px 0'><strong>6 CO₂ + 6 H₂O + lumière → C₆H₁₂O₆ + 6 O₂</strong></div><h3>3. Conditions nécessaires</h3><ul><li>Lumière solaire</li><li>Dioxyde de carbone (CO₂) de l'air</li><li>Eau (H₂O) du sol</li><li>Chlorophylle (dans les chloroplastes)</li></ul><h3>4. Importance</h3><p>La photosynthèse produit l'oxygène que nous respirons et stocke l'énergie dans les aliments.</p>",
+          "exemple": "Les plantes : usines à oxygène de la planète",
+          "qcm": [
+            {"q": "Quel gaz est produit par la photosynthèse ?", "options": ["CO₂", "H₂O", "O₂", "N₂"], "rep": 2},
+            {"q": "Où se déroule la photosynthèse ?", "options": ["Mitochondrie", "Noyau", "Chloroplaste", "Vacuole"], "rep": 2},
+            {"q": "La chlorophylle absorbe quelle énergie ?", "options": ["Thermique", "Chimique", "Lumineuse", "Mécanique"], "rep": 2}
+          ],
+          "fichiers": ["photosynthese.pdf"]
+        },
+        {
+          "id": "sci-03",
+          "titre": "Le système digestif",
+          "niveau": "Primaire 6e",
+          "duree": "50 min",
+          "objectifs": ["Connaître les organes digestifs", "Décrire le trajet des aliments", "Expliquer la digestion"],
+          "contenu": "<h3>1. Les organes digestifs</h3><p>Le système digestif comprend :</p><ol><li><strong>Bouche :</strong> mastication, salive (amylase)</li><li><strong>Œsophage :</strong> conduit vers l'estomac</li><li><strong>Estomac :</strong> digestion par acides gastriques</li><li><strong>Intestin grêle :</strong> absorption des nutriments (6-7 m)</li><li><strong>Côlon (gros intestin) :</strong> absorption de l'eau</li><li><strong>Rectum et anus :</strong> élimination des déchets</li></ol><h3>2. Durée de la digestion</h3><p>Bouche : 1 min → Estomac : 2-4h → Intestin : 4-8h → Total : 24-72h</p>",
+          "exemple": "Un repas met environ 24h à être entièrement digéré",
+          "qcm": [
+            {"q": "Où les nutriments sont-ils absorbés ?", "options": ["Estomac", "Intestin grêle", "Côlon", "Bouche"], "rep": 1},
+            {"q": "Quelle enzyme est dans la salive ?", "options": ["Lipase", "Protéase", "Amylase", "Lactase"], "rep": 2},
+            {"q": "Quelle est la longueur de l'intestin grêle ?", "options": ["1-2 m", "6-7 m", "10 m", "3-4 m"], "rep": 1}
+          ],
+          "fichiers": ["digestion.pdf"]
+        },
+        {
+          "id": "sci-04",
+          "titre": "L'électricité : courant et tension",
+          "niveau": "Secondaire 2e",
+          "duree": "60 min",
+          "objectifs": ["Définir courant et tension", "Appliquer la loi d'Ohm", "Lire un schéma de circuit"],
+          "contenu": "<h3>1. Le courant électrique</h3><p>Le courant électrique est un déplacement ordonné de charges électriques (électrons) dans un conducteur. Il se mesure en <strong>Ampères (A)</strong>.</p><h3>2. La tension</h3><p>La tension (ou différence de potentiel) est la force qui pousse les électrons à se déplacer. Elle se mesure en <strong>Volts (V)</strong>.</p><h3>3. La loi d'Ohm</h3><div style='background:#eff6ff;padding:12px;border-radius:8px;text-align:center;font-size:18px;margin:12px 0'><strong>U = R × I</strong></div><p>U = tension (V), R = résistance (Ω), I = intensité (A)</p><h3>4. Exemple</h3><p>R = 10 Ω, I = 2 A → U = 10 × 2 = <strong>20 V</strong></p>",
+          "exemple": "Pile 9V avec R=3Ω → I = 9/3 = 3A",
+          "qcm": [
+            {"q": "L'intensité du courant se mesure en ?", "options": ["Volt", "Watt", "Ampère", "Ohm"], "rep": 2},
+            {"q": "U = R × I, si R=5Ω et I=3A, U=?", "options": ["8V", "15V", "2V", "12V"], "rep": 1},
+            {"q": "Le voltmètre mesure ?", "options": ["L'intensité", "La résistance", "La tension", "La puissance"], "rep": 2}
+          ],
+          "fichiers": ["electricite.pdf"]
+        },
+        {
+          "id": "sci-05",
+          "titre": "Le cycle de l'eau",
+          "niveau": "Primaire 5e",
+          "duree": "40 min",
+          "objectifs": ["Décrire les étapes du cycle de l'eau", "Expliquer évaporation et précipitation", "Comprendre l'importance du cycle"],
+          "contenu": "<h3>1. Les étapes du cycle de l'eau</h3><ol><li><strong>Évaporation :</strong> l'eau des océans, lacs et rivières s'évapore sous l'effet de la chaleur solaire → devient vapeur d'eau</li><li><strong>Condensation :</strong> la vapeur monte, se refroidit et forme des nuages</li><li><strong>Précipitations :</strong> quand les nuages sont trop lourds → pluie, neige, grêle</li><li><strong>Ruissellement :</strong> l'eau coule sur les sols vers les rivières et les mers</li><li><strong>Infiltration :</strong> une partie s'infiltre dans le sol → nappes phréatiques</li></ol><h3>2. Importance</h3><p>Ce cycle perpétuel assure la disponibilité de l'eau douce sur Terre. Sans lui, la vie serait impossible.</p>",
+          "exemple": "1 litre d'eau peut faire plusieurs fois le tour du cycle",
+          "qcm": [
+            {"q": "La transformation d'eau liquide en vapeur est ?", "options": ["Condensation", "Évaporation", "Précipitation", "Infiltration"], "rep": 1},
+            {"q": "Les nuages se forment par ?", "options": ["Évaporation", "Ruissellement", "Condensation", "Infiltration"], "rep": 2},
+            {"q": "La pluie est une forme de ?", "options": ["Condensation", "Évaporation", "Infiltration", "Précipitation"], "rep": 3}
+          ],
+          "fichiers": ["cycle_eau.pdf"]
+        }
+      ]
+    },
+    {
+      "nom": "Histoire",
+      "couleur": "#C9972A",
+      "icone": "landmark",
+      "lecons": [
+        {
+          "id": "hist-01",
+          "titre": "La Préhistoire",
+          "niveau": "Primaire 4e",
+          "duree": "45 min",
+          "objectifs": ["Situer la Préhistoire dans le temps", "Connaître les modes de vie des hommes préhistoriques", "Identifier les grandes inventions préhistoriques"],
+          "contenu": "<h3>1. Qu'est-ce que la Préhistoire ?</h3><p>La Préhistoire est la période de l'histoire humaine <strong>avant l'écriture</strong> (avant 3 500 av. J.-C.). Elle débute avec l'apparition des premiers hommes (il y a environ 3 millions d'années).</p><h3>2. L'évolution humaine</h3><ul><li><strong>Australopithèque :</strong> il y a ~3 M d'années (Afrique)</li><li><strong>Homo habilis :</strong> ~2,5 M d'années (premiers outils taillés)</li><li><strong>Homo erectus :</strong> ~1,8 M d'années (maîtrise du feu)</li><li><strong>Homo sapiens :</strong> ~300 000 ans (nous !)</li></ul><h3>3. Grandes inventions</h3><ul><li>Taille de la pierre (silex)</li><li>Maîtrise du feu (~400 000 av. J.-C.)</li><li>Agriculture et élevage (~10 000 av. J.-C.)</li></ul>",
+          "exemple": "La grotte de Lascaux (France) : peintures préhistoriques vieilles de 17 000 ans",
+          "qcm": [
+            {"q": "Qui a maîtrisé le feu en premier ?", "options": ["Homo sapiens", "Australopithèque", "Homo erectus", "Homo habilis"], "rep": 2},
+            {"q": "La Préhistoire prend fin avec ?", "options": ["Le feu", "L'écriture", "L'agriculture", "Les outils"], "rep": 1},
+            {"q": "L'Homo habilis est connu pour ?", "options": ["L'écriture", "Les premiers outils", "Le feu", "L'agriculture"], "rep": 1}
+          ],
+          "fichiers": ["prehistoire.pdf"]
+        },
+        {
+          "id": "hist-02",
+          "titre": "L'histoire du Congo-Kinshasa",
+          "niveau": "Secondaire 1e",
+          "duree": "60 min",
+          "objectifs": ["Connaître les grands royaumes du Congo précolonial", "Comprendre la colonisation belge", "Situer l'indépendance dans son contexte"],
+          "contenu": "<h3>1. Les royaumes précoloniaux</h3><ul><li><strong>Royaume Kongo (XVe s.) :</strong> grand empire centrafricain, commerce florissant</li><li><strong>Royaume Luba :</strong> empire organisé en Kasaï-Katanga</li><li><strong>Royaume Lunda :</strong> expansion vers l'Angola et la Zambie</li></ul><h3>2. La colonisation (1885-1960)</h3><p><strong>1885 :</strong> Conférence de Berlin — Léopold II obtient le Congo comme propriété personnelle (État Indépendant du Congo)</p><p><strong>1908 :</strong> Scandale des atrocités → cession au gouvernement belge (Congo Belge)</p><h3>3. L'Indépendance</h3><p><strong>30 juin 1960 :</strong> Proclamation de l'indépendance. Patrice Lumumba, 1er Premier Ministre. Joseph Kasavubu, 1er Président.</p>",
+          "exemple": "Discours de Lumumba le 30 juin 1960 : symbole de la dignité africaine",
+          "qcm": [
+            {"q": "Quelle date est l'indépendance de la RDC ?", "options": ["1er juillet 1960", "30 juin 1960", "15 août 1960", "24 novembre 1965"], "rep": 1},
+            {"q": "Qui était le 1er PM de la RDC ?", "options": ["Mobutu", "Kasavubu", "Lumumba", "Tshombe"], "rep": 2},
+            {"q": "La Conférence de Berlin a eu lieu en ?", "options": ["1880", "1885", "1890", "1900"], "rep": 1}
+          ],
+          "fichiers": ["congo.pdf"]
+        },
+        {
+          "id": "hist-03",
+          "titre": "Les grandes civilisations africaines",
+          "niveau": "Secondaire 2e",
+          "duree": "55 min",
+          "objectifs": ["Connaître les grandes civilisations d'Afrique", "Comprendre leur organisation politique", "Mesurer leur apport à l'humanité"],
+          "contenu": "<h3>1. L'Égypte antique (~3100 av. J.-C.)</h3><p>Grande civilisation du Nil : écriture (hiéroglyphes), pyramides, médecine avancée, mathématiques.</p><h3>2. Carthage (~800 av. J.-C.)</h3><p>Empire commercial en Afrique du Nord, rival de Rome. Hannibal franchit les Alpes avec des éléphants !</p><h3>3. L'Empire du Mali (XIIe-XVIe s.)</h3><p>Mansa Moussa, l'homme le plus riche de l'histoire. La ville de Tombouctou : centre du savoir islamique.</p><h3>4. Le Zimbabwe (XIe-XVe s.)</h3><p>Grandes constructions en pierre sèche. Centre commercial important.</p><h3>5. Le Royaume du Kongo (XIVe-XVIIe s.)</h3><p>État organisé avec administration, commerce transatlantique, diplomatie.</p>",
+          "exemple": "Mansa Moussa en 1324 : son pèlerinage à La Mecque effondra le cours de l'or pendant 10 ans",
+          "qcm": [
+            {"q": "L'écriture égyptienne s'appelle ?", "options": ["Cunéiforme", "Phénicien", "Hiéroglyphes", "Latin"], "rep": 2},
+            {"q": "Mansa Moussa était le souverain de ?", "options": ["Carthage", "Égypte", "Empire du Mali", "Kongo"], "rep": 2},
+            {"q": "Tombouctou était connue comme ?", "options": ["Centre militaire", "Port commercial", "Centre du savoir", "Capitale coloniale"], "rep": 2}
+          ],
+          "fichiers": ["afrique_ancienne.pdf"]
+        },
+        {
+          "id": "hist-04",
+          "titre": "La Deuxième Guerre Mondiale",
+          "niveau": "Secondaire 3e",
+          "duree": "60 min",
+          "objectifs": ["Connaître les causes et acteurs de la 2GM", "Comprendre l'Holocauste", "Mesurer les conséquences mondiales"],
+          "contenu": "<h3>1. Causes</h3><ul><li>Montée du nazisme en Allemagne (Hitler, 1933)</li><li>Traité de Versailles humiliant (1919)</li><li>Crise économique de 1929</li><li>Expansion japonaise en Asie</li></ul><h3>2. Déroulement (1939-1945)</h3><p><strong>1939 :</strong> Invasion de la Pologne → début de la guerre<br><strong>1941 :</strong> Entrée des USA (Pearl Harbor) et URSS<br><strong>1944 :</strong> Débarquement en Normandie<br><strong>1945 :</strong> Capitulation de l'Allemagne (8 mai) et du Japon (2 sept.)</p><h3>3. L'Holocauste</h3><p>Génocide de 6 millions de Juifs par le régime nazi. Crime contre l'humanité.</p><h3>4. Conséquences</h3><p>60 millions de morts, création de l'ONU (1945), début de la Guerre Froide.</p>",
+          "exemple": "Hiroshima & Nagasaki (août 1945) : premières bombes atomiques de l'histoire",
+          "qcm": [
+            {"q": "Quand commence la 2ème Guerre Mondiale ?", "options": ["1937", "1938", "1939", "1940"], "rep": 2},
+            {"q": "Combien de morts dans l'Holocauste ?", "options": ["1 million", "3 millions", "6 millions", "10 millions"], "rep": 2},
+            {"q": "L'ONU est créée en ?", "options": ["1944", "1945", "1946", "1950"], "rep": 1}
+          ],
+          "fichiers": ["guerres.pdf"]
+        },
+        {
+          "id": "hist-05",
+          "titre": "Les indépendances africaines",
+          "niveau": "Secondaire 2e",
+          "duree": "55 min",
+          "objectifs": ["Comprendre le contexte des indépendances", "Connaître les figures de proue du panafricanisme", "Analyser les défis post-indépendance"],
+          "contenu": "<h3>1. Contexte</h3><p>Après la 2GM, les peuples africains réclament la liberté. Les principes de l'ONU (droit des peuples à disposer d'eux-mêmes) soutiennent leurs luttes.</p><h3>2. 1960 : L'Année de l'Afrique</h3><p>17 pays africains obtiennent leur indépendance en 1960 ! Parmi eux : RDC, Sénégal, Côte d'Ivoire, Cameroun, Niger, Mali...</p><h3>3. Figures emblématiques</h3><ul><li><strong>Kwame Nkrumah (Ghana) :</strong> père du panafricanisme</li><li><strong>Patrice Lumumba (Congo) :</strong> martyr de l'indépendance</li><li><strong>Sékou Touré (Guinée) :</strong> premier « Non » à de Gaulle (1958)</li><li><strong>Nelson Mandela (Afrique du Sud) :</strong> lutte contre l'apartheid</li></ul>",
+          "exemple": "1960 = \"Année de l'Afrique\" — 17 indépendances en une seule année",
+          "qcm": [
+            {"q": "Combien d'États indépendants en 1960 ?", "options": ["7", "10", "17", "24"], "rep": 2},
+            {"q": "Kwame Nkrumah venait de ?", "options": ["Nigeria", "Sénégal", "Ghana", "Côte d'Ivoire"], "rep": 2},
+            {"q": "Qui a dit 'Non' à de Gaulle en 1958 ?", "options": ["Lumumba", "Nkrumah", "Mandela", "Sékou Touré"], "rep": 3}
+          ],
+          "fichiers": ["independance.pdf"]
+        }
+      ]
+    },
+    {
+      "nom": "Géographie",
+      "couleur": "#059669",
+      "icone": "map",
+      "lecons": [
+        {
+          "id": "geo-01",
+          "titre": "La RDC : géographie physique",
+          "niveau": "Primaire 5e",
+          "duree": "50 min",
+          "objectifs": ["Localiser la RDC sur une carte", "Connaître les reliefs et fleuves principaux", "Citer les provinces de la RDC"],
+          "contenu": "<h3>1. Localisation</h3><p>La République Démocratique du Congo est située en Afrique centrale, de part et d'autre de l'équateur. Elle est le <strong>2e plus grand pays d'Afrique</strong> (2 344 858 km²).</p><h3>2. Relief</h3><ul><li><strong>Cuvette centrale :</strong> plaine basse couverte de forêts équatoriales</li><li><strong>Massifs montagneux à l'Est :</strong> Ruwenzori, Virunga (volcans)</li><li><strong>Plateaux :</strong> Katanga au Sud</li></ul><h3>3. Hydrographie</h3><p><strong>Fleuve Congo :</strong> 2e plus long fleuve d'Afrique (4 700 km), 2e plus grand débit mondial.</p><p>Principaux affluents : Ubangi, Kasaï, Lualaba</p><h3>4. Les 26 provinces</h3><p>Kinshasa (capitale), Lubumbashi, Goma, Kisangani, Mbuji-Mayi, Matadi...</p>",
+          "exemple": "Le fleuve Congo traverse tout le pays d'Est en Ouest",
+          "qcm": [
+            {"q": "Quelle est la superficie de la RDC ?", "options": ["1,2 M km²", "2,3 M km²", "3,5 M km²", "900 000 km²"], "rep": 1},
+            {"q": "Le fleuve Congo est le ___ plus grand débit mondial", "options": ["1er", "2e", "3e", "5e"], "rep": 1},
+            {"q": "Les volcans de l'Est RDC appartiennent à ?", "options": ["Ruwenzori", "Virunga", "Mitumba", "Katanga"], "rep": 1}
+          ],
+          "fichiers": ["rdc_geo.pdf"]
+        },
+        {
+          "id": "geo-02",
+          "titre": "Les climats africains",
+          "niveau": "Secondaire 1e",
+          "duree": "50 min",
+          "objectifs": ["Identifier les grandes zones climatiques d'Afrique", "Expliquer les facteurs du climat", "Relier climat et végétation"],
+          "contenu": "<h3>1. Les grandes zones climatiques</h3><ul><li><strong>Équatorial (0°-10°) :</strong> chaud et humide toute l'année, pluies abondantes. Végétation : forêt dense (Congo, Cameroun)</li><li><strong>Tropical (10°-20°) :</strong> saison sèche et saison des pluies. Végétation : savane</li><li><strong>Désertique (20°-30°) :</strong> très sec, grandes amplitudes thermiques. Végétation : steppe puis désert</li><li><strong>Méditerranéen (30°-40°) :</strong> étés chauds et secs, hivers doux et pluvieux</li></ul><h3>2. Facteurs du climat</h3><ul><li>Latitude (distance à l'équateur)</li><li>Altitude (plus on monte, plus il fait froid)</li><li>Proximité de la mer</li><li>Courants marins</li></ul>",
+          "exemple": "Kinshasa : climat équatorial → 1 500 mm de pluie/an",
+          "qcm": [
+            {"q": "Quel climat caractérise le Congo ?", "options": ["Désertique", "Méditerranéen", "Équatorial", "Tropical"], "rep": 2},
+            {"q": "La savane correspond à quel climat ?", "options": ["Équatorial", "Tropical", "Désertique", "Méditerranéen"], "rep": 1},
+            {"q": "Qu'est-ce qui explique les différences de température selon l'altitude ?", "options": ["La pluie", "La latitude", "La montée en altitude refroidit", "Les courants"], "rep": 2}
+          ],
+          "fichiers": ["relief.pdf"]
+        },
+        {
+          "id": "geo-03",
+          "titre": "La population mondiale",
+          "niveau": "Secondaire 2e",
+          "duree": "55 min",
+          "objectifs": ["Analyser la croissance démographique mondiale", "Comprendre les inégalités de répartition", "Citer les pays les plus peuplés"],
+          "contenu": "<h3>1. Évolution de la population</h3><p>1900 : 1,6 milliard → 1950 : 2,5 milliards → 2000 : 6 milliards → 2024 : <strong>8,2 milliards</strong></p><h3>2. Répartition</h3><p>La population est inégalement répartie :</p><ul><li><strong>Foyers denses :</strong> Asie du Sud-Est (Chine, Inde), Europe, Afrique subsaharienne</li><li><strong>Zones vides :</strong> déserts (Sahara, Australie), zones arctiques, forêts équatoriales</li></ul><h3>3. Les pays les plus peuplés (2024)</h3><ol><li>Inde : 1,44 milliard</li><li>Chine : 1,40 milliard</li><li>USA : 340 millions</li><li>Indonésie : 280 millions</li><li>Pakistan : 240 millions</li></ol><h3>4. La RDC</h3><p>~110 millions d'habitants, 4e pays le plus peuplé d'Afrique.</p>",
+          "exemple": "En 2050 : l'Afrique aura 2,5 milliards d'habitants",
+          "qcm": [
+            {"q": "Population mondiale en 2024 ?", "options": ["6 milliards", "7 milliards", "8,2 milliards", "10 milliards"], "rep": 2},
+            {"q": "Quel pays est le plus peuplé en 2024 ?", "options": ["Chine", "USA", "Inde", "Indonésie"], "rep": 2},
+            {"q": "La population de la RDC est d'environ ?", "options": ["50 M", "80 M", "110 M", "150 M"], "rep": 2}
+          ],
+          "fichiers": ["population.pdf"]
+        },
+        {
+          "id": "geo-04",
+          "titre": "Développement durable et environnement",
+          "niveau": "Secondaire 3e",
+          "duree": "55 min",
+          "objectifs": ["Définir le développement durable", "Comprendre les enjeux climatiques", "Proposer des solutions concrètes"],
+          "contenu": "<h3>1. Définition</h3><p>Le développement durable est « un développement qui répond aux besoins du présent sans compromettre la capacité des générations futures à répondre à leurs propres besoins » (Rapport Brundtland, 1987).</p><h3>2. Les 3 piliers</h3><ul><li><strong>Économique :</strong> croissance, emploi, richesses</li><li><strong>Social :</strong> équité, accès aux droits, éducation, santé</li><li><strong>Environnemental :</strong> protection des écosystèmes, ressources naturelles</li></ul><h3>3. Défis climatiques</h3><ul><li>Réchauffement climatique (+1,2°C depuis 1850)</li><li>Déforestation (forêt du Congo : 2e poumon mondial)</li><li>Pollution des eaux et de l'air</li></ul><h3>4. Solutions</h3><ul><li>Énergies renouvelables (solaire, éolien, hydraulique)</li><li>Reforestation</li><li>Agriculture durable</li></ul>",
+          "exemple": "La RDC : hydroélectricité d'Inga = potentiel d'électrifier toute l'Afrique",
+          "qcm": [
+            {"q": "Combien de piliers pour le dev. durable ?", "options": ["2", "3", "4", "5"], "rep": 1},
+            {"q": "La forêt du Congo est le ___ poumon mondial", "options": ["1er", "2e", "3e", "4e"], "rep": 1},
+            {"q": "Quelle énergie est renouvelable ?", "options": ["Charbon", "Pétrole", "Gaz naturel", "Solaire"], "rep": 3}
+          ],
+          "fichiers": ["developpement.pdf"]
+        },
+        {
+          "id": "geo-05",
+          "titre": "Cartographie et lecture de carte",
+          "niveau": "Primaire 6e",
+          "duree": "45 min",
+          "objectifs": ["Lire et interpréter une carte", "Utiliser une légende", "Mesurer des distances sur une carte"],
+          "contenu": "<h3>1. Les éléments d'une carte</h3><ul><li><strong>Titre :</strong> indique le sujet de la carte</li><li><strong>Légende :</strong> explique les symboles et couleurs utilisés</li><li><strong>Échelle :</strong> rapport entre les distances réelles et les distances sur la carte</li><li><strong>Rose des vents :</strong> indique les orientations (N, S, E, O)</li></ul><h3>2. Lire une échelle</h3><p>Échelle 1/1 000 000 : 1 cm sur la carte = 10 km dans la réalité</p><p>Si deux villes sont à 5 cm sur la carte → distance réelle = 5 × 10 = <strong>50 km</strong></p><h3>3. Les coordonnées géographiques</h3><p><strong>Latitude :</strong> distance par rapport à l'équateur (0° à 90°)<br><strong>Longitude :</strong> distance par rapport au méridien de Greenwich (0° à 180°)</p><p>Kinshasa : 4°S, 15°E</p>",
+          "exemple": "Échelle 1/50 000 : 2 cm = 1 km réel",
+          "qcm": [
+            {"q": "Que signifie échelle 1/100 000 ?", "options": ["1 cm = 1 km", "1 cm = 10 km", "1 cm = 100 m", "1 m = 1 km"], "rep": 0},
+            {"q": "La latitude de Kinshasa est ?", "options": ["15°N", "4°S", "4°N", "15°S"], "rep": 1},
+            {"q": "La légende d'une carte sert à ?", "options": ["Mesurer", "Expliquer les symboles", "Orienter", "Calculer"], "rep": 1}
+          ],
+          "fichiers": ["cartographie.pdf"]
+        }
+      ]
+    },
+    {
+      "nom": "Éducation Civique",
+      "couleur": "#DC2626",
+      "icone": "shield",
+      "lecons": [
+        {
+          "id": "civ-01",
+          "titre": "Les droits de l'enfant",
+          "niveau": "Primaire 5e",
+          "duree": "40 min",
+          "objectifs": ["Connaître les droits fondamentaux de l'enfant", "Expliquer la Convention des droits de l'enfant", "Distinguer droits et devoirs"],
+          "contenu": "<h3>1. La Convention des droits de l'enfant (CDE)</h3><p>Adoptée par l'ONU le <strong>20 novembre 1989</strong>, ratifiée par 196 pays. C'est le traité international le plus ratifié au monde.</p><h3>2. Les 4 principes fondamentaux</h3><ul><li><strong>Non-discrimination :</strong> tous les enfants sont égaux</li><li><strong>Intérêt supérieur de l'enfant :</strong> toutes décisions doivent favoriser l'enfant</li><li><strong>Droit à la vie et au développement</strong></li><li><strong>Participation :</strong> l'enfant a le droit d'exprimer son opinion</li></ul><h3>3. Les droits principaux</h3><p>✓ Droit à l'éducation ✓ Droit à la santé ✓ Droit à la protection contre les abus ✓ Droit à une identité (nom, nationalité) ✓ Droit au jeu et aux loisirs</p>",
+          "exemple": "En RDC, l'éducation primaire est obligatoire et gratuite depuis 2012",
+          "qcm": [
+            {"q": "La CDE a été adoptée en ?", "options": ["1948", "1979", "1989", "1995"], "rep": 2},
+            {"q": "Combien de pays ont ratifié la CDE ?", "options": ["100", "150", "196", "210"], "rep": 2},
+            {"q": "Quel droit inclut le droit au jeu ?", "options": ["Droit civil", "Droit au développement", "Droit économique", "Droit à la santé"], "rep": 1}
+          ],
+          "fichiers": ["droits.pdf"]
+        },
+        {
+          "id": "civ-02",
+          "titre": "La démocratie et les élections",
+          "niveau": "Secondaire 2e",
+          "duree": "55 min",
+          "objectifs": ["Définir la démocratie", "Comprendre le processus électoral", "Analyser l'importance du vote"],
+          "contenu": "<h3>1. Définition de la démocratie</h3><p>Démocratie vient du grec : <em>demos</em> (peuple) + <em>kratos</em> (pouvoir). C'est « le gouvernement du peuple, par le peuple, pour le peuple » (Lincoln).</p><h3>2. Les principes démocratiques</h3><ul><li>Suffrage universel (tout citoyen peut voter)</li><li>Élections libres et régulières</li><li>Séparation des pouvoirs (exécutif, législatif, judiciaire)</li><li>Respect des droits fondamentaux</li><li>Liberté de la presse</li></ul><h3>3. Les élections en RDC</h3><p>La RDC est une République. Le Président est élu au suffrage universel pour un mandat de 5 ans (renouvelable une fois). Le Parlement comprend l'Assemblée Nationale et le Sénat.</p>",
+          "exemple": "\"Le bulletin de vote est la voix du peuple\" — vote = devoir civique",
+          "qcm": [
+            {"q": "Démocratie signifie littéralement ?", "options": ["Gouvernement des sages", "Pouvoir du peuple", "Loi de tous", "Justice universelle"], "rep": 1},
+            {"q": "La séparation des pouvoirs comprend ?", "options": ["2 pouvoirs", "3 pouvoirs", "4 pouvoirs", "5 pouvoirs"], "rep": 1},
+            {"q": "Le mandat présidentiel en RDC dure ?", "options": ["4 ans", "5 ans", "6 ans", "7 ans"], "rep": 1}
+          ],
+          "fichiers": ["democratie.pdf"]
+        },
+        {
+          "id": "civ-03",
+          "titre": "Les institutions de la RDC",
+          "niveau": "Secondaire 1e",
+          "duree": "55 min",
+          "objectifs": ["Connaître les institutions de la RDC", "Expliquer le rôle de chaque institution", "Comprendre l'organisation de l'État"],
+          "contenu": "<h3>1. Le Pouvoir Exécutif</h3><ul><li><strong>Président de la République :</strong> Chef de l'État, Chef des Armées</li><li><strong>Premier Ministre :</strong> Chef du Gouvernement</li><li><strong>Gouvernement :</strong> ministres</li></ul><h3>2. Le Pouvoir Législatif</h3><ul><li><strong>Assemblée Nationale :</strong> 500 députés nationaux (élus pour 5 ans)</li><li><strong>Sénat :</strong> 108 sénateurs (représentent les provinces)</li></ul><h3>3. Le Pouvoir Judiciaire</h3><ul><li><strong>Cour Constitutionnelle :</strong> contrôle la conformité des lois</li><li><strong>Cour de Cassation :</strong> juridiction suprême civile et pénale</li><li><strong>Conseil d'État :</strong> juridiction administrative</li></ul>",
+          "exemple": "Constitution de la RDC promulguée le 18 février 2006",
+          "qcm": [
+            {"q": "Combien de députés nationaux en RDC ?", "options": ["200", "360", "500", "108"], "rep": 2},
+            {"q": "Qui contrôle la conformité des lois ?", "options": ["Sénat", "Assemblée Nationale", "Cour Constitutionnelle", "Premier Ministre"], "rep": 2},
+            {"q": "Le Sénat représente ?", "options": ["Le peuple", "Les provinces", "Le gouvernement", "L'armée"], "rep": 1}
+          ],
+          "fichiers": ["institutions.pdf"]
+        },
+        {
+          "id": "civ-04",
+          "titre": "Les valeurs morales et la citoyenneté",
+          "niveau": "Primaire 4e",
+          "duree": "40 min",
+          "objectifs": ["Définir les valeurs morales", "Comprendre ce qu'est un bon citoyen", "S'engager pour sa communauté"],
+          "contenu": "<h3>1. Les valeurs morales fondamentales</h3><ul><li><strong>Honnêteté :</strong> dire la vérité, ne pas voler ni trichier</li><li><strong>Respect :</strong> traiter les autres comme on veut être traité</li><li><strong>Solidarité :</strong> aider les plus faibles, partager</li><li><strong>Responsabilité :</strong> assumer ses actes et leurs conséquences</li><li><strong>Justice :</strong> traiter chacun équitablement</li></ul><h3>2. Le bon citoyen</h3><p>Un bon citoyen :</p><ul><li>Respecte les lois</li><li>Paie ses impôts</li><li>Participe aux élections</li><li>Protège l'environnement</li><li>Respecte les droits des autres</li></ul><h3>3. Ubuntu : philosophie africaine</h3><p>« Je suis parce que nous sommes » — la communauté prime sur l'individu.</p>",
+          "exemple": "Ubuntu : une personne est une personne grâce aux autres personnes",
+          "qcm": [
+            {"q": "Qu'est-ce que la solidarité ?", "options": ["S'enrichir", "Aider les autres", "Obéir aux lois", "Voter"], "rep": 1},
+            {"q": "Ubuntu est une philosophie ?", "options": ["Européenne", "Asiatique", "Africaine", "Américaine"], "rep": 2},
+            {"q": "Un bon citoyen doit d'abord ?", "options": ["Être riche", "Respecter les lois", "Commander", "Voyager"], "rep": 1}
+          ],
+          "fichiers": ["valeurs.pdf"]
+        },
+        {
+          "id": "civ-05",
+          "titre": "Paix et résolution des conflits",
+          "niveau": "Secondaire 2e",
+          "duree": "50 min",
+          "objectifs": ["Analyser les causes des conflits", "Proposer des méthodes de résolution pacifique", "Comprendre le rôle des organisations de paix"],
+          "contenu": "<h3>1. Qu'est-ce qu'un conflit ?</h3><p>Un conflit est une opposition entre deux personnes ou groupes ayant des intérêts ou des valeurs différents. Il peut être verbal, social, armé...</p><h3>2. Causes fréquentes</h3><ul><li>Ressources naturelles (terres, minerais, eau)</li><li>Différences ethniques ou religieuses mal gérées</li><li>Injustices économiques</li><li>Mauvaise gouvernance</li></ul><h3>3. Résolution pacifique</h3><ul><li><strong>Dialogue :</strong> écoute et négociation</li><li><strong>Médiation :</strong> intervention d'un tiers neutre</li><li><strong>Arbitrage :</strong> décision d'un arbitre accepté par les deux parties</li></ul><h3>4. Organisations de paix</h3><p>ONU, Union Africaine, SADC, MONUSCO (RDC)</p>",
+          "exemple": "Mandela : 27 ans de prison, choix de la paix et du dialogue au lieu de la vengeance",
+          "qcm": [
+            {"q": "La médiation implique ?", "options": ["La force", "Un tiers neutre", "L'armée", "Le vote"], "rep": 1},
+            {"q": "L'ONU a été créée en ?", "options": ["1939", "1944", "1945", "1948"], "rep": 2},
+            {"q": "MONUSCO opère dans ?", "options": ["Angola", "Rwanda", "RDC", "Centrafrique"], "rep": 2}
+          ],
+          "fichiers": ["paix.pdf"]
+        }
+      ]
+    }
+  ]
+}

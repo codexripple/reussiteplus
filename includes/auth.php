@@ -8,6 +8,14 @@ require_once __DIR__ . '/mailer.php';
 
 // ── Connexion ──────────────────────────────────────────────
 function auth_login(string $email, string $password): array {
+    // Rate-limit interne : 10 tentatives / 10 min par IP+email
+    require_once __DIR__ . '/rate_limit.php';
+    $ip  = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $key = $ip . '_' . md5(strtolower(trim($email)));
+    if (!rate_limit_check('auth_login', $key, 10, 600)) {
+        return ['ok' => false, 'msg' => 'Trop de tentatives. Réessayez dans 10 minutes.'];
+    }
+
     $user = dbRow(
         "SELECT * FROM utilisateurs WHERE email = ? AND is_active = 1",
         [strtolower(trim($email))]

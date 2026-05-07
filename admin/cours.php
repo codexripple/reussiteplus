@@ -40,20 +40,28 @@ if (isset($_POST['rename_file']) && isset($_POST['matiere']) && isset($_POST['ol
 }
 
 // Gestion de l'ajout de fichier
+$allowedExtensions = ['pdf','mp4','avi','mov','mp3','wav','jpg','jpeg','png','gif','pptx','ppt','docx','doc','txt','zip','rar'];
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fichier'])) {
   $matiere = trim($_POST['matiere'] ?? '');
-  if ($matiere && isset($_FILES['fichier']['tmp_name'])) {
-    $targetDir = __DIR__ . '/../cours/' . $matiere;
-    if (!is_dir($targetDir)) mkdir($targetDir, 0777, true);
+  if ($matiere && isset($_FILES['fichier']['tmp_name']) && $_FILES['fichier']['error'] === UPLOAD_ERR_OK) {
     $filename = basename($_FILES['fichier']['name']);
-    $targetFile = $targetDir . '/' . $filename;
-    if (move_uploaded_file($_FILES['fichier']['tmp_name'], $targetFile)) {
-      $message = "Fichier ajouté avec succès.";
+    $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+    if (!in_array($ext, $allowedExtensions, true)) {
+      $message = "Type de fichier non autorisé. Extensions acceptées : " . implode(', ', $allowedExtensions);
+    } elseif ($_FILES['fichier']['size'] > MAX_FILE_SIZE) {
+      $message = "Fichier trop volumineux (max " . round(MAX_FILE_SIZE / 1048576) . " Mo).";
     } else {
-      $message = "Erreur lors de l'upload.";
+      $targetDir = __DIR__ . '/../cours/' . $matiere;
+      if (!is_dir($targetDir)) mkdir($targetDir, 0755, true);
+      $targetFile = $targetDir . '/' . $filename;
+      if (move_uploaded_file($_FILES['fichier']['tmp_name'], $targetFile)) {
+        $message = "Fichier ajouté avec succès.";
+      } else {
+        $message = "Erreur lors de l'upload.";
+      }
     }
   } else {
-    $message = "Veuillez choisir une matière et un fichier.";
+    $message = "Veuillez choisir une matière et un fichier valide.";
   }
 }
 
@@ -79,7 +87,7 @@ try {
   </style>
 </head>
 <body>
-<?php include '../includes/header_app.php'; ?>
+<?php include __DIR__ . '/../includes/header_app.php'; ?>
 <div class="container">
   <h1>Ajouter un contenu de cours</h1>
   <form class="admin-cours-form" method="post" enctype="multipart/form-data">

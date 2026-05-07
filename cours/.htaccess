@@ -1,0 +1,16 @@
+# Autoriser l'accès aux fichiers de tous formats
+Options -Indexes
+AddType application/pdf .pdf
+AddType video/mp4 .mp4
+AddType audio/mpeg .mp3
+AddType application/vnd.ms-powerpoint .ppt .pptx
+AddType image/jpeg .jpg .jpeg
+AddType image/png .png
+AddType text/plain .txt
+AddType application/zip .zip
+
+# Permettre l'accès direct aux fichiers dans les sous-dossiers
+<FilesMatch "\.(pdf|mp4|mp3|jpg|jpeg|png|gif|zip|pptx?|docx?|txt)$">
+  Allow from all
+  Satisfy Any
+</FilesMatch>

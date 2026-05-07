@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
                 'message' => 'Votre paiement a été confirmé. Votre abonnement ' . $abon['plan'] . ' est actif jusqu\'au ' . date('d/m/Y', strtotime($abon['date_fin'])) . '.',
                 'lien'    => '/reussiteplus/abonnement.php',
             ]);
-            dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => 'CONFIRMER_PAIEMENT', 'details' => 'ID=' . $abon['id']]);
+            dbInsert('admin_logs', ['user_id' => $user['id'], 'action' => 'CONFIRMER_PAIEMENT', 'details' => 'ID=' . $abon['id']]);
         }
         redirect('/reussiteplus/admin/notifications.php', 'success', 'Paiement valid&eacute; et plan activ&eacute;.');
     }
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
                 'message' => 'Votre paiement n\'a pas pu être vérifié. Contactez support@reussiteplus.cd.',
                 'lien'    => '/reussiteplus/abonnement.php',
             ]);
-            dbInsert('admin_logs', ['admin_id' => $user['id'], 'action' => 'REFUSER_PAIEMENT', 'details' => 'ID=' . $abon['id']]);
+            dbInsert('admin_logs', ['user_id' => $user['id'], 'action' => 'REFUSER_PAIEMENT', 'details' => 'ID=' . $abon['id']]);
         }
         redirect('/reussiteplus/admin/notifications.php', 'warning', 'Paiement refus&eacute;.');
     }

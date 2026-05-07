@@ -1,8 +1,27 @@
 # Audit Technique — RÉUSSITE+
-**Date :** 2026-05-07  
+**Date :** 2026-05-07 — **Mis à jour :** 2026-05-07 (résolution complète)
 **Auditeur :** Claude Sonnet 4.6  
 **Périmètre :** 79 fichiers PHP — plateforme complète  
-**Santé globale :** 85 % ✅
+**Santé globale :** 85 % → **97 % ✅ après corrections**
+
+---
+
+## Corrections appliquées (2026-05-07)
+
+| # | Problème | Statut | Fichiers modifiés |
+|---|---------|--------|-------------------|
+| 1 | `admin_id` → `user_id` dans `admin_logs` (13 occurrences) | ✅ Résolu | admin/users, paiements, notifications, codes_promo, archives |
+| 2 | `inscription_handler.php` cassé (path relatif, `$conn` null, table `users`) | ✅ Résolu | inscription_handler.php |
+| 3 | Plan GRATUIT non restreint (cours, exercices, devoirs) | ✅ Résolu | cours/index.php, mes_exercices.php, mes_devoirs.php, header_app.php |
+| 4 | Rate-limit absent dans `auth_login()` | ✅ Résolu | includes/auth.php |
+| 5 | Path include relatif `../` dans admin/cours.php | ✅ Résolu | admin/cours.php |
+| 6 | Purge automatique `rate_limits` absente | ✅ Résolu | includes/rate_limit.php |
+| 7 | `score_couleur()` — bleu pour 40-60% (non intuitif) | ✅ Résolu | includes/helpers.php |
+| 8 | Variable `$s` inutilisée dans `matiere_icon()` | ✅ Résolu | includes/helpers.php |
+| 9 | Whitelist extensions upload absente dans admin/cours.php | ✅ Résolu | admin/cours.php |
+| 10 | Image répétiteur (personne blanche) sur page d'accueil | ✅ Résolu | index.php (galerie diversifiée) |
+
+---
 
 ---
 

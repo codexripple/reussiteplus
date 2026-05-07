@@ -29,7 +29,7 @@ if (isset($_GET['action'], $_GET['id'])) {
       'message' => 'Votre paiement a été confirmé. Votre abonnement ' . $abon['plan'] . ' est actif jusqu\'au ' . $dateFinFmt . '.',
       'lien'    => '/reussiteplus/abonnement.php',
     ]);
-    dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'CONFIRMER_PAIEMENT','details'=>"ID=$id"]);
+    dbInsert('admin_logs', ['user_id'=>$user['id'],'action'=>'CONFIRMER_PAIEMENT','details'=>"ID=$id"]);
     redirect('/reussiteplus/admin/paiements.php', 'success', 'Paiement confirmé et plan activé.');
   } elseif ($action === 'refuser' && $abon['statut'] === 'EN_ATTENTE') {
     dbQuery("UPDATE abonnements SET statut='ECHEC' WHERE id=?", [$id]);
@@ -40,7 +40,7 @@ if (isset($_GET['action'], $_GET['id'])) {
       'message' => 'Votre paiement n\'a pas pu être vérifié. Contactez support@reussiteplus.cd.',
       'lien'    => '/reussiteplus/abonnement.php',
     ]);
-    dbInsert('admin_logs', ['admin_id'=>$user['id'],'action'=>'REFUSER_PAIEMENT','details'=>"ID=$id"]);
+    dbInsert('admin_logs', ['user_id'=>$user['id'],'action'=>'REFUSER_PAIEMENT','details'=>"ID=$id"]);
     redirect('/reussiteplus/admin/paiements.php', 'success', 'Paiement refusé.');
   }
 }

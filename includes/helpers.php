@@ -52,8 +52,8 @@ function slugify(string $text): string {
 function matiere_icon(string $icone, int $size = 16, string $style = ''): string {
     // Si c'est déjà un nom Lucide (pas emoji), on rend l'icône
     if (preg_match('/^[a-z][a-z0-9\-]+$/', $icone)) {
-        $s = $style ? " style=\"{$style}\"" : '';
-        return "<i data-lucide=\"{$icone}\" style=\"width:{$size}px;height:{$size}px;vertical-align:middle{$style}\"></i>";
+        $extra = $style ? ";{$style}" : '';
+        return "<i data-lucide=\"{$icone}\" style=\"width:{$size}px;height:{$size}px;vertical-align:middle{$extra}\"></i>";
     }
     // Sinon fallback — on cherche le mapping par le nom Lucide par défaut
     return "<i data-lucide=\"book\" style=\"width:{$size}px;height:{$size}px;vertical-align:middle\"></i>";
@@ -61,10 +61,9 @@ function matiere_icon(string $icone, int $size = 16, string $style = ''): string
 
 // ── Formatage score ────────────────────────────────────────
 function score_couleur(float $pct): string {
-    if ($pct >= 80) return '#007A5E';
-    if ($pct >= 60) return '#C9972A';
-    if ($pct >= 40) return '#1E5FAD';
-    return '#C9342A';
+    if ($pct >= 80) return '#007A5E'; // Excellent — vert
+    if ($pct >= 50) return '#C9972A'; // Passable — or
+    return '#C9342A';                  // À revoir — rouge
 }
 
 function score_label(float $pct): string {
