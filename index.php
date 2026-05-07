@@ -44,16 +44,34 @@ a { text-decoration: none; color: inherit; }
 /* NAV */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: rgba(13,17,23,0.95); backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  padding: 0 40px; height: 68px; display: flex; align-items: center; gap: 32px;
+  background: rgba(13,17,23,0.9); backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 0 48px; height: 70px;
+  display: flex; align-items: center; gap: 24px;
+  transition: background .3s, border-color .3s;
 }
-.nav-logo { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: white; }
-.nav-logo span { color: var(--gold); }
-.nav-links { display: flex; gap: 28px; flex: 1; margin-left: 32px; }
-.nav-link { font-size: 14px; color: rgba(255,255,255,0.65); transition: var(--transition); }
-.nav-link:hover { color: white; }
-.nav-actions { display: flex; gap: 12px; align-items: center; }
+.nav.scrolled { background: rgba(13,17,23,0.98); border-color: rgba(255,255,255,0.1); }
+.nav-logo-link { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+.nav-logo { font-family: var(--font-display); font-size: 19px; font-weight: 800; color: #fff; letter-spacing: -.3px; }
+.nav-logo em { color: var(--gold); font-style: normal; }
+.nav-links { display: flex; gap: 2px; flex: 1; justify-content: center; }
+.nav-link { font-size: 14px; color: rgba(255,255,255,.6); padding: 7px 13px; border-radius: 8px; transition: all .18s; font-weight: 500; position: relative; }
+.nav-link:hover { color: #fff; background: rgba(255,255,255,.06); }
+.nav-actions { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
+.nav-hamburger { display: none; flex-direction: column; gap: 4.5px; background: none; border: 1.5px solid rgba(255,255,255,.15); border-radius: 8px; cursor: pointer; padding: 8px 10px; }
+.nav-hamburger span { display: block; width: 18px; height: 1.5px; background: rgba(255,255,255,.8); border-radius: 2px; transition: all .25s; }
+.nav-mobile { display: none; position: fixed; top: 70px; left: 0; right: 0; background: rgba(10,14,20,.98); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,.08); padding: 16px 24px 24px; flex-direction: column; gap: 4px; z-index: 99; }
+.nav-mobile.open { display: flex; animation: navSlide .2s ease; }
+@keyframes navSlide { from { opacity:0; transform:translateY(-8px) } to { opacity:1; transform:translateY(0) } }
+.nav-mobile-link { font-size: 15px; color: rgba(255,255,255,.65); padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.05); font-weight: 500; }
+.nav-mobile-link:hover { color: #fff; }
+.nav-mobile-divider { height: 1px; background: rgba(255,255,255,.07); margin: 10px 0; }
+@media (max-width: 960px) {
+  .nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+  .nav-actions .btn-outline { display: none; }
+}
 .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 20px; border-radius: var(--radius); font-size: 14px; font-weight: 600; cursor: pointer; border: none; transition: var(--transition); font-family: var(--font-body); }
 .btn-outline { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.25); }
 .btn-outline:hover { background: rgba(255,255,255,0.08); }
@@ -205,14 +223,30 @@ a { text-decoration: none; color: inherit; }
 .cta-sub { font-size: 18px; color: rgba(255,255,255,0.6); margin-bottom: 36px; position: relative; }
 
 /* FOOTER */
-.footer { background: var(--noir); padding: 40px; border-top: 1px solid rgba(255,255,255,0.07); }
-.footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
-.footer-logo { font-family: var(--font-display); font-size: 18px; font-weight: 800; color: white; }
-.footer-logo span { color: var(--gold); }
-.footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
-.footer-link { font-size: 13px; color: rgba(255,255,255,0.4); transition: var(--transition); }
-.footer-link:hover { color: rgba(255,255,255,0.8); }
-.footer-copy { font-size: 12px; color: rgba(255,255,255,0.3); }
+.footer { background: #070c11; border-top: 1px solid rgba(255,255,255,.06); }
+.footer-top { max-width: 1200px; margin: 0 auto; padding: 60px 48px 48px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; }
+.footer-brand-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.footer-logo { font-family: var(--font-display); font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -.3px; }
+.footer-logo em { color: var(--gold); font-style: normal; }
+.footer-tagline { font-size: 13px; color: rgba(255,255,255,.35); line-height: 1.75; margin-bottom: 22px; max-width: 270px; }
+.footer-payments { display: flex; gap: 7px; flex-wrap: wrap; }
+.footer-pay { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 6px; letter-spacing: .3px; }
+.footer-pay-m { background: rgba(0,166,81,.12); color: #4ade80; border: 1px solid rgba(0,166,81,.18); }
+.footer-pay-a { background: rgba(228,6,19,.10); color: #f87171; border: 1px solid rgba(228,6,19,.15); }
+.footer-pay-o { background: rgba(255,102,0,.10); color: #fb923c; border: 1px solid rgba(255,102,0,.14); }
+.footer-col-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: rgba(255,255,255,.4); margin-bottom: 16px; }
+.footer-col-link { display: block; font-size: 13px; color: rgba(255,255,255,.38); padding: 5px 0; transition: color .18s; line-height: 1.5; }
+.footer-col-link:hover { color: rgba(255,255,255,.8); }
+.footer-col-link-wa { color: #25D366 !important; display: flex; align-items: center; gap: 6px; }
+.footer-col-link-wa:hover { color: #4ade80 !important; }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,.05); }
+.footer-bottom-inner { max-width: 1200px; margin: 0 auto; padding: 18px 48px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.footer-copy { font-size: 12px; color: rgba(255,255,255,.2); }
+.footer-legal { display: flex; gap: 18px; }
+.footer-legal a { font-size: 12px; color: rgba(255,255,255,.2); transition: color .18s; }
+.footer-legal a:hover { color: rgba(255,255,255,.5); }
+@media (max-width: 960px) { .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; padding: 40px 24px 32px; } .footer-bottom-inner { padding: 16px 24px; } }
+@media (max-width: 600px) { .footer-top { grid-template-columns: 1fr; } }
 
 @media (max-width: 1024px) {
   .pricing-grid { grid-template-columns: repeat(2,1fr); }
@@ -318,8 +352,9 @@ a { text-decoration: none; color: inherit; }
 .ticker-track{display:flex;align-items:center;gap:0;animation:tickerScroll 38s linear infinite;width:max-content}
 @keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .ticker-track:hover{animation-play-state:paused}
-.ticker-item{font-size:12.5px;color:rgba(255,255,255,.7);white-space:nowrap;padding:0 8px}
-.ticker-sep{color:rgba(255,255,255,.2);font-size:14px;padding:0 4px}
+.ticker-item{font-size:12.5px;color:rgba(255,255,255,.65);white-space:nowrap;padding:0 10px}
+.ticker-sep{color:rgba(255,255,255,.15);font-size:13px;padding:0 2px;font-weight:300}
+.ticker-dot-inline{display:inline-block;width:5px;height:5px;background:#4ade80;border-radius:50%;margin-right:5px;vertical-align:2px}
 
 /* ── CARTE & RÉSULTATS ────────────────────────────────────── */
 .result-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;transition:all .2s}
@@ -356,26 +391,53 @@ a { text-decoration: none; color: inherit; }
 <body>
 
 <!-- NAVIGATION -->
-<nav class="nav">
-  <a href="/reussiteplus/index.php" style="display:flex;align-items:center;gap:8px;text-decoration:none">
-    <img src="/reussiteplus/assets/img/logo-white.svg" alt="RÉUSSITE+" height="36" style="display:block">
+<nav class="nav" id="mainNav">
+  <a href="/reussiteplus/index.php" class="nav-logo-link">
+    <img src="/reussiteplus/assets/img/logo-icon.svg" alt="RÉUSSITE+" width="30" height="30" style="display:block;border-radius:8px">
+    <span class="nav-logo">RÉUSSITE<em>+</em></span>
   </a>
+
   <div class="nav-links">
     <a href="#fonctionnalites" class="nav-link">Fonctionnalités</a>
     <a href="#tarifs" class="nav-link">Tarifs</a>
     <a href="#temoignages" class="nav-link">Témoignages</a>
-    <a href="archives.php" class="nav-link">Archives</a>
+    <a href="/reussiteplus/archives.php" class="nav-link">Archives</a>
     <a href="/reussiteplus/contact.php" class="nav-link">Contact</a>
   </div>
+
   <div class="nav-actions">
     <?php if ($user): ?>
-      <a href="/reussiteplus/dashboard.php" class="btn btn-primary">Mon tableau de bord →</a>
+      <a href="/reussiteplus/dashboard.php" class="btn btn-primary">Tableau de bord
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
     <?php else: ?>
       <a href="/reussiteplus/connexion.php" class="btn btn-outline">Connexion</a>
-      <a href="/reussiteplus/inscription.php" class="btn btn-primary">Commencer gratuitement</a>
+      <a href="/reussiteplus/inscription.php" class="btn btn-primary">Commencer gratuitement
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
     <?php endif; ?>
   </div>
+
+  <button class="nav-hamburger" id="navHamburger" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- Menu mobile -->
+<div class="nav-mobile" id="navMobile">
+  <a href="#fonctionnalites" class="nav-mobile-link" onclick="closeNav()">Fonctionnalités</a>
+  <a href="#tarifs" class="nav-mobile-link" onclick="closeNav()">Tarifs</a>
+  <a href="#temoignages" class="nav-mobile-link" onclick="closeNav()">Témoignages</a>
+  <a href="/reussiteplus/archives.php" class="nav-mobile-link">Archives</a>
+  <a href="/reussiteplus/contact.php" class="nav-mobile-link">Contact</a>
+  <div class="nav-mobile-divider"></div>
+  <?php if ($user): ?>
+    <a href="/reussiteplus/dashboard.php" class="btn btn-primary" style="justify-content:center">Tableau de bord</a>
+  <?php else: ?>
+    <a href="/reussiteplus/connexion.php" class="btn btn-outline" style="justify-content:center;margin-bottom:8px">Connexion</a>
+    <a href="/reussiteplus/inscription.php" class="btn btn-primary" style="justify-content:center">Commencer gratuitement</a>
+  <?php endif; ?>
+</div>
 
 <!-- HERO -->
 <div style="background:var(--noir)">
@@ -429,7 +491,7 @@ a { text-decoration: none; color: inherit; }
       </div>
 
       <div class="hero-carousel-slide">
-        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=800&auto=format&q=80&fit=crop&crop=faces" alt="Étudiante congolaise" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=800&auto=format&q=80&fit=crop&crop=center" alt="Étudiante congolaise" loading="lazy">
         <div class="hero-carousel-label"><i class="bi bi-star-fill"></i> TENASOSP — 1er essai</div>
         <div class="hero-carousel-caption">«&nbsp;Tout classé, corrigé, détaillé. Réussi du premier coup.&nbsp;»</div>
       </div>
@@ -441,7 +503,7 @@ a { text-decoration: none; color: inherit; }
       </div>
 
       <div class="hero-carousel-slide">
-        <img src="https://images.unsplash.com/photo-1507152927626-13d6a1ee8614?w=800&auto=format&q=80&fit=crop&crop=faces" alt="Répétiteur de Goma" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1507152927626-13d6a1ee8614?w=800&auto=format&q=80&fit=crop&crop=center" alt="Répétiteur de Goma" loading="lazy">
         <div class="hero-carousel-label"><i class="bi bi-phone"></i> Goma · 11/13 reçus</div>
         <div class="hero-carousel-caption">«&nbsp;Mes élèves passent les QCM depuis leurs téléphones, même sans WiFi.&nbsp;»</div>
       </div>
@@ -491,22 +553,22 @@ a { text-decoration: none; color: inherit; }
   <div class="ticker-live"><span class="ticker-dot"></span> En direct</div>
   <div class="ticker-overflow">
     <div class="ticker-track" id="tickerTrack">
-      <span class="ticker-item">🎉 <strong>Amisi K.</strong> · Kinshasa — vient de terminer un examen blanc avec <strong style="color:#4ade80">87 %</strong> en Mathématiques</span>
-      <span class="ticker-sep">·</span>
-      <span class="ticker-item">✅ <strong>Grâce M.</strong> · Lubumbashi — TENASOSP validé au <strong style="color:#4ade80">1er essai</strong></span>
-      <span class="ticker-sep">·</span>
-      <span class="ticker-item">📈 <strong>Patient N.</strong> · Goma — score passé de 48 % à <strong style="color:#4ade80">79 %</strong> en 3 semaines</span>
-      <span class="ticker-sep">·</span>
-      <span class="ticker-item">🏆 <strong>Déborah K.</strong> · Mbuji-Mayi — 94 % en Chimie, meilleur score de sa classe</span>
-      <span class="ticker-sep">·</span>
-      <span class="ticker-item">📚 <strong>Éloi M.</strong> · Bukavu — a téléchargé 12 corrigés ENAFEP ce matin</span>
-      <span class="ticker-sep">·</span>
-      <span class="ticker-item">🎯 <strong>Christelle B.</strong> · Kinshasa — plan de révision IA sur 7 jours généré pour l'Exam d'État</span>
-      <span class="ticker-sep">·</span>
-      <span class="ticker-item">🔥 <strong>Joseph K.</strong> · Kisangani — série de 14 jours consécutifs de révision</span>
-      <span class="ticker-sep">·</span>
-      <span class="ticker-item">✨ <strong>Merveille T.</strong> · Kananga — vient de rejoindre <strong>14 238 élèves</strong> sur RÉUSSITE+</span>
-      <span class="ticker-sep">·</span>
+      <span class="ticker-item"><span class="ticker-dot-inline"></span> <strong>Amisi K.</strong> · Kinshasa — examen blanc terminé avec <strong style="color:#4ade80">87 %</strong> en Mathématiques</span>
+      <span class="ticker-sep">—</span>
+      <span class="ticker-item"><span class="ticker-dot-inline"></span> <strong>Grâce M.</strong> · Lubumbashi — TENASOSP validé au <strong style="color:#4ade80">1er essai</strong></span>
+      <span class="ticker-sep">—</span>
+      <span class="ticker-item"><span class="ticker-dot-inline"></span> <strong>Patient N.</strong> · Goma — score passé de 48 % à <strong style="color:#4ade80">79 %</strong> en 3 semaines</span>
+      <span class="ticker-sep">—</span>
+      <span class="ticker-item"><span class="ticker-dot-inline"></span> <strong>Déborah K.</strong> · Mbuji-Mayi — 94 % en Chimie, meilleur score de sa classe</span>
+      <span class="ticker-sep">—</span>
+      <span class="ticker-item"><span class="ticker-dot-inline"></span> <strong>Éloi M.</strong> · Bukavu — 12 corrigés ENAFEP téléchargés ce matin</span>
+      <span class="ticker-sep">—</span>
+      <span class="ticker-item"><span class="ticker-dot-inline"></span> <strong>Christelle B.</strong> · Kinshasa — plan de révision IA sur 7 jours généré pour l'Exam d'État</span>
+      <span class="ticker-sep">—</span>
+      <span class="ticker-item"><span class="ticker-dot-inline"></span> <strong>Joseph K.</strong> · Kisangani — 14 jours consécutifs de révision</span>
+      <span class="ticker-sep">—</span>
+      <span class="ticker-item"><span class="ticker-dot-inline"></span> <strong>Merveille T.</strong> · Kananga — vient de rejoindre <strong>14 238 élèves</strong> sur RÉUSSITE+</span>
+      <span class="ticker-sep">—</span>
     </div>
   </div>
 </div>
@@ -663,7 +725,7 @@ a { text-decoration: none; color: inherit; }
     <div class="gallery-track">
       <?php foreach (array_merge($galleryRow1, $galleryRow1) as [$id, $name, $caption]): ?>
       <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-<?= $id ?>?w=580&auto=format&q=72&fit=crop&crop=faces" alt="<?= htmlspecialchars($name) ?>" loading="lazy">
+        <img src="https://images.unsplash.com/photo-<?= $id ?>?w=580&auto=format&q=72&fit=crop&crop=center" alt="<?= htmlspecialchars($name) ?>" loading="lazy">
         <div class="gallery-item-overlay"></div>
         <div class="gallery-item-label">
           <div style="font-size:11px;font-weight:700;color:#fff"><?= htmlspecialchars($name) ?></div>
@@ -756,7 +818,7 @@ a { text-decoration: none; color: inherit; }
         <div class="testimonial-stars" style="color:#F59E0B;font-size:15px;margin-bottom:12px">★★★★★</div>
         <p class="testimonial-text">"J'avais raté l'Exam d'État en 2023. Je ne savais pas par où recommencer. J'ai trouvé RÉUSSITE+ et j'ai commencé les QCM chaque soir depuis mon Tecno — 20 minutes, pas plus. 4 mois plus tard&nbsp;: 74&nbsp;%. Le résultat que je n'avais pas eu la première fois."</p>
         <div class="testimonial-author">
-          <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=96&h=96&fit=crop&crop=faces&auto=format&q=80" alt="Kalombo Mutombo" width="48" height="48" style="border-radius:50%;object-fit:cover;flex-shrink:0">
+          <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=96&h=96&fit=crop&crop=center&auto=format&q=80" alt="Kalombo Mutombo" width="48" height="48" style="border-radius:50%;object-fit:cover;flex-shrink:0">
           <div>
             <div class="testimonial-name">Kalombo Mutombo</div>
             <div class="testimonial-school">Lycée Roi Baudouin, Kinshasa &middot; Exam. d'État 2024 &middot; <strong style="color:var(--primary)">74 %</strong></div>
@@ -768,7 +830,7 @@ a { text-decoration: none; color: inherit; }
         <div class="testimonial-stars" style="color:#F59E0B;font-size:15px;margin-bottom:12px">★★★★★</div>
         <p class="testimonial-text">"Avant, je cherchais les anciens sujets dans des photocopies mal lisibles que je trouvais au marché. Là, tout est classé, net, corrigé, avec le détail de chaque étape. J'ai eu mon TENASOSP du premier coup. Je ne comprends pas pourquoi tout le monde ne l'utilise pas encore."</p>
         <div class="testimonial-author">
-          <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=96&h=96&fit=crop&crop=faces&auto=format&q=80" alt="Bénédicte Nzuzi" width="48" height="48" style="border-radius:50%;object-fit:cover;flex-shrink:0">
+          <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=96&h=96&fit=crop&crop=center&auto=format&q=80" alt="Bénédicte Nzuzi" width="48" height="48" style="border-radius:50%;object-fit:cover;flex-shrink:0">
           <div>
             <div class="testimonial-name">Bénédicte Nzuzi</div>
             <div class="testimonial-school">Institut Kyondo, Lubumbashi &middot; TENASOSP 2025 &middot; <strong style="color:var(--primary)">1er essai</strong></div>
@@ -780,7 +842,7 @@ a { text-decoration: none; color: inherit; }
         <div class="testimonial-stars" style="color:#F59E0B;font-size:15px;margin-bottom:12px">★★★★★</div>
         <p class="testimonial-text">"Je répète à Goma depuis 5 ans. Cette année j'ai intégré RÉUSSITE+ dans mes séances du soir. Les élèves s'entraînent depuis leurs téléphones — sans WiFi, sans ordinateur. Résultat&nbsp;: 11 reçus sur 13. C'est mon meilleur taux depuis que j'enseigne."</p>
         <div class="testimonial-author">
-          <img src="https://images.unsplash.com/photo-1507152927626-13d6a1ee8614?w=96&h=96&fit=crop&crop=faces&auto=format&q=80" alt="Dieumerci Bauma" width="48" height="48" style="border-radius:50%;object-fit:cover;flex-shrink:0">
+          <img src="https://images.unsplash.com/photo-1507152927626-13d6a1ee8614?w=96&h=96&fit=crop&crop=center&auto=format&q=80" alt="Dieumerci Bauma" width="48" height="48" style="border-radius:50%;object-fit:cover;flex-shrink:0">
           <div>
             <div class="testimonial-name">Dieumerci Bauma</div>
             <div class="testimonial-school">Répétiteur, Goma &middot; 5 ans &middot; <strong style="color:var(--primary)">11/13 reçus en 2025</strong></div>
@@ -944,22 +1006,111 @@ a { text-decoration: none; color: inherit; }
 
 <!-- FOOTER -->
 <footer class="footer">
-  <div class="footer-inner">
+
+  <!-- Colonnes -->
+  <div class="footer-top">
+
+    <!-- Marque -->
+    <div class="footer-brand">
+      <div class="footer-brand-logo">
+        <img src="/reussiteplus/assets/img/logo-icon.svg" alt="RÉUSSITE+" width="36" height="36" style="display:block;border-radius:10px">
+        <span class="footer-logo">RÉUSSITE<em>+</em></span>
+      </div>
+      <p class="footer-tagline">La plateforme de préparation aux examens officiels de la République Démocratique du Congo. Construite pour les élèves congolais — pas adaptée, construite.</p>
+      <div class="footer-payments">
+        <span class="footer-pay footer-pay-m">M-Pesa</span>
+        <span class="footer-pay footer-pay-a">Airtel Money</span>
+        <span class="footer-pay footer-pay-o">Orange Money</span>
+      </div>
+    </div>
+
+    <!-- Plateforme -->
     <div>
-      <img src="/reussiteplus/assets/img/logo-icon.svg" alt="RÉUSSITE+" height="32" style="display:block;opacity:.8;margin-bottom:8px;opacity:.9">
-      <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:4px">© <?= date('Y') ?> — Plateforme EdTech RDC</div>
+      <div class="footer-col-title">Plateforme</div>
+      <a href="/reussiteplus/archives.php"    class="footer-col-link">Archives officielles</a>
+      <a href="/reussiteplus/examen.php"      class="footer-col-link">Passer un examen</a>
+      <a href="/reussiteplus/questions.php"   class="footer-col-link">Banque de questions</a>
+      <a href="/reussiteplus/cours/index.php" class="footer-col-link">Cours &amp; ressources</a>
+      <a href="/reussiteplus/progression.php" class="footer-col-link">Ma progression</a>
+      <a href="/reussiteplus/dashboard.php"   class="footer-col-link">Tableau de bord</a>
     </div>
-    <div class="footer-links">
-      <a href="/reussiteplus/tarifs.php" class="footer-link">Tarifs</a>
-      <a href="/reussiteplus/archives.php" class="footer-link">Archives</a>
-      <a href="/reussiteplus/inscription.php" class="footer-link">Inscription</a>
-      <a href="/reussiteplus/contact.php" class="footer-link">Contact</a>
+
+    <!-- Abonnements -->
+    <div>
+      <div class="footer-col-title">Abonnements</div>
+      <a href="/reussiteplus/inscription.php" class="footer-col-link">Plan Gratuit — 0 CDF</a>
+      <a href="/reussiteplus/tarifs.php"      class="footer-col-link">Plan Basique — 5 000 CDF</a>
+      <a href="/reussiteplus/tarifs.php"      class="footer-col-link">Plan Premium — 10 000 CDF</a>
+      <a href="/reussiteplus/tarifs.php"      class="footer-col-link">Plan École — 50 000 CDF</a>
+      <a href="/reussiteplus/paiement.php"    class="footer-col-link">Payer via mobile money</a>
+      <a href="/reussiteplus/tarifs.php"      class="footer-col-link">Garantie 7 jours</a>
     </div>
-    <div class="footer-copy">Paiement via <i class="bi bi-phone-fill" style="color:#4CAF50"></i> M-Pesa · <i class="bi bi-phone-fill" style="color:#e2000f"></i> Airtel Money · <i class="bi bi-phone-fill" style="color:#FF8C00"></i> Orange Money</div>
+
+    <!-- Support -->
+    <div>
+      <div class="footer-col-title">Support</div>
+      <a href="/reussiteplus/contact.php"    class="footer-col-link">Nous contacter</a>
+      <a href="https://wa.me/243977329184"   class="footer-col-link footer-col-link-wa" target="_blank" rel="noopener">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        WhatsApp — +243 97 732 9184
+      </a>
+      <a href="mailto:support@reussiteplus.cd" class="footer-col-link">support@reussiteplus.cd</a>
+      <div class="footer-col-title" style="margin-top:20px">Légal</div>
+      <a href="#" class="footer-col-link">Conditions d'utilisation</a>
+      <a href="#" class="footer-col-link">Politique de confidentialité</a>
+      <a href="#" class="footer-col-link">Gestion des cookies</a>
+    </div>
+
   </div>
+
+  <!-- Barre du bas -->
+  <div class="footer-bottom">
+    <div class="footer-bottom-inner">
+      <div class="footer-copy">
+        &copy; <?= date('Y') ?> RÉUSSITE+ &nbsp;&middot;&nbsp; Plateforme EdTech RDC &nbsp;&middot;&nbsp; Kinshasa, République Démocratique du Congo
+      </div>
+      <div class="footer-legal">
+        <a href="#">Confidentialité</a>
+        <a href="#">Conditions</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+
 </footer>
 
 <script>
+// ── NAV SCROLL + HAMBURGER ────────────────────────────────────
+(function() {
+  const nav  = document.getElementById('mainNav');
+  const btn  = document.getElementById('navHamburger');
+  const menu = document.getElementById('navMobile');
+  let open   = false;
+
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 30);
+  }, { passive: true });
+
+  if (btn && menu) {
+    btn.addEventListener('click', () => {
+      open = !open;
+      menu.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', open);
+    });
+  }
+
+  window.closeNav = function() {
+    open = false;
+    menu?.classList.remove('open');
+    btn?.setAttribute('aria-expanded', 'false');
+  };
+
+  // Fermer si clic à l'extérieur
+  document.addEventListener('click', e => {
+    if (open && !nav.contains(e.target) && !menu.contains(e.target)) closeNav();
+  });
+})();
+
 // ── TICKER — duplication automatique pour loop seamless ──────
 (function() {
   const track = document.getElementById('tickerTrack');
