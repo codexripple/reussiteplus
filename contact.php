@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 header('Content-Type: text/html; charset=UTF-8');
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/db.php';
@@ -10,10 +10,10 @@ $success = false;
 $errors  = [];
 $nomEnvoyeur = '';
 
-// ── Traitement du formulaire ─────────────────────────────
+// â”€â”€ Traitement du formulaire â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!csrf_verify()) {
-        $errors[] = 'Token de sécurité invalide. Rechargez la page.';
+        $errors[] = 'Token de sÃ©curitÃ© invalide. Rechargez la page.';
     } else {
         $nom      = trim($_POST['nom']      ?? '');
         $email    = trim($_POST['email']    ?? '');
@@ -22,10 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message  = trim($_POST['message']  ?? '');
 
         // Validation
-        if (!$nom || mb_strlen($nom) < 2)        $errors[] = 'Votre nom est requis (minimum 2 caractères).';
+        if (!$nom || mb_strlen($nom) < 2)        $errors[] = 'Votre nom est requis (minimum 2 caractÃ¨res).';
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'Adresse e-mail invalide.';
-        if (!$message || mb_strlen($message) < 10) $errors[] = 'Le message est trop court (minimum 10 caractères).';
-        if (mb_strlen($message) > 2000)            $errors[] = 'Le message est trop long (maximum 2000 caractères).';
+        if (!$message || mb_strlen($message) < 10) $errors[] = 'Le message est trop court (minimum 10 caractÃ¨res).';
+        if (mb_strlen($message) > 2000)            $errors[] = 'Le message est trop long (maximum 2000 caractÃ¨res).';
         $allowed = ['PLAN','TECHNIQUE','PARTENARIAT','PRESSE','AUTRE'];
         if (!in_array($sujet, $allowed, true)) $sujet = 'AUTRE';
 
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             [$ip]
         );
         if (($recent['n'] ?? 0) >= 3) {
-            $errors[] = 'Trop de messages envoyés. Réessayez dans une heure.';
+            $errors[] = 'Trop de messages envoyÃ©s. RÃ©essayez dans une heure.';
         }
 
         if (!$errors) {
@@ -56,23 +56,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $sujets = [
     'PLAN'         => 'Question sur un abonnement / tarif',
-    'TECHNIQUE'    => 'Problème technique',
-    'PARTENARIAT'  => 'Partenariat ou collaboration école',
-    'PRESSE'       => 'Médias & presse',
+    'TECHNIQUE'    => 'ProblÃ¨me technique',
+    'PARTENARIAT'  => 'Partenariat ou collaboration Ã©cole',
+    'PRESSE'       => 'MÃ©dias & presse',
     'AUTRE'        => 'Autre',
 ];
 
 $faq = [
-    ['q' => 'Comment accéder aux archives officielles ?',
-     'r' => 'Les archives sont accessibles dès le plan Basique. Créez un compte gratuit, puis abonnez-vous à partir de 5 000 CDF/mois.'],
+    ['q' => 'Comment accÃ©der aux archives officielles ?',
+     'r' => 'Les archives sont accessibles dÃ¨s le plan Basique. CrÃ©ez un compte gratuit, puis abonnez-vous Ã  partir de 5 000 CDF/mois.'],
     ['q' => 'Le plan Gratuit a-t-il vraiment 0 CDF ?',
-     'r' => 'Oui, totalement gratuit et sans carte bancaire. Vous avez accès à 5 examens d\'entraînement par mois.'],
+     'r' => 'Oui, totalement gratuit et sans carte bancaire. Vous avez accÃ¨s Ã  5 examens d\'entraÃ®nement par mois.'],
     ['q' => 'Comment payer mon abonnement en RDC ?',
      'r' => 'Nous acceptons M-Pesa, Airtel Money et Orange Money. Le paiement se fait directement dans l\'application.'],
-    ['q' => 'Puis-je utiliser RÉUSSITE+ hors-ligne ?',
-     'r' => 'Pour l\'instant, une connexion est requise. Une version hors-ligne est prévue pour fin 2025.'],
-    ['q' => 'Comment préparer l\'Examen d\'État avec la plateforme ?',
-     'r' => 'Choisissez le type "Examen d\'État" dans la configuration, sélectionnez votre matière et lancez une simulation chronométrée.'],
+    ['q' => 'Puis-je utiliser RÃ‰USSITE+ hors-ligne ?',
+     'r' => 'Pour l\'instant, une connexion est requise. Une version hors-ligne est prÃ©vue pour fin 2025.'],
+    ['q' => 'Comment prÃ©parer l\'Examen d\'Ã‰tat avec la plateforme ?',
+     'r' => 'Choisissez le type "Examen d\'Ã‰tat" dans la configuration, sÃ©lectionnez votre matiÃ¨re et lancez une simulation chronomÃ©trÃ©e.'],
 ];
 ?>
 <!DOCTYPE html>
@@ -80,8 +80,8 @@ $faq = [
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nous contacter — RÉUSSITE+</title>
-<meta name="description" content="Contactez l'équipe RÉUSSITE+ pour toute question, partenariat ou support technique.">
+<title>Nous contacter â€” RÃ‰USSITE+</title>
+<meta name="description" content="Contactez l'Ã©quipe RÃ‰USSITE+ pour toute question, partenariat ou support technique.">
 <link rel="icon" type="image/svg+xml" href="/reussiteplus/assets/img/favicon.svg">
 <link rel="stylesheet" href="/reussiteplus/assets/css/fonts.css">
 <link rel="stylesheet" href="/reussiteplus/assets/css/bootstrap-icons.css">
@@ -103,7 +103,7 @@ html{scroll-behavior:smooth;}
 body{font-family:var(--font-body);background:var(--gris-50);color:var(--gris-800);}
 a{text-decoration:none;color:inherit;}
 
-/* ── NAV ─────────────────────────────────────────────── */
+/* â”€â”€ NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .nav {
   position:sticky;top:0;z-index:100;
   background:rgba(13,17,23,0.96);backdrop-filter:blur(12px);
@@ -124,7 +124,7 @@ a{text-decoration:none;color:inherit;}
 .btn-ghost{background:transparent;color:var(--gris-700);border:1.5px solid var(--gris-200);}
 .btn-ghost:hover{background:var(--gris-100);}
 
-/* ── HERO ─────────────────────────────────────────────── */
+/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .hero-contact {
   background:var(--noir);padding:80px 40px 60px;text-align:center;
   position:relative;overflow:hidden;
@@ -139,11 +139,11 @@ a{text-decoration:none;color:inherit;}
 .hero-contact h1{font-family:var(--font-display);font-size:clamp(30px,5vw,52px);font-weight:900;color:white;line-height:1.1;margin-bottom:14px;}
 .hero-contact p{font-size:17px;color:rgba(255,255,255,0.58);line-height:1.7;}
 
-/* ── MAIN LAYOUT ─────────────────────────────────────── */
+/* â”€â”€ MAIN LAYOUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .contact-main{max-width:1100px;margin:0 auto;padding:64px 40px;}
 .contact-grid{display:grid;grid-template-columns:1fr 1.7fr;gap:48px;align-items:start;}
 
-/* ── INFO CARD ───────────────────────────────────────── */
+/* â”€â”€ INFO CARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .info-card{background:white;border-radius:var(--radius-xl);padding:36px;border:1px solid var(--gris-200);box-shadow:var(--shadow);}
 .info-title{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--gris-900);margin-bottom:6px;}
 .info-sub{font-size:13px;color:var(--gris-600);margin-bottom:28px;line-height:1.6;}
@@ -170,7 +170,7 @@ a{text-decoration:none;color:inherit;}
 .social-btn.yt{background:#FEE8E8;color:#FF0000;}
 .social-btn.yt:hover{background:#FF0000;color:white;}
 
-/* ── FORM CARD ───────────────────────────────────────── */
+/* â”€â”€ FORM CARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .form-card{background:white;border-radius:var(--radius-xl);padding:40px;border:1px solid var(--gris-200);box-shadow:var(--shadow);}
 .form-title{font-family:var(--font-display);font-size:22px;font-weight:800;color:var(--gris-900);margin-bottom:6px;}
 .form-sub{font-size:14px;color:var(--gris-600);margin-bottom:28px;}
@@ -213,7 +213,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 .errors-list{list-style:none;}
 .errors-list li{padding:3px 0;}
 
-/* ── FAQ ──────────────────────────────────────────────── */
+/* â”€â”€ FAQ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .faq-section{max-width:1100px;margin:0 auto;padding:0 40px 80px;}
 .faq-title{font-family:var(--font-display);font-size:clamp(22px,3vw,34px);font-weight:800;color:var(--gris-900);margin-bottom:8px;}
 .faq-sub{font-size:15px;color:var(--gris-600);margin-bottom:36px;}
@@ -230,21 +230,21 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 .faq-a{padding:0 20px;max-height:0;overflow:hidden;transition:max-height .3s ease, padding .3s ease;font-size:14px;color:var(--gris-600);line-height:1.7;}
 .faq-item.open .faq-a{max-height:200px;padding-bottom:18px;}
 
-/* ── CTA BOTTOM ──────────────────────────────────────── */
+/* â”€â”€ CTA BOTTOM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .cta-bottom{background:var(--noir);padding:72px 40px;text-align:center;position:relative;overflow:hidden;}
 .cta-bottom::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(0,122,94,0.18) 0%,transparent 70%);pointer-events:none;}
 .cta-bottom-inner{position:relative;max-width:560px;margin:0 auto;}
 .cta-bottom h2{font-family:var(--font-display);font-size:clamp(26px,4vw,42px);font-weight:900;color:white;margin-bottom:12px;line-height:1.15;}
 .cta-bottom p{font-size:16px;color:rgba(255,255,255,0.55);margin-bottom:28px;}
 
-/* ── FOOTER ──────────────────────────────────────────── */
+/* â”€â”€ FOOTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .footer{background:var(--noir);padding:36px 40px;border-top:1px solid rgba(255,255,255,0.07);}
 .footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;}
 .footer-links{display:flex;gap:20px;flex-wrap:wrap;}
 .footer-link{font-size:13px;color:rgba(255,255,255,0.4);transition:var(--transition);}
 .footer-link:hover{color:rgba(255,255,255,0.8);}
 
-/* ── RESPONSIVE ──────────────────────────────────────── */
+/* â”€â”€ RESPONSIVE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @media(max-width:900px){
   .contact-grid{grid-template-columns:1fr;}
   .faq-grid{grid-template-columns:1fr;}
@@ -263,18 +263,18 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 <!-- NAVIGATION -->
 <nav class="nav">
   <a href="/reussiteplus/index.php" class="nav-logo">
-    <img src="/reussiteplus/assets/img/logo-icon.svg" alt="RÉUSSITE+" width="32" height="32" style="display:block;flex-shrink:0">
-    <span>RÉUSSITE<span class="lplus">+</span></span>
+    <img src="/reussiteplus/assets/img/logo-icon.svg" alt="RÃ‰USSITE+" width="32" height="32" style="display:block;flex-shrink:0">
+    <span>RÃ‰USSITE<span class="lplus">+</span></span>
   </a>
   <div class="nav-links">
-    <a href="/reussiteplus/index.php#fonctionnalites" class="nav-link">Fonctionnalités</a>
+    <a href="/reussiteplus/index.php#fonctionnalites" class="nav-link">FonctionnalitÃ©s</a>
     <a href="/reussiteplus/tarifs.php" class="nav-link">Tarifs</a>
     <a href="/reussiteplus/archives.php" class="nav-link">Archives</a>
     <a href="/reussiteplus/contact.php" class="nav-link active">Contact</a>
   </div>
   <div class="nav-actions">
     <?php if ($user): ?>
-      <a href="/reussiteplus/dashboard.php" class="btn btn-primary">Mon tableau de bord →</a>
+      <a href="/reussiteplus/dashboard.php" class="btn btn-primary">Mon tableau de bord â†’</a>
     <?php else: ?>
       <a href="/reussiteplus/connexion.php" class="btn btn-outline">Connexion</a>
       <a href="/reussiteplus/inscription.php" class="btn btn-primary">Commencer gratuitement</a>
@@ -283,32 +283,32 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 </nav>
 
 <?php if ($success): ?>
-<!-- ══════════════════════════════════════════════════════════ -->
-<!--  PAGE SUCCÈS — MESSAGE ENVOYÉ + UPSELL ABONNEMENT        -->
-<!-- ══════════════════════════════════════════════════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!--  PAGE SUCCÃˆS â€” MESSAGE ENVOYÃ‰ + UPSELL ABONNEMENT        -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 
 <!-- Confetti animation -->
 <div id="confetti-container" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden"></div>
 
-<!-- Hero succès -->
+<!-- Hero succÃ¨s -->
 <div style="background:linear-gradient(160deg,#0D1117 0%,#0d3320 50%,#0D1117 100%);padding:80px 40px 60px;text-align:center;position:relative;overflow:hidden">
-  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1400&q=60') center/cover;opacity:.06"></div>
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1507152927626-13d6a1ee8614?w=1400&q=60') center/cover;opacity:.06"></div>
   <!-- Orb glow -->
   <div style="position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(0,169,127,.25) 0%,transparent 70%);pointer-events:none"></div>
   <div style="position:relative;max-width:640px;margin:0 auto">
-    <!-- Check animé -->
+    <!-- Check animÃ© -->
     <div class="success-check"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" stroke="rgba(74,222,128,.3)" stroke-width="1.5"/><polyline points="20 6 9 17 4 12"/></svg></div>
     <div style="font-family:var(--font-display);font-size:clamp(28px,5vw,46px);font-weight:900;color:white;line-height:1.1;margin-bottom:14px">
-      Message reçu,<br><span style="color:var(--primary-light)"><?= e(explode(' ', $nomEnvoyeur)[0]) ?> !</span>
+      Message reÃ§u,<br><span style="color:var(--primary-light)"><?= e(explode(' ', $nomEnvoyeur)[0]) ?> !</span>
     </div>
     <p style="font-size:17px;color:rgba(255,255,255,.55);line-height:1.7;margin-bottom:30px">
-      Votre message a bien été transmis à notre équipe.<br>
-      Nous vous répondrons sous <strong style="color:white">24 heures</strong>.
+      Votre message a bien Ã©tÃ© transmis Ã  notre Ã©quipe.<br>
+      Nous vous rÃ©pondrons sous <strong style="color:white">24 heures</strong>.
     </p>
     <!-- Badge confirmation -->
     <div style="display:inline-flex;align-items:center;gap:10px;background:rgba(0,122,94,.2);border:1px solid rgba(0,122,94,.5);border-radius:50px;padding:10px 22px">
       <i class="bi bi-envelope-check-fill" style="color:var(--primary-light);font-size:18px"></i>
-      <span style="color:rgba(255,255,255,.8);font-size:14px">Confirmation envoyée à <strong style="color:white"><?= e($_POST['email'] ?? '') ?></strong></span>
+      <span style="color:rgba(255,255,255,.8);font-size:14px">Confirmation envoyÃ©e Ã  <strong style="color:white"><?= e($_POST['email'] ?? '') ?></strong></span>
     </div>
   </div>
 </div>
@@ -317,7 +317,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 <div style="background:white;border-bottom:3px solid var(--primary);padding:28px 40px;text-align:center">
   <div style="max-width:700px;margin:0 auto">
     <p style="font-size:18px;color:var(--gris-800);line-height:1.7;font-style:italic">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9972A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-4px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> <strong>En attendant notre réponse</strong>, saviez-vous que les élèves qui s'entraînent régulièrement sur RÉUSSITE+ améliorent leurs résultats de <strong style="color:var(--primary)">47% en moyenne</strong> avant les examens officiels ?
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9972A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-4px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> <strong>En attendant notre rÃ©ponse</strong>, saviez-vous que les Ã©lÃ¨ves qui s'entraÃ®nent rÃ©guliÃ¨rement sur RÃ‰USSITE+ amÃ©liorent leurs rÃ©sultats de <strong style="color:var(--primary)">47% en moyenne</strong> avant les examens officiels ?
     </p>
   </div>
 </div>
@@ -332,24 +332,24 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="vertical-align:-1px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Ne perdez pas de temps
       </div>
       <h2 style="font-family:var(--font-display);font-size:clamp(24px,4vw,38px);font-weight:900;color:var(--gris-900);margin-bottom:10px">
-        Commencez à préparer <span style="color:var(--primary)">dès maintenant</span>
+        Commencez Ã  prÃ©parer <span style="color:var(--primary)">dÃ¨s maintenant</span>
       </h2>
       <p style="font-size:16px;color:var(--gris-600);max-width:560px;margin:0 auto;line-height:1.7">
-        Des milliers d'élèves congolais utilisent déjà RÉUSSITE+ pour préparer l'ENAFEP et l'Examen d'État. 
-        L'examen approche — chaque jour compte.
+        Des milliers d'Ã©lÃ¨ves congolais utilisent dÃ©jÃ  RÃ‰USSITE+ pour prÃ©parer l'ENAFEP et l'Examen d'Ã‰tat. 
+        L'examen approche â€” chaque jour compte.
       </p>
     </div>
 
-    <!-- Témoignage fort -->
+    <!-- TÃ©moignage fort -->
     <div style="background:linear-gradient(135deg,#0D1117,#1a3a2a);border-radius:20px;padding:36px;margin-bottom:48px;display:flex;gap:28px;align-items:center;flex-wrap:wrap;position:relative;overflow:hidden">
       <div style="position:absolute;right:-20px;top:-20px;width:200px;height:200px;background:radial-gradient(circle,rgba(0,169,127,.15),transparent 70%);pointer-events:none"></div>
       <div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#007A5E,#00A97F);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div>
       <div style="flex:1;min-width:240px">
         <div style="font-size:17px;color:white;line-height:1.7;font-style:italic;margin-bottom:12px">
-          "J'ai eu <strong style="color:#4ade80">18/20 en mathématiques</strong> à l'Examen d'État. Je m'entraînais tous les soirs sur RÉUSSITE+. Les exercices ressemblent exactement aux vrais examens !"
+          "J'ai eu <strong style="color:#4ade80">18/20 en mathÃ©matiques</strong> Ã  l'Examen d'Ã‰tat. Je m'entraÃ®nais tous les soirs sur RÃ‰USSITE+. Les exercices ressemblent exactement aux vrais examens !"
         </div>
         <div style="font-size:13px;color:rgba(255,255,255,.5)">
-          <strong style="color:var(--primary-light)">Priscille M.</strong> · Élève finaliste, Kinshasa · Plan Basique
+          <strong style="color:var(--primary-light)">Priscille M.</strong> Â· Ã‰lÃ¨ve finaliste, Kinshasa Â· Plan Basique
         </div>
       </div>
       <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:18px 22px;text-align:center;flex-shrink:0">
@@ -367,15 +367,15 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
         <div style="font-family:var(--font-display);font-size:18px;font-weight:900;color:var(--gris-900);margin-bottom:6px">Gratuit</div>
         <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--gris-700);margin-bottom:16px">0 <span style="font-size:14px;font-weight:500;color:var(--gris-500)">CDF/mois</span></div>
         <ul style="list-style:none;margin-bottom:24px;font-size:13px;color:var(--gris-600);line-height:2">
-          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#007A5E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 5 examens d'entraînement/mois</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#007A5E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 5 examens d'entraÃ®nement/mois</li>
           <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#007A5E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Statistiques de base</li>
           <li style="display:flex;align-items:center;gap:8px;opacity:.45"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Archives officielles</li>
-          <li style="display:flex;align-items:center;gap:8px;opacity:.45"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Examens illimités</li>
+          <li style="display:flex;align-items:center;gap:8px;opacity:.45"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Examens illimitÃ©s</li>
         </ul>
         <a href="/reussiteplus/inscription.php" class="plan-cta" style="display:block;text-align:center;padding:12px;border:2px solid var(--gris-200);border-radius:10px;font-weight:700;color:var(--gris-700);font-size:14px;text-decoration:none;transition:.2s">Commencer gratuitement</a>
       </div>
 
-      <!-- Basique — recommandé -->
+      <!-- Basique â€” recommandÃ© -->
       <div style="background:linear-gradient(160deg,#003d2b,#007A5E);border:2px solid var(--primary);border-radius:20px;padding:28px;position:relative;transform:scale(1.03);box-shadow:0 20px 60px rgba(0,122,94,.3)">
         <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:white;font-size:10px;font-weight:800;padding:4px 14px;border-radius:50px;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;display:inline-flex;align-items:center;gap:5px"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> Le plus populaire</div>
         <div style="width:52px;height:52px;border-radius:12px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;margin-bottom:12px"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
@@ -383,12 +383,12 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
         <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:white;margin-bottom:4px">5 000 <span style="font-size:14px;font-weight:500;color:rgba(255,255,255,.6)">CDF/mois</span></div>
         <div style="font-size:12px;color:rgba(255,255,255,.5);margin-bottom:16px">soit ~1,8 USD/mois</div>
         <ul style="list-style:none;margin-bottom:24px;font-size:13px;color:rgba(255,255,255,.8);line-height:2">
-          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Examens illimités</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Examens illimitÃ©s</li>
           <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Toutes les archives officielles</li>
-          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Statistiques avancées</li>
-          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Résultats détaillés</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Statistiques avancÃ©es</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> RÃ©sultats dÃ©taillÃ©s</li>
         </ul>
-        <a href="/reussiteplus/inscription.php?plan=BASIQUE" style="display:block;text-align:center;padding:13px;background:white;color:var(--primary-dark);border-radius:10px;font-weight:800;font-size:14px;text-decoration:none;transition:.2s">S'abonner maintenant →</a>
+        <a href="/reussiteplus/inscription.php?plan=BASIQUE" style="display:block;text-align:center;padding:13px;background:white;color:var(--primary-dark);border-radius:10px;font-weight:800;font-size:14px;text-decoration:none;transition:.2s">S'abonner maintenant â†’</a>
       </div>
 
       <!-- Premium -->
@@ -398,11 +398,11 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
         <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:#7C3AED;margin-bottom:16px">10 000 <span style="font-size:14px;font-weight:500;color:var(--gris-500)">CDF/mois</span></div>
         <ul style="list-style:none;margin-bottom:24px;font-size:13px;color:var(--gris-600);line-height:2">
           <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Tout le plan Basique</li>
-          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> IA pédagogique personnalisée</li>
-          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Coaching &amp; suivi détaillé</li>
-          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Certificats de réussite</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> IA pÃ©dagogique personnalisÃ©e</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Coaching &amp; suivi dÃ©taillÃ©</li>
+          <li style="display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Certificats de rÃ©ussite</li>
         </ul>
-        <a href="/reussiteplus/inscription.php?plan=PREMIUM" style="display:block;text-align:center;padding:12px;background:linear-gradient(135deg,#7C3AED,#6D28D9);color:white;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none;transition:.2s">Découvrir Premium →</a>
+        <a href="/reussiteplus/inscription.php?plan=PREMIUM" style="display:block;text-align:center;padding:12px;background:linear-gradient(135deg,#7C3AED,#6D28D9);color:white;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none;transition:.2s">DÃ©couvrir Premium â†’</a>
       </div>
 
     </div>
@@ -421,13 +421,13 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
     <!-- CTAs finaux -->
     <div style="text-align:center;margin-top:36px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
       <a href="/reussiteplus/inscription.php" class="btn btn-primary" style="font-size:15px;padding:14px 32px;background:var(--primary)">
-        <i class="bi bi-rocket-takeoff-fill"></i> Créer mon compte gratuitement
+        <i class="bi bi-rocket-takeoff-fill"></i> CrÃ©er mon compte gratuitement
       </a>
       <a href="/reussiteplus/tarifs.php" class="btn btn-ghost" style="font-size:15px;padding:14px 32px">
-        Voir tous les tarifs →
+        Voir tous les tarifs â†’
       </a>
     </div>
-    <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--gris-500);display:flex;align-items:center;justify-content:center;gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#007A5E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Sans engagement &middot; Annulable à tout moment &middot; 100% sécurisé</div>
+    <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--gris-500);display:flex;align-items:center;justify-content:center;gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#007A5E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Sans engagement &middot; Annulable Ã  tout moment &middot; 100% sÃ©curisÃ©</div>
 
   </div>
 </div>
@@ -435,7 +435,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 <!-- Stats sociales -->
 <div style="background:var(--noir);padding:48px 40px">
   <div style="max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:2px">
-    <?php foreach ([['12 000+','Élèves inscrits'],['98%','Taux de satisfaction'],['47%','Amélioration moyenne'],['24h','Délai de réponse']] as [$num,$lbl]): ?>
+    <?php foreach ([['12 000+','Ã‰lÃ¨ves inscrits'],['98%','Taux de satisfaction'],['47%','AmÃ©lioration moyenne'],['24h','DÃ©lai de rÃ©ponse']] as [$num,$lbl]): ?>
     <div style="text-align:center;padding:28px 20px">
       <div style="font-family:var(--font-display);font-size:34px;font-weight:900;color:var(--primary-light)"><?= $num ?></div>
       <div style="font-size:13px;color:rgba(255,255,255,.45);margin-top:4px"><?= $lbl ?></div>
@@ -445,25 +445,25 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 </div>
 
 <?php else: ?>
-<!-- ══════════════════════════════════════════════════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 <!--  PAGE FORMULAIRE CONTACT                                  -->
-<!-- ══════════════════════════════════════════════════════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 
 <!-- HERO -->
 <div class="hero-contact" style="position:relative;overflow:hidden">
   <!-- Image de fond -->
-  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1400&q=60') center/cover;opacity:.12;pointer-events:none"></div>
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1507152927626-13d6a1ee8614?w=1400&q=60') center/cover;opacity:.12;pointer-events:none"></div>
   <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 0%,rgba(0,122,94,0.22) 0%,transparent 65%);pointer-events:none"></div>
   <div class="hero-contact-inner" style="position:relative">
     <div class="hero-label"><i class="bi bi-envelope-heart-fill"></i> Contactez-nous</div>
-    <h1>On est là pour vous<br><span style="color:var(--primary-light)">aider à réussir.</span></h1>
-    <p>Une question sur votre abonnement, un problème technique ou une idée de partenariat ?<br>Notre équipe répond sous <strong style="color:white">24 heures</strong>.</p>
+    <h1>On est lÃ  pour vous<br><span style="color:var(--primary-light)">aider Ã  rÃ©ussir.</span></h1>
+    <p>Une question sur votre abonnement, un problÃ¨me technique ou une idÃ©e de partenariat ?<br>Notre Ã©quipe rÃ©pond sous <strong style="color:white">24 heures</strong>.</p>
     <!-- Stats mini -->
     <div style="display:flex;justify-content:center;gap:24px;margin-top:32px;flex-wrap:wrap">
       <?php foreach ([
-        ['icon'=>'<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>', 'text'=>'Réponse en &lt; 24h'],
-        ['icon'=>'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>', 'text'=>'Support en français'],
-        ['icon'=>'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>', 'text'=>'Équipe basée à Kinshasa'],
+        ['icon'=>'<svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>', 'text'=>'RÃ©ponse en &lt; 24h'],
+        ['icon'=>'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>', 'text'=>'Support en franÃ§ais'],
+        ['icon'=>'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>', 'text'=>'Ã‰quipe basÃ©e Ã  Kinshasa'],
       ] as $badge): ?>
       <div style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);padding:8px 16px;border-radius:50px;font-size:13px;color:rgba(255,255,255,.7);display:inline-flex;align-items:center;gap:6px"><?= $badge['icon'] ?> <?= $badge['text'] ?></div>
       <?php endforeach; ?>
@@ -474,7 +474,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 <!-- Bande de confiance -->
 <div style="background:var(--primary);padding:16px 40px">
   <div style="max-width:1100px;margin:0 auto;display:flex;justify-content:center;gap:40px;flex-wrap:wrap">
-    <?php foreach ([['bi-people-fill','12 000+ élèves actifs'],['bi-star-fill','4.9/5 satisfaction'],['bi-shield-check-fill','Données sécurisées']] as [$icon,$txt]): ?>
+    <?php foreach ([['bi-people-fill','12 000+ Ã©lÃ¨ves actifs'],['bi-star-fill','4.9/5 satisfaction'],['bi-shield-check-fill','DonnÃ©es sÃ©curisÃ©es']] as [$icon,$txt]): ?>
     <div style="display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.9);font-size:13px;font-weight:600">
       <i class="bi <?= $icon ?>" style="opacity:.8"></i> <?= $txt ?>
     </div>
@@ -490,7 +490,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
     <div>
       <div class="info-card">
         <div class="info-title">Restons en contact</div>
-        <div class="info-sub">L'équipe RÉUSSITE+ est basée à Kinshasa et répond tous les jours ouvrables.</div>
+        <div class="info-sub">L'Ã©quipe RÃ‰USSITE+ est basÃ©e Ã  Kinshasa et rÃ©pond tous les jours ouvrables.</div>
 
         <div class="info-item">
           <div class="info-icon green"><i class="bi bi-envelope-fill"></i></div>
@@ -505,7 +505,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
             <div class="info-label">WhatsApp</div>
             <div class="info-value">
               <a href="https://wa.me/243977329184" target="_blank" rel="noopener">+243 977 329 184</a><br>
-              <span style="font-size:12px;color:var(--gris-500)">Lun–Ven, 8h–18h (heure de Kinshasa)</span>
+              <span style="font-size:12px;color:var(--gris-500)">Lunâ€“Ven, 8hâ€“18h (heure de Kinshasa)</span>
             </div>
           </div>
         </div>
@@ -513,13 +513,13 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
           <div class="info-icon gold"><i class="bi bi-geo-alt-fill"></i></div>
           <div>
             <div class="info-label">Adresse</div>
-            <div class="info-value">Kinshasa, République Démocratique du Congo</div>
+            <div class="info-value">Kinshasa, RÃ©publique DÃ©mocratique du Congo</div>
           </div>
         </div>
         <div class="info-item">
           <div class="info-icon bleu"><i class="bi bi-clock-fill"></i></div>
           <div>
-            <div class="info-label">Temps de réponse</div>
+            <div class="info-label">Temps de rÃ©ponse</div>
             <div class="info-value">Moins de <strong>24 heures</strong> en semaine</div>
           </div>
         </div>
@@ -535,21 +535,21 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
       <div style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:var(--radius-xl);padding:28px;margin-top:16px;color:white;position:relative;overflow:hidden">
         <div style="position:absolute;right:-20px;bottom:-20px;width:120px;height:120px;background:rgba(255,255,255,.06);border-radius:50%"></div>
         <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;margin-bottom:10px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg></div>
-        <div style="font-family:var(--font-display);font-size:16px;font-weight:800;margin-bottom:8px">Réponse garantie sous 24h</div>
-        <div style="font-size:13px;opacity:.8;line-height:1.6;margin-bottom:16px">Tous les messages reçus avant 16h sont traités le jour même.</div>
+        <div style="font-family:var(--font-display);font-size:16px;font-weight:800;margin-bottom:8px">RÃ©ponse garantie sous 24h</div>
+        <div style="font-size:13px;opacity:.8;line-height:1.6;margin-bottom:16px">Tous les messages reÃ§us avant 16h sont traitÃ©s le jour mÃªme.</div>
         <div style="background:rgba(255,255,255,.15);border-radius:10px;padding:10px 14px;font-size:12px;display:flex;align-items:center;gap:8px">
           <i class="bi bi-check-circle-fill" style="color:#4ade80"></i>
-          Satisfait ou remboursé sous 7 jours
+          Satisfait ou remboursÃ© sous 7 jours
         </div>
       </div>
 
-      <!-- Image témoignage -->
+      <!-- Image tÃ©moignage -->
       <div style="margin-top:16px;border-radius:var(--radius-xl);overflow:hidden;position:relative;height:180px">
-        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=700&q=70" alt="Élèves RÉUSSITE+" style="width:100%;height:100%;object-fit:cover">
+        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=700&q=70" alt="Ã‰lÃ¨ves RÃ‰USSITE+" style="width:100%;height:100%;object-fit:cover">
         <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.8),transparent)"></div>
         <div style="position:absolute;bottom:16px;left:16px;right:16px">
-          <div style="font-size:13px;color:white;font-style:italic;line-height:1.5">"RÉUSSITE+ m'a aidé à avoir 16/20 à l'Examen d'État !"</div>
-          <div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:4px">— Kevin T., Lubumbashi</div>
+          <div style="font-size:13px;color:white;font-style:italic;line-height:1.5">"RÃ‰USSITE+ m'a aidÃ© Ã  avoir 16/20 Ã  l'Examen d'Ã‰tat !"</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:4px">â€” Kevin T., Lubumbashi</div>
         </div>
       </div>
     </div>
@@ -563,7 +563,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
           </div>
           <div>
             <div class="form-title">Envoyez-nous un message</div>
-            <div class="form-sub" style="margin-bottom:0">Notre équipe vous répond personnellement sous 24h.</div>
+            <div class="form-sub" style="margin-bottom:0">Notre Ã©quipe vous rÃ©pond personnellement sous 24h.</div>
           </div>
         </div>
         <hr style="border:none;border-top:1.5px solid var(--gris-100);margin:20px 0">
@@ -599,7 +599,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label" for="telephone">Téléphone <span style="font-size:11px;color:var(--gris-400)">(optionnel)</span></label>
+              <label class="form-label" for="telephone">TÃ©lÃ©phone <span style="font-size:11px;color:var(--gris-400)">(optionnel)</span></label>
               <input class="form-control" type="tel" id="telephone" name="telephone"
                      value="<?= e($_POST['telephone'] ?? '') ?>"
                      placeholder="+243 81 XXX XXXX" autocomplete="tel">
@@ -629,7 +629,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
             <label class="form-label" for="message">Message <span style="color:var(--rouge)">*</span></label>
             <textarea class="form-control" id="message" name="message" rows="5"
                       maxlength="2000"
-                      placeholder="Décrivez votre demande en détail. Plus vous donnez de contexte, plus nous pouvons vous aider efficacement…"
+                      placeholder="DÃ©crivez votre demande en dÃ©tail. Plus vous donnez de contexte, plus nous pouvons vous aider efficacementâ€¦"
                       oninput="document.getElementById('charCount').textContent = this.value.length"
                       required><?= e($_POST['message'] ?? '') ?></textarea>
             <div class="char-count"><span id="charCount"><?= strlen($_POST['message'] ?? '') ?></span> / 2000</div>
@@ -639,7 +639,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
             <i class="bi bi-send-fill"></i> Envoyer le message
           </button>
           <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--gris-400)">
-            <i class="bi bi-lock-fill"></i> Vos données sont protégées. Nous ne les partageons jamais.
+            <i class="bi bi-lock-fill"></i> Vos donnÃ©es sont protÃ©gÃ©es. Nous ne les partageons jamais.
           </div>
         </form>
       </div>
@@ -650,13 +650,13 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
           <img src="https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=300&q=60" alt="" style="width:100%;height:100%;object-fit:cover">
         </div>
         <div style="position:relative">
-          <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:flex;align-items:center;gap:5px"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12" stroke="white" stroke-width="2"/><line x1="12" y1="16" x2="12.01" y2="16" stroke="white" stroke-width="2"/></svg> Conseil de l'équipe</div>
-          <div style="font-family:var(--font-display);font-size:15px;font-weight:800;color:white;margin-bottom:8px">En attente de notre réponse ?</div>
+          <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:flex;align-items:center;gap:5px"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12" stroke="white" stroke-width="2"/><line x1="12" y1="16" x2="12.01" y2="16" stroke="white" stroke-width="2"/></svg> Conseil de l'Ã©quipe</div>
+          <div style="font-family:var(--font-display);font-size:15px;font-weight:800;color:white;margin-bottom:8px">En attente de notre rÃ©ponse ?</div>
           <div style="font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;margin-bottom:16px">
-            Commencez dès maintenant avec notre plan gratuit — 5 examens d'entraînement vous attendent, sans carte bancaire.
+            Commencez dÃ¨s maintenant avec notre plan gratuit â€” 5 examens d'entraÃ®nement vous attendent, sans carte bancaire.
           </div>
           <a href="/reussiteplus/inscription.php" style="display:inline-flex;align-items:center;gap:7px;background:var(--primary);color:white;padding:9px 20px;border-radius:9px;font-size:13px;font-weight:700;text-decoration:none">
-            <i class="bi bi-rocket-takeoff-fill"></i> Essayer gratuitement →
+            <i class="bi bi-rocket-takeoff-fill"></i> Essayer gratuitement â†’
           </a>
         </div>
       </div>
@@ -667,9 +667,9 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 
 <!-- FAQ -->
 <section class="faq-section">
-  <div style="font-size:11px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px">Questions fréquentes</div>
+  <div style="font-size:11px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px">Questions frÃ©quentes</div>
   <div class="faq-title">Tout ce que vous voulez savoir</div>
-  <div class="faq-sub">Avant de nous écrire, vérifiez si la réponse se trouve ici.</div>
+  <div class="faq-sub">Avant de nous Ã©crire, vÃ©rifiez si la rÃ©ponse se trouve ici.</div>
   <div class="faq-grid">
     <?php foreach ($faq as $i => $f): ?>
     <div class="faq-item" id="faq-<?= $i ?>">
@@ -682,14 +682,14 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
 
 <!-- CTA BOTTOM -->
 <section class="cta-bottom" style="position:relative;overflow:hidden">
-  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1400&q=50') center/cover;opacity:.06;pointer-events:none"></div>
+  <div style="position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1507152927626-13d6a1ee8614?w=1400&q=50') center/cover;opacity:.06;pointer-events:none"></div>
   <div class="cta-bottom-inner" style="position:relative">
     <div style="width:72px;height:72px;border-radius:50%;background:rgba(0,122,94,.2);border:2px solid rgba(0,122,94,.4);display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--primary-light)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg></div>
-    <h2>Chaque jour sans s'entraîner<br>est un avantage donné aux autres.</h2>
-    <p>Plus de 12 000 élèves se préparent déjà sur RÉUSSITE+. L'examen approche — rejoignez-les.</p>
+    <h2>Chaque jour sans s'entraÃ®ner<br>est un avantage donnÃ© aux autres.</h2>
+    <p>Plus de 12 000 Ã©lÃ¨ves se prÃ©parent dÃ©jÃ  sur RÃ‰USSITE+. L'examen approche â€” rejoignez-les.</p>
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
       <a href="/reussiteplus/inscription.php" class="btn btn-primary" style="font-size:15px;padding:14px 32px;background:var(--primary)">
-        Créer mon compte gratuitement →
+        CrÃ©er mon compte gratuitement â†’
       </a>
       <a href="/reussiteplus/tarifs.php" class="btn btn-outline" style="font-size:15px;padding:14px 32px">
         Voir les tarifs
@@ -706,7 +706,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
   <div class="footer-inner">
     <div style="display:flex;align-items:center;gap:8px">
       <img src="/reussiteplus/assets/img/logo-icon.svg" alt="" width="26" height="26" style="display:block;flex-shrink:0;opacity:.8">
-      <span style="font-family:var(--font-display);font-weight:800;color:rgba(255,255,255,.8);font-size:16px">RÉUSSITE<span style="color:#C9972A">+</span></span>
+      <span style="font-family:var(--font-display);font-weight:800;color:rgba(255,255,255,.8);font-size:16px">RÃ‰USSITE<span style="color:#C9972A">+</span></span>
     </div>
     <div class="footer-links">
       <a href="/reussiteplus/index.php" class="footer-link">Accueil</a>
@@ -714,7 +714,7 @@ textarea.form-control{resize:vertical;min-height:130px;line-height:1.6;}
       <a href="/reussiteplus/archives.php" class="footer-link">Archives</a>
       <a href="/reussiteplus/contact.php" class="footer-link" style="color:rgba(255,255,255,.7)">Contact</a>
     </div>
-    <div style="font-size:12px;color:rgba(255,255,255,0.3)">© <?= date('Y') ?> RÉUSSITE+ · Tous droits réservés</div>
+    <div style="font-size:12px;color:rgba(255,255,255,0.3)">Â© <?= date('Y') ?> RÃ‰USSITE+ Â· Tous droits rÃ©servÃ©s</div>
   </div>
 </footer>
 
@@ -727,17 +727,17 @@ function toggleFaq(i) {
   if (!isOpen) item.classList.add('open');
 }
 
-// Empêcher double-soumission
+// EmpÃªcher double-soumission
 const form = document.getElementById('contactForm');
 if (form) {
   form.addEventListener('submit', function() {
     const btn = document.getElementById('submitBtn');
     btn.disabled = true;
-    btn.innerHTML = '<span style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;margin-right:8px"></span> Envoi en cours…';
+    btn.innerHTML = '<span style="display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.4);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;margin-right:8px"></span> Envoi en coursâ€¦';
   });
 }
 
-// Confetti sur page succès
+// Confetti sur page succÃ¨s
 <?php if ($success): ?>
 (function() {
   const colors = ['#007A5E','#00A97F','#C9972A','#1E5FAD','#7C3AED','#EC4899'];

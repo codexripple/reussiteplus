@@ -504,7 +504,7 @@ strong { font-weight: 700; }
       </div>
 
       <div class="hero-carousel-slide">
-        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&auto=format&q=80&fit=crop&crop=center" alt="Enseignant avec ses élèves" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1507152927626-13d6a1ee8614?w=800&auto=format&q=80&fit=crop&crop=center" alt="Enseignant avec ses élèves" loading="lazy">
         <div class="hero-carousel-label"><i class="bi bi-pencil-square"></i> QCM officiels</div>
         <div class="hero-carousel-caption">Questions tirées des vrais sujets ENAFEP, TENASOSP, Exam d’État</div>
       </div>
@@ -616,7 +616,7 @@ strong { font-weight: 700; }
     <!-- Bloc 2 : Enseignants / Répétiteurs -->
     <div class="who-block who-block-reverse">
       <div class="who-img-wrap" style="position:relative">
-        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=900&auto=format&q=85&fit=crop&crop=center" alt="Enseignant congolais avec ses élèves" class="who-img" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1507152927626-13d6a1ee8614?w=900&auto=format&q=85&fit=crop&crop=center" alt="Enseignant congolais avec ses élèves" class="who-img" loading="lazy">
         <div style="position:absolute;bottom:20px;right:20px;background:rgba(0,0,0,.65);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 16px;color:#fff;text-align:right;max-width:280px">
           <div style="font-size:10px;font-family:var(--font-body);font-weight:600;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Dieumerci · Goma · Répétiteur</div>
           <div style="font-size:13px;font-family:var(--font-editorial);font-style:italic;line-height:1.5">"11 reçus sur 13. Mon meilleur taux depuis 5 ans."</div>
@@ -726,7 +726,7 @@ strong { font-weight: 700; }
     ['1531123897727-8f129e1688ce', 'Bénédicte · Lubumbashi', 'TENASOSP réussi'],
     ['1580582932707-520aed937b7b', 'Classe · Goma', 'Révision collective'],
     ['1507152927626-13d6a1ee8614', 'Dieumerci · Goma', 'Répétiteur 11/13'],
-    ['1509062522246-3755977927d7', 'Institut · Bukavu', 'ENAFEP 6ème primaire'],
+    ['1507152927626-13d6a1ee8614', 'Institut · Bukavu', 'ENAFEP 6ème primaire'],
     ['1434030216411-0b5816edd9fb', 'Examen blanc', 'QCM officiels'],
   ];
   $galleryRow2 = [
