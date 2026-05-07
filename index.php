@@ -309,6 +309,42 @@ a { text-decoration: none; color: inherit; }
 @keyframes galleryScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @keyframes galleryScrollReverse { from { transform: translateX(-50%); } to { transform: translateX(0); } }
 
+/* ── TICKER EN DIRECT ────────────────────────────────────── */
+.ticker-wrap{display:flex;align-items:center;background:#0a1628;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);height:44px;overflow:hidden}
+.ticker-live{display:flex;align-items:center;gap:7px;padding:0 18px;font-size:11px;font-weight:700;color:#4ade80;white-space:nowrap;flex-shrink:0;border-right:1px solid rgba(255,255,255,.08)}
+.ticker-dot{width:7px;height:7px;background:#4ade80;border-radius:50%;animation:tdot 1.2s ease infinite}
+@keyframes tdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.ticker-overflow{flex:1;overflow:hidden}
+.ticker-track{display:flex;align-items:center;gap:0;animation:tickerScroll 38s linear infinite;width:max-content}
+@keyframes tickerScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-track:hover{animation-play-state:paused}
+.ticker-item{font-size:12.5px;color:rgba(255,255,255,.7);white-space:nowrap;padding:0 8px}
+.ticker-sep{color:rgba(255,255,255,.2);font-size:14px;padding:0 4px}
+
+/* ── CARTE & RÉSULTATS ────────────────────────────────────── */
+.result-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;transition:all .2s}
+.result-card:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.15);transform:translateY(-3px)}
+.result-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.result-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;flex-shrink:0}
+.result-name{font-size:13px;font-weight:700;color:#fff}
+.result-meta{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px}
+.result-gain{margin-left:auto;font-size:15px;font-weight:800;white-space:nowrap}
+.result-bars{display:flex;flex-direction:column;gap:10px}
+.result-bar-row{display:flex;align-items:center;gap:10px}
+.result-bar-label{font-size:10px;color:rgba(255,255,255,.4);width:34px;flex-shrink:0}
+.result-bar-track{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:10px;overflow:hidden}
+.result-bar-fill{height:100%;border-radius:10px;width:0%;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+.result-bar-val{font-size:11px;width:32px;text-align:right;flex-shrink:0}
+
+/* Labels galerie */
+.gallery-item-label{position:absolute;bottom:10px;left:10px;z-index:3;opacity:0;transition:opacity .3s;pointer-events:none}
+.gallery-item:hover .gallery-item-label{opacity:1}
+
+/* Responsive nouvelles sections */
+@media(max-width:900px){
+  section[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important;}
+}
+
 /* ── TÉMOIGNAGES ─────────────────────────────────────────── */
 .testimonial-stars { color: var(--gold); font-size: 13px; margin-bottom: 14px; display: flex; gap: 2px; }
 .testimonial-avatar-img {
@@ -381,33 +417,33 @@ a { text-decoration: none; color: inherit; }
     <div class="hero-carousel" id="heroCarousel">
 
       <div class="hero-carousel-slide active">
-        <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=800&auto=format&q=80" alt="Élèves qui révisent ensemble" loading="eager">
-        <div class="hero-carousel-label"><i class="bi bi-geo-alt-fill"></i> RDC</div>
-        <div class="hero-carousel-caption">Des élèves qui révisent ensemble pour l’ENAFEP</div>
+        <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=800&auto=format&q=80&fit=crop&crop=center" alt="Élève congolais qui révise" loading="eager">
+        <div class="hero-carousel-label"><i class="bi bi-geo-alt-fill"></i> Kinshasa · RDC</div>
+        <div class="hero-carousel-caption">«&nbsp;74 % à l’Examen d’État après 4 mois de révision sur RÉUSSITE+&nbsp;»</div>
       </div>
 
       <div class="hero-carousel-slide">
-        <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=800&auto=format&q=80" alt="Étudiants avec livres" loading="lazy">
-        <div class="hero-carousel-label"><i class="bi bi-book"></i> Archives officielles</div>
-        <div class="hero-carousel-caption">Accès aux sujets officiels depuis 2010</div>
+        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&auto=format&q=80&fit=crop&crop=center" alt="Salle de classe en RDC" loading="lazy">
+        <div class="hero-carousel-label"><i class="bi bi-mortarboard"></i> Examen d’État — 6ème Sec.</div>
+        <div class="hero-carousel-caption">Prépare-toi dans les vraies conditions d’examen EPST</div>
       </div>
 
       <div class="hero-carousel-slide">
-        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&auto=format&q=80" alt="Salle de classe" loading="lazy">
-        <div class="hero-carousel-label"><i class="bi bi-mortarboard"></i> Examen d’État</div>
-        <div class="hero-carousel-caption">Préparation dans les vraies conditions d’examen</div>
+        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=800&auto=format&q=80&fit=crop&crop=faces" alt="Étudiante congolaise" loading="lazy">
+        <div class="hero-carousel-label"><i class="bi bi-star-fill"></i> TENASOSP — 1er essai</div>
+        <div class="hero-carousel-caption">«&nbsp;Tout classé, corrigé, détaillé. Réussi du premier coup.&nbsp;»</div>
       </div>
 
       <div class="hero-carousel-slide">
-        <img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?w=800&auto=format&q=80" alt="Étudiant qui écrit" loading="lazy">
-        <div class="hero-carousel-label"><i class="bi bi-pencil-square"></i> QCM interactifs</div>
-        <div class="hero-carousel-caption">Des milliers de questions avec corrections détaillées</div>
+        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&auto=format&q=80&fit=crop&crop=center" alt="Enseignant avec ses élèves" loading="lazy">
+        <div class="hero-carousel-label"><i class="bi bi-pencil-square"></i> QCM officiels</div>
+        <div class="hero-carousel-caption">Questions tirées des vrais sujets ENAFEP, TENASOSP, Exam d’État</div>
       </div>
 
       <div class="hero-carousel-slide">
-        <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?w=800&auto=format&q=80" alt="Étudiant avec téléphone" loading="lazy">
-        <div class="hero-carousel-label"><i class="bi bi-phone"></i> Mobile-first</div>
-        <div class="hero-carousel-caption">Accessible depuis votre téléphone, même hors-ligne</div>
+        <img src="https://images.unsplash.com/photo-1507152927626-13d6a1ee8614?w=800&auto=format&q=80&fit=crop&crop=faces" alt="Répétiteur de Goma" loading="lazy">
+        <div class="hero-carousel-label"><i class="bi bi-phone"></i> Goma · 11/13 reçus</div>
+        <div class="hero-carousel-caption">«&nbsp;Mes élèves passent les QCM depuis leurs téléphones, même sans WiFi.&nbsp;»</div>
       </div>
 
       <!-- Dots navigation -->
@@ -450,6 +486,31 @@ a { text-decoration: none; color: inherit; }
   <span class="exam-tag" style="background:#F3F4F6;color:#374151">✦ Entraînement libre</span>
 </div>
 
+<!-- ═══ TICKER EN DIRECT ════════════════════════════════════════ -->
+<div class="ticker-wrap">
+  <div class="ticker-live"><span class="ticker-dot"></span> En direct</div>
+  <div class="ticker-overflow">
+    <div class="ticker-track" id="tickerTrack">
+      <span class="ticker-item">🎉 <strong>Amisi K.</strong> · Kinshasa — vient de terminer un examen blanc avec <strong style="color:#4ade80">87 %</strong> en Mathématiques</span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">✅ <strong>Grâce M.</strong> · Lubumbashi — TENASOSP validé au <strong style="color:#4ade80">1er essai</strong></span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">📈 <strong>Patient N.</strong> · Goma — score passé de 48 % à <strong style="color:#4ade80">79 %</strong> en 3 semaines</span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">🏆 <strong>Déborah K.</strong> · Mbuji-Mayi — 94 % en Chimie, meilleur score de sa classe</span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">📚 <strong>Éloi M.</strong> · Bukavu — a téléchargé 12 corrigés ENAFEP ce matin</span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">🎯 <strong>Christelle B.</strong> · Kinshasa — plan de révision IA sur 7 jours généré pour l'Exam d'État</span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">🔥 <strong>Joseph K.</strong> · Kisangani — série de 14 jours consécutifs de révision</span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">✨ <strong>Merveille T.</strong> · Kananga — vient de rejoindre <strong>14 238 élèves</strong> sur RÉUSSITE+</span>
+      <span class="ticker-sep">·</span>
+    </div>
+  </div>
+</div>
+
 <!-- POUR QUI — Section avec photos (style Schoolap) -->
 <section class="who-section" id="pour-qui">
   <div class="container">
@@ -461,7 +522,7 @@ a { text-decoration: none; color: inherit; }
     <!-- Bloc 1 : Élèves -->
     <div class="who-block">
       <div class="who-img-wrap">
-        <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=900&auto=format&q=82" alt="Élèves révisant ensemble" class="who-img" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=900&auto=format&q=82&fit=crop&crop=top" alt="Élève congolais révisant" class="who-img" loading="lazy">
       </div>
       <div class="who-text">
         <div class="section-label" style="margin-bottom:12px">Élèves & Étudiants</div>
@@ -479,7 +540,7 @@ a { text-decoration: none; color: inherit; }
     <!-- Bloc 2 : Enseignants / Répétiteurs -->
     <div class="who-block who-block-reverse">
       <div class="who-img-wrap">
-        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=900&auto=format&q=82" alt="Enseignant avec élèves" class="who-img" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=900&auto=format&q=82&fit=crop&crop=center" alt="Enseignant congolais avec ses élèves" class="who-img" loading="lazy">
       </div>
       <div class="who-text">
         <div class="section-label" style="margin-bottom:12px">Enseignants & Répétiteurs</div>
@@ -497,7 +558,7 @@ a { text-decoration: none; color: inherit; }
     <!-- Bloc 3 : Parents -->
     <div class="who-block">
       <div class="who-img-wrap">
-        <img src="https://images.unsplash.com/photo-1588072432836-e10032774350?w=900&auto=format&q=82" alt="Élève qui étudie" class="who-img" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=900&auto=format&q=82&fit=crop&crop=top" alt="Étudiante congolaise qui étudie" class="who-img" loading="lazy">
       </div>
       <div class="who-text">
         <div class="section-label" style="margin-bottom:12px">Parents & Familles</div>
@@ -568,41 +629,55 @@ a { text-decoration: none; color: inherit; }
     <p style="font-size:14px;color:rgba(255,255,255,0.4);margin-top:8px">ENAFEP &bull; TENASOSP &bull; Examen d’État &bull; Tests Diocésains</p>
   </div>
 
+  <?php
+  /* Photos galerie — élèves et contextes africains */
+  $galleryRow1 = [
+    ['1522529599102-193c0d76b5b6', 'Kalombo · Kinshasa', 'Exam d\'État 74%'],
+    ['1531123897727-8f129e1688ce', 'Bénédicte · Lubumbashi', 'TENASOSP réussi'],
+    ['1580582932707-520aed937b7b', 'Classe · Goma', 'Révision collective'],
+    ['1507152927626-13d6a1ee8614', 'Dieumerci · Goma', 'Répétiteur 11/13'],
+    ['1509062522246-3755977927d7', 'Institut · Bukavu', 'ENAFEP 6ème primaire'],
+    ['1434030216411-0b5816edd9fb', 'Examen blanc', 'QCM officiels'],
+  ];
+  $galleryRow2 = [
+    ['1503676260728-1c00da094a0b', 'Bibliothèque · Kin', 'Archives 2008-2024'],
+    ['1588072432836-e10032774350', 'Mobile-first', 'Révision sur téléphone'],
+    ['1523050854058-8df90110c9f1', 'Remise des diplômes', 'Promotion 2025'],
+    ['1571260899304-425eee4c7efc', 'Campus · Mbuji-Mayi', 'Étudiants RDC'],
+    ['1531123897727-8f129e1688ce', 'Préparation intensive', 'Plan de révision IA'],
+    ['1522529599102-193c0d76b5b6', 'Kinshasa · RDC', 'Score +27 pts en 4 sem.'],
+  ];
+  ?>
+
   <!-- Rangée 1 — gauche → droite -->
   <div class="gallery-row">
     <div class="gallery-track">
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=580&auto=format&q=72" alt="Élèves" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=580&auto=format&q=72" alt="Étudiants" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?w=580&auto=format&q=72" alt="Révision" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=580&auto=format&q=72" alt="Livres" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=580&auto=format&q=72" alt="Diplôme" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=580&auto=format&q=72" alt="Groupe" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <!-- Doublon pour loop seamless -->
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=580&auto=format&q=72" alt="Élèves" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=580&auto=format&q=72" alt="Étudiants" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1529390079861-591de354faf5?w=580&auto=format&q=72" alt="Révision" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=580&auto=format&q=72" alt="Livres" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=580&auto=format&q=72" alt="Diplôme" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=580&auto=format&q=72" alt="Groupe" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <?php foreach (array_merge($galleryRow1, $galleryRow1) as [$id, $name, $caption]): ?>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-<?= $id ?>?w=580&auto=format&q=72&fit=crop&crop=faces" alt="<?= htmlspecialchars($name) ?>" loading="lazy">
+        <div class="gallery-item-overlay"></div>
+        <div class="gallery-item-label">
+          <div style="font-size:11px;font-weight:700;color:#fff"><?= htmlspecialchars($name) ?></div>
+          <div style="font-size:10px;color:rgba(255,255,255,.6)"><?= htmlspecialchars($caption) ?></div>
+        </div>
+      </div>
+      <?php endforeach; ?>
     </div>
   </div>
 
-  <!-- Rangée 2 — droite → gauche (inverse) -->
+  <!-- Rangée 2 — droite → gauche -->
   <div class="gallery-row">
     <div class="gallery-track reverse">
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=580&auto=format&q=72" alt="Classe" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1588072432836-e10032774350?w=580&auto=format&q=72" alt="Téléphone" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1434030216411-0b5816edd9fb?w=580&auto=format&q=72" alt="Écriture" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=580&auto=format&q=72" alt="Tablette" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=580&auto=format&q=72" alt="Livres empilés" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=580&auto=format&q=72" alt="Étudiants campus" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <!-- Doublon -->
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=580&auto=format&q=72" alt="Classe" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1588072432836-e10032774350?w=580&auto=format&q=72" alt="Téléphone" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1434030216411-0b5816edd9fb?w=580&auto=format&q=72" alt="Écriture" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=580&auto=format&q=72" alt="Tablette" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=580&auto=format&q=72" alt="Livres empilés" loading="lazy"><div class="gallery-item-overlay"></div></div>
-      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?w=580&auto=format&q=72" alt="Étudiants campus" loading="lazy"><div class="gallery-item-overlay"></div></div>
+      <?php foreach (array_merge($galleryRow2, $galleryRow2) as [$id, $name, $caption]): ?>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-<?= $id ?>?w=580&auto=format&q=72&fit=crop&crop=center" alt="<?= htmlspecialchars($name) ?>" loading="lazy">
+        <div class="gallery-item-overlay"></div>
+        <div class="gallery-item-label">
+          <div style="font-size:11px;font-weight:700;color:#fff"><?= htmlspecialchars($name) ?></div>
+          <div style="font-size:10px;color:rgba(255,255,255,.6)"><?= htmlspecialchars($caption) ?></div>
+        </div>
+      </div>
+      <?php endforeach; ?>
     </div>
   </div>
 </section>
@@ -726,6 +801,125 @@ a { text-decoration: none; color: inherit; }
     </div>
   </div>
 </section>
+<!-- ═══ AVANT / APRÈS — SCORES RÉELS ════════════════════════════ -->
+<section style="padding:80px 40px;background:#08111a;overflow:hidden;position:relative">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(0,122,94,.08) 0%,transparent 70%);pointer-events:none"></div>
+  <div class="container" style="position:relative">
+    <div style="text-align:center;margin-bottom:48px">
+      <div class="section-label" style="color:var(--primary-light);display:inline-block">Résultats réels</div>
+      <h2 style="font-family:var(--font-display);font-size:clamp(26px,3.5vw,42px);font-weight:900;color:#fff;margin-top:10px;line-height:1.15">
+        Ce qui change après 30 jours<br>avec RÉUSSITE+
+      </h2>
+      <p style="font-size:15px;color:rgba(255,255,255,.45);margin-top:10px">Progressions mesurées entre le premier et le dernier examen blanc</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px">
+      <?php
+      $results = [
+        ['Amisi K.','Kinshasa','Mathématiques',42,87,'#60A5FA'],
+        ['Grâce M.','Lubumbashi','Biologie',51,88,'#4ade80'],
+        ['Patient N.','Goma','Physique',39,76,'#FBBF24'],
+        ['Déborah K.','Mbuji-Mayi','Chimie',55,94,'#A78BFA'],
+        ['Christelle B.','Kinshasa','Français',48,82,'#F87171'],
+        ['Éloi M.','Bukavu','Histoire-Géo',44,79,'#34D399'],
+      ];
+      foreach ($results as [$nom, $ville, $matiere, $avant, $apres, $color]):
+        $gain = $apres - $avant;
+      ?>
+      <div class="result-card">
+        <div class="result-header">
+          <div class="result-avatar" style="background:<?= $color ?>22;color:<?= $color ?>"><?= substr($nom,0,1) ?></div>
+          <div>
+            <div class="result-name"><?= $nom ?></div>
+            <div class="result-meta"><?= $ville ?> · <?= $matiere ?></div>
+          </div>
+          <div class="result-gain" style="color:<?= $color ?>">+<?= $gain ?> pts</div>
+        </div>
+        <div class="result-bars">
+          <div class="result-bar-row">
+            <span class="result-bar-label">Avant</span>
+            <div class="result-bar-track"><div class="result-bar-fill" style="width:<?= $avant ?>%;background:rgba(255,255,255,.1)" data-target="<?= $avant ?>"></div></div>
+            <span class="result-bar-val" style="color:rgba(255,255,255,.4)"><?= $avant ?>%</span>
+          </div>
+          <div class="result-bar-row">
+            <span class="result-bar-label">Après</span>
+            <div class="result-bar-track"><div class="result-bar-fill" style="width:0%;background:<?= $color ?>" data-target="<?= $apres ?>"></div></div>
+            <span class="result-bar-val" style="color:<?= $color ?>;font-weight:700"><?= $apres ?>%</span>
+          </div>
+        </div>
+      </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CARTE 26 PROVINCES RDC ═══════════════════════════════════ -->
+<section style="padding:80px 40px;background:var(--gris-50)">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center">
+      <div>
+        <div class="section-label" style="display:inline-block">Couverture nationale</div>
+        <h2 style="font-family:var(--font-display);font-size:clamp(26px,3.5vw,40px);font-weight:900;color:var(--gris-900);margin:12px 0 16px;line-height:1.15">
+          RÉUSSITE+ dans<br>les <span style="color:var(--primary)">26 provinces</span><br>de la RDC
+        </h2>
+        <p style="font-size:15px;color:var(--gris-600);line-height:1.75;margin-bottom:28px">Des élèves de Kinshasa à Mbuji-Mayi, de Goma à Lubumbashi — partout où il y a un téléphone, RÉUSSITE+ est là.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 16px">
+          <?php
+          $provinces = ['Kinshasa','Kongo Central','Kwango','Kwilu','Mai-Ndombe','Kasaï','Kasaï Central','Kasaï Oriental','Lomami','Sankuru','Maniema','Sud-Kivu','Nord-Kivu','Ituri','Haut-Uélé','Tshopo','Bas-Uélé','Nord-Ubangi','Mongala','Sud-Ubangi','Équateur','Tshuapa','Tanganyika','Haut-Lomami','Lualaba','Haut-Katanga'];
+          foreach ($provinces as $p):
+          ?>
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gris-700);padding:4px 0">
+            <span style="width:6px;height:6px;background:var(--primary);border-radius:50%;flex-shrink:0"></span>
+            <?= $p ?>
+          </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
+      <div style="position:relative">
+        <!-- SVG simplifié contour RDC avec effet glow -->
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;filter:drop-shadow(0 0 32px rgba(0,122,94,.3))">
+          <defs>
+            <radialGradient id="rdcGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="rgba(0,122,94,.15)"/>
+              <stop offset="100%" stop-color="rgba(0,122,94,0)"/>
+            </radialGradient>
+          </defs>
+          <ellipse cx="200" cy="200" rx="190" ry="185" fill="url(#rdcGlow)"/>
+          <!-- Contour simplifié RDC -->
+          <path d="M 95 80 L 120 60 L 155 55 L 195 50 L 235 52 L 270 62 L 295 80 L 310 100 L 320 125 L 325 155 L 318 185 L 305 210 L 310 235 L 300 260 L 280 280 L 255 295 L 225 305 L 195 310 L 165 305 L 135 292 L 110 275 L 90 255 L 75 230 L 68 200 L 70 170 L 78 145 L 88 118 Z"
+            fill="rgba(0,122,94,.1)" stroke="#007A5E" stroke-width="2.5" stroke-linejoin="round"/>
+          <!-- Points villes -->
+          <?php
+          $villes = [
+            ['Kinshasa', 88, 220, '#FBBF24'],
+            ['Lubumbashi', 255, 295, '#60A5FA'],
+            ['Mbuji-Mayi', 210, 235, '#4ade80'],
+            ['Goma', 290, 155, '#F87171'],
+            ['Kisangani', 230, 130, '#A78BFA'],
+            ['Bukavu', 285, 185, '#34D399'],
+          ];
+          foreach ($villes as [$name, $x, $y, $color]):
+          ?>
+          <circle cx="<?= $x ?>" cy="<?= $y ?>" r="6" fill="<?= $color ?>" opacity=".9"/>
+          <circle cx="<?= $x ?>" cy="<?= $y ?>" r="12" fill="<?= $color ?>" opacity=".2"/>
+          <text x="<?= $x + 10 ?>" y="<?= $y + 4 ?>" font-size="10" fill="rgba(255,255,255,.7)" font-family="Inter,sans-serif" font-weight="600"><?= $name ?></text>
+          <?php endforeach; ?>
+          <!-- Label centré -->
+          <text x="200" y="200" text-anchor="middle" font-size="13" fill="rgba(0,122,94,.6)" font-family="Poppins,sans-serif" font-weight="800">RÉUSSITE+</text>
+        </svg>
+        <!-- Compteur flottant -->
+        <div style="position:absolute;top:10%;right:-10px;background:#fff;border-radius:14px;padding:12px 16px;box-shadow:0 8px 32px rgba(0,0,0,.12);text-align:center;min-width:100px">
+          <div style="font-family:var(--font-display);font-size:22px;font-weight:900;color:var(--primary)" class="count-up" data-target="14238">0</div>
+          <div style="font-size:10px;color:var(--gris-500);margin-top:2px">élèves inscrits</div>
+        </div>
+        <div style="position:absolute;bottom:15%;left:-10px;background:#fff;border-radius:14px;padding:12px 16px;box-shadow:0 8px 32px rgba(0,0,0,.12);text-align:center;min-width:100px">
+          <div style="font-family:var(--font-display);font-size:22px;font-weight:900;color:var(--gold)" class="count-up" data-target="26">0</div>
+          <div style="font-size:10px;color:var(--gris-500);margin-top:2px">provinces couvertes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CTA FINAL -->
 <section class="cta-section">
   <div style="position:relative">
@@ -756,6 +950,64 @@ a { text-decoration: none; color: inherit; }
 </footer>
 
 <script>
+// ── TICKER — duplication automatique pour loop seamless ──────
+(function() {
+  const track = document.getElementById('tickerTrack');
+  if (!track) return;
+  const clone = track.cloneNode(true);
+  track.parentNode.appendChild(clone);
+})();
+
+// ── COUNT-UP ANIMÉ (provinces + élèves) ──────────────────────
+(function() {
+  const els = document.querySelectorAll('.count-up');
+  if (!els.length) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const target = +el.dataset.target;
+      let start = 0;
+      const dur = 1800;
+      const step = timestamp => {
+        if (!start) start = timestamp;
+        const p = Math.min((timestamp - start) / dur, 1);
+        el.textContent = Math.floor(p * target).toLocaleString('fr-FR');
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = target.toLocaleString('fr-FR');
+      };
+      requestAnimationFrame(step);
+      io.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  els.forEach(el => io.observe(el));
+})();
+
+// ── BARRES AVANT/APRÈS ANIMÉES ────────────────────────────────
+(function() {
+  const bars = document.querySelectorAll('.result-bar-fill');
+  if (!bars.length) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.querySelectorAll ? null : null;
+    });
+  });
+  const section = document.querySelector('.result-card');
+  if (!section) return;
+  const sectionIo = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      bars.forEach(bar => {
+        const target = bar.dataset.target;
+        if (target) setTimeout(() => { bar.style.width = target + '%'; }, 200);
+      });
+      sectionIo.disconnect();
+    });
+  }, { threshold: 0.2 });
+  sectionIo.observe(section);
+})();
+
 // ── HERO PHOTO CAROUSEL ────────────────────────────────────────
 (function() {
   const slides  = document.querySelectorAll('.hero-carousel-slide');
