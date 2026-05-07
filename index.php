@@ -278,6 +278,7 @@ a { text-decoration: none; color: inherit; }
     <a href="#tarifs" class="nav-link">Tarifs</a>
     <a href="#temoignages" class="nav-link">Témoignages</a>
     <a href="archives.php" class="nav-link">Archives</a>
+    <a href="/reussiteplus/contact.php" class="nav-link">Contact</a>
   </div>
   <div class="nav-actions">
     <?php if ($user): ?>
