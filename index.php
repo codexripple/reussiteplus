@@ -381,14 +381,14 @@ a { text-decoration: none; color: inherit; }
 <div style="background:var(--noir)">
 <section class="hero">
   <div class="hero-content">
-    <div class="hero-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Kinshasa · Lubumbashi · Goma · Mbuji-Mayi · Bukavu</div>
+    <div class="hero-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> 14 238 élèves en RDC s'y préparent déjà — Kinshasa · Goma · Lubumbashi · Bukavu</div>
     <h1 class="hero-title">
-      Prépare l'Examen d'État,<br>le TENASOSP et l'ENAFEP<br><span>comme il faut.</span>
+      Ce n'est pas<br>une question de talent.<br><span>C'est une question de méthode.</span>
     </h1>
-    <p class="hero-sub">Archives officielles depuis 2005, QCM tirés des vrais sujets, suivi par matière. Sur ton téléphone Android, même sans WiFi stable.</p>
+    <p class="hero-sub">Les élèves qui réussissent l'Exam d'État ne travaillent pas plus. Ils s'entraînent avec les vrais sujets, comprennent leurs erreurs et savent exactement quoi réviser. RÉUSSITE+ leur donne ça — sur téléphone, même sans WiFi.</p>
     <div class="hero-cta">
-      <a href="/reussiteplus/inscription.php" class="btn btn-primary btn-lg">Commencer gratuitement →</a>
-      <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-lg"><i class="bi bi-star-fill"></i> Voir les offres Premium</a>
+      <a href="/reussiteplus/inscription.php" class="btn btn-primary btn-lg">Je commence — c'est gratuit →</a>
+      <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-lg"><i class="bi bi-star-fill"></i> Découvrir Premium</a>
     </div>
     <div class="hero-stats">
       <div>
@@ -517,7 +517,7 @@ a { text-decoration: none; color: inherit; }
     <div style="text-align:center;margin-bottom:12px">
       <div class="section-label" style="display:inline-block">Pour qui ?</div>
     </div>
-    <h2 class="section-title" style="text-align:center">Une plateforme pour tous<br>ceux qui veulent réussir</h2>
+    <h2 class="section-title" style="text-align:center">Quelle que soit ta situation,<br>RÉUSSITE+ s'adapte à toi</h2>
 
     <!-- Bloc 1 : Élèves -->
     <div class="who-block">
@@ -525,15 +525,18 @@ a { text-decoration: none; color: inherit; }
         <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=900&auto=format&q=82&fit=crop&crop=top" alt="Élève congolais révisant" class="who-img" loading="lazy">
       </div>
       <div class="who-text">
-        <div class="section-label" style="margin-bottom:12px">Élèves & Étudiants</div>
-        <h3 class="who-title">Révise efficacement, seul ou avec tes amis</h3>
-        <p class="who-desc">Accède à des centaines de sujets officiels classés par matière et par année. Entraîne-toi avec les QCM, suis ta progression semaine par semaine et prépare-toi dans les vraies conditions d'examen.</p>
+        <div class="section-label" style="margin-bottom:12px">Élèves — 6ème primaire, 3ème & 6ème secondaire</div>
+        <h3 class="who-title">Tu as les cours.<br>Maintenant, entraîne-toi vraiment.</h3>
+        <p class="who-desc">Avoir les livres ne suffit pas — tout le monde les a. Ce qui fait la différence, c'est de s'entraîner avec les vrais sujets, de comprendre ses erreurs et de savoir exactement ce qui reste à réviser avant le jour J. C'est précisément ce que font les 14 238 élèves qui utilisent RÉUSSITE+.</p>
         <ul class="who-list">
-          <li><i class="bi bi-check-circle-fill"></i> ENAFEP, TENASOSP, Examen d'État, Tests Diocésains</li>
-          <li><i class="bi bi-check-circle-fill"></i> QCM avec corrections détaillées</li>
-          <li><i class="bi bi-check-circle-fill"></i> Suivi de progression par matière</li>
+          <li><i class="bi bi-check-circle-fill"></i> Sujets officiels ENAFEP, TENASOSP & Exam d'État depuis 2005</li>
+          <li><i class="bi bi-check-circle-fill"></i> Chaque erreur expliquée question par question</li>
+          <li><i class="bi bi-check-circle-fill"></i> Ton score par matière mis à jour après chaque session</li>
         </ul>
-        <a href="/reussiteplus/inscription.php" class="btn btn-primary">Commencer gratuitement →</a>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <a href="/reussiteplus/inscription.php" class="btn btn-primary">Je commence gratuitement →</a>
+          <span style="font-size:13px;color:var(--gris-500)">Aucune carte bancaire requise</span>
+        </div>
       </div>
     </div>
 
@@ -544,14 +547,17 @@ a { text-decoration: none; color: inherit; }
       </div>
       <div class="who-text">
         <div class="section-label" style="margin-bottom:12px">Enseignants & Répétiteurs</div>
-        <h3 class="who-title">Préparez vos cours avec les vrais sujets d'examens</h3>
-        <p class="who-desc">Retrouvez les archives officielles de toutes les provinces, créez des révisions ciblées et partagez les ressources avec vos élèves. La banque de questions couvre 8 matières avec 5 niveaux de difficulté.</p>
+        <h3 class="who-title">Donnez à vos élèves les mêmes chances qu'un répétiteur privé.</h3>
+        <p class="who-desc">Vous savez ce qui tombe aux examens. Maintenant vous avez l'outil pour le faire réviser question par question, en dehors de la classe — et repérer en un coup d'œil qui progresse et qui décroche avant qu'il soit trop tard.</p>
         <ul class="who-list">
-          <li><i class="bi bi-check-circle-fill"></i> Archives par province et par année</li>
-          <li><i class="bi bi-check-circle-fill"></i> 600+ questions QCM prêtes à l'emploi</li>
-          <li><i class="bi bi-check-circle-fill"></i> Corrigés officiels téléchargeables</li>
+          <li><i class="bi bi-check-circle-fill"></i> Archives officielles classées par province, matière et année</li>
+          <li><i class="bi bi-check-circle-fill"></i> 15 000+ questions QCM prêtes à exploiter en cours ou à la maison</li>
+          <li><i class="bi bi-check-circle-fill"></i> Résultats collectifs visibles — repérez les lacunes à temps</li>
         </ul>
-        <a href="/reussiteplus/inscription.php" class="btn btn-primary">Créer un compte →</a>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <a href="/reussiteplus/inscription.php" class="btn btn-primary">Créer un compte →</a>
+          <span style="font-size:13px;color:var(--gris-500)">Plan École disponible pour les classes entières</span>
+        </div>
       </div>
     </div>
 
@@ -562,14 +568,17 @@ a { text-decoration: none; color: inherit; }
       </div>
       <div class="who-text">
         <div class="section-label" style="margin-bottom:12px">Parents & Familles</div>
-        <h3 class="who-title">Suivez les progrès de votre enfant en temps réel</h3>
-        <p class="who-desc">Votre enfant a un examen dans 3 mois ? Inscrivez-le gratuitement dès aujourd'hui. Le plan de révision s'adapte à son niveau, ses points faibles et la date de son examen.</p>
+        <h3 class="who-title">Votre enfant mérite<br>mieux qu'une photocopie froissée.</h3>
+        <p class="who-desc">En RDC, l'accès aux bons outils de révision coûte cher et n'est pas toujours garanti. RÉUSSITE+ change ça. Votre enfant peut réviser à n'importe quelle heure, avec les vrais sujets officiels — depuis son téléphone, même sans courant stable. Et vous pouvez voir s'il avance.</p>
         <ul class="who-list">
-          <li><i class="bi bi-check-circle-fill"></i> Inscription gratuite en 2 minutes</li>
-          <li><i class="bi bi-check-circle-fill"></i> Tableau de bord de progression</li>
-          <li><i class="bi bi-check-circle-fill"></i> Plan de révision sur-mesure (Premium)</li>
+          <li><i class="bi bi-check-circle-fill"></i> Inscription gratuite en moins de 2 minutes — pas d'ordinateur nécessaire</li>
+          <li><i class="bi bi-check-circle-fill"></i> Fonctionne hors connexion, sur les téléphones d'entrée de gamme</li>
+          <li><i class="bi bi-check-circle-fill"></i> Tableau de progression visible chaque semaine</li>
         </ul>
-        <a href="/reussiteplus/inscription.php" class="btn btn-primary">Inscrire mon enfant →</a>
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <a href="/reussiteplus/inscription.php" class="btn btn-primary">Inscrire mon enfant →</a>
+          <span style="font-size:13px;color:var(--gris-500)">Gratuit pour commencer, Premium à 10 000 CDF/mois</span>
+        </div>
       </div>
     </div>
   </div>
@@ -579,41 +588,41 @@ a { text-decoration: none; color: inherit; }
 <section class="features" id="fonctionnalites">
   <div class="container">
     <div style="text-align:center;margin-bottom:12px">
-      <div class="section-label" style="display:inline-block">Pourquoi RÉUSSITE+ ?</div>
+      <div class="section-label" style="display:inline-block">Ce qui change tout</div>
     </div>
-    <h2 class="section-title" style="text-align:center">Conçu pour le système<br>éducatif congolais</h2>
-    <p class="section-sub" style="text-align:center;margin:0 auto">Pas une plateforme générique adaptée &mdash; construite dès le départ pour l'EPST, les programmes officiels et les contraintes de la RDC.</p>
+    <h2 class="section-title" style="text-align:center">Arrête de réviser<br>au hasard.</h2>
+    <p class="section-sub" style="text-align:center;margin:0 auto">RÉUSSITE+ n'est pas une appli générique traduite en français. Elle a été construite pour un seul système — le tien. Pour l'EPST, les programmes officiels de la RDC, et les réalités du terrain.</p>
 
     <div class="features-grid">
       <div class="feature-card">
         <div class="feature-icon"><i class="bi bi-folder2-open"></i></div>
-        <div class="feature-title">Sujets & corrigés officiels</div>
-        <div class="feature-desc">ENAFEP, TENASOSP, Examen d'État, Tests diocésains — des centaines de sujets classés par matière, année et province. Exactement ce qui tombe aux examens.</div>
+        <div class="feature-title">Tout ce qui est tombé depuis 2005 — en un endroit</div>
+        <div class="feature-desc">ENAFEP, TENASOSP, Exam d'État, Tests diocésains. Chaque sujet corrigé, annoté, classé par matière et par province. Ce n'est pas une sélection — c'est l'intégralité.</div>
       </div>
       <div class="feature-card">
         <div class="feature-icon"><i class="bi bi-pencil-square"></i></div>
-        <div class="feature-title">Entraîne-toi dans les vraies conditions</div>
-        <div class="feature-desc">Minuteur, QCM, score immédiat. Tu peux refaire le même examen autant de fois que tu veux — jusqu'à ce que tu le maîtrises vraiment.</div>
+        <div class="feature-title">L'examen blanc qui te fait peur… moins</div>
+        <div class="feature-desc">Minuteur réaliste, QCM en conditions d'examen, score immédiat. Recommence autant de fois que tu veux. La confiance le jour J ne vient pas du talent — elle vient de l'entraînement.</div>
       </div>
       <div class="feature-card">
         <div class="feature-icon"><i class="bi bi-lightbulb"></i></div>
-        <div class="feature-title">Des milliers de questions classées</div>
-        <div class="feature-desc">Par matière, par chapitre, par niveau. Chaque question a son explication. Tu sais exactement pourquoi tu t'es trompé, pas juste quelle réponse était bonne.</div>
+        <div class="feature-title">Tu sais exactement pourquoi tu t'es trompé</div>
+        <div class="feature-desc">Pas juste la bonne réponse — l'explication complète, étape par étape. 15 000+ questions classées par chapitre et par niveau. Chaque erreur devient une leçon concrète.</div>
       </div>
       <div class="feature-card">
         <div class="feature-icon"><i class="bi bi-graph-up-arrow"></i></div>
-        <div class="feature-title">Tu vois où tu en es</div>
-        <div class="feature-desc">Score par matière, jours consécutifs, classement provincial. Plus besoin de deviner si tu progresses — les chiffres te le disent.</div>
+        <div class="feature-title">Ta progression, en chiffres, semaine après semaine</div>
+        <div class="feature-desc">Score par matière, jours consécutifs, évolution sur 30 jours. Fini de réviser dans le vide sans savoir si ça avance. Les données ne mentent pas — et elles motivent.</div>
       </div>
       <div class="feature-card">
         <div class="feature-icon"><i class="bi bi-calendar-check"></i></div>
-        <div class="feature-title">Plan de révision sur-mesure (Premium)</div>
-        <div class="feature-desc">Tu entres la date de ton examen. On calcule ce qu'il faut réviser chaque semaine en fonction de tes points faibles. Pas de panique, juste un plan clair.</div>
+        <div class="feature-title">Ton coach IA — un plan personnalisé, chaque semaine</div>
+        <div class="feature-desc">Tu entres la date de ton examen et tes matières les plus faibles. L'IA génère ce qu'il faut réviser chaque jour jusqu'au jour J. Pas d'improvisation, pas de panique — juste une feuille de route.</div>
       </div>
       <div class="feature-card">
         <div class="feature-icon"><i class="bi bi-wifi-off"></i></div>
-        <div class="feature-title">Fonctionne sans connexion</div>
-        <div class="feature-desc">Pas de wifi ? Pas de problème. Les archives et les QCM téléchargés restent disponibles sur ton téléphone même hors-ligne.</div>
+        <div class="feature-title">Le réseau coupe ? Tu continues quand même.</div>
+        <div class="feature-desc">En RDC, on ne choisit pas quand le réseau lâche. Télécharge tes archives et QCM une fois — révise en bus, en coupure de courant, partout. Sans rien perdre.</div>
       </div>
     </div>
   </div>
@@ -624,9 +633,9 @@ a { text-decoration: none; color: inherit; }
   <div class="gallery-header">
     <div class="section-label" style="color:var(--primary-light)">La communauté RÉUSSITE+</div>
     <h2 style="font-family:var(--font-display);font-size:clamp(24px,3vw,38px);font-weight:800;color:white;margin-top:8px;line-height:1.2">
-      Des milliers d’élèves qui préparent leur avenir
+      14 238 élèves qui ne laissent<br>pas le destin décider.
     </h2>
-    <p style="font-size:14px;color:rgba(255,255,255,0.4);margin-top:8px">ENAFEP &bull; TENASOSP &bull; Examen d’État &bull; Tests Diocésains</p>
+    <p style="font-size:14px;color:rgba(255,255,255,0.4);margin-top:8px">Kinshasa &bull; Lubumbashi &bull; Goma &bull; Mbuji-Mayi &bull; Bukavu &bull; Kisangani &bull; et 20 autres provinces</p>
   </div>
 
   <?php
@@ -740,12 +749,12 @@ a { text-decoration: none; color: inherit; }
     <div style="text-align:center;margin-bottom:12px">
       <div class="section-label" style="display:inline-block">Témoignages</div>
     </div>
-    <h2 class="section-title" style="text-align:center">Ce que disent les élèves<br>et répétiteurs congolais</h2>
+    <h2 class="section-title" style="text-align:center">Ils ne font pas que<br>nous faire confiance — <em style="font-style:normal;color:var(--primary)">ils réussissent.</em></h2>
     <div class="testimonials-grid">
 
       <div class="testimonial-card">
         <div class="testimonial-stars" style="color:#F59E0B;font-size:15px;margin-bottom:12px">★★★★★</div>
-        <p class="testimonial-text">"J'avais raté l'Examen d'État en 2023. J'ai repris les révisions sur RÉUSSITE+ pendant 4 mois — sujets corrigés, QCM chaque soir depuis mon Tecno. 74 % en 2024. C'est tout ce dont j'avais besoin."</p>
+        <p class="testimonial-text">"J'avais raté l'Exam d'État en 2023. Je ne savais pas par où recommencer. J'ai trouvé RÉUSSITE+ et j'ai commencé les QCM chaque soir depuis mon Tecno — 20 minutes, pas plus. 4 mois plus tard&nbsp;: 74&nbsp;%. Le résultat que je n'avais pas eu la première fois."</p>
         <div class="testimonial-author">
           <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=96&h=96&fit=crop&crop=faces&auto=format&q=80" alt="Kalombo Mutombo" width="48" height="48" style="border-radius:50%;object-fit:cover;flex-shrink:0">
           <div>
@@ -757,7 +766,7 @@ a { text-decoration: none; color: inherit; }
 
       <div class="testimonial-card">
         <div class="testimonial-stars" style="color:#F59E0B;font-size:15px;margin-bottom:12px">★★★★★</div>
-        <p class="testimonial-text">"Avant, je cherchais les anciens sujets dans des photocopies mal lisibles. Là tout est classé, corrigé, avec le détail de chaque étape. J'ai eu mon TENASOSP du premier coup."</p>
+        <p class="testimonial-text">"Avant, je cherchais les anciens sujets dans des photocopies mal lisibles que je trouvais au marché. Là, tout est classé, net, corrigé, avec le détail de chaque étape. J'ai eu mon TENASOSP du premier coup. Je ne comprends pas pourquoi tout le monde ne l'utilise pas encore."</p>
         <div class="testimonial-author">
           <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=96&h=96&fit=crop&crop=faces&auto=format&q=80" alt="Bénédicte Nzuzi" width="48" height="48" style="border-radius:50%;object-fit:cover;flex-shrink:0">
           <div>
@@ -769,7 +778,7 @@ a { text-decoration: none; color: inherit; }
 
       <div class="testimonial-card">
         <div class="testimonial-stars" style="color:#F59E0B;font-size:15px;margin-bottom:12px">★★★★★</div>
-        <p class="testimonial-text">"Je prépare mes élèves à Goma depuis 5 ans. J'utilise la banque de questions pour les exercices du soir. Ils passent les QCM depuis leurs téléphones sans même avoir besoin du WiFi. Résultat : 11 reçus sur 13 cette année."</p>
+        <p class="testimonial-text">"Je répète à Goma depuis 5 ans. Cette année j'ai intégré RÉUSSITE+ dans mes séances du soir. Les élèves s'entraînent depuis leurs téléphones — sans WiFi, sans ordinateur. Résultat&nbsp;: 11 reçus sur 13. C'est mon meilleur taux depuis que j'enseigne."</p>
         <div class="testimonial-author">
           <img src="https://images.unsplash.com/photo-1507152927626-13d6a1ee8614?w=96&h=96&fit=crop&crop=faces&auto=format&q=80" alt="Dieumerci Bauma" width="48" height="48" style="border-radius:50%;object-fit:cover;flex-shrink:0">
           <div>
@@ -923,12 +932,13 @@ a { text-decoration: none; color: inherit; }
 <!-- CTA FINAL -->
 <section class="cta-section">
   <div style="position:relative">
-    <h2 class="cta-title">Ton prochain examen,<br>tu peux le réussir.</h2>
-    <p class="cta-sub">14 238 élèves de toutes les provinces de la RDC s'y préparent déjà. C'est gratuit pour commencer.</p>
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-      <a href="/reussiteplus/inscription.php" class="btn btn-primary btn-lg">Créer mon compte gratuitement →</a>
-      <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-lg"><i class="bi bi-star-fill"></i> Voir le Premium</a>
+    <h2 class="cta-title">Cette année, tu ne rates pas.<br>Tu arrives <span style="color:var(--gold)">préparé.</span></h2>
+    <p class="cta-sub" style="max-width:600px;margin:0 auto 36px">14 238 élèves de toutes les provinces ont commencé ici, gratuitement, sans rien promettre. Certains depuis leur chambre à Kinshasa, d'autres sous la véranda à Goma, d'autres encore dans le bus vers Lubumbashi.<br><strong style="color:rgba(255,255,255,.8)">Aujourd'hui, c'est ton tour.</strong></p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:20px">
+      <a href="/reussiteplus/inscription.php" class="btn btn-primary btn-lg" style="font-size:17px;padding:16px 36px">Créer mon compte — c'est gratuit →</a>
+      <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-lg"><i class="bi bi-star-fill"></i> Voir ce que donne Premium</a>
     </div>
+    <p style="font-size:13px;color:rgba(255,255,255,.3);position:relative">Aucune carte bancaire. Aucun engagement. Tu peux arrêter quand tu veux.</p>
   </div>
 </section>
 
