@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/auth.php';
@@ -416,7 +416,7 @@ include __DIR__ . '/includes/header_app.php';
         <div class="ob-icon" style="background:linear-gradient(135deg,#007A5E,#22C55E)">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
-        <h2 style="font-family:'Poppins',sans-serif;font-size:19px;font-weight:800;text-align:center;margin-bottom:6px">Comment ça marche ?</h2>
+        <h2 style="font-family:'Manrope',sans-serif;font-size:19px;font-weight:800;text-align:center;margin-bottom:6px">Comment ça marche ?</h2>
         <p style="text-align:center;color:#6B7280;font-size:13px;margin-bottom:20px">3 étapes pour booster vos résultats EXETAT</p>
         <div style="display:flex;flex-direction:column;gap:0">
           <div class="ob-step-row"><div class="ob-step-num" style="background:linear-gradient(135deg,#007A5E,#22C55E)">1</div><div style="padding-top:4px"><div style="font-weight:700;font-size:14px;margin-bottom:3px">Passez vos examens</div><div style="font-size:13px;color:#6B7280;line-height:1.6">Choisissez une matière et simulez les conditions réelles avec de vraies questions EXETAT.</div></div></div>
@@ -427,7 +427,7 @@ include __DIR__ . '/includes/header_app.php';
         </div>
       </div>
       <div class="ob-slide ob-right">
-        <h3 style="font-family:'Poppins',sans-serif;font-size:19px;font-weight:800;text-align:center;margin-bottom:6px">Choisissez votre plan</h3>
+        <h3 style="font-family:'Manrope',sans-serif;font-size:19px;font-weight:800;text-align:center;margin-bottom:6px">Choisissez votre plan</h3>
         <p style="text-align:center;color:#6B7280;font-size:13px;margin-bottom:20px">Commencez gratuitement, évoluez quand vous voulez</p>
         <div class="ob-plan-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
           <div class="ob-plan"><div style="font-weight:800;font-size:13px;margin-bottom:3px;color:#4A5568">Gratuit</div><div style="font-size:20px;font-weight:900;color:#4A5568;margin-bottom:10px">0 CDF</div><div style="font-size:11px;display:flex;flex-direction:column;gap:5px"><div class="ob-check">✓ 5 examens/mois</div><div class="ob-check">✓ Questions basiques</div><div class="ob-cross">✗ Archives</div><div class="ob-cross">✗ IA Coach</div></div></div>
@@ -443,7 +443,7 @@ include __DIR__ . '/includes/header_app.php';
         <div class="ob-icon" style="background:linear-gradient(135deg,#22C55E,#16A34A)">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <h2 style="font-family:'Poppins',sans-serif;font-size:22px;font-weight:800;margin-bottom:10px">Vous êtes prêt·e, <?= e($user['prenom']) ?> !</h2>
+        <h2 style="font-family:'Manrope',sans-serif;font-size:22px;font-weight:800;margin-bottom:10px">Vous êtes prêt·e, <?= e($user['prenom']) ?> !</h2>
         <p style="color:#6B7280;font-size:13px;line-height:1.7;max-width:380px;margin:0 auto 24px">Votre premier examen prend 5 minutes. C'est le meilleur moyen de connaître votre niveau de départ.</p>
         <div style="display:flex;flex-direction:column;gap:10px;max-width:300px;margin:0 auto">
           <a href="/reussiteplus/examen.php" onclick="obClose()" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#007A5E;color:#fff;border-radius:12px;padding:14px;font-weight:700;font-size:14px;text-decoration:none">Passer mon premier examen</a>
@@ -495,4 +495,494 @@ include __DIR__ . '/includes/header_app.php';
 </script>
 <?php endif; ?>
 
+
+
+<!-- IA FLOTANT MODERNE -->
+<button id="ia-fab" class="ia-fab" title="Coach IA">
+  <span class="ia-fab-avatar">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg>
+  </span>
+</button>
+
+<div id="ia-modal" class="ia-modal" data-ia-managed="1">
+  <div class="ia-modal-card">
+    <div class="ia-modal-header">
+      <span class="ia-avatar-lg">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg>
+      </span>
+      <div class="ia-header-info">
+        <span class="ia-header-title">Coach IA</span>
+        <span class="ia-header-badge">Premium</span>
+      </div>
+      <select id="ia-tone" class="ia-tone">
+        <option value="motivant">Motivant</option>
+        <option value="strict">Strict</option>
+        <option value="humoristique">Humoristique</option>
+      </select>
+      <div class="ia-header-actions">
+        <button id="ia-export" class="ia-action" title="Exporter PDF">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="13" x2="12" y2="19"/><polyline points="9 16 12 19 15 16"/></svg>
+        </button>
+        <button id="ia-clear" class="ia-action ia-action-warn" title="Effacer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        </button>
+        <button id="ia-close" class="ia-action ia-action-close" title="Fermer">&times;</button>
+      </div>
+    </div>
+    <div id="ia-stats" class="ia-stats"></div>
+    <div id="ia-chat-body" class="ia-chat-body"></div>
+    <div class="ia-suggestions-wrap">
+      <div id="ia-suggestions" class="ia-suggestions"></div>
+      <button id="ia-analyse" type="button" class="ia-analyse">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        Générer un plan de révision personnalisé
+      </button>
+    </div>
+    <form id="ia-chat-form" class="ia-chat-form">
+      <input id="ia-chat-input" type="text" placeholder="Posez votre question…" autocomplete="off" class="ia-chat-input" />
+      <button type="submit" class="ia-send">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+// ── Coach IA — Dashboard ─────────────────────────────────────
+var iaHistory  = [];
+var iaTone     = 'motivant';
+var iaLoading  = false;
+var iaStartTime = null;
+var iaModal    = document.getElementById('ia-modal');
+var iaChatBody = document.getElementById('ia-chat-body');
+
+var IA_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg>';
+
+// ── Bulle image Wikipedia ────────────────────────────────────
+function makeImageMsg(apiUrl, caption) {
+  var wrap   = document.createElement('div');
+  wrap.className = 'ia-msg ia-msg-bot';
+  var avatar = document.createElement('div');
+  avatar.className = 'ia-msg-avatar';
+  avatar.innerHTML = IA_SVG;
+  var bubble = document.createElement('div');
+  bubble.className = 'ia-msg-bubble ia-msg-image-bubble';
+
+  var cap = document.createElement('p');
+  cap.className = 'ia-img-caption';
+  cap.innerHTML = mdToHtml(caption);
+  bubble.appendChild(cap);
+
+  var loader = document.createElement('div');
+  loader.className = 'ia-img-loader';
+  loader.innerHTML = '<div class="ia-typing"><span></span><span></span><span></span></div><span>Recherche d\'illustration…</span>';
+  bubble.appendChild(loader);
+
+  wrap.appendChild(avatar);
+  wrap.appendChild(bubble);
+
+  fetch(apiUrl)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      loader.remove();
+      if (!data.success || !data.url) {
+        bubble.innerHTML += '<p style="color:#C9342A;font-size:12px">⚠ Aucune illustration trouvée. Essaie un autre terme.</p>';
+        return;
+      }
+      var img = document.createElement('img');
+      img.className = 'ia-gen-img';
+      img.alt = data.title;
+      img.src = data.url;
+      bubble.appendChild(img);
+
+      if (data.desc) {
+        var desc = document.createElement('p');
+        desc.style.cssText = 'font-size:11.5px;color:#6B7280;margin:5px 0 2px;line-height:1.5';
+        desc.textContent = data.desc + '…';
+        bubble.appendChild(desc);
+      }
+      var footer = document.createElement('div');
+      footer.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-top:4px';
+      footer.innerHTML = '<span style="font-size:10px;color:#9CA3AF;font-style:italic">Source : Wikipedia (libre de droits)</span>'
+        + '<a href="' + data.wiki + '" target="_blank" class="ia-img-dl">Consulter l\'article</a>';
+      bubble.appendChild(footer);
+      iaChatBody.scrollTop = iaChatBody.scrollHeight;
+    })
+    .catch(function() {
+      loader.innerHTML = '<span style="color:#C9342A;font-size:12px">⚠ Erreur de connexion.</span>';
+    });
+
+  return wrap;
+}
+
+// ── Markdown → HTML ──────────────────────────────────────────
+function mdToHtml(t) {
+  if (!t) return '';
+  t = t.replace(/^### (.+)$/gm, '<h4 class="ia-md-h3">$1</h4>');
+  t = t.replace(/^## (.+)$/gm,  '<h3 class="ia-md-h2">$1</h3>');
+  t = t.replace(/^# (.+)$/gm,   '<h3 class="ia-md-h2">$1</h3>');
+  t = t.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+  t = t.replace(/\*\*(.+?)\*\*/g,     '<strong>$1</strong>');
+  t = t.replace(/\*(.+?)\*/g,         '<em>$1</em>');
+  t = t.replace(/^[-•] (.+)$/gm,      '<li>$1</li>');
+  t = t.replace(/^(\d+)\. (.+)$/gm,   '<li>$2</li>');
+  t = t.replace(/(<li>[\s\S]*?<\/li>\n?)+/g, '<ul class="ia-md-ul">$&</ul>');
+  t = t.replace(/\n{2,}/g, '<br><br>');
+  t = t.replace(/\n/g, '<br>');
+  return t;
+}
+
+// ── Stats ────────────────────────────────────────────────────
+function updateIaStats() {
+  var el = document.getElementById('ia-stats');
+  var n  = Math.floor(iaHistory.length / 2);
+  el.textContent = n > 0 ? (n + ' échange' + (n > 1 ? 's' : '') + ' — session en cours') : '';
+}
+
+// ── Créer une bulle message ───────────────────────────────────
+function makeMsg(role, htmlContent, animate) {
+  var isUser = role === 'user';
+  var wrap   = document.createElement('div');
+  wrap.className = 'ia-msg ' + (isUser ? 'ia-msg-user' : 'ia-msg-bot');
+
+  var avatar = document.createElement('div');
+  avatar.className = 'ia-msg-avatar';
+  if (isUser) {
+    var ini = (window.userPrenom && window.userPrenom[0]) ? window.userPrenom[0].toUpperCase() : '?';
+    avatar.textContent = ini;
+    avatar.style.background = 'linear-gradient(135deg,var(--gold),var(--gold-dark))';
+  } else {
+    avatar.innerHTML = IA_SVG;
+  }
+
+  var bubble = document.createElement('div');
+  bubble.className = 'ia-msg-bubble';
+
+  if (!isUser && animate) {
+    // Effet machine à écrire : texte d'abord, HTML Markdown à la fin
+    var plain = htmlContent.replace(/<[^>]+>/g, '');
+    var i = 0;
+    bubble.textContent = '';
+    (function tick() {
+      if (i >= plain.length) {
+        bubble.innerHTML = htmlContent;
+        iaChatBody.scrollTop = iaChatBody.scrollHeight;
+        return;
+      }
+      bubble.textContent += plain[i++];
+      iaChatBody.scrollTop = iaChatBody.scrollHeight;
+      setTimeout(tick, 10);
+    })();
+  } else {
+    if (isUser) bubble.textContent = htmlContent;
+    else bubble.innerHTML = htmlContent;
+  }
+
+  // Bouton lecture vocale (IA uniquement)
+  if (!isUser) {
+    var tts = document.createElement('button');
+    tts.className = 'ia-tts-btn';
+    tts.title = 'Écouter';
+    tts.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>';
+    var rawText = htmlContent.replace(/<[^>]+>/g, '');
+    tts.onclick = function() { var u = new SpeechSynthesisUtterance(rawText); u.lang = 'fr-FR'; u.rate = 1.02; speechSynthesis.speak(u); };
+    bubble.appendChild(tts);
+  }
+
+  wrap.appendChild(avatar);
+  wrap.appendChild(bubble);
+  return wrap;
+}
+
+// ── Indicateur de frappe ─────────────────────────────────────
+function showTyping() {
+  var wrap   = document.createElement('div');
+  wrap.className = 'ia-msg ia-msg-bot';
+  var avatar = document.createElement('div');
+  avatar.className = 'ia-msg-avatar';
+  avatar.innerHTML = IA_SVG;
+  var dots   = document.createElement('div');
+  dots.className = 'ia-typing';
+  dots.innerHTML  = '<span></span><span></span><span></span>';
+  wrap.appendChild(avatar);
+  wrap.appendChild(dots);
+  iaChatBody.appendChild(wrap);
+  iaChatBody.scrollTop = iaChatBody.scrollHeight;
+  return wrap;
+}
+
+// ── Écran d'accueil ───────────────────────────────────────────
+function showWelcomeIa() {
+  var prenom = window.userPrenom || '';
+  iaChatBody.innerHTML =
+    '<div class="ia-welcome">' +
+    '<div class="ia-welcome-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 1 0 20A10 10 0 0 1 12 2z"/><path d="M12 8v4l3 3"/></svg></div>' +
+    '<h3>' + (prenom ? 'Bienvenue, ' + prenom : 'Coach IA RÉUSSITE+') + '</h3>' +
+    '<p>Posez votre question sur l\'EXETAT, vos cours ou exercices.<br>Je réponds en m\'appuyant sur le programme scolaire RDC.</p>' +
+    '</div>';
+}
+
+// ── Rendu complet de l'historique ─────────────────────────────
+function renderIaHistory() {
+  iaChatBody.innerHTML = '';
+  if (!iaHistory.length) { showWelcomeIa(); updateIaStats(); return; }
+
+  iaHistory.forEach(function(msg, idx) {
+    var isLast = (idx === iaHistory.length - 1);
+    var html   = msg.role === 'user' ? msg.content : mdToHtml(msg.content);
+    iaChatBody.appendChild(makeMsg(msg.role, html, isLast && msg.role === 'assistant'));
+  });
+
+  iaChatBody.scrollTop = iaChatBody.scrollHeight;
+  updateIaStats();
+}
+
+// ── Suggestions ───────────────────────────────────────────────
+function renderIaSuggestions() {
+  var cont = document.getElementById('ia-suggestions');
+  cont.style.display = '';
+  cont.innerHTML = '';
+  ['Méthodes de révision efficaces pour l\'EXETAT',
+   'Expliquer la photosynthèse',
+   'Résoudre : 2x + 5 = 13',
+   'Différence entre mitose et méiose',
+   'Règles d\'accord du participe passé',
+   'Plan de révision sur 7 jours'].forEach(function(q) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'ia-suggestion';
+    btn.textContent = q;
+    btn.onclick = function() {
+      document.getElementById('ia-chat-input').value = q;
+      document.getElementById('ia-chat-input').focus();
+      cont.style.display = 'none';
+    };
+    cont.appendChild(btn);
+  });
+}
+
+// ── Ouvrir / fermer ───────────────────────────────────────────
+document.getElementById('ia-fab').onclick = function(e) {
+  e.stopPropagation();
+  iaModal.classList.add('open');
+  if (!iaStartTime) iaStartTime = Date.now();
+  setTimeout(function() {
+    if (!iaChatBody.querySelector('.ia-msg, .ia-welcome')) showWelcomeIa();
+    renderIaSuggestions();
+    document.getElementById('ia-chat-input').focus();
+  }, 80);
+};
+document.getElementById('ia-close').onclick = function() { iaModal.classList.remove('open'); };
+iaModal.onclick = function(e) { if (e.target === this) this.classList.remove('open'); };
+document.addEventListener('click', function(e) {
+  if (!iaModal.contains(e.target) && !document.getElementById('ia-fab').contains(e.target))
+    iaModal.classList.remove('open');
+});
+document.getElementById('ia-tone').onchange = function() { iaTone = this.value; };
+
+// ── Export PDF — Rapport professionnel ────────────────────────
+document.getElementById('ia-export').onclick = function() {
+  if (!iaHistory.length) return;
+
+  var now    = new Date();
+  var date   = now.toLocaleDateString('fr-FR', {weekday:'long', day:'2-digit', month:'long', year:'numeric'});
+  var heure  = now.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+  var prenom = window.userPrenom || 'Élève';
+  var nbEchanges = Math.floor(iaHistory.length / 2);
+
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function mdHtml(s) {
+    return esc(s)
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/^## (.+)$/gm, '<div class="md-h2">$1</div>')
+      .replace(/^### (.+)$/gm, '<div class="md-h3">$1</div>')
+      .replace(/^[-•] (.+)$/gm, '<li>$1</li>')
+      .replace(/(<li>[\s\S]*?<\/li>\n?)+/g, '<ul>$&</ul>')
+      .replace(/\n\n/g, '</p><p>')
+      .replace(/\n/g, '<br>');
+  }
+
+  var rows = iaHistory.map(function(msg, idx) {
+    var isUser = msg.role === 'user';
+    var num    = isUser ? Math.ceil((idx + 1) / 2) : '';
+    var role   = isUser ? prenom : 'Coach IA';
+    var cls    = isUser ? 'user' : 'ia';
+    return '<div class="msg ' + cls + '">'
+      + '<div class="msg-header">'
+      +   '<span class="role-tag ' + cls + '">' + role + '</span>'
+      +   (num ? '<span class="msg-num">Question ' + num + '</span>' : '')
+      + '</div>'
+      + '<div class="msg-body"><p>' + mdHtml(msg.content) + '</p></div>'
+      + '</div>';
+  }).join('');
+
+  var html = '<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8">'
+    + '<title>Rapport Coach IA — ' + prenom + ' — RÉUSSITE+</title>'
+    + '<style>'
+    + '*{margin:0;padding:0;box-sizing:border-box}'
+    + 'body{font-family:Arial,Helvetica,sans-serif;color:#1a1a2e;font-size:11.5px;line-height:1.65}'
+    // En-tête
+    + '.header{background:#007A5E;color:#fff;padding:22px 32px 18px}'
+    + '.header-row{display:flex;justify-content:space-between;align-items:flex-start}'
+    + '.brand{font-size:20px;font-weight:900;letter-spacing:.5px}'
+    + '.brand span{color:#C9972A}'
+    + '.brand-sub{font-size:9.5px;opacity:.75;margin-top:2px;letter-spacing:.3px}'
+    + '.doc-date{text-align:right;font-size:9.5px;opacity:.8;line-height:1.8}'
+    + '.doc-date strong{font-size:11px;display:block;opacity:1}'
+    + '.doc-title{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.25);font-size:13px;font-weight:700;letter-spacing:.3px}'
+    // Barre méta
+    + '.meta-bar{background:#F0F7F4;border-bottom:2px solid #007A5E;padding:8px 32px;display:flex;gap:28px;font-size:10px;color:#4A5568}'
+    + '.meta-bar strong{color:#007A5E;font-weight:700}'
+    // Contenu
+    + '.content{padding:24px 32px}'
+    + '.section-title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9CA3AF;margin-bottom:14px;padding-bottom:6px;border-bottom:1px solid #E5E7EB}'
+    // Messages
+    + '.msg{margin-bottom:14px;page-break-inside:avoid}'
+    + '.msg-header{display:flex;align-items:center;gap:8px;margin-bottom:5px}'
+    + '.role-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;padding:2px 9px;border-radius:2px}'
+    + '.role-tag.user{background:#E8F5F1;color:#005A45}'
+    + '.role-tag.ia{background:#FEF3C7;color:#92400E}'
+    + '.msg-num{font-size:9px;color:#9CA3AF}'
+    + '.msg-body{padding:9px 13px;font-size:11.5px;line-height:1.65}'
+    + '.msg.user .msg-body{background:#F0F7F4;border-left:3px solid #007A5E}'
+    + '.msg.ia   .msg-body{background:#FAFAFA;border-left:3px solid #C9972A;border:1px solid #F0F0F0;border-left:3px solid #C9972A}'
+    + '.msg-body p{margin-bottom:6px}.msg-body p:last-child{margin-bottom:0}'
+    + '.msg-body ul{margin:4px 0 4px 18px;padding:0}'
+    + '.msg-body li{margin:2px 0}'
+    + '.md-h2{font-weight:700;font-size:12px;color:#007A5E;margin:8px 0 4px;padding-bottom:2px;border-bottom:1px solid #E5E7EB}'
+    + '.md-h3{font-weight:600;font-size:11.5px;color:#1a1a2e;margin:6px 0 3px}'
+    // Pied de page
+    + '.footer{margin-top:32px;padding:12px 32px;border-top:1px solid #E5E7EB;display:flex;justify-content:space-between;font-size:9.5px;color:#9CA3AF}'
+    + '@media print{'
+    +   '@page{size:A4;margin:1.2cm}'
+    +   '.header{-webkit-print-color-adjust:exact;print-color-adjust:exact}'
+    +   '.meta-bar{-webkit-print-color-adjust:exact;print-color-adjust:exact}'
+    +   '.msg-body{-webkit-print-color-adjust:exact;print-color-adjust:exact}'
+    + '}'
+    + '</style></head><body>'
+    + '<div class="header">'
+    +   '<div class="header-row">'
+    +     '<div><div class="brand">RÉUSSITE<span>+</span></div>'
+    +     '<div class="brand-sub">Plateforme éducative — République Démocratique du Congo</div></div>'
+    +     '<div class="doc-date"><strong>' + date + '</strong>' + heure + '</div>'
+    +   '</div>'
+    +   '<div class="doc-title">Compte-rendu de session — Coach IA</div>'
+    + '</div>'
+    + '<div class="meta-bar">'
+    +   '<span><strong>Participant :</strong> ' + esc(prenom) + '</span>'
+    +   '<span><strong>Échanges :</strong> ' + nbEchanges + '</span>'
+    +   '<span><strong>Document :</strong> Usage pédagogique — confidentiel</span>'
+    + '</div>'
+    + '<div class="content">'
+    +   '<div class="section-title">Transcription de la session</div>'
+    +   rows
+    + '</div>'
+    + '<div class="footer">'
+    +   '<span>RÉUSSITE+ — Plateforme EdTech RDC</span>'
+    +   '<span>Généré automatiquement par Coach IA</span>'
+    + '</div>'
+    + '</body></html>';
+
+  var win = window.open('', '_blank');
+  win.document.write(html);
+  win.document.close();
+  win.focus();
+  setTimeout(function() { win.print(); }, 500);
+};
+
+// ── Effacer historique ────────────────────────────────────────
+document.getElementById('ia-clear').onclick = function() {
+  if (!confirm('Effacer toute la conversation IA ?')) return;
+  iaHistory = [];
+  showWelcomeIa();
+  renderIaSuggestions();
+  updateIaStats();
+  fetch('/reussiteplus/api/ia_chat.php', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({action: 'clear_history'})
+  }).catch(function(){});
+};
+
+// ── Analyse & plan de révision ────────────────────────────────
+document.getElementById('ia-analyse').onclick = async function() {
+  if (iaHistory.length < 2) {
+    alert('Commence d\'abord une conversation pour générer une analyse !'); return;
+  }
+  var btn = this;
+  var orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" style="animation:ia-spin .8s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Analyse en cours…';
+  if (!document.getElementById('ia-spin-style')) {
+    var st = document.createElement('style'); st.id = 'ia-spin-style';
+    st.textContent = '@keyframes ia-spin{to{transform:rotate(360deg)}}';
+    document.head.appendChild(st);
+  }
+  var typing = showTyping();
+  try {
+    var res  = await fetch('/reussiteplus/api/ia_chat.php', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({action: 'analyse', history: iaHistory})
+    });
+    var data = await res.json();
+    typing.remove();
+    iaHistory.push({role: 'assistant', content: data.reply || 'Analyse indisponible.'});
+    iaChatBody.appendChild(makeMsg('assistant', mdToHtml(data.reply || 'Analyse indisponible.'), false));
+    iaChatBody.scrollTop = iaChatBody.scrollHeight;
+    updateIaStats();
+  } catch(_) {
+    typing.remove();
+    iaChatBody.innerHTML += '<div class="ia-msg ia-msg-bot"><div class="ia-msg-bubble" style="background:#FEF0EF;color:#C9342A;border-color:#FCA5A5">Erreur de connexion. Réessaie.</div></div>';
+  }
+  btn.disabled = false; btn.innerHTML = orig;
+};
+
+// ── Envoi d'un message ────────────────────────────────────────
+document.getElementById('ia-chat-form').onsubmit = async function(e) {
+  e.preventDefault();
+  if (iaLoading) return;
+  var input = document.getElementById('ia-chat-input');
+  var msg   = input.value.trim();
+  var forbidden = /sexe|porn|nude|violence|drogue|suicide|meurtre|terrorisme|racisme|bombe|attentat/i;
+  if (forbidden.test(msg)) { alert('Cette question n\'est pas autorisée sur RÉUSSITE+.'); return; }
+  if (!msg) return;
+
+  iaChatBody.querySelector('.ia-welcome')?.remove();
+  document.getElementById('ia-suggestions').style.display = 'none';
+
+  iaHistory.push({role: 'user', content: msg});
+  iaChatBody.appendChild(makeMsg('user', msg, false));
+  input.value = '';
+  iaChatBody.scrollTop = iaChatBody.scrollHeight;
+
+  iaLoading = true;
+  var typing = showTyping();
+  var isExercice = /\b(calculer|résous|résoudre|équation|problème|exercice|simplifie|factorise|montrer que)\b|\d+\s*[+\-*\/=]/i.test(msg);
+  try {
+    var res  = await fetch('/reussiteplus/api/ia_chat.php', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({message: msg, history: iaHistory.slice(0, -1), exercice: isExercice ? 1 : 0, tone: iaTone})
+    });
+    var data = await res.json();
+    typing.remove();
+    if (data.type === 'image' || data.type === 'image_search') {
+      iaHistory.push({role: 'assistant', content: data.reply || ''});
+      iaChatBody.appendChild(makeImageMsg(data.image_url, data.reply || ''));
+    } else {
+      var reply = data.reply || 'Erreur IA';
+      iaHistory.push({role: 'assistant', content: reply});
+      iaChatBody.appendChild(makeMsg('assistant', mdToHtml(reply), true));
+    }
+    iaChatBody.scrollTop = iaChatBody.scrollHeight;
+    updateIaStats();
+  } catch(_) {
+    typing.remove();
+    iaChatBody.innerHTML += '<div class="ia-msg ia-msg-bot"><div class="ia-msg-bubble" style="background:#FEF0EF;color:#C9342A;border-color:#FCA5A5">Erreur de connexion. Réessaie.</div></div>';
+  }
+  iaLoading = false;
+};
+</script>
+
 <?php include __DIR__ . '/includes/footer_app.php'; ?>
+
