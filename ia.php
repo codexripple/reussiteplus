@@ -326,6 +326,7 @@ $initials  = strtoupper(substr($user['prenom'] ?? 'U', 0, 1));
   </div>
 </div>
 
+<script src="/reussiteplus/assets/js/ia-pdf.js?v=<?= filemtime(__DIR__.'/assets/js/ia-pdf.js') ?>"></script>
 <script src="/reussiteplus/assets/js/ia-pro.js?v=<?= filemtime(__DIR__.'/assets/js/ia-pro.js') ?>"></script>
 </body>
 </html>

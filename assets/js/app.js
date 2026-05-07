@@ -435,27 +435,12 @@ document.addEventListener('DOMContentLoaded', function initCoachIA() {
     }).catch(() => {});
   });
 
-  // ── Export PDF ────────────────────────────────────────────
+  // ── Export PDF — Rapport premium ──────────────────────────
   exportBtn?.addEventListener('click', () => {
     if (!history.length) return;
-    const now      = new Date();
-    const date     = now.toLocaleDateString('fr-FR', {weekday:'long', day:'2-digit', month:'long', year:'numeric'});
-    const heure    = now.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
-    const nom      = (window.userPrenom || 'Élève').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
-    const nbEch    = Math.floor(history.length / 2);
-    function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-    function mdHtml(s){ return esc(s).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/^## (.+)$/gm,'<div class="md-h2">$1</div>').replace(/^### (.+)$/gm,'<div class="md-h3">$1</div>').replace(/^[-•] (.+)$/gm,'<li>$1</li>').replace(/(<li>[\s\S]*?<\/li>\n?)+/g,'<ul>$&</ul>').replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>'); }
-    const rows = history.map((msg, idx) => {
-      const isUser = msg.role === 'user';
-      const num    = isUser ? `Question ${Math.ceil((idx+1)/2)}` : '';
-      return `<div class="msg ${isUser?'user':'ia'}"><div class="msg-header"><span class="role-tag ${isUser?'user':'ia'}">${isUser ? nom : 'Coach IA'}</span>${num ? `<span class="msg-num">${num}</span>` : ''}</div><div class="msg-body"><p>${mdHtml(msg.content)}</p></div></div>`;
-    }).join('');
-    const html = `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Rapport Coach IA — ${nom} — RÉUSSITE+</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,Helvetica,sans-serif;color:#1a1a2e;font-size:11.5px;line-height:1.65}.header{background:#007A5E;color:#fff;padding:22px 32px 18px}.header-row{display:flex;justify-content:space-between;align-items:flex-start}.brand{font-size:20px;font-weight:900;letter-spacing:.5px}.brand span{color:#C9972A}.brand-sub{font-size:9.5px;opacity:.75;margin-top:2px}.doc-date{text-align:right;font-size:9.5px;opacity:.8;line-height:1.8}.doc-date strong{font-size:11px;display:block;opacity:1}.doc-title{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.25);font-size:13px;font-weight:700}.meta-bar{background:#F0F7F4;border-bottom:2px solid #007A5E;padding:8px 32px;display:flex;gap:28px;font-size:10px;color:#4A5568}.meta-bar strong{color:#007A5E;font-weight:700}.content{padding:24px 32px}.section-title{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#9CA3AF;margin-bottom:14px;padding-bottom:6px;border-bottom:1px solid #E5E7EB}.msg{margin-bottom:14px;page-break-inside:avoid}.msg-header{display:flex;align-items:center;gap:8px;margin-bottom:5px}.role-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;padding:2px 9px;border-radius:2px}.role-tag.user{background:#E8F5F1;color:#005A45}.role-tag.ia{background:#FEF3C7;color:#92400E}.msg-num{font-size:9px;color:#9CA3AF}.msg-body{padding:9px 13px;font-size:11.5px;line-height:1.65}.msg.user .msg-body{background:#F0F7F4;border-left:3px solid #007A5E}.msg.ia .msg-body{background:#FAFAFA;border:1px solid #F0F0F0;border-left:3px solid #C9972A}.msg-body p{margin-bottom:6px}.msg-body p:last-child{margin-bottom:0}.msg-body ul{margin:4px 0 4px 18px;padding:0}.msg-body li{margin:2px 0}.md-h2{font-weight:700;font-size:12px;color:#007A5E;margin:8px 0 4px;padding-bottom:2px;border-bottom:1px solid #E5E7EB}.md-h3{font-weight:600;font-size:11.5px;color:#1a1a2e;margin:6px 0 3px}.footer{margin-top:32px;padding:12px 32px;border-top:1px solid #E5E7EB;display:flex;justify-content:space-between;font-size:9.5px;color:#9CA3AF}@media print{@page{size:A4;margin:1.2cm}.header,.meta-bar,.msg-body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class="header"><div class="header-row"><div><div class="brand">RÉUSSITE<span>+</span></div><div class="brand-sub">Plateforme éducative — République Démocratique du Congo</div></div><div class="doc-date"><strong>${date}</strong>${heure}</div></div><div class="doc-title">Compte-rendu de session — Coach IA</div></div><div class="meta-bar"><span><strong>Participant :</strong> ${nom}</span><span><strong>Échanges :</strong> ${nbEch}</span><span><strong>Document :</strong> Usage pédagogique — confidentiel</span></div><div class="content"><div class="section-title">Transcription de la session</div>${rows}</div><div class="footer"><span>RÉUSSITE+ — Plateforme EdTech RDC</span><span>Généré automatiquement par Coach IA</span></div></body></html>`;
-    const win = window.open('', '_blank');
-    win.document.write(html);
-    win.document.close();
-    win.focus();
-    setTimeout(() => win.print(), 500);
+    if (typeof IAPdf !== 'undefined') {
+      IAPdf.open(history, 'Session Coach IA', window.userPrenom || 'Élève');
+    }
   });
 
   // ── Analyse & plan de révision ────────────────────────────

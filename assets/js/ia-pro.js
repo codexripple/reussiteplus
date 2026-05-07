@@ -537,23 +537,9 @@ const IAPro = (() => {
   function exportPdf() {
     const conv = store.getActive();
     if (!conv || !conv.messages.length) { toast('Aucune conversation à exporter', 'error'); return; }
-    const nom   = esc(window.iaUserPrenom || 'Élève');
-    const date  = new Date().toLocaleDateString('fr-FR', {weekday:'long',day:'2-digit',month:'long',year:'numeric'});
-    const rows  = conv.messages.map((msg, idx) => {
-      const isUser = msg.role === 'user';
-      const num    = isUser ? `Question ${Math.ceil((idx+1)/2)}` : '';
-      function mdPlain(s){ return esc(s).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/^## (.+)$/gm,'<div style="font-weight:800;color:#007A5E;margin:8px 0 3px">$1</div>').replace(/^### (.+)$/gm,'<strong>$1</strong>').replace(/^[-•] (.+)$/gm,'<li>$1</li>').replace(/(<li>[\s\S]*?<\/li>\n?)+/g,'<ul style="margin:4px 0 4px 16px">$&</ul>').replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>'); }
-      return `<div style="margin-bottom:14px;page-break-inside:avoid">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
-          <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;padding:2px 9px;border-radius:2px;${isUser?'background:#E8F5F1;color:#005A45':'background:#FEF3C7;color:#92400E'}">${isUser?nom:'Coach IA'}</span>
-          ${num?`<span style="font-size:9px;color:#9CA3AF">${num}</span>`:''}
-        </div>
-        <div style="padding:9px 13px;font-size:11.5px;line-height:1.65;${isUser?'background:#F0F7F4;border-left:3px solid #007A5E':'background:#FAFAFA;border:1px solid #F0F0F0;border-left:3px solid #C9972A'}"><p>${mdPlain(msg.content)}</p></div>
-      </div>`;
-    }).join('');
-    const html = `<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Coach IA — ${esc(conv.title)}</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;color:#1a1a2e;font-size:11.5px;line-height:1.65}.hd{background:#007A5E;color:#fff;padding:22px 32px 18px}.brand{font-size:20px;font-weight:900}.brand span{color:#C9972A}.meta{background:#F0F7F4;border-bottom:2px solid #007A5E;padding:8px 32px;display:flex;gap:28px;font-size:10px;color:#4A5568}.meta strong{color:#007A5E}.body{padding:24px 32px}.ft{margin-top:24px;padding:10px 32px;border-top:1px solid #E5E7EB;display:flex;justify-content:space-between;font-size:9.5px;color:#9CA3AF}@media print{@page{size:A4;margin:1.2cm}.hd,.meta{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class="hd"><div style="display:flex;justify-content:space-between"><div><div class="brand">RÉUSSITE<span>+</span></div><div style="font-size:9.5px;opacity:.75;margin-top:2px">Plateforme éducative — République Démocratique du Congo</div></div><div style="text-align:right;font-size:9.5px;opacity:.8"><strong style="font-size:11px;display:block;opacity:1">${date}</strong></div></div><div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.25);font-size:13px;font-weight:700">Compte-rendu de session — Coach IA</div></div><div class="meta"><span><strong>Participant :</strong> ${nom}</span><span><strong>Échanges :</strong> ${Math.floor(conv.messages.length/2)}</span><span><strong>Titre :</strong> ${esc(conv.title)}</span></div><div class="body">${rows}</div><div class="ft"><span>RÉUSSITE+ — Plateforme EdTech RDC</span><span>Généré automatiquement par Coach IA</span></div></body></html>`;
-    const win = window.open('','_blank'); win.document.write(html); win.document.close(); win.focus(); setTimeout(()=>win.print(),500);
-    toast('Export PDF prêt', 'success');
+    if (typeof IAPdf === 'undefined') { toast('Générateur PDF non chargé', 'error'); return; }
+    IAPdf.open(conv.messages, conv.title, window.iaUserPrenom || 'Élève');
+    toast('Rapport PDF en cours de génération…', 'success');
   }
 
   // ── Prompts library ───────────────────────────────────────
