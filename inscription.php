@@ -86,15 +86,15 @@ a{text-decoration:none;color:inherit;}
 }
 .left-photo{
   position:absolute;inset:0;z-index:0;
-  background:url('https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=800&auto=format&q=60&fit=crop&crop=center') center/cover no-repeat;
-  opacity:.06;
+  background:url('https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=800&auto=format&q=80&fit=crop&crop=center') center/cover no-repeat;
+  opacity:.26;
 }
 .left-gradient{
   position:absolute;inset:0;z-index:1;
   background:
-    radial-gradient(ellipse 100% 55% at 0% 10%,rgba(0,122,94,.3) 0%,transparent 60%),
-    radial-gradient(ellipse 70% 50% at 100% 90%,rgba(201,151,42,.12) 0%,transparent 60%),
-    linear-gradient(180deg,rgba(12,15,13,0) 50%,rgba(12,15,13,.9) 100%);
+    radial-gradient(ellipse 100% 55% at 0% 10%,rgba(0,122,94,.48) 0%,transparent 60%),
+    radial-gradient(ellipse 70% 50% at 100% 90%,rgba(201,151,42,.18) 0%,transparent 60%),
+    linear-gradient(180deg,rgba(12,15,13,.55) 0%,rgba(12,15,13,.88) 100%);
   pointer-events:none;
 }
 .left-inner{position:relative;z-index:2;display:flex;flex-direction:column;height:100%;}
