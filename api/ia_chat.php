@@ -20,6 +20,75 @@ set_exception_handler(function (Throwable $e) {
 // ═══════════════════════════════════════════════════════════
 
 /**
+ * RAG — Récupère des questions EXETAT réelles depuis la DB.
+ * Détecte la matière dans le message, retourne un bloc de contexte
+ * à injecter dans le system prompt.
+ */
+function getRagContext(string $message, int $limit = 4): string
+{
+    try {
+        // 1. Détecter la matière mentionnée dans le message
+        $matieres  = dbAll("SELECT id, nom, nom_court, code FROM matieres WHERE actif = 1");
+        $matiereId = null;
+        $msg       = mb_strtolower(strip_tags($message));
+
+        foreach ($matieres as $mat) {
+            $terms = array_filter([
+                mb_strtolower($mat['nom']       ?? ''),
+                mb_strtolower($mat['nom_court'] ?? ''),
+                mb_strtolower($mat['code']      ?? ''),
+            ]);
+            foreach ($terms as $t) {
+                if (mb_strlen($t) > 2 && mb_strpos($msg, $t) !== false) {
+                    $matiereId = $mat['id'];
+                    break 2;
+                }
+            }
+        }
+
+        // 2. Requête : questions publiées avec bonne réponse + explication
+        $sql = "SELECT qb.enonce, qb.annee_source, qb.difficulte,
+                       m.nom AS matiere_nom,
+                       qo.texte AS bonne_reponse, qo.explication
+                FROM question_bank qb
+                JOIN matieres m ON qb.matiere_id = m.id
+                LEFT JOIN question_options qo
+                       ON qb.id = qo.question_id AND qo.est_correcte = 1
+                WHERE qb.status = 'PUBLIE'";
+
+        $params = [];
+        if ($matiereId) {
+            $sql     .= " AND qb.matiere_id = ?";
+            $params[] = $matiereId;
+        }
+        $sql    .= " ORDER BY qb.usage_count DESC, qb.annee_source DESC LIMIT ?";
+        $params[] = $limit;
+
+        $questions = dbAll($sql, $params);
+        if (empty($questions)) return '';
+
+        // 3. Formater le contexte (compact pour économiser les tokens)
+        $lines = ["CONTEXTE — Questions EXETAT réelles issues de la plateforme RÉUSSITE+ :"];
+        foreach ($questions as $q) {
+            $year  = $q['annee_source'] ? " {$q['annee_source']}" : '';
+            $lines[] = "• [{$q['matiere_nom']}{$year}] {$q['enonce']}";
+            if (!empty($q['bonne_reponse'])) {
+                $expl    = !empty($q['explication'])
+                    ? ' (' . mb_substr($q['explication'], 0, 90) . '…)'
+                    : '';
+                $lines[] = "  ✓ {$q['bonne_reponse']}{$expl}";
+            }
+        }
+        $lines[] = "Appuie-toi sur ces exemples pour contextualiser ta réponse si pertinent.";
+
+        return "\n\n" . implode("\n", $lines);
+
+    } catch (Throwable $e) {
+        return ''; // RAG non bloquant — ne pas planter si la table est vide
+    }
+}
+
+/**
  * Appel GitHub Models (GPT-4o-mini) — format OpenAI-compatible.
  * Utilisé comme fallback quand le quota Gemini est épuisé.
  */
@@ -230,9 +299,13 @@ $tonePrompt = [
 ];
 $toneText = $tonePrompt[$tone] ?? $tonePrompt['motivant'];
 
-$systemPrompt = $isExercice
+$basePrompt = $isExercice
     ? "Tu es Coach IA pour la plateforme RÉUSSITE+. Si la question est un exercice, explique la solution étape par étape en détaillant chaque raisonnement, sans donner la réponse finale tout de suite. Encourage l'élève à réfléchir à chaque étape. Sois bienveillant, pédagogique, adapté au niveau lycée RDC. $toneText"
     : "Tu es Coach IA pour la plateforme RÉUSSITE+. Réponds de façon claire, concise, bienveillante et pédagogique, en français, à des élèves préparant l'EXETAT ou des devoirs. Sois motivant, donne des conseils, explique simplement. Adapte-toi au niveau lycée RDC. $toneText";
+
+// Enrichir avec le contexte RAG (questions EXETAT réelles)
+$ragContext   = getRagContext($message);
+$systemPrompt = $basePrompt . $ragContext;
 
 // ─── Appel IA avec fallback automatique ──────────────────
 $reply  = callGemini($apiKey, $model, $systemPrompt, $history, $message, 600);
