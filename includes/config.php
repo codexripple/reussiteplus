@@ -125,12 +125,21 @@ define('MAX_FILE_SIZE', 10 * 1024 * 1024); // 10 MB
 // Session
 define('SESSION_LIFETIME', 86400 * 7); // 7 jours
 
-// Groq AI (gratuit sur console.groq.com)
-// Définir GROQ_API_KEY dans .env ou dans les variables d'environnement du serveur
-define('GROQ_API_KEY',   $_ENV['GROQ_API_KEY'] ?? (getenv('GROQ_API_KEY') ?: ''));
-define('GROQ_API_URL',   'https://api.groq.com/openai/v1/chat/completions');
-define('GROQ_MODEL',     'llama-3.1-8b-instant');
-define('GROQ_MAX_TOKENS', 1024);
+// Hugging Face (génération d'images — gratuit sur huggingface.co)
+define('HF_API_KEY', $_ENV['HF_API_KEY'] ?? (getenv('HF_API_KEY') ?: ''));
+
+// GitHub Models — fallback IA (GPT-4o-mini, gratuit via PAT GitHub)
+// Obtenir sur : github.com/settings/tokens → classic token, aucun scope requis
+define('GITHUB_TOKEN',      $_ENV['GITHUB_TOKEN'] ?? (getenv('GITHUB_TOKEN') ?: ''));
+define('GITHUB_MODELS_URL', 'https://models.inference.ai.azure.com/chat/completions');
+define('GITHUB_MODEL',      'gpt-4o-mini');
+
+// Google Gemini AI (gratuit sur aistudio.google.com)
+// Définir GEMINI_API_KEY dans .env ou dans les variables d'environnement du serveur
+define('GEMINI_API_KEY',   $_ENV['GEMINI_API_KEY'] ?? (getenv('GEMINI_API_KEY') ?: ''));
+define('GEMINI_API_URL',   'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions');
+define('GEMINI_MODEL',     'gemini-2.5-flash');
+define('GEMINI_MAX_TOKENS', 1024);
 
 // Timezone RDC (Kinshasa)
 date_default_timezone_set('Africa/Kinshasa');
