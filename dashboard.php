@@ -64,7 +64,7 @@ include __DIR__ . '/includes/header_app.php';
 <div class="db-welcome">
   <div class="db-welcome-left">
     <div class="db-welcome-greeting">
-      Bonjour, <?= e($user['prenom']) ?>&nbsp;👋
+      Bonjour, <?= e($user['prenom']) ?>
     </div>
     <div class="db-welcome-sub">
       <?php
@@ -115,14 +115,17 @@ include __DIR__ . '/includes/header_app.php';
       </div>
     </div>
     <div class="db-kpi-value" style="color:var(--primary)"><?= number_format($scoreM, 1) ?>%</div>
-    <div class="db-kpi-sub"><?= $scoreM >= 50 ? '✓ Au-dessus de la moyenne' : '⚠ En dessous de 50%' ?></div>
+    <div class="db-kpi-sub" style="display:flex;align-items:center;gap:4px;color:<?= $scoreM >= 50 ? 'var(--primary)' : 'var(--rouge)' ?>">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><?= $scoreM >= 50 ? '<polyline points="18 15 12 9 6 15"/>' : '<polyline points="6 9 12 15 18 9"/>' ?></svg>
+      <?= $scoreM >= 50 ? 'Au-dessus de la moyenne' : 'En dessous de 50 %' ?>
+    </div>
   </div>
 
   <div class="db-kpi-card kpi-bleu">
     <div class="db-kpi-top">
       <span class="db-kpi-label">Examens passés</span>
       <div class="db-kpi-icon kpi-bleu">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--bleu)" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       </div>
     </div>
     <div class="db-kpi-value" style="color:var(--bleu)"><?= number_format((int)($user['total_examens'] ?? $stats['total_examens'] ?? 0)) ?></div>
@@ -133,23 +136,23 @@ include __DIR__ . '/includes/header_app.php';
     <div class="db-kpi-top">
       <span class="db-kpi-label">Matières actives</span>
       <div class="db-kpi-icon kpi-gold">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       </div>
     </div>
     <div class="db-kpi-value" style="color:var(--gold)"><?= $nbMatieres ?></div>
-    <div class="db-kpi-sub">Matières avec progression</div>
+    <div class="db-kpi-sub">Matières avec progression tracée</div>
   </div>
 
   <div class="db-kpi-card kpi-rouge">
     <div class="db-kpi-top">
       <span class="db-kpi-label">Notifications</span>
       <div class="db-kpi-icon kpi-rouge">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--rouge)" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       </div>
     </div>
     <?php $nbNotifs = count($notificationsRecentes); ?>
     <div class="db-kpi-value" style="color:<?= $nbNotifs > 0 ? 'var(--rouge)' : 'var(--gris-400)' ?>"><?= $nbNotifs ?></div>
-    <div class="db-kpi-sub"><?= $nbNotifs > 0 ? 'Non lue(s) récemment' : 'Aucune nouvelle alerte' ?></div>
+    <div class="db-kpi-sub"><?= $nbNotifs > 0 ? $nbNotifs . ' non lue(s)' : 'Aucune nouvelle alerte' ?></div>
   </div>
 
 </div>

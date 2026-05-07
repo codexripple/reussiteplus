@@ -33,30 +33,30 @@ if (is_admin()) {
 <aside class="sidebar">
   <div class="sidebar-logo">
     <div class="logo-icon">
-      <img src="/reussiteplus/assets/img/logo-icon.svg" alt="RÉUSSITE+" width="32" height="32" style="display:block">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg>
     </div>
-    <div>
+    <div style="flex:1;min-width:0">
       <div class="logo-text">RÉUSSITE<span>+</span></div>
       <div class="logo-sub">Plateforme EdTech RDC</div>
     </div>
-    <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" title="Réduire">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 19l-7-7 7-7"/><path d="M21 19l-7-7 7-7"/></svg>
+    <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" title="Réduire (Ctrl+B)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 19l-7-7 7-7"/><path d="M21 19l-7-7 7-7"/></svg>
     </button>
   </div>
 
   <div class="sidebar-user">
-    <div class="user-avatar" style="<?= is_admin() ? 'background:linear-gradient(135deg,#007A5E,#7C3AED)' : '' ?>"><?= strtoupper(substr($user['prenom'], 0, 1) . substr($user['nom'], 0, 1)) ?></div>
-    <div>
+    <div class="user-avatar" style="<?= is_admin() ? 'background:linear-gradient(135deg,#007A5E,#7C3AED)' : 'background:linear-gradient(135deg,var(--primary),var(--primary-dark))' ?>"><?= strtoupper(substr($user['prenom'], 0, 1) . substr($user['nom'], 0, 1)) ?></div>
+    <div style="flex:1;min-width:0">
       <div class="user-info-name"><?= e($user['prenom'] . ' ' . $user['nom']) ?></div>
       <div>
         <?php if (is_admin()): ?>
-        <span class="user-info-plan" style="background:rgba(124,58,237,.2);color:#a78bfa">
-          <i data-lucide="shield-check" style="width:10px;height:10px"></i>
+        <span class="user-info-plan" style="background:rgba(124,58,237,.2);color:#a78bfa;font-size:9px;padding:1px 7px;border-radius:5px;display:inline-flex;align-items:center;gap:3px">
+          <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           <?= $user['role'] === 'SUPER_ADMIN' ? 'Super Admin' : ($user['role'] === 'MODERATEUR' ? 'Modérateur' : 'Admin') ?>
         </span>
         <?php else: ?>
         <?php $plan = $user['plan']; $plans = PLANS; ?>
-        <span class="user-info-plan"><i data-lucide="<?= $plan==='PREMIUM'?'crown':($plan==='BASIQUE'?'zap':'backpack') ?>"></i> <?= e($plans[$plan]['nom'] ?? $plan) ?></span>
+        <span class="user-info-plan" style="<?= $plan==='PREMIUM'?'background:rgba(201,151,42,.18);color:#C9972A':($plan==='BASIQUE'?'background:rgba(30,95,173,.15);color:#60a5fa':'background:rgba(255,255,255,.08);color:rgba(255,255,255,.4)') ?>"><?= e($plans[$plan]['nom'] ?? $plan) ?></span>
         <?php endif; ?>
       </div>
     </div>
@@ -101,6 +101,12 @@ if (is_admin()) {
       <span class="nav-label">Mon Profil</span>
     </a>
     <?php if (($user['plan'] ?? 'GRATUIT') !== 'GRATUIT'): ?>
+    <?php if (!empty(PLANS[$user['plan']]['ia'])): ?>
+    <a href="/reussiteplus/ia.php" class="nav-item <?= $pageActive === 'ia' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="sparkles"></i></div>
+      <span class="nav-label">Coach IA</span>
+    </a>
+    <?php endif; ?>
     <a href="/reussiteplus/mes_devoirs.php" class="nav-item <?= $pageActive === 'mes_devoirs' ? 'active' : '' ?>">
       <div class="nav-icon"><i data-lucide="clipboard"></i></div>
       <span class="nav-label">Mes Devoirs</span>
@@ -281,25 +287,17 @@ if (is_admin()) {
   <div class="sidebar-bottom">
 
     <?php if ($user['plan'] === 'GRATUIT'): ?>
-    <!-- Bouton upgrade Premium -->
     <a href="/reussiteplus/tarifs.php" class="sidebar-upgrade">
       <div class="sidebar-upgrade-title">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="#FBBF24" stroke="#FBBF24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="#FBBF24" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         Passer à Premium
       </div>
-      <div class="sidebar-upgrade-sub">Accès illimité dès 10 000 CDF/mois</div>
+      <div class="sidebar-upgrade-sub">Accès illimité — 10 000 CDF/mois</div>
     </a>
     <?php endif; ?>
 
-    <!-- Bouton reload (dev) -->
-    <button onclick="forcerReloadCss()" class="sidebar-reload-btn">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
-      <span>Recharger le design</span>
-    </button>
-
-    <!-- Déconnexion -->
     <a href="/reussiteplus/deconnexion.php" class="sidebar-logout">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
         <polyline points="16 17 21 12 16 7"/>
         <line x1="21" y1="12" x2="9" y2="12"/>
