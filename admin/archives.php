@@ -182,13 +182,16 @@ include __DIR__ . '/../includes/header_app.php';
 }
 .admin-archives-form .form-section:last-child { border-bottom: none; }
 .admin-archives-form .form-title {
-  font-family: var(--font-display);
+  font-family: 'Manrope', sans-serif;
   font-size: 17px;
   font-weight: 800;
   color: var(--gris-900);
   margin-bottom: 18px;
   margin-top: 0;
 }
+  font-family: 'Manrope', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
 .admin-archives-form .form-group { margin-bottom: 16px; }
 .admin-archives-form label.form-label { font-size: 13px; font-weight: 600; color: var(--gris-700); margin-bottom: 6px; }
 .admin-archives-form input[type="file"] { background: var(--gris-50); border: 1.5px solid var(--gris-200); border-radius: 8px; }

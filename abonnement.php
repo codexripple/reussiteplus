@@ -53,7 +53,7 @@ include __DIR__ . '/includes/header_app.php';
   box-shadow: 0 4px 20px rgba(0,0,0,.3);
 }
 .abn-plan-label { font-size: 11px; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 4px; }
-.abn-plan-name { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: #fff; line-height: 1; margin-bottom: 6px; }
+.abn-plan-name { font-family: 'Manrope', sans-serif; font-size: 28px; font-weight: 900; color: #fff; line-height: 1; margin-bottom: 6px; }
 .abn-plan-status { font-size: 13px; color: rgba(255,255,255,.65); }
 .abn-hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 
@@ -64,7 +64,7 @@ include __DIR__ . '/includes/header_app.php';
   background: var(--blanc); border: 1px solid var(--gris-200);
   border-radius: var(--radius-lg); padding: 18px 16px; text-align: center;
 }
-.abn-stat-val { font-family: var(--font-display); font-size: 28px; font-weight: 900; line-height: 1; }
+.abn-stat-val { font-family: 'Manrope', sans-serif; font-size: 28px; font-weight: 900; line-height: 1; }
 .abn-stat-label { font-size: 11px; color: var(--gris-500); margin-top: 4px; text-transform: uppercase; letter-spacing: .4px; }
 
 /* ── Grille features ───────────────────────────────────── */
@@ -101,7 +101,7 @@ include __DIR__ . '/includes/header_app.php';
   color: #C4B5FD; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 700;
   margin-bottom: 14px;
 }
-.ia-title { font-family: var(--font-display); font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+.ia-title { font-family: 'Manrope', sans-serif; font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 8px; }
 .ia-title span { color: #C4B5FD; }
 .ia-desc { font-size: 13px; color: rgba(255,255,255,.6); line-height: 1.7; max-width: 540px; margin-bottom: 20px; }
 .ia-features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
@@ -126,7 +126,7 @@ include __DIR__ . '/includes/header_app.php';
   display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
 }
 .upgrade-banner-text { flex: 1; }
-.upgrade-banner-title { font-family: var(--font-display); font-size: 16px; font-weight: 800; color: #92400E; margin-bottom: 4px; }
+.upgrade-banner-title { font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 800; color: #92400E; margin-bottom: 4px; }
 .upgrade-banner-desc { font-size: 13px; color: #B45309; }
 
 /* ── Historique table ──────────────────────────────────── */
@@ -291,7 +291,7 @@ include __DIR__ . '/includes/header_app.php';
 
 <!-- ══ FONCTIONNALITÉS DE VOTRE PLAN ═════════════════════════ -->
 <div class="card" style="margin-bottom:24px">
-  <div style="font-family:var(--font-display);font-size:16px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px">
+  <div style="font-family:'Manrope',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:8px">
     <i data-lucide="package-check" style="width:18px;height:18px;stroke:var(--primary)"></i>
     Inclus dans votre plan <?= e($planActif['nom']) ?>
   </div>
@@ -406,7 +406,7 @@ include __DIR__ . '/includes/header_app.php';
 <!-- ══ HISTORIQUE DES PAIEMENTS ══════════════════════════════ -->
 <div class="card" style="margin-bottom:24px">
   <div class="card-header">
-    <div style="font-family:var(--font-display);font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px">
+    <div style="font-family:'Manrope',sans-serif;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px">
       <i data-lucide="receipt" style="width:18px;height:18px;stroke:var(--primary)"></i>
       Historique des paiements
     </div>
@@ -441,7 +441,7 @@ include __DIR__ . '/includes/header_app.php';
         $planNom   = PLANS[$ab['plan']]['nom'] ?? $ab['plan'];
       ?>
       <tr>
-        <td style="font-family:var(--font-mono);font-size:11px;color:var(--gris-600)"><?= e($ab['reference_paiement']) ?></td>
+        <td style="font-family:monospace;font-size:11px;color:var(--gris-600)"><?= e($ab['reference_paiement']) ?></td>
         <td>
           <span style="font-size:13px;font-weight:600;color:<?= PLANS[$ab['plan']]['couleur'] ?? 'var(--gris-700)' ?>">
             <i data-lucide="<?= $planIcons[$ab['plan']] ?? 'package' ?>" style="width:12px;height:12px;vertical-align:-1px"></i>

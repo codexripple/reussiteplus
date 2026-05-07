@@ -47,7 +47,7 @@ $tc = $cert ? ($typeConfig[$cert['type']] ?? $typeConfig['REUSSITE']) : null;
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Manrope', sans-serif;
       min-height: 100vh;
       background-color: #0a1628;
       background-image:
@@ -67,7 +67,7 @@ $tc = $cert ? ($typeConfig[$cert['type']] ?? $typeConfig['REUSSITE']) : null;
     .logo-lien { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
     .logo-icone { width: 42px; height: 42px; border-radius: 12px; overflow: hidden; flex-shrink: 0; box-shadow: 0 4px 16px rgba(0,122,94,.4); }
     .logo-icone img { width: 100%; height: 100%; display: block; }
-    .logo-texte { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 20px; color: #fff; letter-spacing: .5px; }
+    .logo-texte { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: #fff; letter-spacing: .5px; }
     .logo-texte span { color: #C9972A; }
     .logo-sous { font-size: 11px; color: rgba(255,255,255,.4); letter-spacing: .5px; line-height: 1; }
     .badge-public { font-size: 11px; font-weight: 600; color: rgba(255,255,255,.5); background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); border-radius: 20px; padding: 6px 14px; }
@@ -76,13 +76,13 @@ $tc = $cert ? ($typeConfig[$cert['type']] ?? $typeConfig['REUSSITE']) : null;
       background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.09);
       border-radius: 20px; padding: 36px 32px; margin-bottom: 24px; backdrop-filter: blur(12px);
     }
-    .recherche-titre { font-family: 'Poppins', sans-serif; font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .recherche-titre { font-family: 'Manrope', sans-serif; font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 6px; }
     .recherche-sous { font-size: 13px; color: rgba(255,255,255,.4); margin-bottom: 24px; line-height: 1.6; }
     .recherche-ligne { display: flex; gap: 10px; }
     .champ-code {
       flex: 1; padding: 14px 18px; border-radius: 12px;
       border: 1.5px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06);
-      color: #fff; font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 700;
+      color: #fff; font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 700;
       letter-spacing: 3px; text-transform: uppercase; outline: none; transition: border-color .2s;
     }
     .champ-code::placeholder { color: rgba(255,255,255,.2); letter-spacing: 1px; font-weight: 400; font-size: 14px; }
@@ -90,7 +90,7 @@ $tc = $cert ? ($typeConfig[$cert['type']] ?? $typeConfig['REUSSITE']) : null;
     .bouton-verifier {
       padding: 14px 24px; border-radius: 12px;
       background: linear-gradient(135deg, #007A5E, #059669);
-      border: none; color: #fff; font-family: 'Poppins', sans-serif;
+      border: none; color: #fff; font-family: 'Manrope', sans-serif;
       font-weight: 700; font-size: 14px; cursor: pointer; white-space: nowrap;
       transition: transform .15s, box-shadow .15s;
       display: flex; align-items: center; gap: 8px;
@@ -105,7 +105,7 @@ $tc = $cert ? ($typeConfig[$cert['type']] ?? $typeConfig['REUSSITE']) : null;
     .entete-resultat { padding: 28px 32px 24px; position: relative; }
     .badge-valide { display: inline-flex; align-items: center; gap: 7px; background: #D1FAE5; color: #065F46; border-radius: 30px; padding: 7px 16px; font-size: 12px; font-weight: 700; margin-bottom: 18px; }
     .badge-invalide { display: inline-flex; align-items: center; gap: 7px; background: #FEE2E2; color: #991B1B; border-radius: 30px; padding: 7px 16px; font-size: 12px; font-weight: 700; margin-bottom: 18px; }
-    .nom-eleve { font-family: 'Poppins', sans-serif; font-size: 32px; font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 5px; }
+    .nom-eleve { font-family: 'Manrope', sans-serif; font-size: 32px; font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 5px; }
     .email-eleve { font-size: 13px; color: rgba(255,255,255,.65); }
     .grille-details { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 28px 32px; }
     .detail { background: #f8fafc; border-radius: 12px; padding: 14px 16px; }
@@ -115,16 +115,16 @@ $tc = $cert ? ($typeConfig[$cert['type']] ?? $typeConfig['REUSSITE']) : null;
     .message-etablissement p { font-size: 14px; color: #334155; line-height: 1.6; font-style: italic; }
     .section-code { margin: 0 32px 32px; background: #f1f5f9; border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
     .code-etiquette { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; margin-bottom: 5px; font-weight: 600; }
-    .code-valeur { font-family: 'Poppins', sans-serif; font-size: 20px; font-weight: 900; letter-spacing: 4px; color: #059669; }
+    .code-valeur { font-family: 'Manrope', sans-serif; font-size: 20px; font-weight: 900; letter-spacing: 4px; color: #059669; }
     .bouton-copier { padding: 9px 18px; border-radius: 9px; background: #059669; border: none; color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background .2s; display: flex; align-items: center; gap: 6px; }
     .bouton-copier:hover { background: #047857; }
     .carte-erreur { background: rgba(255,255,255,.04); border: 1px solid rgba(220,38,38,.3); border-radius: 20px; padding: 48px 32px; text-align: center; margin-bottom: 24px; animation: glisserHaut .35s ease-out; }
     .erreur-icone { width: 64px; height: 64px; background: rgba(220,38,38,.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #ef4444; }
-    .erreur-titre { font-family: 'Poppins', sans-serif; font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 10px; }
+    .erreur-titre { font-family: 'Manrope', sans-serif; font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 10px; }
     .erreur-texte { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.7; max-width: 420px; margin: 0 auto; }
     .etat-vide { text-align: center; padding: 40px 20px; }
     .vide-icone { width: 72px; height: 72px; background: rgba(255,255,255,.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: rgba(255,255,255,.3); }
-    .vide-titre { font-family: 'Poppins', sans-serif; font-size: 17px; font-weight: 700; color: rgba(255,255,255,.6); margin-bottom: 8px; }
+    .vide-titre { font-family: 'Manrope', sans-serif; font-size: 17px; font-weight: 700; color: rgba(255,255,255,.6); margin-bottom: 8px; }
     .vide-texte { font-size: 13px; color: rgba(255,255,255,.3); line-height: 1.7; max-width: 360px; margin: 0 auto; }
     .pied-page { text-align: center; margin-top: 8px; font-size: 11.5px; color: rgba(255,255,255,.2); line-height: 1.8; }
     .pied-page a { color: rgba(255,255,255,.35); text-decoration: none; }
@@ -147,18 +147,78 @@ $tc = $cert ? ($typeConfig[$cert['type']] ?? $typeConfig['REUSSITE']) : null;
 <body>
 
 <!-- Barre de navigation -->
-<nav class="barre-nav">
-  <a href="<?= APP_URL ?>" class="logo-lien">
-    <div class="logo-icone">
-      <img src="/reussiteplus/assets/img/logo-icon.svg" alt="REUSSITE+">
-    </div>
-    <div>
-      <div class="logo-texte">RÉUSSITE<span>+</span></div>
-      <div class="logo-sous">Plateforme EdTech RDC</div>
-    </div>
+<nav class="nav">
+  <a href="/reussiteplus/index.php" class="nav-logo">
+    <img src="/reussiteplus/assets/img/logo-icon.svg" alt="RÉUSSITE+" width="32" height="32" style="display:block;flex-shrink:0">
+    <span>RÉUSSITE<span class="lplus">+</span></span>
   </a>
-  <span class="badge-public">Service public gratuit</span>
+  <div class="nav-links">
+    <a href="/reussiteplus/connexion.php" class="btn-nav btn-nav-ghost">Connexion</a>
+    <a href="/reussiteplus/inscription.php" class="btn-nav btn-nav-solid">Commencer gratuitement →</a>
+  </div>
 </nav>
+
+<style>
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(13, 17, 23, 0.97);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  display: flex;
+  align-items: center;
+  padding: 0 48px;
+  height: 68px;
+  gap: 32px;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.5px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.nav-logo .lplus {
+  color: #C9972A;
+}
+.btn-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: 200ms;
+  border-radius: 10px;
+}
+.btn-nav-ghost {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+.btn-nav-ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.btn-nav-solid {
+  background: #007A5E;
+  color: white;
+}
+.btn-nav-solid:hover {
+  background: #005A45;
+  box-shadow: 0 0 24px rgba(0, 122, 94, 0.35);
+}
+</style>
 
 <!-- Bouton retour -->
   <div style="margin-bottom: 20px;">

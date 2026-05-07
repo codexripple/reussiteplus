@@ -43,7 +43,7 @@ include __DIR__ . '/includes/header_app.php';
 .join-container { max-width: 520px; margin: 0 auto; padding: 20px 0; }
 .join-card { background:var(--blanc); border:1.5px solid var(--gris-200); border-radius:24px; overflow:hidden; box-shadow:0 8px 40px rgba(0,0,0,.08); }
 .join-hero { background:linear-gradient(135deg,#1e3a5f,#2563EB 50%,#4f46e5); padding:32px; text-align:center; }
-.code-input { font-family:var(--font-display); font-size:28px; font-weight:900; letter-spacing:8px; text-align:center; text-transform:uppercase; }
+.code-input { font-family:var(--font-body); font-size:28px; font-weight:900; letter-spacing:8px; text-align:center; text-transform:uppercase; }
 .classe-preview { background:linear-gradient(135deg,#EDE9FE,#DBEAFE); border:1.5px solid #C4B5FD; border-radius:14px; padding:20px; margin:20px 0; text-align:center; }
 </style>
 
@@ -58,7 +58,7 @@ include __DIR__ . '/includes/header_app.php';
       <div style="width:56px;height:56px;background:rgba(255,255,255,.15);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
         <i data-lucide="school" style="width:28px;height:28px;stroke:#fff"></i>
       </div>
-      <div style="font-family:var(--font-display);font-size:22px;font-weight:900;color:#fff;margin-bottom:6px">Rejoindre une classe</div>
+      <div style="font-family:var(--font-body);font-size:22px;font-weight:900;color:#fff;margin-bottom:6px">Rejoindre une classe</div>
       <div style="font-size:13px;color:rgba(255,255,255,.6)">Entrez le code d'invitation fourni par votre enseignant</div>
     </div>
 
@@ -69,7 +69,7 @@ include __DIR__ . '/includes/header_app.php';
         <div style="width:64px;height:64px;background:#D1FAE5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
           <i data-lucide="check-circle" style="width:30px;height:30px;stroke:#059669"></i>
         </div>
-        <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:var(--gris-900);margin-bottom:6px">Bienvenue dans la classe !</div>
+        <div style="font-family:var(--font-body);font-size:20px;font-weight:900;color:var(--gris-900);margin-bottom:6px">Bienvenue dans la classe !</div>
         <div style="font-size:14px;color:var(--gris-600);margin-bottom:6px">Vous avez rejoint <strong><?= e($classe['nom']) ?></strong></div>
         <div style="font-size:12px;color:var(--gris-400);margin-bottom:24px">Enseignant : <?= e(($classe['admin_prenom']??'').' '.($classe['admin_nom']??'')) ?></div>
         <div style="display:flex;flex-direction:column;gap:10px">
@@ -88,7 +88,7 @@ include __DIR__ . '/includes/header_app.php';
         <div style="width:48px;height:48px;background:#7C3AED;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
           <i data-lucide="layout-list" style="width:22px;height:22px;stroke:#fff"></i>
         </div>
-        <div style="font-family:var(--font-display);font-size:18px;font-weight:900;color:#3730A3;margin-bottom:4px"><?= e($classe['nom']) ?></div>
+        <div style="font-family:var(--font-body);font-size:18px;font-weight:900;color:#3730A3;margin-bottom:4px"><?= e($classe['nom']) ?></div>
         <?php if ($classe['niveau']): ?>
         <div style="font-size:13px;color:#5B21B6;margin-bottom:4px"><?= e($classe['niveau']) ?></div>
         <?php endif; ?>

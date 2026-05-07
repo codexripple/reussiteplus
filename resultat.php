@@ -50,10 +50,10 @@ include __DIR__ . '/includes/header_app.php';
     <div style="font-size:48px;margin-bottom:16px">
       <?php if ($pct >= 80): ?><i data-lucide="trophy" style="width:56px;height:56px;stroke:#C9972A"></i><?php elseif ($pct >= 60): ?><i data-lucide="target" style="width:56px;height:56px;stroke:#007A5E"></i><?php elseif ($pct >= 40): ?><i data-lucide="trending-up" style="width:56px;height:56px;stroke:#1E5FAD"></i><?php else: ?><i data-lucide="dumbbell" style="width:56px;height:56px;stroke:#C9342A"></i><?php endif; ?>
     </div>
-    <div style="font-family:var(--font-display);font-size:56px;font-weight:900;color:<?= score_couleur($pct) ?>">
+    <div style="font-family:var(--font-body);font-size:56px;font-weight:900;color:<?= score_couleur($pct) ?>">
       <?= number_format($pct, 1) ?>%
     </div>
-    <div style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--gris-900);margin-top:8px">
+    <div style="font-family:var(--font-body);font-size:22px;font-weight:700;color:var(--gris-900);margin-top:8px">
       <?= score_label($pct) ?>
     </div>
     <div style="font-size:14px;color:var(--gris-600);margin-top:6px">

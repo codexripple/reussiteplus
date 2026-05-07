@@ -223,7 +223,7 @@ include __DIR__ . '/../includes/header_app.php';
 <!-- Modal gestion utilisateur -->
 <div id="user-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center">
   <div style="background:white;border-radius:var(--radius-xl);padding:28px;width:100%;max-width:420px;margin:16px">
-    <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:20px">Gérer l'utilisateur</div>
+    <div style="font-family:'Manrope',sans-serif;font-size:18px;font-weight:700;margin-bottom:20px">Gérer l'utilisateur</div>
 
     <form method="POST" id="modal-form">
       <?= csrf_field() ?>

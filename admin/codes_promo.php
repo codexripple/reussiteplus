@@ -96,7 +96,7 @@ include __DIR__ . '/../includes/header_app.php';
 <style>
 .promo-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:22px; }
 .promo-stat { background:#fff; border:1.5px solid var(--gris-200); border-radius:14px; padding:18px 20px; }
-.promo-stat .val { font-family:var(--font-display); font-size:26px; font-weight:900; color:var(--gris-900); }
+.promo-stat .val { font-family:'Manrope',sans-serif; font-size:26px; font-weight:900; color:var(--gris-900); }
 .promo-stat .lbl { font-size:11px; font-weight:700; color:var(--gris-500); text-transform:uppercase; letter-spacing:.4px; margin-top:4px; }
 
 .promo-card { background:#fff; border:1.5px solid var(--gris-200); border-radius:14px; padding:18px 20px; margin-bottom:10px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; transition:.15s; }
@@ -115,7 +115,7 @@ include __DIR__ . '/../includes/header_app.php';
 <!-- Header -->
 <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:22px">
   <div>
-    <div style="font-family:var(--font-display);font-size:22px;font-weight:900;color:var(--gris-900)">Codes Promo</div>
+    <div style="font-family:'Manrope',sans-serif;font-size:22px;font-weight:900;color:var(--gris-900')">Codes Promo</div>
     <div style="font-size:12px;color:var(--gris-500);margin-top:2px">Gérez les codes de réduction pour vos abonnements</div>
   </div>
 </div>
@@ -140,7 +140,7 @@ include __DIR__ . '/../includes/header_app.php';
 
 <?php if ($showForm): ?>
 <div class="create-form">
-  <div style="font-family:var(--font-display);font-size:16px;font-weight:800;margin-bottom:18px;display:flex;align-items:center;gap:8px">
+  <div style="font-family:'Manrope',sans-serif;font-size:16px;font-weight:800;margin-bottom:18px;display:flex;align-items:center;gap:8px">
     <i data-lucide="tag" style="width:18px;height:18px;stroke:var(--primary)"></i>
     Nouveau code promo
   </div>

@@ -51,14 +51,14 @@ include __DIR__ . '/includes/header_app.php';
 .tarif-hero{text-align:center;padding:36px 20px 28px;background:linear-gradient(160deg,#0D1117 0%,#003D2E 100%);border-radius:var(--radius-xl);margin-bottom:28px;position:relative;overflow:hidden}
 .tarif-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(0,122,94,.45) 0%,transparent 65%);pointer-events:none}
 .tarif-hero-inner{position:relative}
-.tarif-hero h1{font-family:var(--font-display);font-size:clamp(22px,4vw,32px);font-weight:800;color:#fff;line-height:1.2;margin-bottom:8px}
+.tarif-hero h1{font-family:var(--font-body);font-size:clamp(22px,4vw,32px);font-weight:800;color:#fff;line-height:1.2;margin-bottom:8px}
 .tarif-hero h1 span{color:#FBBF24}
 .tarif-hero p{font-size:14px;color:rgba(255,255,255,.6);max-width:440px;margin:0 auto}
 .current-plan-card{background:var(--blanc);border:1px solid var(--gris-200);border-radius:var(--radius-lg);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px}
 .current-plan-left{display:flex;align-items:center;gap:14px}
 .plan-icon-wrap{width:52px;height:52px;border-radius:14px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .current-plan-label{font-size:11px;color:var(--gris-500);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
-.current-plan-name{font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--gris-900);line-height:1.1}
+.current-plan-name{font-family:var(--font-body);font-size:20px;font-weight:800;color:var(--gris-900);line-height:1.1}
 .current-plan-meta{font-size:13px;color:var(--gris-600);margin-top:2px}
 .referral-box{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
 .referral-code{font-family:var(--font-mono);font-size:15px;font-weight:700;background:var(--gris-100);padding:7px 18px;border-radius:var(--radius);cursor:pointer;border:1px solid var(--gris-200);transition:var(--transition);display:flex;align-items:center;gap:8px}
@@ -76,15 +76,15 @@ include __DIR__ . '/includes/header_app.php';
 .tarif-badge.popular{background:var(--gold);color:#fff}
 .tarif-card-head{padding:28px 24px 20px;text-align:center}
 .tarif-card-icon{width:60px;height:60px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
-.tarif-card-name{font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--gris-900);margin-bottom:12px}
-.tarif-card-price{font-family:var(--font-display);font-size:32px;font-weight:900;line-height:1}
+.tarif-card-name{font-family:var(--font-body);font-size:20px;font-weight:800;color:var(--gris-900);margin-bottom:12px}
+.tarif-card-price{font-family:var(--font-body);font-size:32px;font-weight:900;line-height:1}
 .tarif-card-period{font-size:12px;color:var(--gris-400);margin-top:4px}
 .tarif-card-features{padding:4px 24px 16px;flex:1}
 .tarif-feat{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--gris-700);padding:8px 0;border-bottom:1px solid var(--gris-100)}
 .tarif-feat:last-child{border-bottom:none}
 .tarif-card-cta{padding:8px 24px 24px}
 .tarif-compare{background:var(--blanc);border:1px solid var(--gris-200);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:32px}
-.tarif-compare-header{padding:20px 24px 0;font-family:var(--font-display);font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.tarif-compare-header{padding:20px 24px 0;font-family:var(--font-body);font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:4px}
 .table-wrap{overflow-x:auto;padding:0 0 4px}
 .tarif-compare table{width:100%;border-collapse:collapse}
 .tarif-compare th{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gris-500);padding:10px 16px;text-align:center;border-bottom:2px solid var(--gris-200)}
@@ -102,8 +102,8 @@ include __DIR__ . '/includes/header_app.php';
 .tarif-main{min-width:0;}
 .tarif-sidebar{position:sticky;top:84px;display:flex;flex-direction:column;gap:16px;}
 .tsb-card{background:var(--blanc);border:1px solid var(--gris-200);border-radius:var(--radius-lg);padding:20px;overflow:hidden;}
-.tsb-card-head{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--gris-500);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
-.tsb-plan-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:var(--radius);font-family:var(--font-display);font-size:14px;font-weight:800;width:100%;margin-bottom:10px;}
+.tsb-card-head{font-family:var(--font-body);font-size:13px;font-weight:700;color:var(--gris-500);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.tsb-plan-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:var(--radius);font-family:var(--font-body);font-size:14px;font-weight:800;width:100%;margin-bottom:10px;}
 .tsb-trust{display:flex;flex-direction:column;gap:9px;}
 .tsb-trust-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--gris-700);}
 .tsb-trust-item svg{width:16px;height:16px;flex-shrink:0;}

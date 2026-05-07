@@ -94,7 +94,7 @@ include __DIR__ . '/../includes/header_app.php';
 .msg-body-full { display:none; font-size:13px; color:var(--gris-700); line-height:1.6; margin:10px 0; padding:12px 14px; background:var(--gris-50); border-radius:10px; border-left:3px solid var(--gris-300); white-space:pre-wrap; }
 .msg-row.expanded .msg-body-preview { display:none; }
 .msg-row.expanded .msg-body-full { display:block; }
-.btn-act { display:inline-flex; align-items:center; gap:5px; padding:5px 11px; border-radius:8px; font-size:11px; font-weight:700; border:none; cursor:pointer; font-family:var(--font-body); transition:.15s; text-decoration:none; }
+.btn-act { display:inline-flex; align-items:center; gap:5px; padding:5px 11px; border-radius:8px; font-size:11px; font-weight:700; border:none; cursor:pointer; font-family:'Manrope',sans-serif; transition:.15s; text-decoration:none; }
 </style>
 
 <!-- Hero -->

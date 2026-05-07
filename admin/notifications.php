@@ -100,7 +100,7 @@ include __DIR__ . '/../includes/header_app.php';
 .aln-wrap { max-width:900px; margin:0 auto; }
 
 .aln-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:12px; }
-.aln-title { font-family:var(--font-display); font-size:22px; font-weight:800; color:var(--gris-900); }
+.aln-title { font-family:'Manrope',sans-serif; font-size:22px; font-weight:800; color:var(--gris-900); }
 .aln-title small { display:block; font-size:13px; font-weight:400; color:var(--gris-500); margin-top:2px; }
 
 .aln-summary { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:28px; }
@@ -113,7 +113,7 @@ include __DIR__ . '/../includes/header_app.php';
   display:flex; align-items:center; justify-content:center;
 }
 .aln-stat-icon svg { width:20px; height:20px; }
-.aln-stat-val { font-family:var(--font-display); font-size:22px; font-weight:900; color:var(--gris-900); line-height:1; }
+.aln-stat-val { font-family:'Manrope',sans-serif; font-size:22px; font-weight:900; color:var(--gris-900); line-height:1; }
 .aln-stat-lbl { font-size:11px; color:var(--gris-500); margin-top:3px; }
 
 .aln-section { margin-bottom:28px; }
@@ -124,7 +124,7 @@ include __DIR__ . '/../includes/header_app.php';
 }
 .aln-section-title {
   display:flex; align-items:center; gap:10px;
-  font-family:var(--font-display); font-size:15px; font-weight:700; color:var(--gris-900);
+  font-family:'Manrope',sans-serif; font-size:15px; font-weight:700; color:var(--gris-900);
 }
 .aln-badge {
   font-size:10px; font-weight:800; padding:2px 8px; border-radius:10px; min-width:22px; text-align:center;
@@ -153,7 +153,7 @@ include __DIR__ . '/../includes/header_app.php';
 .pay-name { font-size:13px; font-weight:700; color:var(--gris-900); }
 .pay-meta { font-size:11px; color:var(--gris-500); margin-top:2px; }
 .pay-amount {
-  font-family:var(--font-display); font-size:15px; font-weight:900;
+  font-family:'Manrope',sans-serif; font-size:15px; font-weight:900;
   color:var(--gris-900); white-space:nowrap;
 }
 .pay-plan { font-size:10px; color:var(--gris-500); text-align:right; margin-top:2px; }
@@ -161,7 +161,7 @@ include __DIR__ . '/../includes/header_app.php';
 .btn-xs {
   display:inline-flex; align-items:center; gap:5px;
   padding:5px 12px; border-radius:8px; font-size:11px; font-weight:700;
-  border:none; cursor:pointer; transition:.15s; font-family:var(--font-body);
+  border:none; cursor:pointer; transition:.15s; font-family:'Manrope',sans-serif;
   text-decoration:none;
 }
 .btn-xs-green { background:#dcfce7; color:#15803d; }

@@ -116,7 +116,7 @@ include __DIR__ . '/includes/header_app.php';
             <span class="badge badge-gray"><?= e($detail['annee']) ?></span>
             <span class="badge badge-gray"><?= e($detail['session_type']) ?></span>
           </div>
-          <h1 style="font-family:var(--font-display);font-size:22px;font-weight:800;color:var(--gris-900);line-height:1.3"><?= e($detail['titre']) ?></h1>
+          <h1 style="font-family:'Manrope',sans-serif;font-size:22px;font-weight:800;color:var(--gris-900);line-height:1.3"><?= e($detail['titre']) ?></h1>
         </div>
         <form method="POST" style="flex-shrink:0">
           <?= csrf_field() ?>

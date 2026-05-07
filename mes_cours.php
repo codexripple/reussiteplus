@@ -32,9 +32,9 @@ if ($classeIds) {
             JOIN classes_ecole c ON c.id=b.classe_id
             WHERE b.classe_id IN ($inPlaceholders)";
 
-    if ($filtreType) { $sql .= " AND b.type=?"; $params[] = $filtreType; }
+    if ($filtreType) { $sql .= " AND b.type_ressource=?"; $params[] = $filtreType; }
     if ($filtreClasse) { $sql .= " AND b.classe_id=?"; $params[] = $filtreClasse; }
-    if ($q) { $sql .= " AND (b.titre LIKE ? OR b.matiere LIKE ? OR b.description LIKE ?)"; $params = array_merge($params, ["%$q%","%$q%","%$q%"]); }
+    if ($q) { $sql .= " AND (b.titre LIKE ? OR b.description LIKE ?)"; $params = array_merge($params, ["%$q%","%$q%"]); }
     $sql .= " ORDER BY b.created_at DESC";
 
     $cours = dbAll($sql, $params) ?? [];
@@ -43,7 +43,7 @@ if ($classeIds) {
 $typesDispos = ['PDF'=>'PDF','VIDEO'=>'Vid&eacute;o','AUDIO'=>'Audio','IMAGE'=>'Image','LIEN'=>'Lien','AUTRE'=>'Autre'];
 $coursStats = [
     'cours_total' => count($cours),
-    'pdf'         => count(array_filter($cours, fn($c) => $c['type']==='PDF')),
+    'pdf'         => count(array_filter($cours, fn($c) => ($c['type_ressource'] ?? '')==='PDF')),
 ];
 
 include __DIR__ . '/includes/header_app.php';
@@ -131,8 +131,8 @@ include __DIR__ . '/includes/header_app.php';
     $typeColors = ['PDF'=>['#DC2626','#FEE2E2'],'VIDEO'=>['#7C3AED','#EDE9FE'],
                    'AUDIO'=>['#059669','#D1FAE5'],'IMAGE'=>['#B45309','#FEF3C7'],
                    'LIEN'=>['#1E5FAD','#DBEAFE'],'AUTRE'=>['#6B7280','#F3F4F6']];
-    $tIcon = $typeIcons[$c['type']??'AUTRE'] ?? 'folder';
-    [$tColor,$tBg] = $typeColors[$c['type']??'AUTRE'] ?? $typeColors['AUTRE'];
+    $tIcon = $typeIcons[$c['type_ressource']??'AUTRE'] ?? 'folder';
+    [$tColor,$tBg] = $typeColors[$c['type_ressource']??'AUTRE'] ?? $typeColors['AUTRE'];
   ?>
   <div class="cours-card">
     <div style="display:flex;align-items:flex-start;gap:12px">
@@ -148,7 +148,7 @@ include __DIR__ . '/includes/header_app.php';
       </div>
     </div>
     <div style="display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--gris-100)">
-      <span style="background:<?= $tBg ?>;color:<?= $tColor ?>;font-size:10px;font-weight:700;padding:3px 10px;border-radius:8px;display:inline-flex;align-items:center;gap:4px"><i data-lucide="<?= $tIcon ?>" style="width:10px;height:10px"></i> <?= e($c['type']??'') ?></span>
+      <span style="background:<?= $tBg ?>;color:<?= $tColor ?>;font-size:10px;font-weight:700;padding:3px 10px;border-radius:8px;display:inline-flex;align-items:center;gap:4px"><i data-lucide="<?= $tIcon ?>" style="width:10px;height:10px"></i> <?= e($c['type_ressource']??'') ?></span>
       <?php if ($c['fichier_url']): ?>
       <a href="<?= e($c['fichier_url']) ?>" target="_blank" download
          onclick="incrementDl('<?= e($c['id']) ?>')"

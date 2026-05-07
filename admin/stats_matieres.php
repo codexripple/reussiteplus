@@ -179,7 +179,7 @@ include __DIR__ . '/../includes/header_app.php';
 <style>
 .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:24px; }
 .stat-card { background:var(--blanc); border:1.5px solid var(--gris-200); border-radius:14px; padding:18px 20px; }
-.stat-card .val { font-family:var(--font-display); font-size:26px; font-weight:900; color:var(--gris-900); }
+.stat-card .val { font-family:'Manrope',sans-serif; font-size:26px; font-weight:900; color:var(--gris-900); }
 .stat-card .lbl { font-size:11px; color:var(--gris-500); text-transform:uppercase; letter-spacing:.5px; margin-top:4px; }
 
 .mat-row { display:grid; grid-template-columns:180px 1fr 90px 90px 90px 90px 100px 80px; gap:0; align-items:center; border-bottom:1px solid var(--gris-100); padding:12px 0; }
@@ -200,7 +200,7 @@ include __DIR__ . '/../includes/header_app.php';
 <!-- Header page -->
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px">
   <div>
-    <h1 style="font-family:var(--font-display);font-size:22px;font-weight:900;color:var(--gris-900);margin:0 0 4px">Statistiques par matière</h1>
+    <h1 style="font-family:'Manrope',sans-serif;font-size:22px;font-weight:900;color:var(--gris-900);margin:0 0 4px">Statistiques par matière</h1>
     <p style="font-size:13px;color:var(--gris-500);margin:0">Performance, engagement et couverture du contenu par discipline.</p>
   </div>
   <div style="display:flex;gap:8px;flex-wrap:wrap">
