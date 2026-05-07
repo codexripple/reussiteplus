@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!rate_limit_check('register', $ip, 3, 1800)) {
         $errors[] = 'Trop de tentatives d’inscription. Réessayez plus tard.';
     } elseif (!csrf_verify()) {
-        $errors[] https://www.ethnocia.c= 'Token de sécurité invalide.';
+        $errors[] = 'Token de sécurité invalide.';
     } else {
         $nom    = trim($_POST['nom'] ?? '');
         $prenom = trim($_POST['prenom'] ?? '');
@@ -125,6 +125,16 @@ body{font-family:'Manrope',sans-serif;background:var(--n100);color:var(--n900);l
 .brand-name span{color:#FBBF24;}
 
 .left-content{position:relative;flex:1;display:flex;flex-direction:column;justify-content:center;padding:32px 0;}
+.left-title{
+  font-family:'Syne','Fraunces',Georgia,serif;
+  font-size:clamp(34px,4vw,54px);
+  font-weight:900;
+  color:#fff;
+  line-height:1.1;
+  letter-spacing:-.03em;
+  margin-bottom:18px;
+}
+.left-title em{color:#C9972A;font-style:italic;}
 .left-headline{font-family:'Manrope',sans-serif;font-size:clamp(26px,3vw,38px);font-weight:900;color:white;line-height:1.15;margin-bottom:16px;}
 .left-headline span{color:#FBBF24;}
 .left-sub{font-size:14px;color:rgba(255,255,255,.55);line-height:1.7;max-width:340px;margin-bottom:32px;}
