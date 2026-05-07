@@ -277,20 +277,34 @@ if (is_admin()) {
   </nav>
 
   <div class="sidebar-bottom">
+
     <?php if ($user['plan'] === 'GRATUIT'): ?>
+    <!-- Bouton upgrade Premium -->
     <a href="/reussiteplus/tarifs.php" class="sidebar-upgrade">
-      <div class="sidebar-upgrade-title"><i data-lucide="star" style="width:14px;height:14px;vertical-align:-2px"></i> Passer à Premium</div>
+      <div class="sidebar-upgrade-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#FBBF24" stroke="#FBBF24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Passer à Premium
+      </div>
       <div class="sidebar-upgrade-sub">Accès illimité dès 10 000 CDF/mois</div>
     </a>
     <?php endif; ?>
-    <button onclick="forcerReloadCss()" class="nav-item" style="margin-top:8px;background:rgba(0,122,94,.08);color:#007A5E;font-weight:700;gap:8px">
-      <div class="nav-icon"><i data-lucide="refresh-ccw"></i></div>
-      <span class="nav-label">Forcer le rechargement du design</span>
+
+    <!-- Bouton reload (dev) -->
+    <button onclick="forcerReloadCss()" class="sidebar-reload-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      <span>Recharger le design</span>
     </button>
-    <a href="/reussiteplus/deconnexion.php" class="nav-item" style="margin-top:8px">
-      <div class="nav-icon"><i data-lucide="log-out"></i></div>
-      <span class="nav-label">Déconnexion</span>
+
+    <!-- Déconnexion -->
+    <a href="/reussiteplus/deconnexion.php" class="sidebar-logout">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+        <polyline points="16 17 21 12 16 7"/>
+        <line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+      <span>Déconnexion</span>
     </a>
+
   </div>
 </aside>
 <!-- Overlay sidebar mobile -->

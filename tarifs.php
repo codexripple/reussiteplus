@@ -97,6 +97,24 @@ include __DIR__ . '/includes/header_app.php';
 .pay-chip:hover{border-color:var(--primary);background:var(--primary-subtle)}
 .pay-chip-dot{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 
+/* Layout 2 colonnes */
+.tarif-layout{display:grid;grid-template-columns:1fr 300px;gap:28px;align-items:start;}
+.tarif-main{min-width:0;}
+.tarif-sidebar{position:sticky;top:84px;display:flex;flex-direction:column;gap:16px;}
+.tsb-card{background:var(--blanc);border:1px solid var(--gris-200);border-radius:var(--radius-lg);padding:20px;overflow:hidden;}
+.tsb-card-head{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--gris-500);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.tsb-plan-badge{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:var(--radius);font-family:var(--font-display);font-size:14px;font-weight:800;width:100%;margin-bottom:10px;}
+.tsb-trust{display:flex;flex-direction:column;gap:9px;}
+.tsb-trust-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--gris-700);}
+.tsb-trust-item svg{width:16px;height:16px;flex-shrink:0;}
+.tsb-wa{display:flex;align-items:center;gap:10px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:var(--radius);padding:12px 14px;text-decoration:none;transition:var(--transition);}
+.tsb-wa:hover{background:#DCFCE7;border-color:#86EFAC;}
+.tsb-wa-icon{width:36px;height:36px;background:#25D366;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.tsb-wa-icon svg{width:18px;height:18px;stroke:#fff;}
+.tsb-wa-label{font-size:13px;font-weight:700;color:#166534;}
+.tsb-wa-sub{font-size:11px;color:#4ade80;}
+@media(max-width:900px){.tarif-layout{grid-template-columns:1fr;}.tarif-sidebar{position:static;}}
+
 /* FAQ */
 .faq-list{display:flex;flex-direction:column;gap:10px}
 .faq-item{background:var(--blanc);border:1px solid var(--gris-200);border-radius:var(--radius-lg);overflow:hidden;cursor:pointer;transition:border-color var(--transition)}
@@ -108,7 +126,7 @@ include __DIR__ . '/includes/header_app.php';
 .faq-item.open{border-color:var(--primary)}
 </style>
 
-<div style="max-width:960px;margin:0 auto">
+<div style="max-width:1200px;margin:0 auto">
 
   <!-- Hero -->
   <div class="tarif-hero">
@@ -153,6 +171,10 @@ include __DIR__ . '/includes/header_app.php';
     </div>
     <?php endif; ?>
   </div>
+
+  <!-- Layout 2 colonnes : contenu principal + sidebar -->
+  <div class="tarif-layout">
+  <div class="tarif-main">
 
   <!-- Grille des 3 plans -->
   <div class="tarif-grid">
@@ -397,6 +419,122 @@ include __DIR__ . '/includes/header_app.php';
       </a>
     </div>
   </div>
+
+  </div><!-- /tarif-main -->
+
+  <!-- ═══ SIDEBAR DROITE ═══════════════════════════════════ -->
+  <aside class="tarif-sidebar">
+
+    <!-- Plan actuel -->
+    <div class="tsb-card">
+      <div class="tsb-card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+        Votre abonnement
+      </div>
+      <?php
+        $pc = $planActif['couleur'];
+        $pn = $planActif['nom'];
+        $pi = $planSvgs[$user['plan']] ?? $planSvgs['GRATUIT'];
+      ?>
+      <div class="tsb-plan-badge" style="background:<?= $pc ?>18;color:<?= $pc ?>">
+        <span style="width:28px;height:28px;display:flex;align-items:center;justify-content:center">
+          <?= str_replace('<svg ', '<svg width="20" height="20" ', $pi) ?>
+        </span>
+        <?= e($pn) ?>
+        <?php if (plan_actif($user) && $user['plan'] !== 'GRATUIT'): ?>
+          <span style="margin-left:auto;font-size:10px;background:<?= $pc ?>;color:#fff;padding:2px 8px;border-radius:10px">Actif</span>
+        <?php endif; ?>
+      </div>
+      <?php if ($user['plan'] === 'GRATUIT'): ?>
+        <div style="font-size:12px;color:var(--gris-500);margin-bottom:14px;display:flex;align-items:center;gap:6px">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <?= $user['examens_mois'] ?? 0 ?>/<?= FREE_EXAMS_PER_MONTH ?> examens ce mois
+        </div>
+        <a href="/reussiteplus/paiement.php?plan=PREMIUM" style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--gold),#F59E0B);color:#fff;border-radius:10px;padding:12px 16px;font-family:var(--font-display);font-size:13px;font-weight:700;text-decoration:none;transition:all .2s;box-shadow:0 4px 14px rgba(201,151,42,.3)" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 20px rgba(201,151,42,.4)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 14px rgba(201,151,42,.3)'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Passer à Premium
+        </a>
+      <?php elseif ($user['plan_expire_at']): ?>
+        <?php $j = max(0, (int)((strtotime($user['plan_expire_at']) - time()) / 86400)); ?>
+        <div style="font-size:12px;color:<?= $j < 7 ? 'var(--rouge)' : 'var(--gris-500)' ?>;margin-bottom:12px;display:flex;align-items:center;gap:5px">
+          <?php if ($j < 7): ?>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+          <?php endif; ?>
+          Expire dans <strong><?= $j ?> jours</strong>
+        </div>
+        <a href="/reussiteplus/paiement.php?plan=<?= $user['plan'] ?>" class="btn btn-ghost btn-full btn-sm" style="justify-content:center">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Renouveler le plan
+        </a>
+      <?php endif; ?>
+    </div>
+
+    <!-- Plan recommandé -->
+    <?php if ($user['plan'] !== 'PREMIUM' && $user['plan'] !== 'ECOLE'): ?>
+    <div class="tsb-card" style="border-color:var(--gold);background:linear-gradient(135deg,#FFFBF0,#FFF7E0)">
+      <div class="tsb-card-head" style="color:var(--gold-dark)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Recommandé pour vous
+      </div>
+      <div style="font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--gris-900);margin-bottom:4px">Plan Premium</div>
+      <div style="font-size:22px;font-weight:900;color:var(--gold);font-family:var(--font-display);margin-bottom:10px">10 000 <span style="font-size:13px;font-weight:500;color:var(--gris-500)">CDF/mois</span></div>
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:14px">
+        <?php foreach(['Examens illimités','Toutes les archives','Corrigés PDF','Assistant IA'] as $f): ?>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--gris-700)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <?= $f ?>
+        </div>
+        <?php endforeach; ?>
+      </div>
+      <a href="/reussiteplus/paiement.php?plan=PREMIUM" class="btn btn-full btn-sm" style="background:var(--gold);color:#fff;border:none;justify-content:center">
+        Choisir Premium →
+      </a>
+    </div>
+    <?php endif; ?>
+
+    <!-- Confiance & sécurité -->
+    <div class="tsb-card">
+      <div class="tsb-card-head">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Pourquoi nous faire confiance
+      </div>
+      <div class="tsb-trust">
+        <div class="tsb-trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          <span>Remboursé sous 7 jours</span>
+        </div>
+        <div class="tsb-trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--bleu)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          <span>Paiement mobile money sécurisé</span>
+        </div>
+        <div class="tsb-trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Activation sous 24h</span>
+        </div>
+        <div class="tsb-trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--rouge)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span>Sans engagement, annulable</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- WhatsApp -->
+    <a href="https://wa.me/243977329184" target="_blank" rel="noopener" class="tsb-wa">
+      <div class="tsb-wa-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="tsb-wa-label">Besoin d'aide ?</div>
+        <div class="tsb-wa-sub">Répondons sur WhatsApp</div>
+      </div>
+      <svg style="margin-left:auto;width:14px;height:14px;stroke:#166534;opacity:.5" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+
+  </aside>
+
+  </div><!-- /tarif-layout -->
 
 </div>
 

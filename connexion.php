@@ -246,6 +246,22 @@ body{font-family:var(--ff-body);background:var(--n100);color:var(--n900);line-he
 .back-link:hover{color:var(--pr);}
 .back-link svg{width:14px;height:14px;stroke:currentColor;}
 
+/* ── Stats row ─────────────────────────────────────────── */
+.stats-row{display:flex;align-items:center;gap:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px 20px;margin-bottom:24px;}
+.stat-item{flex:1;text-align:center;}
+.stat-num{font-family:var(--ff-display);font-size:22px;font-weight:900;color:#fff;line-height:1;margin-bottom:3px;}
+.stat-lbl{font-size:11px;color:rgba(255,255,255,.5);font-weight:500;}
+.stat-sep{width:1px;height:32px;background:rgba(255,255,255,.12);flex-shrink:0;}
+
+/* ── Feature pills ──────────────────────────────────────── */
+.feat-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+.feat-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:600;color:rgba(255,255,255,.85);}
+.feat-pill svg{width:12px;height:12px;stroke:currentColor;flex-shrink:0;}
+.feat-pill.green{color:#4ade80;border-color:rgba(74,222,128,.25);background:rgba(74,222,128,.08);}
+.feat-pill.gold{color:#FBBF24;border-color:rgba(251,191,36,.25);background:rgba(251,191,36,.08);}
+.feat-pill.blue{color:#60A5FA;border-color:rgba(96,165,250,.25);background:rgba(96,165,250,.08);}
+.feat-pill.violet{color:#A78BFA;border-color:rgba(167,139,250,.25);background:rgba(167,139,250,.08);}
+
 /* ── Responsive ─────────────────────────────────────────── */
 @media(max-width:900px){
   .page{grid-template-columns:1fr;}
@@ -300,7 +316,50 @@ body{font-family:var(--ff-body);background:var(--n100);color:var(--n900);line-he
 
     <div class="left-content">
       <div class="left-title">Reprends là<br>où tu t'es<br><em>arrêté.</em></div>
-      <div class="left-sub">Tous tes résultats, ton historique d'examens et tes révisions t'attendent. Ta prochaine session commence ici.</div>
+      <div class="left-sub">Tes révisions, tes scores et tes archives t'attendent. Ta prochaine session EXETAT commence ici.</div>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="stat-num">15K+</div>
+          <div class="stat-lbl">élèves actifs</div>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat-item">
+          <div class="stat-num">98%</div>
+          <div class="stat-lbl">satisfaction</div>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat-item">
+          <div class="stat-num">12</div>
+          <div class="stat-lbl">provinces</div>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat-item">
+          <div class="stat-num">2008</div>
+          <div class="stat-lbl">à aujourd'hui</div>
+        </div>
+      </div>
+
+      <!-- Feature pills -->
+      <div class="feat-pills">
+        <span class="feat-pill green">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Examens EXETAT officiels
+        </span>
+        <span class="feat-pill gold">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Corrigés détaillés
+        </span>
+        <span class="feat-pill blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Suivi de progression
+        </span>
+        <span class="feat-pill violet">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          IA de révision
+        </span>
+      </div>
 
       <!-- ── Carousel ── -->
       <div class="carousel" id="carousel">
