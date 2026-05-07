@@ -880,4 +880,75 @@ async function loadAiInsights() {
 }
 </script>
 <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+
+<!-- ═══ EXPORTS ════════════════════════════════════════════ -->
+<div class="card" style="margin-top:24px">
+  <div class="card-header">
+    <div class="card-title">
+      <i data-lucide="download" style="width:16px;height:16px;vertical-align:-3px;margin-right:6px"></i>
+      Exports de données
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+
+    <a href="/reussiteplus/admin/users.php?export=csv" class="export-card">
+      <div class="export-icon" style="background:#EEF4FD">
+        <i data-lucide="users" style="width:20px;height:20px;stroke:#1E5FAD"></i>
+      </div>
+      <div>
+        <div class="export-title">Utilisateurs</div>
+        <div class="export-sub">ID, nom, email, plan, classe, province</div>
+      </div>
+      <i data-lucide="download" style="width:14px;height:14px;stroke:var(--gris-400);margin-left:auto"></i>
+    </a>
+
+    <a href="/reussiteplus/admin/paiements.php?export=csv" class="export-card">
+      <div class="export-icon" style="background:#FFF8EC">
+        <i data-lucide="credit-card" style="width:20px;height:20px;stroke:#C9972A"></i>
+      </div>
+      <div>
+        <div class="export-title">Paiements & Abonnements</div>
+        <div class="export-sub">Références, montants, statuts, opérateurs</div>
+      </div>
+      <i data-lucide="download" style="width:14px;height:14px;stroke:var(--gris-400);margin-left:auto"></i>
+    </a>
+
+    <a href="/reussiteplus/admin/stats_matieres.php?export=csv" class="export-card">
+      <div class="export-icon" style="background:#E8F5F1">
+        <i data-lucide="bar-chart-2" style="width:20px;height:20px;stroke:#007A5E"></i>
+      </div>
+      <div>
+        <div class="export-title">Résultats d'examens</div>
+        <div class="export-sub">Tous les examens blancs avec scores</div>
+      </div>
+      <i data-lucide="download" style="width:14px;height:14px;stroke:var(--gris-400);margin-left:auto"></i>
+    </a>
+
+    <a href="/reussiteplus/admin/messages.php?export=csv" class="export-card">
+      <div class="export-icon" style="background:#FEF0EF">
+        <i data-lucide="mail" style="width:20px;height:20px;stroke:#C9342A"></i>
+      </div>
+      <div>
+        <div class="export-title">Messages de contact</div>
+        <div class="export-sub">Tous les messages reçus du formulaire</div>
+      </div>
+      <i data-lucide="download" style="width:14px;height:14px;stroke:var(--gris-400);margin-left:auto"></i>
+    </a>
+
+  </div>
+</div>
+
+<style>
+.export-card{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 16px;border-radius:var(--radius-lg);
+  border:1px solid var(--gris-200);background:var(--gris-50);
+  text-decoration:none;transition:all .18s;cursor:pointer;
+}
+.export-card:hover{background:var(--blanc);border-color:var(--primary);box-shadow:var(--shadow-sm);}
+.export-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.export-title{font-size:13px;font-weight:700;color:var(--gris-900);margin-bottom:2px;}
+.export-sub{font-size:11px;color:var(--gris-500);}
+</style>
+
 <?php include __DIR__ . '/../includes/footer_app.php'; ?>

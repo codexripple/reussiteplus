@@ -1070,9 +1070,9 @@ strong { font-weight: 700; }
     <div>
       <div class="footer-col-title">Support</div>
       <a href="/reussiteplus/contact.php"    class="footer-col-link">Nous contacter</a>
-      <a href="https://wa.me/243977329184"   class="footer-col-link footer-col-link-wa" target="_blank" rel="noopener">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        WhatsApp — +243 97 732 9184
+      <a href="/reussiteplus/contact.php" class="footer-col-link">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Messagerie WhatsApp (via Contact)
       </a>
       <a href="mailto:support@reussiteplus.cd" class="footer-col-link">support@reussiteplus.cd</a>
       <div class="footer-col-title" style="margin-top:20px">Légal</div>

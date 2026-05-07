@@ -8,6 +8,21 @@ $pageTitle  = 'Messages de contact';
 $pageActive = 'admin_messages';
 $user = require_admin();
 
+// ── Export CSV messages ───────────────────────────────────
+if (isset($_GET['export']) && $_GET['export'] === 'csv') {
+    $rows = dbAll("SELECT nom, email, sujet, message, statut, created_at FROM contact_messages ORDER BY created_at DESC") ?? [];
+    $tmp = fopen('php://temp', 'r+');
+    fwrite($tmp, "\xEF\xBB\xBF");
+    fputcsv($tmp, ['Nom', 'Email', 'Sujet', 'Message', 'Statut', 'Date'], ';');
+    foreach ($rows as $r) fputcsv($tmp, array_values($r), ';');
+    rewind($tmp); $csv = stream_get_contents($tmp); fclose($tmp);
+    while (ob_get_level()) ob_end_clean();
+    header('Content-Type: application/vnd.ms-excel; charset=utf-8');
+    header('Content-Disposition: attachment; filename="messages_contact_' . date('Y-m-d') . '.csv"');
+    header('Content-Length: ' . strlen($csv));
+    echo $csv; exit;
+}
+
 // ── Actions POST ──────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && csrf_verify()) {
     $action = $_POST['action'] ?? '';
@@ -100,6 +115,9 @@ include __DIR__ . '/../includes/header_app.php';
       </button>
     </form>
     <?php endif; ?>
+    <a href="?export=csv" class="btn btn-ghost btn-sm">
+      <i data-lucide="download" style="width:13px;height:13px"></i> Exporter CSV
+    </a>
     <a href="/reussiteplus/admin/index.php" class="btn btn-ghost btn-sm">
       <i data-lucide="arrow-left" style="width:13px;height:13px"></i> Tableau de bord
     </a>

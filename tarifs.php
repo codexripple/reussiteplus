@@ -223,7 +223,8 @@ include __DIR__ . '/includes/header_app.php';
           ['Assistant IA de révision personnalisé', (bool)$plan['ia']],
         ];
         if (isset($plan['eleves_max'])) {
-          $feats[] = ["Jusqu'à <strong>{$plan['eleves_max']} élèves</strong>", true];
+          $feats[] = ["Jusqu'à <strong>{$plan['eleves_max']} élèves</strong> + <strong>{$plan['enseignants_max']}</strong> enseignants", true];
+          $feats[] = ['Groupe WhatsApp dédié (support &amp; communauté)', true];
         }
         foreach ($feats as [$label, $ok]): ?>
         <div class="tarif-feat">
@@ -307,15 +308,18 @@ include __DIR__ . '/includes/header_app.php';
         <tbody>
           <?php
           $rows = [
-            ['Examens par mois',              '5',       '30',         '∞',          '∞'],
-            ['Questions par examen',           '20',      '200',        '∞',          '∞'],
-            ['Banque de questions officielle', 'ok',      'ok',         'ok',         'ok'],
-            ['Archives ENAFEP/TENASOSP/État',  'no',      'ok',         'ok',         'ok'],
-            ['Corrigés et explications',       'no',      'ok',         'ok',         'ok'],
-            ['Assistant IA personnalisé',      'no',      'no',         'ok',         'ok'],
-            ['Suivi de progression',           'ok',      'ok',         'ok',         'ok'],
-            ['Gestion multi-élèves',           'no',      'no',         'no',         '50 élèves'],
-            ['Prix mensuel','Gratuit','5 000 CDF','10 000 CDF','50 000 CDF'],
+            ['Examens par mois',               '5',       '30',          '∞',           '∞'],
+            ['Questions par examen',            '20',      '200',         '∞',           '∞'],
+            ['Banque de questions officielle',  'ok',      'ok',          'ok',          'ok'],
+            ['Cours & ressources pédagogiques', 'no',      'ok',          'ok',          'ok'],
+            ['Archives ENAFEP/TENASOSP/État',   'no',      'ok',          'ok',          'ok'],
+            ['Corrigés et explications',        'no',      'ok',          'ok',          'ok'],
+            ['Exercices & devoirs',             'no',      'ok',          'ok',          'ok'],
+            ['Assistant IA personnalisé',       'no',      'no',          'ok',          'ok'],
+            ['Suivi de progression',            'ok',      'ok',          'ok',          'ok'],
+            ['Gestion multi-élèves',            'no',      'no',          'no',          '50 élèves'],
+            ['Groupe WhatsApp dédié',           'no',      'no',          'no',          'ok'],
+            ['Prix mensuel', 'Gratuit', '5 000 CDF', '10 000 CDF', '50 000 CDF'],
           ];
           foreach ($rows as [$feat,$g,$b,$p,$e]): ?>
           <tr>

@@ -22,11 +22,15 @@ if (isset($_GET['action'], $_GET['id'])) {
     dbQuery("UPDATE abonnements SET statut='CONFIRME', confirmed_at=NOW(), confirmed_by=? WHERE id=?", [$user['id'], $id]);
     dbQuery("UPDATE utilisateurs SET plan=?, plan_expire_at=? WHERE id=?", [$abon['plan'], $abon['date_fin'], $abon['uid']]);
     $dateFinFmt = $abon['date_fin'] ? date('d/m/Y', strtotime($abon['date_fin'])) : '?';
+    $msgPlan = 'Votre paiement a été confirmé. Votre abonnement ' . $abon['plan'] . ' est actif jusqu\'au ' . $dateFinFmt . '.';
+    if ($abon['plan'] === 'ECOLE') {
+        $msgPlan .= ' Rejoignez notre groupe WhatsApp dédié aux écoles pour le support prioritaire : https://chat.whatsapp.com/reussiteplus-ecoles';
+    }
     dbInsert('notifications', [
       'user_id' => $abon['uid'],
       'type'    => 'PAIEMENT',
       'titre'   => 'Abonnement ' . $abon['plan'] . ' activé !',
-      'message' => 'Votre paiement a été confirmé. Votre abonnement ' . $abon['plan'] . ' est actif jusqu\'au ' . $dateFinFmt . '.',
+      'message' => $msgPlan,
       'lien'    => '/reussiteplus/abonnement.php',
     ]);
     dbInsert('admin_logs', ['user_id'=>$user['id'],'action'=>'CONFIRMER_PAIEMENT','details'=>"ID=$id"]);

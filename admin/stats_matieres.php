@@ -8,6 +8,29 @@ $pageTitle  = 'Statistiques par matière';
 $pageActive = 'admin_stats_matieres';
 $user = require_admin();
 
+// ── Export CSV examens ────────────────────────────────────
+if (isset($_GET['export']) && $_GET['export'] === 'csv') {
+    $rows = dbAll("
+        SELECT u.prenom, u.nom, u.email, u.plan, u.classe, u.ville,
+               m.nom as matiere, es.statut, es.pourcentage, es.nb_questions,
+               es.nb_correctes, es.temps_passe, es.started_at, es.finished_at
+        FROM exam_sessions es
+        JOIN utilisateurs u ON es.user_id = u.id
+        LEFT JOIN matieres m ON es.matiere_id = m.id
+        ORDER BY es.started_at DESC
+    ") ?? [];
+    $tmp = fopen('php://temp', 'r+');
+    fwrite($tmp, "\xEF\xBB\xBF");
+    fputcsv($tmp, ['Prénom','Nom','Email','Plan','Classe','Ville','Matière','Statut','Score%','Questions','Correctes','Durée(s)','Démarré','Terminé'], ';');
+    foreach ($rows as $r) fputcsv($tmp, array_values($r), ';');
+    rewind($tmp); $csv = stream_get_contents($tmp); fclose($tmp);
+    while (ob_get_level()) ob_end_clean();
+    header('Content-Type: application/vnd.ms-excel; charset=utf-8');
+    header('Content-Disposition: attachment; filename="examens_' . date('Y-m-d') . '.csv"');
+    header('Content-Length: ' . strlen($csv));
+    echo $csv; exit;
+}
+
 // Période filtre
 $periode = $_GET['periode'] ?? '30'; // 7, 30, 90, 365, all
 $whereDate = match($periode) {
