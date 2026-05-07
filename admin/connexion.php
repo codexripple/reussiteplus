@@ -11,6 +11,7 @@ if (is_logged()) {
 }
 
 $errors = [];
+$html_error = '';
 $email_val = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -31,7 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 session_unset();
                 session_destroy();
                 session_start();
-                $errors[] = 'Accès refusé. Ce compte ne dispose pas des droits d\'administration.';
+                $html_error = 'Accès refusé. Ce compte est réservé aux élèves. Utilisez le <a href="/reussiteplus/connexion.php" style="color:#4ade80;text-decoration:underline">portail élève</a>.';
+                $errors[] = '';
             }
         } else {
             $errors[] = $result['msg'];
@@ -60,7 +62,7 @@ $clientIp = htmlspecialchars(explode(',', $clientIp)[0]);
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:#04080F;font-family:'Inter',sans-serif;color:#CBD5E1;overflow:hidden}
+html,body{height:100%;background:#04080F;font-family:'Manrope',sans-serif;color:#CBD5E1;overflow:hidden}
 
 /* ── FOND GRILLE ────────────────────────────────── */
 .bg{
@@ -177,7 +179,7 @@ html,body{height:100%;background:#04080F;font-family:'Inter',sans-serif;color:#C
 }
 
 .form-title{
-  font-family:'Poppins',sans-serif;font-size:24px;font-weight:900;
+  font-family:'Syne',sans-serif;font-size:24px;font-weight:900;
   color:#f1f5f9;text-align:center;margin-bottom:6px;letter-spacing:-.3px;
 }
 .form-sub{
@@ -235,7 +237,7 @@ html,body{height:100%;background:#04080F;font-family:'Inter',sans-serif;color:#C
 /* Bouton */
 .btn-adm{
   width:100%;padding:13px;border:none;border-radius:10px;cursor:pointer;
-  font-family:'Poppins',sans-serif;font-size:14px;font-weight:800;
+  font-family:'Manrope',sans-serif;font-size:14px;font-weight:800;
   background:linear-gradient(135deg,#007A5E 0%,#00563F 50%,#1a006f 100%);
   color:white;display:flex;align-items:center;justify-content:center;gap:10px;
   transition:transform .15s,box-shadow .15s,opacity .15s;
@@ -314,6 +316,63 @@ html,body{height:100%;background:#04080F;font-family:'Inter',sans-serif;color:#C
 }
 
 @media(max-width:1000px){.col-left,.col-right{display:none}.col-center{background:rgba(4,8,15,.95)}}
+
+/* ── PREMIUM ADDITIONS ── */
+@keyframes admFadeUp  { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+@keyframes admFadeIn  { from{opacity:0} to{opacity:1} }
+@keyframes admSpin    { to{transform:rotate(360deg)} }
+@keyframes admShake   { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-5px)} 40%,80%{transform:translateX(5px)} }
+@keyframes admGlow    { 0%,100%{box-shadow:0 0 12px rgba(0,200,120,.3)} 50%{box-shadow:0 0 24px rgba(0,200,120,.6)} }
+
+/* Entry animations */
+.col-left   { animation: admFadeIn .6s ease; }
+.col-right  { animation: admFadeIn .6s ease .1s both; }
+.lock-wrap  { animation: admFadeUp .5s cubic-bezier(0.16,1,0.3,1) .15s both; }
+.form-system-id { animation: admFadeUp .5s cubic-bezier(0.16,1,0.3,1) .2s both; }
+.form-title { animation: admFadeUp .5s cubic-bezier(0.16,1,0.3,1) .25s both; }
+.form-sub   { animation: admFadeUp .5s cubic-bezier(0.16,1,0.3,1) .3s both; }
+.adm-form-box { animation: admFadeUp .5s cubic-bezier(0.16,1,0.3,1) .35s both; }
+.alert-adm  { animation: admShake .4s cubic-bezier(0.36,0.07,0.19,0.97); }
+
+/* Lock icon glow on load */
+.lock-wrap { animation: admFadeUp .5s cubic-bezier(0.16,1,0.3,1) .15s both, admGlow 3s ease-in-out 1s infinite; }
+
+/* Input enhanced focus */
+.field-input:focus {
+  border-color: rgba(0,200,120,.6) !important;
+  box-shadow: 0 0 0 3px rgba(0,200,120,.1) !important;
+  background: rgba(0,200,120,.05) !important;
+}
+
+/* Button spinner */
+.btn-adm-spinner {
+  display: none; width: 15px; height: 15px; flex-shrink: 0;
+  border: 2px solid rgba(255,255,255,.3); border-top-color: #fff;
+  border-radius: 50%; animation: admSpin .7s linear infinite;
+}
+.btn-adm.loading { opacity: .85; pointer-events: none; }
+.btn-adm.loading .btn-adm-spinner { display: block; }
+.btn-adm.loading .btn-adm-txt:last-child { display: none; }
+
+/* IP badge pulse */
+.ip-row {
+  position: relative;
+  overflow: hidden;
+}
+.ip-row::after {
+  content: '';
+  position: absolute; top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(245,158,11,.05), transparent);
+  animation: admScan 3s ease-in-out infinite;
+}
+@keyframes admScan { 0%{left:-100%} 100%{left:200%} }
+
+/* Form field focus label */
+.field-wrap:focus-within + .field-label,
+.field:focus-within .field-label {
+  color: rgba(0,200,120,.8) !important;
+}
 </style>
 </head>
 <body>
@@ -398,7 +457,7 @@ html,body{height:100%;background:#04080F;font-family:'Inter',sans-serif;color:#C
       <?php if ($errors): ?>
       <div class="alert-adm">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <div>ACCÈS REFUSÉ — <?= htmlspecialchars($errors[0]) ?></div>
+        <div>ACCÈS REFUSÉ — <?= $html_error ? $html_error : htmlspecialchars($errors[0]) ?></div>
       </div>
       <?php endif; ?>
 
@@ -434,9 +493,10 @@ html,body{height:100%;background:#04080F;font-family:'Inter',sans-serif;color:#C
         </div>
 
         <button type="submit" class="btn-adm" id="submitBtn">
+          <svg class="btn-adm-spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Valider l'acc&egrave;s
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
+          <span class="btn-adm-txt">Valider l'acc&egrave;s</span>
+          <svg class="btn-adm-txt" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
       </form>
 
@@ -501,8 +561,19 @@ function togglePwd() {
 }
 document.getElementById('adminLoginForm').addEventListener('submit', function() {
   const btn = document.getElementById('submitBtn');
+  btn.classList.add('loading');
   btn.disabled = true;
-  btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin .7s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> V&eacute;rification...';
+  btn.querySelector('.btn-adm-spinner').style.display = 'block';
+  document.querySelectorAll('.btn-adm-txt').forEach(el => el.style.opacity = '0');
+});
+// Auto-focus
+document.addEventListener('DOMContentLoaded', () => {
+  const emailField = document.getElementById('email');
+  if (emailField && !emailField.value) emailField.focus();
+});
+// Keyboard: email → password on Enter
+document.getElementById('email')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); document.getElementById('password').focus(); }
 });
 </script>
 <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
