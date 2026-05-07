@@ -24,22 +24,29 @@ $user = is_logged() ? current_user() : null;
 <title>RÉUSSITE+ | Prépare l'Examen d'État, le TENASOSP et l'ENAFEP en RDC</title>
 <link rel="icon" type="image/svg+xml" href="/reussiteplus/assets/img/favicon.svg">
 <meta name="description" content="Archives officielles depuis 2005, QCM tirés des vrais sujets, suivi de progression par matière. Plus de 14 000 élèves de Kinshasa, Lubumbashi, Goma et Mbuji-Mayi s'y préparent déjà.">
-<link rel="stylesheet" href="/reussiteplus/assets/css/fonts.css">
 <link rel="stylesheet" href="/reussiteplus/assets/css/bootstrap-icons.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,700&family=Manrope:wght@300;400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
 <style>
 :root {
   --primary: #007A5E; --primary-dark: #005A45; --primary-light: #00A97F; --primary-subtle: #E8F5F1;
   --gold: #C9972A; --gold-light: #F5E6C0; --rouge: #C9342A; --bleu: #1E5FAD; --bleu-light: #EEF4FD;
   --noir: #0D1117; --gris-900: #1C2433; --gris-800: #2E3A4A; --gris-700: #4A5568; --gris-600: #6B7280;
   --gris-200: #E2E8F0; --gris-100: #F1F5F9; --gris-50: #F8FAFC; --blanc: #FFFFFF;
-  --font-display: 'Poppins', sans-serif; --font-body: 'Poppins', sans-serif; /* DRC landing */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body:    'Manrope', system-ui, sans-serif;
+  --font-editorial: 'Newsreader', Georgia, serif;
   --radius: 10px; --radius-lg: 16px; --radius-xl: 24px;
   --shadow: 0 4px 16px rgba(0,0,0,0.08); --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
   --shadow-glow: 0 0 40px rgba(0,122,94,0.25); --transition: 200ms cubic-bezier(0.4,0,0.2,1);
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--font-body); color: var(--gris-900); line-height: 1.6; overflow-x: hidden; }
+body { font-family: var(--font-body); color: var(--gris-900); line-height: 1.65; overflow-x: hidden; font-size: 16px; font-weight: 400; -webkit-font-smoothing: antialiased; }
 a { text-decoration: none; color: inherit; }
+h1,h2,h3,h4 { font-family: var(--font-display); font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
+em { font-family: var(--font-editorial); font-style: italic; }
+strong { font-weight: 700; }
 
 /* NAV */
 .nav {
@@ -445,9 +452,9 @@ a { text-decoration: none; color: inherit; }
   <div class="hero-content">
     <div class="hero-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> 14 238 élèves en RDC s'y préparent déjà — Kinshasa · Goma · Lubumbashi · Bukavu</div>
     <h1 class="hero-title">
-      Ce n'est pas<br>une question de talent.<br><span>C'est une question de méthode.</span>
+      L'Exam d'État,<br>le TENASOSP, l'ENAFEP —<br><span>prépare-toi comme ceux qui réussissent.</span>
     </h1>
-    <p class="hero-sub">Les élèves qui réussissent l'Exam d'État ne travaillent pas plus. Ils s'entraînent avec les vrais sujets, comprennent leurs erreurs et savent exactement quoi réviser. RÉUSSITE+ leur donne ça — sur téléphone, même sans WiFi.</p>
+    <p class="hero-sub">Chaque année, des milliers d'élèves congolais entrent dans la salle d'examen sans savoir ce qui les attend. Ceux qui réussissent ont un point commun : ils s'étaient déjà entraînés avec les vrais sujets. RÉUSSITE+ te donne exactement ça — où que tu sois, même sans WiFi.</p>
     <div class="hero-cta">
       <a href="/reussiteplus/inscription.php" class="btn btn-primary btn-lg">Je commence — c'est gratuit →</a>
       <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-lg"><i class="bi bi-star-fill"></i> Découvrir Premium</a>
@@ -579,67 +586,79 @@ a { text-decoration: none; color: inherit; }
     <div style="text-align:center;margin-bottom:12px">
       <div class="section-label" style="display:inline-block">Pour qui ?</div>
     </div>
-    <h2 class="section-title" style="text-align:center">Quelle que soit ta situation,<br>RÉUSSITE+ s'adapte à toi</h2>
+    <h2 class="section-title" style="text-align:center">Pour toi, quelle que soit<br>ta place dans cette histoire.</h2>
 
     <!-- Bloc 1 : Élèves -->
     <div class="who-block">
-      <div class="who-img-wrap">
-        <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=900&auto=format&q=82&fit=crop&crop=top" alt="Élève congolais révisant" class="who-img" loading="lazy">
+      <div class="who-img-wrap" style="position:relative">
+        <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=900&auto=format&q=85&fit=crop&crop=center" alt="Élève congolais concentré sur sa révision" class="who-img" loading="lazy">
+        <div style="position:absolute;bottom:20px;left:20px;background:rgba(0,0,0,.65);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 16px;color:#fff;max-width:280px">
+          <div style="font-size:10px;font-family:var(--font-body);font-weight:600;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Kalombo · Kinshasa · 19 ans</div>
+          <div style="font-size:13px;font-family:var(--font-editorial);font-style:italic;line-height:1.5">"J'avais raté l'an passé. Cette année, 74 %."</div>
+        </div>
       </div>
       <div class="who-text">
-        <div class="section-label" style="margin-bottom:12px">Élèves — 6ème primaire, 3ème & 6ème secondaire</div>
-        <h3 class="who-title">Tu as les cours.<br>Maintenant, entraîne-toi vraiment.</h3>
-        <p class="who-desc">Avoir les livres ne suffit pas — tout le monde les a. Ce qui fait la différence, c'est de s'entraîner avec les vrais sujets, de comprendre ses erreurs et de savoir exactement ce qui reste à réviser avant le jour J. C'est précisément ce que font les 14 238 élèves qui utilisent RÉUSSITE+.</p>
+        <div class="section-label" style="margin-bottom:12px">Pour les élèves — 6ème primaire, 3ème &amp; 6ème secondaire</div>
+        <h3 class="who-title">Tu n'as pas besoin<br>de travailler plus.<br>Tu as besoin de travailler <em>mieux.</em></h3>
+        <p class="who-desc">Tes cours, tu les as. Mais des centaines d'autres élèves les ont aussi. Ce qui va changer le résultat le jour de l'examen, c'est de s'être vraiment entraîné — avec les vrais sujets, dans les vraies conditions. Pas de révision au hasard. Pas de panique de dernière minute.</p>
         <ul class="who-list">
-          <li><i class="bi bi-check-circle-fill"></i> Sujets officiels ENAFEP, TENASOSP & Exam d'État depuis 2005</li>
-          <li><i class="bi bi-check-circle-fill"></i> Chaque erreur expliquée question par question</li>
-          <li><i class="bi bi-check-circle-fill"></i> Ton score par matière mis à jour après chaque session</li>
+          <li><i class="bi bi-check-circle-fill"></i> Sujets officiels ENAFEP, TENASOSP &amp; Exam d'État depuis 2005</li>
+          <li><i class="bi bi-check-circle-fill"></i> Chaque erreur expliquée — tu comprends <em>pourquoi</em>, pas juste quoi</li>
+          <li><i class="bi bi-check-circle-fill"></i> Score par matière mis à jour après chaque session</li>
         </ul>
         <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-          <a href="/reussiteplus/inscription.php" class="btn btn-primary">Je commence gratuitement →</a>
-          <span style="font-size:13px;color:var(--gris-500)">Aucune carte bancaire requise</span>
+          <a href="/reussiteplus/inscription.php" class="btn btn-primary">Je commence — c'est gratuit →</a>
+          <span style="font-size:13px;color:var(--gris-500)">Sans carte. Sans engagement.</span>
         </div>
       </div>
     </div>
 
     <!-- Bloc 2 : Enseignants / Répétiteurs -->
     <div class="who-block who-block-reverse">
-      <div class="who-img-wrap">
-        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=900&auto=format&q=82&fit=crop&crop=center" alt="Enseignant congolais avec ses élèves" class="who-img" loading="lazy">
+      <div class="who-img-wrap" style="position:relative">
+        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=900&auto=format&q=85&fit=crop&crop=center" alt="Enseignant congolais avec ses élèves" class="who-img" loading="lazy">
+        <div style="position:absolute;bottom:20px;right:20px;background:rgba(0,0,0,.65);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 16px;color:#fff;text-align:right;max-width:280px">
+          <div style="font-size:10px;font-family:var(--font-body);font-weight:600;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Dieumerci · Goma · Répétiteur</div>
+          <div style="font-size:13px;font-family:var(--font-editorial);font-style:italic;line-height:1.5">"11 reçus sur 13. Mon meilleur taux depuis 5 ans."</div>
+        </div>
       </div>
       <div class="who-text">
-        <div class="section-label" style="margin-bottom:12px">Enseignants & Répétiteurs</div>
-        <h3 class="who-title">Donnez à vos élèves les mêmes chances qu'un répétiteur privé.</h3>
-        <p class="who-desc">Vous savez ce qui tombe aux examens. Maintenant vous avez l'outil pour le faire réviser question par question, en dehors de la classe — et repérer en un coup d'œil qui progresse et qui décroche avant qu'il soit trop tard.</p>
+        <div class="section-label" style="margin-bottom:12px">Pour les enseignants &amp; répétiteurs</div>
+        <h3 class="who-title">Vos élèves méritent<br>les mêmes outils que<br>ceux des grandes écoles.</h3>
+        <p class="who-desc">Vous faites ce métier parce que vous croyez en vos élèves. RÉUSSITE+ vous donne les moyens de ce que vous croyez — les vrais sujets d'examen, une banque de 15 000 questions par matière, et la possibilité de voir qui progresse et qui a besoin d'aide avant qu'il soit trop tard.</p>
         <ul class="who-list">
-          <li><i class="bi bi-check-circle-fill"></i> Archives officielles classées par province, matière et année</li>
-          <li><i class="bi bi-check-circle-fill"></i> 15 000+ questions QCM prêtes à exploiter en cours ou à la maison</li>
-          <li><i class="bi bi-check-circle-fill"></i> Résultats collectifs visibles — repérez les lacunes à temps</li>
+          <li><i class="bi bi-check-circle-fill"></i> Archives classées par province, matière et année</li>
+          <li><i class="bi bi-check-circle-fill"></i> 15 000+ questions QCM prêtes à exploiter en classe ou à la maison</li>
+          <li><i class="bi bi-check-circle-fill"></i> Résultats collectifs — repérez les lacunes avant l'examen réel</li>
         </ul>
         <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-          <a href="/reussiteplus/inscription.php" class="btn btn-primary">Créer un compte →</a>
-          <span style="font-size:13px;color:var(--gris-500)">Plan École disponible pour les classes entières</span>
+          <a href="/reussiteplus/inscription.php" class="btn btn-primary">Créer mon compte →</a>
+          <span style="font-size:13px;color:var(--gris-500)">Plan École pour les classes entières</span>
         </div>
       </div>
     </div>
 
     <!-- Bloc 3 : Parents -->
     <div class="who-block">
-      <div class="who-img-wrap">
-        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=900&auto=format&q=82&fit=crop&crop=top" alt="Étudiante congolaise qui étudie" class="who-img" loading="lazy">
+      <div class="who-img-wrap" style="position:relative">
+        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=900&auto=format&q=85&fit=crop&crop=center" alt="Étudiante congolaise déterminée" class="who-img" loading="lazy">
+        <div style="position:absolute;bottom:20px;left:20px;background:rgba(0,0,0,.65);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 16px;color:#fff;max-width:280px">
+          <div style="font-size:10px;font-family:var(--font-body);font-weight:600;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Bénédicte · Lubumbashi · 17 ans</div>
+          <div style="font-size:13px;font-family:var(--font-editorial);font-style:italic;line-height:1.5">"TENASOSP réussi du 1er coup. Sans répétiteur privé."</div>
+        </div>
       </div>
       <div class="who-text">
-        <div class="section-label" style="margin-bottom:12px">Parents & Familles</div>
-        <h3 class="who-title">Votre enfant mérite<br>mieux qu'une photocopie froissée.</h3>
-        <p class="who-desc">En RDC, l'accès aux bons outils de révision coûte cher et n'est pas toujours garanti. RÉUSSITE+ change ça. Votre enfant peut réviser à n'importe quelle heure, avec les vrais sujets officiels — depuis son téléphone, même sans courant stable. Et vous pouvez voir s'il avance.</p>
+        <div class="section-label" style="margin-bottom:12px">Pour les parents &amp; familles</div>
+        <h3 class="who-title">Vous avez fait des sacrifices<br>pour leur avenir.<br>Ne les laissez pas partir <em>sans préparation.</em></h3>
+        <p class="who-desc">En RDC, un répétiteur privé coûte ce que beaucoup de familles ne peuvent pas se permettre. RÉUSSITE+ change ça — votre enfant accède aux vrais sujets d'examen depuis son téléphone, à n'importe quelle heure, même sans WiFi. Et vous, vous pouvez voir s'il avance.</p>
         <ul class="who-list">
-          <li><i class="bi bi-check-circle-fill"></i> Inscription gratuite en moins de 2 minutes — pas d'ordinateur nécessaire</li>
-          <li><i class="bi bi-check-circle-fill"></i> Fonctionne hors connexion, sur les téléphones d'entrée de gamme</li>
+          <li><i class="bi bi-check-circle-fill"></i> Gratuit pour commencer — inscription en moins de 2 minutes</li>
+          <li><i class="bi bi-check-circle-fill"></i> Fonctionne sur n'importe quel Android, sans connexion</li>
           <li><i class="bi bi-check-circle-fill"></i> Tableau de progression visible chaque semaine</li>
         </ul>
         <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
           <a href="/reussiteplus/inscription.php" class="btn btn-primary">Inscrire mon enfant →</a>
-          <span style="font-size:13px;color:var(--gris-500)">Gratuit pour commencer, Premium à 10 000 CDF/mois</span>
+          <span style="font-size:13px;color:var(--gris-500)">Gratuit — Premium à 10 000 CDF/mois</span>
         </div>
       </div>
     </div>
@@ -652,8 +671,8 @@ a { text-decoration: none; color: inherit; }
     <div style="text-align:center;margin-bottom:12px">
       <div class="section-label" style="display:inline-block">Ce qui change tout</div>
     </div>
-    <h2 class="section-title" style="text-align:center">Arrête de réviser<br>au hasard.</h2>
-    <p class="section-sub" style="text-align:center;margin:0 auto">RÉUSSITE+ n'est pas une appli générique traduite en français. Elle a été construite pour un seul système — le tien. Pour l'EPST, les programmes officiels de la RDC, et les réalités du terrain.</p>
+    <h2 class="section-title" style="text-align:center">Tout ce dont tu as besoin<br>pour <em>vraiment</em> te préparer.</h2>
+    <p class="section-sub" style="text-align:center;margin:0 auto">RÉUSSITE+ n'est pas une appli générique traduite en français. Elle a été construite pour un seul système éducatif — le tien. Pour l'EPST, les programmes officiels, et les réalités du terrain congolais.</p>
 
     <div class="features-grid">
       <div class="feature-card">
@@ -811,12 +830,12 @@ a { text-decoration: none; color: inherit; }
     <div style="text-align:center;margin-bottom:12px">
       <div class="section-label" style="display:inline-block">Témoignages</div>
     </div>
-    <h2 class="section-title" style="text-align:center">Ils ne font pas que<br>nous faire confiance — <em style="font-style:normal;color:var(--primary)">ils réussissent.</em></h2>
+    <h2 class="section-title" style="text-align:center">Ils ont eu peur, comme toi.<br>Et ils ont <em>réussi.</em></h2>
     <div class="testimonials-grid">
 
       <div class="testimonial-card">
         <div class="testimonial-stars" style="color:#F59E0B;font-size:15px;margin-bottom:12px">★★★★★</div>
-        <p class="testimonial-text">"J'avais raté l'Exam d'État en 2023. Je ne savais pas par où recommencer. J'ai trouvé RÉUSSITE+ et j'ai commencé les QCM chaque soir depuis mon Tecno — 20 minutes, pas plus. 4 mois plus tard&nbsp;: 74&nbsp;%. Le résultat que je n'avais pas eu la première fois."</p>
+        <p class="testimonial-text" style="font-family:var(--font-editorial);font-style:italic;font-size:15px;line-height:1.75">"J'avais raté. Je ne savais pas par où recommencer. J'ai commencé les QCM chaque soir depuis mon Tecno — 20 minutes seulement. Quatre mois plus tard&nbsp;: 74&nbsp;%. C'est le résultat que je n'avais pas eu la première fois. Et j'avais travaillé moins, mais mieux."</p>
         <div class="testimonial-author">
           <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=96&h=96&fit=crop&crop=center&auto=format&q=80" alt="Kalombo Mutombo" width="48" height="48" style="border-radius:50%;object-fit:cover;flex-shrink:0">
           <div>
@@ -828,7 +847,7 @@ a { text-decoration: none; color: inherit; }
 
       <div class="testimonial-card">
         <div class="testimonial-stars" style="color:#F59E0B;font-size:15px;margin-bottom:12px">★★★★★</div>
-        <p class="testimonial-text">"Avant, je cherchais les anciens sujets dans des photocopies mal lisibles que je trouvais au marché. Là, tout est classé, net, corrigé, avec le détail de chaque étape. J'ai eu mon TENASOSP du premier coup. Je ne comprends pas pourquoi tout le monde ne l'utilise pas encore."</p>
+        <p class="testimonial-text" style="font-family:var(--font-editorial);font-style:italic;font-size:15px;line-height:1.75">"Avant, je cherchais les sujets dans des photocopies froissées que je trouvais au marché. Là, tout est classé, net, corrigé — avec l'explication de chaque étape. J'ai eu mon TENASOSP du premier coup. Je ne comprends toujours pas pourquoi tout le monde ne l'utilise pas encore."</p>
         <div class="testimonial-author">
           <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=96&h=96&fit=crop&crop=center&auto=format&q=80" alt="Bénédicte Nzuzi" width="48" height="48" style="border-radius:50%;object-fit:cover;flex-shrink:0">
           <div>
@@ -840,7 +859,7 @@ a { text-decoration: none; color: inherit; }
 
       <div class="testimonial-card">
         <div class="testimonial-stars" style="color:#F59E0B;font-size:15px;margin-bottom:12px">★★★★★</div>
-        <p class="testimonial-text">"Je répète à Goma depuis 5 ans. Cette année j'ai intégré RÉUSSITE+ dans mes séances du soir. Les élèves s'entraînent depuis leurs téléphones — sans WiFi, sans ordinateur. Résultat&nbsp;: 11 reçus sur 13. C'est mon meilleur taux depuis que j'enseigne."</p>
+        <p class="testimonial-text" style="font-family:var(--font-editorial);font-style:italic;font-size:15px;line-height:1.75">"Je répète à Goma depuis 5 ans. Cette année, j'ai intégré RÉUSSITE+ dans les séances du soir. Les élèves passaient les QCM depuis leurs téléphones — sans WiFi, sans ordinateur. 11 reçus sur 13. C'est mon meilleur taux. Et ce n'est pas un hasard."</p>
         <div class="testimonial-author">
           <img src="https://images.unsplash.com/photo-1507152927626-13d6a1ee8614?w=96&h=96&fit=crop&crop=center&auto=format&q=80" alt="Dieumerci Bauma" width="48" height="48" style="border-radius:50%;object-fit:cover;flex-shrink:0">
           <div>
@@ -994,8 +1013,9 @@ a { text-decoration: none; color: inherit; }
 <!-- CTA FINAL -->
 <section class="cta-section">
   <div style="position:relative">
-    <h2 class="cta-title">Cette année, tu ne rates pas.<br>Tu arrives <span style="color:var(--gold)">préparé.</span></h2>
-    <p class="cta-sub" style="max-width:600px;margin:0 auto 36px">14 238 élèves de toutes les provinces ont commencé ici, gratuitement, sans rien promettre. Certains depuis leur chambre à Kinshasa, d'autres sous la véranda à Goma, d'autres encore dans le bus vers Lubumbashi.<br><strong style="color:rgba(255,255,255,.8)">Aujourd'hui, c'est ton tour.</strong></p>
+    <h2 class="cta-title">Cette année,<br>tu arrives <span style="color:var(--gold)">préparé.</span></h2>
+    <p style="font-family:var(--font-editorial);font-style:italic;font-size:clamp(17px,2vw,22px);color:rgba(255,255,255,.55);margin-bottom:16px;position:relative;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.65">"Certains révisent depuis leur chambre à Kinshasa. D'autres sous la véranda à Goma. D'autres encore dans le bus vers Lubumbashi. Ce qui les unit ? Ils ont décidé d'arrêter de laisser le hasard décider."</p>
+    <p class="cta-sub" style="max-width:520px;margin:0 auto 36px;font-size:16px">14 238 élèves ont commencé ici — gratuitement, sans rien promettre. Aujourd'hui, c'est ton tour.</p>
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:20px">
       <a href="/reussiteplus/inscription.php" class="btn btn-primary btn-lg" style="font-size:17px;padding:16px 36px">Créer mon compte — c'est gratuit →</a>
       <a href="/reussiteplus/tarifs.php" class="btn btn-gold btn-lg"><i class="bi bi-star-fill"></i> Voir ce que donne Premium</a>
