@@ -363,16 +363,45 @@ include __DIR__ . '/../includes/header_app.php';
           <div style="font-size:10px;color:var(--gris-400);margin-top:3px"><?php echo temps_relatif($p['created_at']); ?></div>
         </td>
         <td>
+          <div style="display:flex;gap:4px;align-items:center">
           <?php if ($p['statut'] === 'EN_ATTENTE'): ?>
-          <div style="display:flex;gap:4px">
-            <a href="?action=confirmer&id=<?php echo e($p['id']); ?>&statut=<?php echo $statut; ?>" class="btn btn-primary btn-sm" onclick="return confirm('Confirmer ce paiement ?')" title="Confirmer">
+            <a href="?action=confirmer&id=<?php echo e($p['id']); ?>&csrf=<?php echo e($_SESSION['csrf_admin']??''); ?>&statut=<?php echo $statut; ?>" class="btn btn-primary btn-sm" onclick="return confirm('Confirmer ce paiement ?')" title="Confirmer">
               <i data-lucide="check" style="width:13px;height:13px"></i>
             </a>
-            <a href="?action=refuser&id=<?php echo e($p['id']); ?>&statut=<?php echo $statut; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Refuser ce paiement ?')" title="Refuser">
+            <a href="?action=refuser&id=<?php echo e($p['id']); ?>&csrf=<?php echo e($_SESSION['csrf_admin']??''); ?>&statut=<?php echo $statut; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Refuser ce paiement ?')" title="Refuser">
               <i data-lucide="x" style="width:13px;height:13px"></i>
             </a>
+          <?php endif; ?>
+          <?php
+            $receiptData = json_encode([
+              'abonnement' => [
+                'reference_paiement' => $p['reference_paiement'] ?? '',
+                'plan'               => $p['plan'] ?? '',
+                'montant'            => $p['montant'] ?? 0,
+                'devise'             => $p['devise'] ?? 'CDF',
+                'methode_paiement'   => $p['methode_paiement'] ?? '',
+                'telephone'          => $p['telephone'] ?? '',
+                'date_debut'         => $p['date_debut'] ?? '',
+                'date_fin'           => $p['date_fin'] ?? '',
+                'duree_mois'         => $p['duree_mois'] ?? 1,
+                'statut'             => $p['statut'] ?? '',
+                'code_promo'         => $p['code_promo'] ?? '',
+                'remise'             => $p['remise'] ?? 0,
+                'created_at'         => $p['created_at'] ?? '',
+                'confirmed_at'       => $p['confirmed_at'] ?? '',
+              ],
+              'user' => [
+                'prenom' => $p['prenom'] ?? '',
+                'nom'    => $p['nom'] ?? '',
+                'email'  => $p['email'] ?? '',
+                'plan'   => $p['plan'] ?? '',
+              ],
+            ], JSON_UNESCAPED_UNICODE | JSON_HEX_QUOT | JSON_HEX_TAG);
+          ?>
+          <button onclick='adminDownloadReceipt(<?= htmlspecialchars($receiptData, ENT_QUOTES) ?>)' title="Télécharger le reçu PDF" class="btn btn-ghost btn-sm">
+            <i data-lucide="file-down" style="width:13px;height:13px"></i>
+          </button>
           </div>
-          <?php else: ?><span style="color:var(--gris-300)">---</span><?php endif; ?>
         </td>
       </tr>
       <?php endforeach; ?>
@@ -398,4 +427,13 @@ include __DIR__ . '/../includes/header_app.php';
   <?php endif; ?>
 </div>
 
+<script>
+function adminDownloadReceipt(data) {
+  if (typeof ReceiptPdf === 'undefined') {
+    alert('Générateur PDF non chargé. Actualisez la page.');
+    return;
+  }
+  ReceiptPdf.open(data);
+}
+</script>
 <?php include __DIR__ . '/../includes/footer_app.php'; ?>

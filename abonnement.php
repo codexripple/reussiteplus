@@ -28,6 +28,31 @@ $totalExamens  = (int)($user['total_examens'] ?? 0);
 $scoreMoyen    = (float)($user['score_moyen'] ?? 0);
 $streakJours   = (int)($user['streak_jours'] ?? 0);
 
+// Données JSON des abonnements pour les reçus PDF
+$abonnementsJson = json_encode(array_map(fn($ab) => [
+    'reference_paiement' => $ab['reference_paiement'],
+    'plan'               => $ab['plan'],
+    'montant'            => $ab['montant'],
+    'devise'             => $ab['devise'] ?? 'CDF',
+    'methode_paiement'   => $ab['methode_paiement'],
+    'telephone'          => $ab['telephone'],
+    'date_debut'         => $ab['date_debut'],
+    'date_fin'           => $ab['date_fin'],
+    'duree_mois'         => $ab['duree_mois'],
+    'statut'             => $ab['statut'],
+    'code_promo'         => $ab['code_promo'],
+    'remise'             => $ab['remise'],
+    'created_at'         => $ab['created_at'],
+    'confirmed_at'       => $ab['confirmed_at'],
+], $abonnements), JSON_UNESCAPED_UNICODE);
+
+$userJson = json_encode([
+    'prenom' => $user['prenom'],
+    'nom'    => $user['nom'],
+    'email'  => $user['email'] ?? '',
+    'plan'   => $user['plan'],
+], JSON_UNESCAPED_UNICODE);
+
 $planIcons = ['GRATUIT' => 'backpack', 'BASIQUE' => 'zap', 'PREMIUM' => 'crown', 'ECOLE' => 'school'];
 $icon = $planIcons[$user['plan']] ?? 'backpack';
 
@@ -426,10 +451,11 @@ include __DIR__ . '/includes/header_app.php';
           <th>Méthode</th>
           <th>Période</th>
           <th>Statut</th>
+          <th style="text-align:center">Reçu</th>
         </tr>
       </thead>
       <tbody>
-      <?php foreach ($abonnements as $ab):
+      <?php foreach ($abonnements as $abIdx => $ab):
         $statusConfig = [
           'EN_ATTENTE' => ['bg'=>'#FEF3C7','c'=>'#92400E','icon'=>'clock'],
           'CONFIRME'   => ['bg'=>'#D1FAE5','c'=>'#065F46','icon'=>'check-circle'],
@@ -460,6 +486,16 @@ include __DIR__ . '/includes/header_app.php';
             <i data-lucide="<?= $sc['icon'] ?>" style="width:10px;height:10px;vertical-align:-1px"></i>
             <?= e($ab['statut']) ?>
           </span>
+        </td>
+        <td style="text-align:center">
+          <button
+            onclick="downloadReceipt(<?= $abIdx ?>)"
+            title="Télécharger le reçu PDF"
+            style="background:none;border:1px solid var(--gris-200);border-radius:7px;padding:5px 9px;cursor:pointer;color:var(--gris-600);font-size:11px;display:inline-flex;align-items:center;gap:4px;transition:all .15s;font-family:inherit"
+            onmouseover="this.style.background='var(--primary-subtle)';this.style.color='var(--primary)';this.style.borderColor='var(--primary)'"
+            onmouseout="this.style.background='none';this.style.color='var(--gris-600)';this.style.borderColor='var(--gris-200)'">
+            <i data-lucide="download" style="width:11px;height:11px;vertical-align:-1px"></i> PDF
+          </button>
         </td>
       </tr>
       <?php endforeach; ?>
@@ -494,5 +530,25 @@ include __DIR__ . '/includes/header_app.php';
     </a>
   </div>
 </div>
+
+<script id="abonnementsData" type="application/json"><?= $abonnementsJson ?></script>
+<script id="userData" type="application/json"><?= $userJson ?></script>
+<script>
+function downloadReceipt(idx) {
+  if (typeof ReceiptPdf === 'undefined') {
+    alert('Générateur PDF non chargé. Actualisez la page.');
+    return;
+  }
+  try {
+    const abonnements = JSON.parse(document.getElementById('abonnementsData').textContent);
+    const user        = JSON.parse(document.getElementById('userData').textContent);
+    const ab          = abonnements[idx];
+    if (!ab) { alert('Données introuvables.'); return; }
+    ReceiptPdf.open({ abonnement: ab, user });
+  } catch(e) {
+    alert('Erreur lors de la génération du reçu.');
+  }
+}
+</script>
 
 <?php include __DIR__ . '/includes/footer_app.php'; ?>
