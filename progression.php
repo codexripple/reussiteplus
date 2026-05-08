@@ -887,16 +887,76 @@ async function sendToIA(text, addToHistory) {
   iaLoading = true;
   document.getElementById('ia-send').disabled = true;
   showTyping(true);
+
+  const fd = new FormData();
+  fd.append('action',     'chat');
+  fd.append('csrf_token', CSRF_TOKEN);
+  fd.append('message',    text);
+  fd.append('history',    JSON.stringify(chatHistory.filter(m=>m.role!=='user'||m.content!==text).slice(-12)));
+
   try {
-    const d = await callIA('chat', {
-      message: text,
-      history: JSON.stringify(chatHistory.filter(m=>m.role!=='user'||m.content!==text).slice(-18))
-    });
-    showTyping(false);
-    const reply = d.ok ? d.content : ('[Erreur] ' + (d.msg || d.error || 'Réessaie.'));
-    appendMsg('bot', reply);
-    if (addToHistory) chatHistory.push({ role:'assistant', content:reply });
+    const resp = await fetch('/reussiteplus/api/revision.php', { method:'POST', body:fd });
+    const ct   = resp.headers.get('Content-Type') || '';
+
+    // ── Mode streaming SSE ────────────────────────────────────
+    if (ct.includes('text/event-stream')) {
+      showTyping(false);
+      // Créer la bulle vide
+      const box    = document.getElementById('ia-messages');
+      const typing = document.getElementById('ia-typing-row');
+      const row    = document.createElement('div');
+      row.className = 'ia-msg-row bot';
+      row.innerHTML = `<div class="ia-msg-av" style="background:linear-gradient(135deg,#7C3AED,#4F46E5)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/><path d="M19 3v4"/><path d="M21 5h-4"/></svg></div><div class="ia-msg-inner"><div class="ia-bubble" id="stream-bubble"></div></div>`;
+      if (typing) box.insertBefore(row, typing); else box.appendChild(row);
+      const bubble = document.getElementById('stream-bubble');
+      bubble.removeAttribute('id');
+
+      const reader  = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let fullText  = '';
+      let leftover  = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        leftover += decoder.decode(value, { stream: true });
+        const parts = leftover.split('\n\n');
+        leftover = parts.pop(); // garder l'éventuel fragment incomplet
+        for (const part of parts) {
+          for (const line of part.split('\n')) {
+            if (!line.startsWith('data: ')) continue;
+            const raw = line.slice(6);
+            if (raw === '[DONE]') break;
+            try {
+              const d = JSON.parse(raw);
+              if (d.err) { bubble.textContent = '[Erreur] ' + d.err; break; }
+              if (d.t)   { fullText += d.t; bubble.innerHTML = mdToHTML(fullText); }
+            } catch(_) {}
+          }
+        }
+        box.scrollTop = box.scrollHeight;
+      }
+
+      // Ajouter les outils une fois terminé
+      const inner = row.querySelector('.ia-msg-inner');
+      const tools = document.createElement('div');
+      tools.className = 'ia-msg-tools';
+      tools.innerHTML = `<button class="ia-tool-btn" onclick="copyMsg(this)" data-text="${fullText.replace(/"/g,'&quot;')}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copier</button><button class="ia-tool-btn" onclick="regenerate(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Régénérer</button>`;
+      inner.appendChild(tools);
+
+      if (addToHistory && fullText) chatHistory.push({ role:'assistant', content:fullText });
+
+    } else {
+      // ── Fallback JSON normal ──────────────────────────────
+      showTyping(false);
+      const d     = await resp.json();
+      const reply = d.ok ? d.content : ('[Erreur] ' + (d.msg || d.error || 'Réessaie.'));
+      appendMsg('bot', reply);
+      if (addToHistory) chatHistory.push({ role:'assistant', content:reply });
+    }
+
     if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
+
   } catch(e) {
     showTyping(false);
     appendMsg('bot', '[Erreur réseau] Vérifie ta connexion.');
@@ -904,6 +964,13 @@ async function sendToIA(text, addToHistory) {
     iaLoading = false;
     document.getElementById('ia-send').disabled = false;
   }
+}
+
+// Convertit **gras** et sauts de ligne en HTML dans les bulles
+function mdToHTML(t) {
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+          .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+          .replace(/\n/g,'<br>');
 }
 
 // ── Plan + Analyse ────────────────────────────────────────────

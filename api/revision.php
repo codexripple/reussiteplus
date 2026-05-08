@@ -69,82 +69,147 @@ function build_user_context(array $user): string {
     return $context;
 }
 
-// ── Appel Gemini (natif) avec fallback GitHub Models ────────
-function call_ia(array $messages, ?int $maxTokens = null): array {
-    $max = $maxTokens ?? 1024;
+// ── Modèle rapide (pas de thinking tokens) ───────────────────
+const IA_MODEL = 'gemini-2.0-flash';
 
-    // Séparer system prompt et messages
-    $system  = '';
-    $history = [];
+// ── Appel Gemini non-streaming ────────────────────────────────
+function call_ia(array $messages, ?int $maxTokens = null): array {
+    $max       = $maxTokens ?? 600;
+    $geminiKey = $_ENV['GEMINI_API_KEY'] ?? '';
+    $system    = '';
+    $contents  = [];
+
     foreach ($messages as $m) {
-        if ($m['role'] === 'system') { $system = $m['content']; }
-        else { $history[] = $m; }
+        if ($m['role'] === 'system') $system = $m['content'];
+        else $contents[] = [
+            'role'  => $m['role'] === 'assistant' ? 'model' : 'user',
+            'parts' => [['text' => $m['content']]],
+        ];
     }
 
-    // ── Tentative Gemini ──
-    $geminiKey = $_ENV['GEMINI_API_KEY'] ?? '';
     if ($geminiKey) {
-        $contents = [];
-        foreach ($history as $h) {
-            $contents[] = [
-                'role'  => $h['role'] === 'assistant' ? 'model' : 'user',
-                'parts' => [['text' => $h['content']]],
-            ];
-        }
         $payload = json_encode([
             'systemInstruction' => ['parts' => [['text' => $system]]],
             'contents'          => $contents,
             'generationConfig'  => ['maxOutputTokens' => $max, 'temperature' => 0.7],
         ]);
-        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={$geminiKey}";
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/" . IA_MODEL . ":generateContent?key={$geminiKey}";
         $ch  = curl_init($url);
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true,
             CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
-            CURLOPT_POSTFIELDS     => $payload, CURLOPT_TIMEOUT => 35,
+            CURLOPT_POSTFIELDS     => $payload, CURLOPT_TIMEOUT => 30,
         ]);
         $raw  = curl_exec($ch);
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $err  = curl_error($ch);
         unset($ch);
-
-        if (!$err && $raw && $code !== 429) {
-            $data    = json_decode($raw, true);
-            $content = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
-            if ($content) return ['ok' => true, 'content' => $content];
+        if ($raw && $code !== 429) {
+            $d = json_decode($raw, true);
+            $t = $d['candidates'][0]['content']['parts'][0]['text'] ?? null;
+            if ($t) return ['ok' => true, 'content' => $t];
         }
     }
 
-    // ── Fallback GitHub Models ──
+    // Fallback GitHub Models
     $ghToken = $_ENV['GITHUB_TOKEN'] ?? '';
     if ($ghToken && $ghToken !== 'COLLE_TON_PAT_ICI') {
-        $payload2 = json_encode([
-            'model'       => 'gpt-4o-mini',
-            'messages'    => $messages,
-            'max_tokens'  => $max,
-            'temperature' => 0.7,
-        ]);
         $ch2 = curl_init('https://models.inference.ai.azure.com/chat/completions');
         curl_setopt_array($ch2, [
             CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true,
             CURLOPT_HTTPHEADER     => ['Content-Type: application/json', 'Authorization: Bearer ' . $ghToken],
-            CURLOPT_POSTFIELDS     => $payload2, CURLOPT_TIMEOUT => 35,
+            CURLOPT_POSTFIELDS     => json_encode(['model'=>'gpt-4o-mini','messages'=>$messages,'max_tokens'=>$max,'temperature'=>0.7]),
+            CURLOPT_TIMEOUT => 30,
         ]);
-        $raw2  = curl_exec($ch2);
-        $code2 = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
-        unset($ch2);
-
+        $raw2 = curl_exec($ch2); $code2 = curl_getinfo($ch2, CURLINFO_HTTP_CODE); unset($ch2);
         if ($raw2 && $code2 === 200) {
-            $data2   = json_decode($raw2, true);
-            $content = $data2['choices'][0]['message']['content'] ?? null;
-            if ($content) return ['ok' => true, 'content' => $content];
+            $t = json_decode($raw2,true)['choices'][0]['message']['content'] ?? null;
+            if ($t) return ['ok' => true, 'content' => $t];
+        }
+    }
+    return ['error' => 'network', 'msg' => 'Moteur IA indisponible. Réessaie dans quelques instants.'];
+}
+
+// ── Streaming SSE pour le chat (tokens en temps réel) ─────────
+function stream_chat(array $messages, int $maxTokens = 500): void {
+    // Désactiver tout buffering
+    while (ob_get_level()) ob_end_clean();
+    ini_set('output_buffering', 'off');
+    ini_set('zlib.output_compression', 'off');
+    set_time_limit(60);
+
+    header('Content-Type: text/event-stream; charset=utf-8');
+    header('Cache-Control: no-cache');
+    header('X-Accel-Buffering: no');
+    header('Connection: keep-alive');
+
+    $geminiKey = $_ENV['GEMINI_API_KEY'] ?? '';
+    $system    = '';
+    $contents  = [];
+    foreach ($messages as $m) {
+        if ($m['role'] === 'system') $system = $m['content'];
+        else $contents[] = [
+            'role'  => $m['role'] === 'assistant' ? 'model' : 'user',
+            'parts' => [['text' => $m['content']]],
+        ];
+    }
+
+    if ($geminiKey) {
+        $payload = json_encode([
+            'systemInstruction' => ['parts' => [['text' => $system]]],
+            'contents'          => $contents,
+            'generationConfig'  => ['maxOutputTokens' => $maxTokens, 'temperature' => 0.7],
+        ]);
+        $url    = "https://generativelanguage.googleapis.com/v1beta/models/" . IA_MODEL . ":streamGenerateContent?alt=sse&key={$geminiKey}";
+        $buffer = '';
+        $ch     = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_POST           => true,
+            CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
+            CURLOPT_POSTFIELDS     => $payload,
+            CURLOPT_TIMEOUT        => 55,
+            CURLOPT_WRITEFUNCTION  => function($ch, $data) use (&$buffer) {
+                $buffer .= $data;
+                while (($pos = strpos($buffer, "\n\n")) !== false) {
+                    $event  = substr($buffer, 0, $pos);
+                    $buffer = substr($buffer, $pos + 2);
+                    foreach (explode("\n", $event) as $line) {
+                        if (strncmp($line, 'data: ', 6) === 0) {
+                            $json = substr($line, 6);
+                            if ($json === '[DONE]') break;
+                            $d = json_decode($json, true);
+                            $t = $d['candidates'][0]['content']['parts'][0]['text'] ?? '';
+                            if ($t !== '') {
+                                echo 'data: ' . json_encode(['t' => $t]) . "\n\n";
+                                flush();
+                            }
+                        }
+                    }
+                }
+                return strlen($data);
+            },
+        ]);
+        $err = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        unset($ch);
+
+        if ($code !== 429) {
+            echo "data: [DONE]\n\n"; flush(); return;
         }
     }
 
-    return ['error' => 'network', 'msg' => 'Les deux moteurs IA sont indisponibles. Réessaie dans quelques minutes.'];
+    // Fallback non-streaming via GitHub Models
+    $result = call_ia($messages, $maxTokens);
+    if ($result['ok'] ?? false) {
+        // Envoyer le texte en un seul event
+        echo 'data: ' . json_encode(['t' => $result['content']]) . "\n\n";
+        flush();
+    } else {
+        echo 'data: ' . json_encode(['err' => $result['msg']]) . "\n\n";
+        flush();
+    }
+    echo "data: [DONE]\n\n"; flush();
 }
 
-// Alias pour compatibilité
 function call_groq(array $messages, ?int $maxTokens = null): array {
     return call_ia($messages, $maxTokens);
 }
@@ -170,30 +235,38 @@ if ($action === 'plan_revision') {
 }
 
 // ════════════════════════════════════════════
-// ACTION : Chat assistant
+// ACTION : Chat assistant (streaming SSE)
 // ════════════════════════════════════════════
 if ($action === 'chat') {
     $userMsg    = trim($_POST['message'] ?? '');
     $historyRaw = $_POST['history'] ?? '[]';
-    if (!$userMsg) {
-        echo json_encode(['error' => 'Message vide.']);
-        exit;
-    }
+    if (!$userMsg) { echo json_encode(['error' => 'Message vide.']); exit; }
+
     $history = json_decode($historyRaw, true);
     if (!is_array($history)) $history = [];
-    // Limiter l'historique aux 8 derniers échanges pour économiser les tokens
-    $history = array_slice($history, -8);
-    $userCtx = build_user_context($user);
-    $systemPrompt = "Tu es RÉUSSITE+IA, un assistant pédagogique expert pour les examens nationaux de la RDC (ENAFEP pour les élèves de 6ème primaire, TENASOSP pour les élèves de 3ème secondaire, EXAMEN D'ÉTAT pour les élèves de terminale). Tu aides les élèves à réviser les matières : Mathématiques, Français, Sciences, Histoire-Géographie, Chimie, Physique, Biologie, Anglais. Tu expliques les concepts de façon claire, tu poses des questions pour vérifier la compréhension, et tu donnes des exemples concrets adaptés au contexte congolais. Réponds toujours en français. Sois bienveillant, encourageant et pédagogique.\n\nContexte de l'élève :\n{$userCtx}";
+    $history = array_slice($history, -6); // 6 échanges max = moins de tokens = plus rapide
+
+    // Contexte utilisateur minimal (score + matières faibles seulement)
+    $scoreM   = number_format((float)($user['score_moyen'] ?? 0), 1);
+    $weakMats = dbAll(
+        "SELECT m.nom FROM user_progression up JOIN matieres m ON up.matiere_id=m.id
+         WHERE up.user_id=? ORDER BY up.score_moyen ASC LIMIT 3",
+        [$user['id']]
+    );
+    $weakList = implode(', ', array_column($weakMats, 'nom')) ?: 'non déterminées';
+
+    $systemPrompt = "Tu es RÉUSSITE+IA, tuteur expert pour les examens nationaux RDC (ENAFEP, TENASOSP, EXAMEN D'ÉTAT). "
+        . "Élève : {$user['prenom']}, score moyen {$scoreM}%, matières faibles : {$weakList}. "
+        . "Réponds en français, sois concis (3-5 phrases max sauf si demande de détail), bienveillant et pédagogique. "
+        . "Adapte tes exemples au contexte congolais.";
+
     $messages = [['role' => 'system', 'content' => $systemPrompt]];
     foreach ($history as $h) {
-        if (isset($h['role'], $h['content'])) {
-            $messages[] = ['role' => $h['role'], 'content' => $h['content']];
-        }
+        if (isset($h['role'], $h['content'])) $messages[] = $h;
     }
     $messages[] = ['role' => 'user', 'content' => $userMsg];
-    $result = call_groq($messages, 800);
-    echo json_encode($result);
+
+    stream_chat($messages, 450);
     exit;
 }
 
