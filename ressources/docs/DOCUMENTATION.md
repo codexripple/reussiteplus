@@ -1,4 +1,4 @@
-﻿# RÉUSSITE+ — Documentation Exhaustive du Projet v2.0.0
+# RÉUSSITE+ — Documentation Exhaustive du Projet v2.0.0
 
 > **Version** : 2.0.0  
 > **Date** : 2026-05-07  
@@ -91,30 +91,30 @@ Elle couvre l'ensemble du parcours scolaire (primaire → secondaire) et propose
 ### 2.1 Vue macro
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    CLIENTS                                   │
-│  Navigateur Web  │  App Android (APK)  │  App iOS (IPA)    │
-│  Nuxt.js 3 PWA   │  Capacitor 6        │  Capacitor 6      │
-└──────────────────────────┬──────────────────────────────────┘
+┌───────────────────────────────────────────────────────────┐
+│                    CLIENTS                                │
+│  Navigateur Web  │  App Android (APK)  │  App iOS (IPA)   │
+│  Nuxt.js 3 PWA   │  Capacitor 6        │  Capacitor 6     │
+└──────────────────────────┬────────────────────────────────┘
                            │ HTTPS / REST JSON
                            │ /api/v1/
-┌──────────────────────────▼──────────────────────────────────┐
-│                  API BACKEND                                 │
-│              Laravel 11  (PHP 8.3)                          │
-│  Sanctum 4 · Eloquent · Queue · Events · Notifications      │
-└────┬─────────────┬─────────────┬──────────────┬────────────┘
-     │             │             │              │
+┌──────────────────────────▼────────────────────────────────┐
+│                  API BACKEND                              │
+│              Laravel 11  (PHP 8.3)                        │
+│  Sanctum 4 · Eloquent · Queue · Events · Notifications    │
+└────┬────────────┬─────────────┬──────────────┬────────────┘
+     │            │             │              │
 ┌────▼──┐   ┌─────▼──┐   ┌──────▼───┐   ┌──────▼────┐
 │MySQL  │   │ Redis  │   │  Storage │   │ Queues    │
-│ 8.4   │   │  7.x   │   │  (S3/   │   │ (Redis /  │
+│ 8.4   │   │  7.x   │   │  (S3/    │   │ (Redis /  │
 │32 tbl │   │ Cache  │   │  Local)  │   │ Horizon)  │
 └───────┘   └────────┘   └──────────┘   └──────┬────┘
-                                                │
-                               ┌────────────────▼────────────────┐
-                               │       Services externes          │
-                               │  Groq API · Brevo · M-Pesa      │
-                               │  Airtel Money · Firebase FCM    │
-                               └─────────────────────────────────┘
+                                               │
+                               ┌───────────────▼────────────────┐
+                               │       Services externes        │
+                               │  Groq API · Brevo · M-Pesa     │
+                               │  Airtel Money · Firebase FCM   │
+                               └────────────────────────────────┘
 ```
 
 ### 2.2 Principes architecturaux
