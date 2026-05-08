@@ -387,7 +387,12 @@ $planBgMap     = ['GRATUIT'=>'#F3F4F6','BASIQUE'=>'#E8F5F1','PREMIUM'=>'#EDE9FE'
       <a href="/reussiteplus/admin/users.php" class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25)">Utilisateurs</a>
       <a href="/reussiteplus/admin/paiements.php" class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25)">Paiements</a>
       <a href="/reussiteplus/admin/archives.php" class="btn btn-sm" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25)">Archives</a>
-      <button onclick="loadAiInsights()" class="btn btn-sm" style="background:rgba(124,58,237,.4);color:#e9d5ff;border:1px solid rgba(124,58,237,.5)">Analyse IA</button>
+      <button onclick="loadAiInsights()" id="ai-btn" class="btn btn-sm" style="background:rgba(124,58,237,.4);color:#e9d5ff;border:1px solid rgba(124,58,237,.5)">
+        <i data-lucide="zap" style="width:13px;height:13px"></i> Analyse IA
+      </button>
+      <button onclick="exportAdminPDF()" id="export-pdf-btn" class="btn btn-sm" style="background:rgba(0,122,94,.4);color:#6EE7B7;border:1px solid rgba(0,122,94,.5)">
+        <i data-lucide="file-down" style="width:13px;height:13px"></i> Exporter PDF
+      </button>
     </div>
   </div>
   <div class="welcome-kpis">
@@ -869,7 +874,7 @@ async function loadAiInsights() {
       result.style.display = 'block';
     }
   } catch(e) {
-    text.innerHTML = '<span style="color:#DC2626">Impossible de contacter l\'IA. Vérifiez la clé GROQ_API_KEY.</span>';
+    text.innerHTML = '<span style="color:#DC2626">Impossible de contacter l\'IA. Vérifiez votre connexion.</span>';
     result.style.display = 'block';
   }
   loader.style.display = 'none';
@@ -877,6 +882,28 @@ async function loadAiInsights() {
   btn.innerHTML = '<i data-lucide="zap" style="width:13px;height:13px"></i> Analyse IA';
   if (typeof lucide !== 'undefined') lucide.createIcons();
   result.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+// ── Export PDF Admin ──────────────────────────────────────
+function exportAdminPDF() {
+  if (typeof AdminPdf === 'undefined') { alert('Générateur PDF non chargé.'); return; }
+  const btn  = document.getElementById('export-pdf-btn');
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<svg style="animation:spin .7s linear infinite;display:inline-block" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Génération…';
+
+  // Récupère le texte de l'analyse IA si disponible
+  const iaText = document.getElementById('ai-groq-text')?.innerText?.trim() || '';
+
+  const reportData = JSON.parse(document.getElementById('adminReportData').textContent);
+  reportData.iaText = iaText;
+
+  try {
+    AdminPdf.open(reportData);
+  } catch(e) {
+    alert('Erreur lors de la génération du PDF.');
+  }
+  setTimeout(() => { btn.disabled = false; btn.innerHTML = orig; if (typeof lucide !== 'undefined') lucide.createIcons(); }, 1500);
 }
 </script>
 <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
@@ -950,5 +977,32 @@ async function loadAiInsights() {
 .export-title{font-size:13px;font-weight:700;color:var(--gris-900);margin-bottom:2px;}
 .export-sub{font-size:11px;color:var(--gris-500);}
 </style>
+
+<?php
+// Données sérialisées pour le générateur PDF admin
+$convRate = $totalUsers > 0 ? round(array_sum(array_filter(array_column($planStats ?? [], 'nb'), fn($nb, $plan) => $plan !== 'GRATUIT', ARRAY_FILTER_USE_BOTH)) / $totalUsers * 100, 1) : 0;
+// recalcul simple : utilisateurs payants / total
+$payants = 0;
+foreach ($planStats ?? [] as $ps) { if ($ps['plan'] !== 'GRATUIT') $payants += (int)$ps['nb']; }
+$convRate = $totalUsers > 0 ? round($payants / $totalUsers * 100, 1) : 0;
+
+$adminReportData = json_encode([
+    'adminName'    => e($user['prenom'] . ' ' . $user['nom']),
+    'periodeLabel' => date('F Y'),
+    'totalUsers'   => $adm['total_users'],
+    'usersToday'   => $adm['users_today'],
+    'users7j'      => $adm['users_7j'],
+    'revenus'      => $adm['revenus_mois'],
+    'revGrowth'    => $revGrowth,
+    'examsToday'   => $adm['exams_today'],
+    'exams7j'      => $adm['exams_7j'],
+    'paiementsAtt' => $adm['paiements_att'],
+    'convRate'     => $convRate,
+    'planStats'    => array_column($planStats ?? [], 'nb', 'plan'),
+    'rev6m'        => array_map(fn($r) => ['mois'=>$r['mois'],'label'=>$r['mois'],'total'=>$r['total']], $rev6m ?? []),
+], JSON_UNESCAPED_UNICODE);
+?>
+<script id="adminReportData" type="application/json"><?= $adminReportData ?></script>
+<script src="/reussiteplus/assets/js/admin-pdf.js?v=<?= filemtime(__DIR__ . '/../assets/js/admin-pdf.js') ?>"></script>
 
 <?php include __DIR__ . '/../includes/footer_app.php'; ?>
