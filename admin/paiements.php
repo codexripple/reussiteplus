@@ -8,6 +8,12 @@ $pageTitle  = 'Abonnements & Paiements';
 $pageActive = 'admin_paiements';
 $user = require_admin();
 
+// Générer le token CSRF admin s'il n'existe pas encore
+if (empty($_SESSION['csrf_admin'])) {
+    $_SESSION['csrf_admin'] = bin2hex(random_bytes(32));
+}
+$csrf_admin = $_SESSION['csrf_admin'];
+
 // Actions confirmer / refuser
 if (isset($_GET['action'], $_GET['id'])) {
   // Vérification CSRF
@@ -365,10 +371,10 @@ include __DIR__ . '/../includes/header_app.php';
         <td>
           <div style="display:flex;gap:4px;align-items:center">
           <?php if ($p['statut'] === 'EN_ATTENTE'): ?>
-            <a href="?action=confirmer&id=<?php echo e($p['id']); ?>&csrf=<?php echo e($_SESSION['csrf_admin']??''); ?>&statut=<?php echo $statut; ?>" class="btn btn-primary btn-sm" onclick="return confirm('Confirmer ce paiement ?')" title="Confirmer">
+            <a href="?action=confirmer&id=<?php echo e($p['id']); ?>&csrf=<?php echo e($csrf_admin); ?>&statut=<?php echo $statut; ?>" class="btn btn-primary btn-sm" onclick="return confirm('Confirmer ce paiement ?')" title="Confirmer">
               <i data-lucide="check" style="width:13px;height:13px"></i>
             </a>
-            <a href="?action=refuser&id=<?php echo e($p['id']); ?>&csrf=<?php echo e($_SESSION['csrf_admin']??''); ?>&statut=<?php echo $statut; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Refuser ce paiement ?')" title="Refuser">
+            <a href="?action=refuser&id=<?php echo e($p['id']); ?>&csrf=<?php echo e($csrf_admin); ?>&statut=<?php echo $statut; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Refuser ce paiement ?')" title="Refuser">
               <i data-lucide="x" style="width:13px;height:13px"></i>
             </a>
           <?php endif; ?>
