@@ -69,37 +69,84 @@ function build_user_context(array $user): string {
     return $context;
 }
 
-// ── Appel Groq API ──────────────────────────────────────────
+// ── Appel Gemini (natif) avec fallback GitHub Models ────────
+function call_ia(array $messages, ?int $maxTokens = null): array {
+    $max = $maxTokens ?? 1024;
+
+    // Séparer system prompt et messages
+    $system  = '';
+    $history = [];
+    foreach ($messages as $m) {
+        if ($m['role'] === 'system') { $system = $m['content']; }
+        else { $history[] = $m; }
+    }
+
+    // ── Tentative Gemini ──
+    $geminiKey = $_ENV['GEMINI_API_KEY'] ?? '';
+    if ($geminiKey) {
+        $contents = [];
+        foreach ($history as $h) {
+            $contents[] = [
+                'role'  => $h['role'] === 'assistant' ? 'model' : 'user',
+                'parts' => [['text' => $h['content']]],
+            ];
+        }
+        $payload = json_encode([
+            'systemInstruction' => ['parts' => [['text' => $system]]],
+            'contents'          => $contents,
+            'generationConfig'  => ['maxOutputTokens' => $max, 'temperature' => 0.7],
+        ]);
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={$geminiKey}";
+        $ch  = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true,
+            CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
+            CURLOPT_POSTFIELDS     => $payload, CURLOPT_TIMEOUT => 35,
+        ]);
+        $raw  = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $err  = curl_error($ch);
+        unset($ch);
+
+        if (!$err && $raw && $code !== 429) {
+            $data    = json_decode($raw, true);
+            $content = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
+            if ($content) return ['ok' => true, 'content' => $content];
+        }
+    }
+
+    // ── Fallback GitHub Models ──
+    $ghToken = $_ENV['GITHUB_TOKEN'] ?? '';
+    if ($ghToken && $ghToken !== 'COLLE_TON_PAT_ICI') {
+        $payload2 = json_encode([
+            'model'       => 'gpt-4o-mini',
+            'messages'    => $messages,
+            'max_tokens'  => $max,
+            'temperature' => 0.7,
+        ]);
+        $ch2 = curl_init('https://models.inference.ai.azure.com/chat/completions');
+        curl_setopt_array($ch2, [
+            CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true,
+            CURLOPT_HTTPHEADER     => ['Content-Type: application/json', 'Authorization: Bearer ' . $ghToken],
+            CURLOPT_POSTFIELDS     => $payload2, CURLOPT_TIMEOUT => 35,
+        ]);
+        $raw2  = curl_exec($ch2);
+        $code2 = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+        unset($ch2);
+
+        if ($raw2 && $code2 === 200) {
+            $data2   = json_decode($raw2, true);
+            $content = $data2['choices'][0]['message']['content'] ?? null;
+            if ($content) return ['ok' => true, 'content' => $content];
+        }
+    }
+
+    return ['error' => 'network', 'msg' => 'Les deux moteurs IA sont indisponibles. Réessaie dans quelques minutes.'];
+}
+
+// Alias pour compatibilité
 function call_groq(array $messages, ?int $maxTokens = null): array {
-    if (!GROQ_API_KEY) {
-        return ['error' => 'no_key', 'msg' => 'Clé API Groq non configurée. Ajoutez GROQ_API_KEY dans votre environnement ou config.php.'];
-    }
-    $payload = json_encode([
-        'model'       => GROQ_MODEL,
-        'messages'    => $messages,
-        'max_tokens'  => $maxTokens ?? GROQ_MAX_TOKENS,
-        'temperature' => 0.7,
-    ]);
-    $ctx = stream_context_create([
-        'http' => [
-            'method'  => 'POST',
-            'header'  => "Content-Type: application/json\r\nAuthorization: Bearer " . GROQ_API_KEY . "\r\n",
-            'content' => $payload,
-            'timeout' => 30,
-            'ignore_errors' => true,
-        ]
-    ]);
-    $raw  = @file_get_contents(GROQ_API_URL, false, $ctx);
-    if (!$raw) {
-        return ['error' => 'network', 'msg' => 'Impossible de joindre l\'API. Vérifiez votre connexion.'];
-    }
-    $data = json_decode($raw, true);
-    if (isset($data['error'])) {
-        $detail = $data['error']['message'] ?? ($data['error']['code'] ?? json_encode($data['error']));
-        return ['error' => 'api_error', 'msg' => $detail];
-    }
-    $content = $data['choices'][0]['message']['content'] ?? '';
-    return ['ok' => true, 'content' => $content];
+    return call_ia($messages, $maxTokens);
 }
 
 // ════════════════════════════════════════════
