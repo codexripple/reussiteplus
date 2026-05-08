@@ -23,14 +23,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $classeId   = $_POST['classe_id']        ?? null;
         $matiere    = trim($_POST['matiere']     ?? '');
         $type       = $_POST['type']             ?? 'DEVOIR';
-        $dateRemise = $_POST['date_remise']      ?? null;
-        $points     = (int)($_POST['points_max'] ?? 20);
+        $dateRemise = $_POST['date_limite']      ?? null;
+        $points     = (int)($_POST['nb_questions'] ?? 20);
         if ($titre && $classeId) {
-            $validTypes = ['DEVOIR','CONTROLE','EXAM','PROJET','EXPOSE'];
-            $type = in_array($type, $validTypes) ? $type : 'DEVOIR';
-            dbRun("INSERT INTO devoirs_ecole (admin_id, classe_id, titre, description, matiere, type_devoir, date_remise, points_max, actif)
-                   VALUES (?,?,?,?,?,?,?,?,1)",
-                [$user['id'], $classeId, $titre, $desc ?: null, $matiere ?: null, $type, $dateRemise ?: null, $points]);
+            $validTypes = ['ENTRAINEMENT','EXAMEN','CONTROLE','DEVOIR'];
+            $type = in_array($type, $validTypes) ? $type : 'ENTRAINEMENT';
+            dbRun("INSERT INTO devoirs_ecole (admin_id, classe_id, titre, type_examen, date_limite, nb_questions, actif)
+                   VALUES (?,?,?,?,?,?,1)",
+                [$user['id'], $classeId, $titre, $type, $dateRemise ?: null, $points]);
             redirect('/reussiteplus/ecole_devoirs.php', 'success', "Devoir « $titre » créé.");
         }
     }
@@ -48,8 +48,8 @@ $classes = dbAll("SELECT id, nom FROM classes_ecole WHERE admin_id=? AND actif=1
 
 $whereExtra = ''; $params = [$user['id']];
 if ($filtreClasse) { $whereExtra .= ' AND d.classe_id=?'; $params[] = $filtreClasse; }
-if ($filtreStatut === 'actif')  { $whereExtra .= ' AND (d.date_remise IS NULL OR d.date_remise >= CURDATE())'; }
-if ($filtreStatut === 'expire') { $whereExtra .= ' AND d.date_remise < CURDATE()'; }
+if ($filtreStatut === 'actif')  { $whereExtra .= ' AND (d.date_limite IS NULL OR d.date_limite >= CURDATE())'; }
+if ($filtreStatut === 'expire') { $whereExtra .= ' AND d.date_limite < CURDATE()'; }
 
 $devoirs = dbAll(
     "SELECT d.*, c.nom as classe_nom,
@@ -63,12 +63,12 @@ $devoirs = dbAll(
      LEFT JOIN soumissions_devoirs sd ON sd.devoir_id=d.id
      WHERE d.admin_id=? AND d.actif=1 $whereExtra
      GROUP BY d.id
-     ORDER BY d.date_remise IS NULL, d.date_remise ASC, d.created_at DESC",
+     ORDER BY d.date_limite IS NULL, d.date_limite ASC, d.created_at DESC",
     $params
 ) ?? [];
 
-$nbActifs  = (int)dbScalar("SELECT COUNT(*) FROM devoirs_ecole WHERE admin_id=? AND actif=1 AND (date_remise IS NULL OR date_remise >= CURDATE())", [$user['id']]);
-$nbExpires = (int)dbScalar("SELECT COUNT(*) FROM devoirs_ecole WHERE admin_id=? AND actif=1 AND date_remise < CURDATE()", [$user['id']]);
+$nbActifs  = (int)dbScalar("SELECT COUNT(*) FROM devoirs_ecole WHERE admin_id=? AND actif=1 AND (date_limite IS NULL OR date_limite >= CURDATE())", [$user['id']]);
+$nbExpires = (int)dbScalar("SELECT COUNT(*) FROM devoirs_ecole WHERE admin_id=? AND actif=1 AND date_limite < CURDATE()", [$user['id']]);
 $nbTotal   = (int)dbScalar("SELECT COUNT(*) FROM devoirs_ecole WHERE admin_id=? AND actif=1", [$user['id']]);
 
 $typeConfig = [
@@ -143,10 +143,10 @@ include __DIR__ . '/includes/header_app.php';
 <div class="dv-grid">
   <?php foreach ($devoirs as $dv): ?>
   <?php
-    $tc       = $typeConfig[$dv['type_devoir']] ?? $typeConfig['DEVOIR'];
-    $expired  = $dv['date_remise'] && $dv['date_remise'] < date('Y-m-d');
-    $urgence  = $dv['date_remise'] && !$expired && (strtotime($dv['date_remise']) - time()) < 86400*3;
-    $daysLeft = $dv['date_remise'] ? ceil((strtotime($dv['date_remise']) - time()) / 86400) : null;
+    $tc       = $typeConfig[$dv['type_examen']] ?? $typeConfig['DEVOIR'];
+    $expired  = $dv['date_limite'] && $dv['date_limite'] < date('Y-m-d');
+    $urgence  = $dv['date_limite'] && !$expired && (strtotime($dv['date_limite']) - time()) < 86400*3;
+    $daysLeft = $dv['date_limite'] ? ceil((strtotime($dv['date_limite']) - time()) / 86400) : null;
   ?>
   <div class="dv-card">
     <div class="dv-card-bar" style="background:<?= $expired?'#D1D5DB':$tc['color'] ?>"></div>
@@ -183,7 +183,7 @@ include __DIR__ . '/includes/header_app.php';
         <?php if ($dv['matiere']): ?>
         <span style="background:var(--primary-subtle);color:var(--primary);font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px"><?= e($dv['matiere']) ?></span>
         <?php endif; ?>
-        <span style="background:var(--gris-100);color:var(--gris-600);font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px"><?= $dv['points_max'] ?> pts</span>
+        <span style="background:var(--gris-100);color:var(--gris-600);font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px"><?= $dv['nb_questions'] ?> pts</span>
       </div>
     </div>
     <?php if ($dv['nb_eleves'] > 0): ?>
@@ -206,15 +206,15 @@ include __DIR__ . '/includes/header_app.php';
         <i data-lucide="users" style="width:11px;height:11px"></i>
         <?= $dv['nb_eleves'] ?> élève<?= $dv['nb_eleves']!=1?'s':'' ?>
       </div>
-      <?php if ($dv['date_remise']): ?>
+      <?php if ($dv['date_limite']): ?>
       <div class="deadline-badge" style="background:<?= $expired?'#F3F4F6':($urgence?'#FEF3C7':'#DCFCE7') ?>;color:<?= $expired?'#6B7280':($urgence?'#D97706':'#059669') ?>">
         <i data-lucide="calendar" style="width:10px;height:10px"></i>
         <?php if ($expired): ?>
-          Rendu le <?= date('d/m', strtotime($dv['date_remise'])) ?>
+          Rendu le <?= date('d/m', strtotime($dv['date_limite'])) ?>
         <?php elseif ($daysLeft <= 0): ?>
           Aujourd'hui
         <?php else: ?>
-          J–<?= $daysLeft ?> · <?= date('d/m', strtotime($dv['date_remise'])) ?>
+          J–<?= $daysLeft ?> · <?= date('d/m', strtotime($dv['date_limite'])) ?>
         <?php endif; ?>
       </div>
       <?php else: ?>
@@ -234,8 +234,8 @@ include __DIR__ . '/includes/header_app.php';
       <button onclick="genFeedbackIA(<?= htmlspecialchars(json_encode([
           'titre'      => $dv['titre'],
           'matiere'    => $dv['matiere'] ?? '',
-          'type'       => $dv['type_devoir'] ?? 'DEVOIR',
-          'points_max' => $dv['points_max'] ?? 20,
+          'type'       => $dv['type_examen'] ?? 'DEVOIR',
+          'nb_questions' => $dv['nb_questions'] ?? 20,
           'note'       => $dv['note_moyenne'] ?? 0,
       ]), ENT_QUOTES) ?>)"
         style="background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;border:none;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:.15s;font-family:inherit"
@@ -304,12 +304,12 @@ include __DIR__ . '/includes/header_app.php';
           </div>
           <div class="form-group">
             <label class="form-label">Date de remise</label>
-            <input type="date" name="date_remise" class="form-control" min="<?= date('Y-m-d') ?>">
+            <input type="date" name="date_limite" class="form-control" min="<?= date('Y-m-d') ?>">
           </div>
         </div>
         <div class="form-group">
           <label class="form-label">Points maximum</label>
-          <input type="number" name="points_max" class="form-control" value="20" min="1" max="200">
+          <input type="number" name="nb_questions" class="form-control" value="20" min="1" max="200">
         </div>
         <div class="form-group">
           <label class="form-label">Description / consignes</label>

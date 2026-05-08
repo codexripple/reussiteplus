@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $commentaire  = trim($_POST['commentaire']   ?? '');
     $reponseTxt   = trim($_POST['reponse_texte'] ?? '');
-    $statut = $devoir['date_remise'] && strtotime($devoir['date_remise']) < time() ? 'EN_RETARD' : 'SOUMIS';
+    $statut = $devoir['date_limite'] && strtotime($devoir['date_limite']) < time() ? 'EN_RETARD' : 'SOUMIS';
 
     // Upsert
     $existing = dbRow("SELECT id FROM soumissions_devoirs WHERE devoir_id=? AND eleve_id=?", [$devoirId, $user['id']]);
@@ -89,7 +89,7 @@ if ($classeIds) {
          JOIN classes_ecole c ON c.id=d.classe_id
          LEFT JOIN soumissions_devoirs s ON s.devoir_id=d.id AND s.eleve_id=?
          WHERE d.classe_id IN ($in) AND d.actif=1
-         ORDER BY d.date_remise ASC, d.created_at DESC",
+         ORDER BY d.date_limite ASC, d.created_at DESC",
         array_merge([$user['id']], $classeIds)
     ) ?? [];
 }
@@ -190,8 +190,8 @@ $niveauLabel = $tauxCompletion >= 100 ? '🏆 Tout soumis !' : ($tauxCompletion 
 <div style="display:flex;flex-direction:column;gap:14px">
 <?php foreach ($devoirs as $d):
   $tc = $typeConfig[$d['type'] ?? 'DEVOIR'] ?? $typeConfig['DEVOIR'];
-  $isLate = $d['date_remise'] && strtotime($d['date_remise']) < time() && !$d['soumission_id'];
-  $daysLeft = $d['date_remise'] ? ceil((strtotime($d['date_remise']) - time()) / 86400) : null;
+  $isLate = $d['date_limite'] && strtotime($d['date_limite']) < time() && !$d['soumission_id'];
+  $daysLeft = $d['date_limite'] ? ceil((strtotime($d['date_limite']) - time()) / 86400) : null;
   $submitted = (bool)$d['soumission_id'];
 ?>
 <div class="devoir-card">
@@ -221,9 +221,9 @@ $niveauLabel = $tauxCompletion >= 100 ? '🏆 Tout soumis !' : ($tauxCompletion 
         <div style="font-size:13px;color:var(--gris-600);line-height:1.5;margin-bottom:8px"><?= e($d['description']) ?></div>
         <?php endif; ?>
         <div style="font-size:11px;color:var(--gris-400);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-          <?php if ($d['date_remise']): ?>
+          <?php if ($d['date_limite']): ?>
           <span style="display:flex;align-items:center;gap:4px"><i data-lucide="calendar" style="width:11px;height:11px"></i>
-            Date limite : <strong><?= date('d/m/Y', strtotime($d['date_remise'])) ?></strong></span>
+            Date limite : <strong><?= date('d/m/Y', strtotime($d['date_limite'])) ?></strong></span>
           <?php endif; ?>
           <?php if ($d['matiere']??null): ?>
           <span>📚 <?= e($d['matiere']) ?></span>
@@ -321,15 +321,15 @@ function exportDevoirsPDF() {
     stats:   <?= json_encode($devoirsStats) ?>,
     devoirs: <?= json_encode(array_map(fn($d) => [
       'titre'         => $d['titre'],
-      'type'          => $d['type_devoir'] ?? $d['type'] ?? 'DEVOIR',
+      'type'          => $d['type_examen'] ?? $d['type'] ?? 'DEVOIR',
       'matiere'       => $d['matiere'] ?? null,
       'classe_nom'    => $d['classe_nom'] ?? null,
-      'date_remise'   => $d['date_remise'] ?? null,
+      'date_limite'   => $d['date_limite'] ?? null,
       'soumis_le'     => $d['soumis_le'] ?? null,
       'soumission_id' => $d['soumission_id'] ?? null,
       'soumis_statut' => $d['soumis_statut'] ?? null,
       'note'          => $d['note'] ?? null,
-      'points_max'    => $d['points_max'] ?? 20,
+      'nb_questions'    => $d['nb_questions'] ?? 20,
       'feedback'      => $d['feedback'] ?? null,
     ], $devoirs), JSON_UNESCAPED_UNICODE) ?>,
   });

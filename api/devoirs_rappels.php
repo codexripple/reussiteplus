@@ -15,26 +15,26 @@ $userId = $_SESSION['user']['id'];
 
 // Devoirs à venir pour cet élève (J-1 à J+3, non soumis)
 $devoirs = dbAll(
-    "SELECT d.id, d.titre, d.date_remise, d.type_devoir, c.nom as classe_nom
+    "SELECT d.id, d.titre, d.date_limite, d.type_examen, c.nom as classe_nom
      FROM devoirs_ecole d
      JOIN classe_membres cm ON cm.classe_id=d.classe_id AND cm.eleve_id=? AND cm.statut='ACTIF'
      JOIN classes_ecole c ON c.id=d.classe_id
      LEFT JOIN soumissions_devoirs sd ON sd.devoir_id=d.id AND sd.eleve_id=?
      WHERE d.actif=1 AND sd.id IS NULL
-       AND d.date_remise BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY)
-     ORDER BY d.date_remise ASC",
+       AND d.date_limite BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 3 DAY)
+     ORDER BY d.date_limite ASC",
     [$userId, $userId]
 ) ?? [];
 
 $created = 0;
 foreach ($devoirs as $dv) {
-    $jours = (int)ceil((strtotime($dv['date_remise']) - time()) / 86400);
+    $jours = (int)ceil((strtotime($dv['date_limite']) - time()) / 86400);
     $urgence = $jours <= 1 ? 'URGENT' : 'RAPPEL';
     $titreNotif = $urgence === 'URGENT'
         ? "Devoir à rendre aujourd'hui !"
         : "Devoir à rendre dans {$jours} jours";
     $msgNotif = "« {$dv['titre']} » ({$dv['classe_nom']}) — date limite : "
-              . date('d/m/Y', strtotime($dv['date_remise']));
+              . date('d/m/Y', strtotime($dv['date_limite']));
 
     // Vérifier qu'une notification similaire n'existe pas déjà dans les dernières 20h
     $existe = dbRow(

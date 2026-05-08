@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'user_id' => $eleveId,
                 'type'    => 'DEVOIR',
                 'titre'   => 'Devoir corrigé',
-                'message' => "Votre devoir « {$devoir['titre']} » a été corrigé." . ($note !== null ? " Note : {$note}/{$devoir['points_max']}." : ''),
+                'message' => "Votre devoir « {$devoir['titre']} » a été corrigé." . ($note !== null ? " Note : {$note}/{$devoir['nb_questions']}." : ''),
                 'lien'    => '/reussiteplus/mes_devoirs.php',
             ]);
         }
@@ -90,8 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($sd) {
             $geminiKey = $_ENV['GEMINI_API_KEY'] ?? '';
             $ghToken   = $_ENV['GITHUB_TOKEN']   ?? '';
-            $systemP   = "Tu es un enseignant expert pour le programme EPST en RDC. Analyse la réponse de l'élève et génère : 1) une note sur {$devoir['points_max']} (chiffre seul), 2) un feedback bienveillant de 2-3 phrases. Format : NOTE:X.X\nFEEDBACK:texte";
-            $prompt    = "Devoir : {$devoir['titre']} ({$devoir['type_devoir']}, matière : {$devoir['matiere']}).\n"
+            $systemP   = "Tu es un enseignant expert pour le programme EPST en RDC. Analyse la réponse de l'élève et génère : 1) une note sur {$devoir['nb_questions']} (chiffre seul), 2) un feedback bienveillant de 2-3 phrases. Format : NOTE:X.X\nFEEDBACK:texte";
+            $prompt    = "Devoir : {$devoir['titre']} ({$devoir['type_examen']}, matière : {$devoir['matiere']}).\n"
                        . "Réponse de l'élève : " . ($sd['reponse_texte'] ?: '(fichier joint — analyse sans la réponse texte)') . "\n"
                        . "Commentaire : " . ($sd['commentaire'] ?? '');
             $messages  = [['role'=>'system','content'=>$systemP],['role'=>'user','content'=>$prompt]];
@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($response) {
                 preg_match('/NOTE\s*:\s*([\d.,]+)/i', $response, $noteM);
                 preg_match('/FEEDBACK\s*:\s*(.+)/is', $response, $fbM);
-                $noteIA = isset($noteM[1]) ? min((float)str_replace(',','.',$noteM[1]), (float)$devoir['points_max']) : null;
+                $noteIA = isset($noteM[1]) ? min((float)str_replace(',','.',$noteM[1]), (float)$devoir['nb_questions']) : null;
                 $feedbackIA = trim($fbM[1] ?? $response);
                 dbQuery(
                     "UPDATE soumissions_devoirs SET feedback_ia=?, note_ia=? WHERE devoir_id=? AND eleve_id=?",
@@ -150,7 +150,7 @@ $nbIa       = count(array_filter($soumissions, fn($s)=>$s['feedback_ia']));
 $noteMoyenne = $nbCorriges ? round(array_sum(array_filter(array_column($soumissions,'note'),fn($n)=>$n!==null)) / max(1,count(array_filter(array_column($soumissions,'note'),fn($n)=>$n!==null))),1) : null;
 
 $typeConfig = ['DEVOIR'=>'#1E5FAD','CONTROLE'=>'#7C3AED','EXAM'=>'#C9342A','PROJET'=>'#059669','EXPOSE'=>'#C9972A'];
-$typeColor  = $typeConfig[$devoir['type_devoir'] ?? 'DEVOIR'] ?? '#1E5FAD';
+$typeColor  = $typeConfig[$devoir['type_examen'] ?? 'DEVOIR'] ?? '#1E5FAD';
 
 include __DIR__ . '/includes/header_app.php';
 ?>
@@ -181,12 +181,12 @@ include __DIR__ . '/includes/header_app.php';
   <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap">
     <div>
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
-        <span style="background:<?= $typeColor ?>22;color:<?= $typeColor ?>;font-size:11px;font-weight:800;padding:2px 10px;border-radius:6px"><?= e($devoir['type_devoir'] ?? 'DEVOIR') ?></span>
+        <span style="background:<?= $typeColor ?>22;color:<?= $typeColor ?>;font-size:11px;font-weight:800;padding:2px 10px;border-radius:6px"><?= e($devoir['type_examen'] ?? 'DEVOIR') ?></span>
         <span style="font-size:11px;color:rgba(255,255,255,.45)"><?= e($devoir['classe_nom']) ?></span>
       </div>
       <div style="font-size:20px;font-weight:900;color:#fff"><?= e($devoir['titre']) ?></div>
-      <?php if ($devoir['date_remise']): ?>
-      <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:3px">Date limite : <?= date('d/m/Y', strtotime($devoir['date_remise'])) ?></div>
+      <?php if ($devoir['date_limite']): ?>
+      <div style="font-size:12px;color:rgba(255,255,255,.5);margin-top:3px">Date limite : <?= date('d/m/Y', strtotime($devoir['date_limite'])) ?></div>
       <?php endif; ?>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
@@ -213,7 +213,7 @@ include __DIR__ . '/includes/header_app.php';
     <div class="corr-kpi-lbl">Corrigés</div>
   </div>
   <div class="corr-kpi">
-    <div class="corr-kpi-val" style="color:#C9972A"><?= $noteMoyenne !== null ? $noteMoyenne . '/' . $devoir['points_max'] : '—' ?></div>
+    <div class="corr-kpi-val" style="color:#C9972A"><?= $noteMoyenne !== null ? $noteMoyenne . '/' . $devoir['nb_questions'] : '—' ?></div>
     <div class="corr-kpi-lbl">Moyenne classe</div>
   </div>
 </div>
@@ -269,7 +269,7 @@ include __DIR__ . '/includes/header_app.php';
     <?php if ($s['feedback_ia']): ?>
     <div style="font-size:11.5px;font-weight:700;color:#7C3AED;margin-bottom:5px;display:flex;align-items:center;gap:5px;text-transform:uppercase;letter-spacing:.4px">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-      Analyse IA <?= $s['note_ia'] !== null ? '— Note suggérée : <strong>'.$s['note_ia'].'/'.$devoir['points_max'].'</strong>' : '' ?>
+      Analyse IA <?= $s['note_ia'] !== null ? '— Note suggérée : <strong>'.$s['note_ia'].'/'.$devoir['nb_questions'].'</strong>' : '' ?>
     </div>
     <div class="ia-feedback-box"><?= nl2br(e($s['feedback_ia'])) ?></div>
     <?php endif; ?>
@@ -283,8 +283,8 @@ include __DIR__ . '/includes/header_app.php';
         <input type="hidden" name="eleve_id" value="<?= e($s['eleve_id']) ?>">
         <div class="form-note">
           <div>
-            <label style="font-size:11px;font-weight:700;color:var(--gris-600);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:4px">Note / <?= $devoir['points_max'] ?></label>
-            <input type="number" name="note" class="form-control" step="0.5" min="0" max="<?= $devoir['points_max'] ?>"
+            <label style="font-size:11px;font-weight:700;color:var(--gris-600);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:4px">Note / <?= $devoir['nb_questions'] ?></label>
+            <input type="number" name="note" class="form-control" step="0.5" min="0" max="<?= $devoir['nb_questions'] ?>"
                    value="<?= $s['note'] !== null ? $s['note'] : ($s['note_ia'] !== null ? $s['note_ia'] : '') ?>"
                    placeholder="—" style="width:80px">
           </div>
