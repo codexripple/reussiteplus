@@ -127,6 +127,12 @@ include __DIR__ . '/includes/header_app.php';
       <div style="font-size:11px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Mes Cours</div>
       <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#fff;display:flex;align-items:center;gap:10px">Mes Devoirs</div>
       <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:3px">Consultez et soumettez vos devoirs en ligne</div>
+      <?php if ($devoirs): ?>
+      <button onclick="exportDevoirsPDF()" style="margin-top:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);border-radius:9px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px;transition:.15s" onmouseover="this.style.background='rgba(255,255,255,.2)'" onmouseout="this.style.background='rgba(255,255,255,.12)'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="13" x2="12" y2="19"/><polyline points="9 16 12 19 15 16"/></svg>
+        Exporter relevé PDF
+      </button>
+      <?php endif; ?>
     </div>
     <div style="display:flex;gap:10px">
       <?php foreach ([['total','Total','#fff'],['soumis','Soumis','#34d399'],['en_attente','En attente','#f59e0b'],['corriges','Corrigés','#a78bfa']] as [$k,$l,$c]): ?>
@@ -269,4 +275,29 @@ include __DIR__ . '/includes/header_app.php';
 
 <?php endif; ?>
 
+<script>
+fetch('/reussiteplus/api/devoirs_rappels.php').catch(()=>{});
+
+function exportDevoirsPDF() {
+  if (typeof DevoirsPdf === 'undefined') { alert('Générateur PDF non chargé.'); return; }
+  DevoirsPdf.open({
+    prenom:  <?= json_encode($user['prenom']) ?>,
+    periode: <?= json_encode(date('F Y')) ?>,
+    stats:   <?= json_encode($devoirsStats) ?>,
+    devoirs: <?= json_encode(array_map(fn($d) => [
+      'titre'         => $d['titre'],
+      'type'          => $d['type_devoir'] ?? $d['type'] ?? 'DEVOIR',
+      'matiere'       => $d['matiere'] ?? null,
+      'classe_nom'    => $d['classe_nom'] ?? null,
+      'date_remise'   => $d['date_remise'] ?? null,
+      'soumis_le'     => $d['soumis_le'] ?? null,
+      'soumission_id' => $d['soumission_id'] ?? null,
+      'soumis_statut' => $d['soumis_statut'] ?? null,
+      'note'          => $d['note'] ?? null,
+      'points_max'    => $d['points_max'] ?? 20,
+      'feedback'      => $d['feedback'] ?? null,
+    ], $devoirs), JSON_UNESCAPED_UNICODE) ?>,
+  });
+}
+</script>
 <?php include __DIR__ . '/includes/footer_app.php'; ?>

@@ -220,6 +220,21 @@ include __DIR__ . '/includes/header_app.php';
       <?php else: ?>
       <span style="font-size:11px;color:var(--gris-400)">Pas de date limite</span>
       <?php endif; ?>
+      <!-- Bouton feedback IA -->
+      <?php if ($dv['nb_soumissions'] > 0): ?>
+      <button onclick="genFeedbackIA(<?= htmlspecialchars(json_encode([
+          'titre'      => $dv['titre'],
+          'matiere'    => $dv['matiere'] ?? '',
+          'type'       => $dv['type_devoir'] ?? 'DEVOIR',
+          'points_max' => $dv['points_max'] ?? 20,
+          'note'       => $dv['note_moyenne'] ?? 0,
+      ]), ENT_QUOTES) ?>)"
+        style="background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;border:none;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;transition:.15s;font-family:inherit"
+        onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        Feedback IA
+      </button>
+      <?php endif; ?>
     </div>
   </div>
   <?php endforeach; ?>
@@ -298,5 +313,88 @@ include __DIR__ . '/includes/header_app.php';
     </div>
   </div>
 </div>
+
+<!-- ══ MODALE Feedback IA ══════════════════════════════════════ -->
+<div id="modal-ia-feedback" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:linear-gradient(160deg,#0d1120,#111827);border:1px solid rgba(124,58,237,.25);border-radius:18px;padding:24px;width:100%;max-width:500px;margin:20px;box-shadow:0 24px 64px rgba(0,0,0,.5)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#7C3AED,#4F46E5);display:flex;align-items:center;justify-content:center">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </div>
+        <span style="font-size:14px;font-weight:800;color:#fff">Feedback IA — Gemini</span>
+      </div>
+      <button onclick="document.getElementById('modal-ia-feedback').style.display='none'" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,.4);font-size:20px">×</button>
+    </div>
+    <div id="ia-feedback-content" style="min-height:80px">
+      <div id="ia-feedback-loading" style="text-align:center;padding:24px;color:rgba(255,255,255,.5)">
+        <svg style="animation:iaSpin .7s linear infinite;display:inline-block;margin-right:8px" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+        Génération du feedback en cours…
+      </div>
+      <div id="ia-feedback-text" style="display:none;font-size:13.5px;line-height:1.75;color:rgba(255,255,255,.85);background:rgba(124,58,237,.12);border:1px solid rgba(124,58,237,.2);border-radius:10px;padding:14px 16px"></div>
+      <div id="ia-feedback-error" style="display:none;font-size:13px;color:#fca5a5;text-align:center;padding:16px"></div>
+    </div>
+    <div id="ia-feedback-actions" style="display:none;margin-top:14px;display:flex;gap:8px;justify-content:flex-end">
+      <button id="ia-copy-btn" onclick="copyFeedback()" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">
+        Copier
+      </button>
+      <button onclick="document.getElementById('modal-ia-feedback').style.display='none'" style="background:linear-gradient(135deg,#7C3AED,#4F46E5);border:none;color:#fff;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">
+        Fermer
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>@keyframes iaSpin { to { transform: rotate(360deg); } }</style>
+
+<script>
+let lastFeedbackText = '';
+
+async function genFeedbackIA(dv) {
+  const modal   = document.getElementById('modal-ia-feedback');
+  const loading = document.getElementById('ia-feedback-loading');
+  const textEl  = document.getElementById('ia-feedback-text');
+  const errorEl = document.getElementById('ia-feedback-error');
+  const actions = document.getElementById('ia-feedback-actions');
+
+  modal.style.display = 'flex';
+  loading.style.display = 'block';
+  textEl.style.display  = 'none';
+  errorEl.style.display = 'none';
+  actions.style.display = 'none';
+
+  try {
+    const resp = await fetch('/reussiteplus/api/ia_devoir_feedback.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dv),
+    });
+    const data = await resp.json();
+    loading.style.display = 'none';
+    if (data.ok && data.feedback) {
+      lastFeedbackText = data.feedback;
+      textEl.textContent = data.feedback;
+      textEl.style.display = 'block';
+      actions.style.display = 'flex';
+    } else {
+      errorEl.textContent = data.msg || 'Erreur lors de la génération.';
+      errorEl.style.display = 'block';
+    }
+  } catch(e) {
+    loading.style.display = 'none';
+    errorEl.textContent = 'Erreur de connexion. Vérifiez votre connexion.';
+    errorEl.style.display = 'block';
+  }
+}
+
+function copyFeedback() {
+  navigator.clipboard?.writeText(lastFeedbackText).then(() => {
+    const btn = document.getElementById('ia-copy-btn');
+    btn.textContent = 'Copié !';
+    btn.style.color = '#4ade80';
+    setTimeout(() => { btn.textContent = 'Copier'; btn.style.color = 'rgba(255,255,255,.8)'; }, 2000);
+  });
+}
+</script>
 
 <?php include __DIR__ . '/includes/footer_app.php'; ?>

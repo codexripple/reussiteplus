@@ -224,6 +224,11 @@ include __DIR__ . '/includes/header_app.php';
         ];
         if (isset($plan['eleves_max'])) {
           $feats[] = ["Jusqu'à <strong>{$plan['eleves_max']} élèves</strong> + <strong>{$plan['enseignants_max']}</strong> enseignants", true];
+          $feats[] = ["<strong>{$plan['classes_max']}</strong> classes avec emploi du temps", true];
+          $feats[] = ['Devoirs &amp; évaluations avec feedback IA automatique', true];
+          $feats[] = ['Bulletins PDF imprimables automatiques', true];
+          $feats[] = ['Rappels deadlines devoirs (J-3, J-1)', true];
+          $feats[] = ['Rapports PDF pédagogiques premium', true];
           $feats[] = ['Groupe WhatsApp dédié (support &amp; communauté)', true];
         }
         foreach ($feats as [$label, $ok]): ?>
