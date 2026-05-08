@@ -53,10 +53,14 @@ if ($filtreStatut === 'expire') { $whereExtra .= ' AND d.date_remise < CURDATE()
 
 $devoirs = dbAll(
     "SELECT d.*, c.nom as classe_nom,
-            COUNT(DISTINCT cm.eleve_id) as nb_eleves
+            COUNT(DISTINCT cm.eleve_id) as nb_eleves,
+            COUNT(DISTINCT sd.id) as nb_soumissions,
+            COUNT(DISTINCT CASE WHEN sd.statut='CORRIGE' THEN sd.id END) as nb_corriges,
+            COALESCE(ROUND(AVG(sd.note),1), 0) as note_moyenne
      FROM devoirs_ecole d
      JOIN classes_ecole c ON c.id=d.classe_id
-     LEFT JOIN classe_membres cm ON cm.classe_id=d.classe_id
+     LEFT JOIN classe_membres cm ON cm.classe_id=d.classe_id AND cm.statut='ACTIF'
+     LEFT JOIN soumissions_devoirs sd ON sd.devoir_id=d.id
      WHERE d.admin_id=? AND d.actif=1 $whereExtra
      GROUP BY d.id
      ORDER BY d.date_remise IS NULL, d.date_remise ASC, d.created_at DESC",
@@ -182,6 +186,21 @@ include __DIR__ . '/includes/header_app.php';
         <span style="background:var(--gris-100);color:var(--gris-600);font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px"><?= $dv['points_max'] ?> pts</span>
       </div>
     </div>
+    <?php if ($dv['nb_eleves'] > 0): ?>
+    <div style="padding:0 16px 12px">
+      <?php $tauxSoumission = $dv['nb_eleves'] > 0 ? round($dv['nb_soumissions'] / $dv['nb_eleves'] * 100) : 0; ?>
+      <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--gris-500);margin-bottom:4px">
+        <span><?= $dv['nb_soumissions'] ?>/<?= $dv['nb_eleves'] ?> soumissions</span>
+        <span style="font-weight:700;color:<?= $tauxSoumission>=75?'#007A5E':($tauxSoumission>=40?'#C9972A':'#C9342A') ?>"><?= $tauxSoumission ?>%</span>
+      </div>
+      <div style="height:4px;background:var(--gris-100);border-radius:99px;overflow:hidden">
+        <div style="height:100%;width:<?= $tauxSoumission ?>%;background:<?= $tauxSoumission>=75?'#007A5E':($tauxSoumission>=40?'#C9972A':'#C9342A') ?>;border-radius:99px;transition:width .4s"></div>
+      </div>
+      <?php if ($dv['nb_corriges'] > 0): ?>
+      <div style="font-size:10px;color:var(--gris-400);margin-top:3px"><?= $dv['nb_corriges'] ?> corrigé<?= $dv['nb_corriges']>1?'s':'' ?><?= $dv['note_moyenne'] > 0 ? ' · moy. '.$dv['note_moyenne'].'/20' : '' ?></div>
+      <?php endif; ?>
+    </div>
+    <?php endif; ?>
     <div class="dv-card-footer">
       <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--gris-500)">
         <i data-lucide="users" style="width:11px;height:11px"></i>

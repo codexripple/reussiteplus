@@ -44,25 +44,26 @@ $whereQ = '';
 if ($q) { $whereQ = ' AND (u.nom LIKE ? OR u.prenom LIKE ? OR u.email LIKE ?) '; $params[] = "%$q%"; $params[] = "%$q%"; $params[] = "%$q%"; }
 
 $eleves = dbAll(
-    "SELECT u.id, u.nom, u.prenom, u.email, u.avatar_url,
+    "SELECT u.id, u.nom, u.prenom, u.email,
             c.id as classe_id, c.nom as classe_nom,
             cm.created_at as rejoint_le,
             COUNT(DISTINCT es.id) as nb_examens,
-            COALESCE(ROUND(AVG(er.score_pct),1),0) as score_moyen,
-            MAX(es.date_debut) as dernier_examen
+            COALESCE(ROUND(AVG(es.pourcentage),1), 0) as score_moyen,
+            MAX(es.finished_at) as dernier_examen
      FROM classes_ecole c
      JOIN classe_membres cm ON cm.classe_id=c.id
      JOIN utilisateurs u ON u.id=cm.eleve_id
-     LEFT JOIN exam_sessions es ON es.user_id=u.id AND es.statut='COMPLETE'
-     LEFT JOIN exam_results er ON er.session_id=es.id
+     LEFT JOIN exam_sessions es ON es.user_id=u.id AND es.statut='TERMINE'
      WHERE c.admin_id=? $whereClass $whereQ
      GROUP BY u.id, c.id
      ORDER BY c.nom, score_moyen DESC",
     $params
 ) ?? [];
 
-$totalEleves = count($eleves);
-$scoreMoyenGlobal = $totalEleves ? round(array_sum(array_column($eleves,'score_moyen'))/$totalEleves,1) : 0;
+$totalEleves       = count($eleves);
+$scoreMoyenGlobal  = $totalEleves ? round(array_sum(array_column($eleves,'score_moyen'))/$totalEleves,1) : 0;
+$elevesEnDifficulte = array_filter($eleves, fn($e) => $e['nb_examens'] > 0 && $e['score_moyen'] < 50);
+$elevesActifs      = array_filter($eleves, fn($e) => $e['nb_examens'] > 0);
 
 include __DIR__ . '/includes/header_app.php';
 ?>
@@ -102,6 +103,43 @@ include __DIR__ . '/includes/header_app.php';
       <?php endif; ?>
     </div>
   </div>
+</div>
+
+<?php if (count($elevesEnDifficulte) > 0): ?>
+<!-- Alerte élèves en difficulté -->
+<div style="background:#FEF0EF;border:1.5px solid #FECACA;border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:16px;display:flex;align-items:flex-start;gap:12px">
+  <div style="width:34px;height:34px;border-radius:9px;background:#FEE2E2;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9342A" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+  </div>
+  <div style="flex:1">
+    <div style="font-size:13px;font-weight:700;color:#7F1D1D;margin-bottom:4px"><?= count($elevesEnDifficulte) ?> élève<?= count($elevesEnDifficulte)>1?'s':'' ?> en difficulté (score &lt; 50%)</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+      <?php foreach (array_slice($elevesEnDifficulte, 0, 5) as $ed): ?>
+      <span style="background:#FEE2E2;color:#7F1D1D;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px">
+        <?= e($ed['prenom'] . ' ' . $ed['nom']) ?> — <?= $ed['score_moyen'] ?>%
+      </span>
+      <?php endforeach; ?>
+      <?php if (count($elevesEnDifficulte) > 5): ?>
+      <span style="background:#F3F4F6;color:#6B7280;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px">+<?= count($elevesEnDifficulte)-5 ?> autres</span>
+      <?php endif; ?>
+    </div>
+  </div>
+</div>
+<?php endif; ?>
+
+<!-- KPI rapides -->
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px">
+  <?php foreach ([
+    ['label'=>'Inscrits', 'val'=>$totalEleves, 'color'=>'#007A5E'],
+    ['label'=>'Actifs', 'val'=>count($elevesActifs), 'color'=>'#1E5FAD'],
+    ['label'=>'Score moyen', 'val'=>$scoreMoyenGlobal.'%', 'color'=>($scoreMoyenGlobal>=50?'#007A5E':'#C9342A')],
+    ['label'=>'En difficulté', 'val'=>count($elevesEnDifficulte), 'color'=>'#C9342A'],
+  ] as $kpi): ?>
+  <div style="background:var(--blanc);border:1px solid var(--gris-200);border-radius:12px;padding:14px 16px;text-align:center">
+    <div style="font-size:22px;font-weight:900;color:<?= $kpi['color'] ?>"><?= $kpi['val'] ?></div>
+    <div style="font-size:10.5px;color:var(--gris-500);margin-top:2px;text-transform:uppercase;letter-spacing:.4px"><?= $kpi['label'] ?></div>
+  </div>
+  <?php endforeach; ?>
 </div>
 
 <!-- Barre de recherche -->

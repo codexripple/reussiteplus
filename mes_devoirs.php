@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $commentaire = trim($_POST['commentaire'] ?? '');
-    $statut = $devoir['date_limite'] && strtotime($devoir['date_limite']) < time() ? 'EN_RETARD' : 'SOUMIS';
+    $statut = $devoir['date_remise'] && strtotime($devoir['date_remise']) < time() ? 'EN_RETARD' : 'SOUMIS';
 
     // Upsert
     $existing = dbRow("SELECT id FROM soumissions_devoirs WHERE devoir_id=? AND eleve_id=?", [$devoirId, $user['id']]);
@@ -88,7 +88,7 @@ if ($classeIds) {
          JOIN classes_ecole c ON c.id=d.classe_id
          LEFT JOIN soumissions_devoirs s ON s.devoir_id=d.id AND s.eleve_id=?
          WHERE d.classe_id IN ($in) AND d.actif=1
-         ORDER BY d.date_limite ASC, d.created_at DESC",
+         ORDER BY d.date_remise ASC, d.created_at DESC",
         array_merge([$user['id']], $classeIds)
     ) ?? [];
 }
@@ -125,7 +125,7 @@ include __DIR__ . '/includes/header_app.php';
   <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px">
     <div>
       <div style="font-size:11px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Mes Cours</div>
-      <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#fff;display:flex;align-items:center;gap:10px">📋 Mes Devoirs</div>
+      <div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#fff;display:flex;align-items:center;gap:10px">Mes Devoirs</div>
       <div style="font-size:12px;color:rgba(255,255,255,.45);margin-top:3px">Consultez et soumettez vos devoirs en ligne</div>
     </div>
     <div style="display:flex;gap:10px">
@@ -159,8 +159,8 @@ include __DIR__ . '/includes/header_app.php';
 <div style="display:flex;flex-direction:column;gap:14px">
 <?php foreach ($devoirs as $d):
   $tc = $typeConfig[$d['type'] ?? 'DEVOIR'] ?? $typeConfig['DEVOIR'];
-  $isLate = $d['date_limite'] && strtotime($d['date_limite']) < time() && !$d['soumission_id'];
-  $daysLeft = $d['date_limite'] ? ceil((strtotime($d['date_limite']) - time()) / 86400) : null;
+  $isLate = $d['date_remise'] && strtotime($d['date_remise']) < time() && !$d['soumission_id'];
+  $daysLeft = $d['date_remise'] ? ceil((strtotime($d['date_remise']) - time()) / 86400) : null;
   $submitted = (bool)$d['soumission_id'];
 ?>
 <div class="devoir-card">
@@ -190,9 +190,9 @@ include __DIR__ . '/includes/header_app.php';
         <div style="font-size:13px;color:var(--gris-600);line-height:1.5;margin-bottom:8px"><?= e($d['description']) ?></div>
         <?php endif; ?>
         <div style="font-size:11px;color:var(--gris-400);display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-          <?php if ($d['date_limite']): ?>
+          <?php if ($d['date_remise']): ?>
           <span style="display:flex;align-items:center;gap:4px"><i data-lucide="calendar" style="width:11px;height:11px"></i>
-            Date limite : <strong><?= date('d/m/Y', strtotime($d['date_limite'])) ?></strong></span>
+            Date limite : <strong><?= date('d/m/Y', strtotime($d['date_remise'])) ?></strong></span>
           <?php endif; ?>
           <?php if ($d['matiere']??null): ?>
           <span>📚 <?= e($d['matiere']) ?></span>

@@ -26,8 +26,8 @@ $nbEleves      = (int)(dbScalar("SELECT COUNT(DISTINCT cm.eleve_id) FROM classe_
 $nbDevoirs     = (int)(dbScalar("SELECT COUNT(*) FROM devoirs_ecole WHERE admin_id=? AND actif=1", [$user['id']]) ?? 0);
 $nbRessources  = (int)(dbScalar("SELECT COUNT(*) FROM bibliotheque_ecole WHERE ecole_admin_id=?", [$user['id']]) ?? 0);
 $scoreMoyen    = (float)(dbScalar("SELECT ROUND(AVG(u.score_moyen),1) FROM classe_membres cm JOIN classes_ecole c ON c.id=cm.classe_id JOIN utilisateurs u ON u.id=cm.eleve_id WHERE c.admin_id=? AND cm.statut='ACTIF'", [$user['id']]) ?? 0);
-$examsSemaine  = (int)(dbScalar("SELECT COUNT(*) FROM exam_sessions es JOIN classe_membres cm ON cm.eleve_id=es.user_id JOIN classes_ecole c ON c.id=cm.classe_id WHERE c.admin_id=? AND es.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)", [$user['id']]) ?? 0);
-$elevesActifs  = (int)(dbScalar("SELECT COUNT(DISTINCT cm.eleve_id) FROM classe_membres cm JOIN classes_ecole c ON c.id=cm.classe_id JOIN utilisateurs u ON u.id=cm.eleve_id WHERE c.admin_id=? AND cm.statut='ACTIF' AND u.derniere_activite >= DATE_SUB(NOW(), INTERVAL 7 DAY)", [$user['id']]) ?? 0);
+$examsSemaine  = (int)(dbScalar("SELECT COUNT(*) FROM exam_sessions es JOIN classe_membres cm ON cm.eleve_id=es.user_id JOIN classes_ecole c ON c.id=cm.classe_id WHERE c.admin_id=? AND es.started_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)", [$user['id']]) ?? 0);
+$elevesActifs  = (int)(dbScalar("SELECT COUNT(DISTINCT cm.eleve_id) FROM classe_membres cm JOIN classes_ecole c ON c.id=cm.classe_id JOIN utilisateurs u ON u.id=cm.eleve_id WHERE c.admin_id=? AND cm.statut='ACTIF'", [$user['id']]) ?? 0);
 
 // ── Classes ───────────────────────────────────────────────────
 $classes = dbAll(
