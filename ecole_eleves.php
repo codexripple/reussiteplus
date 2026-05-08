@@ -46,7 +46,7 @@ if ($q) { $whereQ = ' AND (u.nom LIKE ? OR u.prenom LIKE ? OR u.email LIKE ?) ';
 $eleves = dbAll(
     "SELECT u.id, u.nom, u.prenom, u.email,
             c.id as classe_id, c.nom as classe_nom,
-            cm.created_at as rejoint_le,
+            cm.joined_at as rejoint_le,
             COUNT(DISTINCT es.id) as nb_examens,
             COALESCE(ROUND(AVG(es.pourcentage),1), 0) as score_moyen,
             MAX(es.finished_at) as dernier_examen
