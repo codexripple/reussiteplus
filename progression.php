@@ -526,9 +526,6 @@ include __DIR__ . '/includes/header_app.php';
     <div class="pg-heatmap-grid" style="grid-template-rows:repeat(7,13px)">
       <?php for ($i = 83; $i >= 0; $i--):
         $d   = date('Y-m-d', strtotime("-{$i} days"));
-        $act = $actMap[$d] ?? null;
-        $ex  = $act ? (int)$act['ex'] : ($act ? (int)$act['examens'] : 0);
-        // fix: actMap uses date_act key
         $ex  = isset($actMap[$d]) ? (int)$actMap[$d]['examens'] : 0;
         $lvl = $ex === 0 ? 0 : ($ex <= 1 ? 1 : ($ex <= 2 ? 2 : ($ex <= 4 ? 3 : 4)));
         $title = date('d/m', strtotime($d)) . ' — ' . $ex . ' examen(s)';
