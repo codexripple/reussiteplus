@@ -54,18 +54,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $commentaire = trim($_POST['commentaire'] ?? '');
+    $commentaire  = trim($_POST['commentaire']   ?? '');
+    $reponseTxt   = trim($_POST['reponse_texte'] ?? '');
     $statut = $devoir['date_remise'] && strtotime($devoir['date_remise']) < time() ? 'EN_RETARD' : 'SOUMIS';
 
     // Upsert
     $existing = dbRow("SELECT id FROM soumissions_devoirs WHERE devoir_id=? AND eleve_id=?", [$devoirId, $user['id']]);
     if ($existing) {
-        dbQuery("UPDATE soumissions_devoirs SET fichier_url=COALESCE(?,fichier_url), fichier_nom=COALESCE(?,fichier_nom), commentaire=?, statut=?, soumis_le=NOW() WHERE id=?",
-            [$fichierUrl, $fichierNom, $commentaire ?: null, $statut, $existing['id']]);
+        dbQuery("UPDATE soumissions_devoirs SET fichier_url=COALESCE(?,fichier_url), fichier_nom=COALESCE(?,fichier_nom), commentaire=?, reponse_texte=?, statut=?, soumis_le=NOW() WHERE id=?",
+            [$fichierUrl, $fichierNom, $commentaire ?: null, $reponseTxt ?: null, $statut, $existing['id']]);
     } else {
-        dbRun("INSERT INTO soumissions_devoirs (devoir_id, eleve_id, fichier_url, fichier_nom, commentaire, statut)
-               VALUES (?,?,?,?,?,?)",
-            [$devoirId, $user['id'], $fichierUrl, $fichierNom, $commentaire ?: null, $statut]);
+        dbRun("INSERT INTO soumissions_devoirs (devoir_id, eleve_id, fichier_url, fichier_nom, commentaire, reponse_texte, statut)
+               VALUES (?,?,?,?,?,?,?)",
+            [$devoirId, $user['id'], $fichierUrl, $fichierNom, $commentaire ?: null, $reponseTxt ?: null, $statut]);
     }
     redirect('/reussiteplus/mes_devoirs.php', 'success', 'Devoir soumis avec succès !');
 }
@@ -145,9 +146,33 @@ include __DIR__ . '/includes/header_app.php';
   </div>
 </div>
 
+<?php
+// Barre de progression gamification
+$tauxCompletion = ($devoirsStats['total'] > 0)
+    ? round($devoirsStats['soumis'] / $devoirsStats['total'] * 100) : 0;
+$niveauLabel = $tauxCompletion >= 100 ? '🏆 Tout soumis !' : ($tauxCompletion >= 75 ? '⭐ Excellent' : ($tauxCompletion >= 50 ? '📈 Bien' : '🎯 En cours'));
+?>
+<?php if ($devoirsStats['total'] > 0): ?>
+<div style="background:var(--blanc);border:1px solid var(--gris-200);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+  <div style="flex:1;min-width:200px">
+    <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--gris-700);margin-bottom:6px">
+      <span>Avancement — <?= $devoirsStats['soumis'] ?>/<?= $devoirsStats['total'] ?> devoirs soumis</span>
+      <span style="color:<?= $tauxCompletion>=75?'#007A5E':($tauxCompletion>=50?'#C9972A':'#1E5FAD') ?>"><?= $tauxCompletion ?>%</span>
+    </div>
+    <div style="height:6px;background:var(--gris-100);border-radius:99px;overflow:hidden">
+      <div style="height:100%;width:<?= $tauxCompletion ?>%;background:<?= $tauxCompletion>=75?'#007A5E':($tauxCompletion>=50?'#C9972A':'#1E5FAD') ?>;border-radius:99px;transition:width .6s"></div>
+    </div>
+  </div>
+  <div style="font-size:13px;font-weight:700;color:var(--gris-700);white-space:nowrap"><?= $niveauLabel ?></div>
+  <?php if ($devoirsStats['corriges'] > 0): ?>
+  <div style="font-size:12px;color:var(--gris-500)"><?= $devoirsStats['corriges'] ?> corrigé<?= $devoirsStats['corriges']>1?'s':'' ?></div>
+  <?php endif; ?>
+</div>
+<?php endif; ?>
+
 <?php if (!$mesClasses): ?>
 <div class="card" style="text-align:center;padding:60px 30px">
-  <div style="font-size:56px;margin-bottom:16px">🏫</div>
+  <div style="font-size:48px;margin-bottom:16px">🏫</div>
   <div style="font-family:var(--font-display);font-size:20px;font-weight:800;margin-bottom:8px">Vous n'êtes dans aucune classe</div>
   <p style="color:var(--gris-500);font-size:13px;max-width:400px;margin:0 auto 24px;line-height:1.6">
     Rejoignez une classe avec un code d'invitation pour accéder aux devoirs et exercices.
@@ -256,12 +281,22 @@ include __DIR__ . '/includes/header_app.php';
                      onchange="document.getElementById('zone-txt-<?= e($d['id']) ?>').textContent=this.files[0]?.name||'Fichier sélectionné'">
             </label>
           </div>
+          <!-- Réponse texte (optionnel mais analysable par IA) -->
+          <div class="form-group" style="margin-bottom:14px">
+            <label class="form-label" style="display:flex;align-items:center;gap:6px">
+              Réponse texte
+              <span style="background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;font-size:9px;font-weight:800;padding:1px 7px;border-radius:10px;letter-spacing:.3px">IA</span>
+              <span style="font-size:11px;color:var(--gris-400);font-weight:400">(optionnel — permet la correction IA automatique)</span>
+            </label>
+            <textarea name="reponse_texte" class="form-control" rows="4" placeholder="Rédigez votre réponse ici pour une correction IA automatique par votre enseignant…" style="font-size:13px;line-height:1.6"></textarea>
+          </div>
           <div class="form-group" style="margin-bottom:14px">
             <label class="form-label">Commentaire (optionnel)</label>
             <textarea name="commentaire" class="form-control" rows="2" placeholder="Remarques, difficultés rencontrées…"></textarea>
           </div>
           <button type="submit" class="btn btn-primary" style="background:<?= $tc['color'] ?>;border-color:<?= $tc['color'] ?>;width:100%">
-            <i data-lucide="send" style="width:13px;height:13px;stroke:#fff;vertical-align:-2px"></i> Envoyer le devoir
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;margin-right:4px"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Envoyer le devoir
           </button>
         </form>
       </div>

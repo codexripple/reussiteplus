@@ -220,6 +220,15 @@ include __DIR__ . '/includes/header_app.php';
       <?php else: ?>
       <span style="font-size:11px;color:var(--gris-400)">Pas de date limite</span>
       <?php endif; ?>
+      <!-- Bouton Corriger -->
+      <?php if ($dv['nb_soumissions'] > 0): ?>
+      <a href="/reussiteplus/ecole_correction.php?devoir=<?= urlencode($dv['id']) ?>"
+         style="background:var(--primary);color:#fff;border-radius:8px;padding:5px 11px;font-size:11px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:4px;transition:.15s"
+         onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Corriger (<?= $dv['nb_soumissions'] ?>)
+      </a>
+      <?php endif; ?>
       <!-- Bouton feedback IA -->
       <?php if ($dv['nb_soumissions'] > 0): ?>
       <button onclick="genFeedbackIA(<?= htmlspecialchars(json_encode([
