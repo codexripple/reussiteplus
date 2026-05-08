@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $eleveId  = $_POST['eleve_id']  ?? '';
         // Vérifier que la classe appartient à cet admin
         $c = dbRow("SELECT id FROM classes_ecole WHERE id=? AND admin_id=?", [$classeId, $user['id']]);
-        if ($c) dbRun("DELETE FROM classe_membres WHERE classe_id=? AND user_id=?", [$classeId, $eleveId]);
+        if ($c) dbRun("DELETE FROM classe_membres WHERE classe_id=? AND eleve_id=?", [$classeId, $eleveId]);
         redirect('/reussiteplus/ecole_classes.php?vue=' . urlencode($classeId), 'success', 'Élève retiré.');
     }
     exit;
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // ── Données ───────────────────────────────────────────────────
 $classeVue = $_GET['vue'] ?? '';
 $classes = dbAll(
-    "SELECT c.*, COUNT(DISTINCT cm.user_id) as nb_eleves
+    "SELECT c.*, COUNT(DISTINCT cm.eleve_id) as nb_eleves
      FROM classes_ecole c
      LEFT JOIN classe_membres cm ON cm.classe_id=c.id
      WHERE c.admin_id=? AND c.actif=1
@@ -78,7 +78,7 @@ if ($classeActive) {
                 COUNT(DISTINCT es.id) as nb_examens,
                 COALESCE(ROUND(AVG(er.score_pct),1), 0) as score_moyen
          FROM classe_membres cm
-         JOIN users u ON u.id=cm.user_id
+         JOIN utilisateurs u ON u.id=cm.eleve_id
          LEFT JOIN exam_sessions es ON es.user_id=u.id AND es.statut='COMPLETE'
          LEFT JOIN exam_results er ON er.session_id=es.id
          WHERE cm.classe_id=?

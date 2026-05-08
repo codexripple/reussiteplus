@@ -58,7 +58,7 @@ foreach ($classes as $cl) { if ($cl['id'] === $filtreClasse) { $classeActive = $
 $eleves = [];
 if ($classeActive) {
     $eleves = dbAll(
-        "SELECT u.id, u.nom, u.prenom FROM classe_membres cm JOIN users u ON u.id=cm.user_id WHERE cm.classe_id=? ORDER BY u.nom, u.prenom",
+        "SELECT u.id, u.nom, u.prenom FROM classe_membres cm JOIN utilisateurs u ON u.id=cm.eleve_id WHERE cm.classe_id=? ORDER BY u.nom, u.prenom",
         [$filtreClasse]
     ) ?? [];
 }

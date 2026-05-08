@@ -53,7 +53,7 @@ if ($filtreStatut === 'expire') { $whereExtra .= ' AND d.date_remise < CURDATE()
 
 $devoirs = dbAll(
     "SELECT d.*, c.nom as classe_nom,
-            COUNT(DISTINCT cm.user_id) as nb_eleves
+            COUNT(DISTINCT cm.eleve_id) as nb_eleves
      FROM devoirs_ecole d
      JOIN classes_ecole c ON c.id=d.classe_id
      LEFT JOIN classe_membres cm ON cm.classe_id=d.classe_id

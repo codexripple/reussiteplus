@@ -19,7 +19,7 @@ foreach ($classes as $cl) { if ($cl['id'] === $filtreClasse) { $classeActive = $
 $stats = [
     'nb_classes'     => count($classes),
     'nb_enseignants' => (int)dbScalar("SELECT COUNT(*) FROM enseignants_ecole WHERE ecole_admin_id=? AND statut='ACTIF'", [$user['id']]),
-    'nb_eleves'      => (int)dbScalar("SELECT COUNT(DISTINCT cm.user_id) FROM classe_membres cm JOIN classes_ecole c ON c.id=cm.classe_id WHERE c.admin_id=?", [$user['id']]),
+    'nb_eleves'      => (int)dbScalar("SELECT COUNT(DISTINCT cm.eleve_id) FROM classe_membres cm JOIN classes_ecole c ON c.id=cm.classe_id WHERE c.admin_id=?", [$user['id']]),
     'nb_devoirs'     => (int)dbScalar("SELECT COUNT(*) FROM devoirs_ecole WHERE admin_id=? AND actif=1", [$user['id']]),
     'nb_ressources'  => (int)dbScalar("SELECT COUNT(*) FROM bibliotheque_ecole WHERE ecole_admin_id=?", [$user['id']]),
     'nb_absences'    => (int)dbScalar("SELECT COUNT(*) FROM absences_ecole a JOIN classes_ecole c ON c.id=a.classe_id WHERE c.admin_id=? AND a.justifiee=0 AND a.date_absence >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)", [$user['id']]),
@@ -34,7 +34,7 @@ if ($classeActive) {
                 COALESCE(ROUND(AVG(er.score_pct),1),0) as score_moyen,
                 COUNT(DISTINCT a.id) as nb_absences
          FROM classe_membres cm
-         JOIN users u ON u.id=cm.user_id
+         JOIN utilisateurs u ON u.id=cm.eleve_id
          LEFT JOIN exam_sessions es ON es.user_id=u.id AND es.statut='COMPLETE'
          LEFT JOIN exam_results er ON er.session_id=es.id
          LEFT JOIN absences_ecole a ON a.eleve_id=u.id AND a.classe_id=cm.classe_id
@@ -50,7 +50,7 @@ $matiereStats = dbAll(
     "SELECT q.matiere as matiere, COUNT(DISTINCT es.id) as nb_sessions, ROUND(AVG(er.score_pct),1) as avg_score
      FROM exam_sessions es
      JOIN exam_results er ON er.session_id=es.id
-     JOIN classe_membres cm ON cm.user_id=es.user_id
+     JOIN classe_membres cm ON cm.eleve_id=es.user_id
      JOIN questions q ON q.session_id=es.id
      JOIN classes_ecole c ON c.id=cm.classe_id
      WHERE c.admin_id=? AND es.statut='COMPLETE'
