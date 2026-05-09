@@ -512,6 +512,22 @@ form          { animation: authFadeUp .5s cubic-bezier(0.16,1,0.3,1) .25s both; 
 
     <div class="form-foot">
       <p>Pas encore de compte ? <a href="/reussiteplus/inscription.php">Créer un compte gratuit</a></p>
+
+      <!-- Lien portail enseignant -->
+      <div style="margin:16px 0;padding:12px 16px;background:#EEF4FD;border:1px solid rgba(30,95,173,.15);border-radius:10px;display:flex;align-items:center;gap:10px">
+        <div style="width:32px;height:32px;border-radius:8px;background:#1E5FAD;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div style="flex:1;text-align:left">
+          <div style="font-size:12.5px;font-weight:700;color:#1E3A5F">Vous êtes enseignant ?</div>
+          <div style="font-size:11.5px;color:#6B7280">Accédez à votre espace pédagogique dédié.</div>
+        </div>
+        <a href="/reussiteplus/enseignant/connexion.php" style="font-size:12px;font-weight:700;color:#1E5FAD;white-space:nowrap;display:flex;align-items:center;gap:4px">
+          Connexion
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
       <a href="/reussiteplus/index.php" class="back-link">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         Retour à l'accueil

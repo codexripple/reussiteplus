@@ -37,6 +37,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // ── Créer un compte enseignant ────────────────────────────
+    if ($action === 'creer_compte') {
+        $ensId    = trim($_POST['enseignant_id'] ?? '');
+        $password = trim($_POST['password']      ?? '');
+        $ens = dbRow("SELECT * FROM enseignants_ecole WHERE id=? AND ecole_admin_id=?", [$ensId, $user['id']]);
+
+        if (!$ens) redirect('/reussiteplus/ecole_enseignants.php', 'error', 'Enseignant introuvable.');
+        if (strlen($password) < 6) redirect('/reussiteplus/ecole_enseignants.php', 'error', 'Mot de passe trop court (6 caractères minimum).');
+
+        if (empty($ens['email'])) {
+            redirect('/reussiteplus/ecole_enseignants.php', 'error', 'Cet enseignant n\'a pas d\'adresse e-mail. Modifiez-le d\'abord.');
+        }
+
+        // Vérifier si email déjà utilisé
+        $existe = dbRow("SELECT id FROM utilisateurs WHERE email=?", [$ens['email']]);
+        if ($existe) {
+            // Lier le compte existant
+            dbRun("UPDATE enseignants_ecole SET user_id=?, statut_compte='VALIDE' WHERE id=?", [$existe['id'], $ensId]);
+            redirect('/reussiteplus/ecole_enseignants.php', 'success', 'Compte existant lié à cet enseignant.');
+        }
+
+        // Créer un nouveau compte utilisateur
+        $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => BCRYPT_COST]);
+        $newUserId = bin2hex(random_bytes(18));
+        $newUserId = sprintf('%s-%s-%s-%s-%s', substr($newUserId,0,8), substr($newUserId,8,4), substr($newUserId,12,4), substr($newUserId,16,4), substr($newUserId,20,12));
+
+        dbQuery(
+            "INSERT INTO utilisateurs (id, prenom, nom, email, password_hash, role, plan, is_active, created_at)
+             VALUES (?,?,?,?,?,'ENSEIGNANT','ECOLE',1,NOW())",
+            [$newUserId, $ens['prenom'], $ens['nom'], $ens['email'], $hash]
+        );
+        dbRun("UPDATE enseignants_ecole SET user_id=?, statut_compte='VALIDE' WHERE id=?", [$newUserId, $ensId]);
+
+        // Sauvegarder les credentials en session flash pour les afficher
+        $_SESSION['flash'] = ['type'=>'success','msg'=>"Compte créé ! Email : {$ens['email']} · Mot de passe temporaire : {$password} · URL : " . APP_URL . "/enseignant/connexion.php"];
+        redirect('/reussiteplus/ecole_enseignants.php');
+    }
+
     if ($action === 'supprimer_enseignant') {
         $id = $_POST['enseignant_id'] ?? '';
         dbRun("UPDATE enseignants_ecole SET statut='INACTIF' WHERE id=? AND ecole_admin_id=?", [$id, $user['id']]);
@@ -206,9 +244,23 @@ include __DIR__ . '/includes/header_app.php';
                   onmouseover="this.style.borderColor='#7C3AED';this.style.color='#7C3AED'" onmouseout="this.style.borderColor='var(--gris-200)';this.style.color='var(--gris-600)'">
             <i data-lucide="link" style="width:12px;height:12px;vertical-align:-1px"></i>
           </button>
-          <a href="/reussiteplus/enseignant/dashboard.php?ens=<?= e($ens['id']) ?>" title="Voir espace enseignant" style="display:inline-flex;align-items:center;background:none;border:1px solid var(--gris-200);border-radius:var(--radius);padding:5px 10px;font-size:12px;color:var(--gris-700);cursor:pointer;text-decoration:none;transition:.15s;margin-right:4px" onmouseover="this.style.background='var(--primary-subtle)';this.style.color='var(--primary)'" onmouseout="this.style.background='none';this.style.color='var(--gris-700)'">
-            <i data-lucide="layout-dashboard" style="width:12px;height:12px;vertical-align:-1px"></i>
+          <!-- Créer / voir compte -->
+          <?php if (empty($ens['user_id'])): ?>
+          <button onclick="openCreerCompte('<?= e($ens['id']) ?>','<?= e(addslashes($ens['prenom'].' '.$ens['nom'])) ?>','<?= e($ens['email'] ?? '') ?>')"
+                  title="Créer un compte de connexion"
+                  style="display:inline-flex;align-items:center;gap:3px;background:var(--primary);border:none;border-radius:var(--radius);padding:5px 10px;font-size:11.5px;color:#fff;cursor:pointer;transition:.15s;margin-right:4px;font-family:inherit"
+                  onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            Créer compte
+          </button>
+          <?php else: ?>
+          <a href="/reussiteplus/enseignant/dashboard.php?ens=<?= e($ens['id']) ?>" title="Voir espace enseignant"
+             style="display:inline-flex;align-items:center;gap:3px;background:var(--primary-subtle);border:1px solid rgba(0,122,94,.2);border-radius:var(--radius);padding:5px 10px;font-size:11.5px;color:var(--primary);cursor:pointer;text-decoration:none;transition:.15s;margin-right:4px"
+             onmouseover="this.style.background='rgba(0,122,94,.15)'" onmouseout="this.style.background='var(--primary-subtle)'">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Compte actif
           </a>
+          <?php endif; ?>
           <form method="POST" style="display:inline" onsubmit="return confirm('Désactiver cet enseignant ?')">
             <?= csrf_field() ?>
             <input type="hidden" name="action" value="supprimer_enseignant">
@@ -332,6 +384,73 @@ function openAssign(id, name) {
   document.getElementById('assign-ens-id').value = id;
   document.getElementById('assign-name').textContent = 'Enseignant : ' + name;
   document.getElementById('modal-assign').style.display = 'flex';
+}
+</script>
+
+<!-- ══ MODALE Créer compte enseignant ════════════════════════ -->
+<div id="modal-creer-compte" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:var(--blanc);border-radius:18px;padding:28px;width:100%;max-width:440px;margin:20px;box-shadow:0 24px 64px rgba(0,0,0,.2)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div>
+        <div style="font-size:16px;font-weight:800;color:var(--gris-900)">Créer un compte de connexion</div>
+        <div id="cc-nom" style="font-size:12.5px;color:var(--gris-500);margin-top:2px"></div>
+      </div>
+      <button onclick="document.getElementById('modal-creer-compte').style.display='none'" style="background:none;border:none;cursor:pointer;color:var(--gris-400);font-size:20px;padding:4px">×</button>
+    </div>
+
+    <div style="background:var(--primary-subtle);border:1px solid rgba(0,122,94,.2);border-radius:10px;padding:12px 14px;margin-bottom:18px;font-size:12.5px;color:var(--primary-dark);line-height:1.6">
+      <strong>Comment ça marche :</strong> Un compte de connexion sera créé avec l'email de l'enseignant et le mot de passe ci-dessous. L'enseignant pourra se connecter sur
+      <strong><?= APP_URL ?>/enseignant/connexion.php</strong>
+    </div>
+
+    <form method="POST" id="form-creer-compte">
+      <?= csrf_field() ?>
+      <input type="hidden" name="action" value="creer_compte">
+      <input type="hidden" name="enseignant_id" id="cc-ens-id">
+
+      <div style="margin-bottom:14px">
+        <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--gris-500);margin-bottom:7px">Email de connexion</label>
+        <div id="cc-email-display" style="background:var(--gris-50);border:1px solid var(--gris-200);border-radius:9px;padding:10px 13px;font-size:13.5px;color:var(--gris-700)"></div>
+      </div>
+
+      <div style="margin-bottom:18px">
+        <label style="display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--gris-500);margin-bottom:7px">Mot de passe temporaire</label>
+        <div style="position:relative">
+          <input type="text" name="password" id="cc-password" class="form-control"
+                 placeholder="Minimum 6 caractères" minlength="6" required
+                 style="padding-right:100px;font-size:14px">
+          <button type="button" onclick="genMdp()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:var(--gris-100);border:1px solid var(--gris-200);border-radius:6px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;color:var(--gris-700);transition:.15s;font-family:inherit" onmouseover="this.style.background='var(--gris-200)'" onmouseout="this.style.background='var(--gris-100)'">
+            Générer
+          </button>
+        </div>
+        <div style="font-size:11px;color:var(--gris-400);margin-top:5px">Communiquez ce mot de passe à l'enseignant. Il pourra le changer ensuite.</div>
+      </div>
+
+      <div style="display:flex;gap:8px">
+        <button type="submit" class="btn btn-primary" style="flex:1">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;margin-right:5px"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+          Créer le compte
+        </button>
+        <button type="button" onclick="document.getElementById('modal-creer-compte').style.display='none'" class="btn btn-ghost">Annuler</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function openCreerCompte(id, nom, email) {
+  document.getElementById('cc-ens-id').value = id;
+  document.getElementById('cc-nom').textContent = nom;
+  document.getElementById('cc-email-display').textContent = email || '(aucun email — ajoutez-en un d\'abord)';
+  document.getElementById('cc-password').value = '';
+  document.getElementById('modal-creer-compte').style.display = 'flex';
+  setTimeout(() => document.getElementById('cc-password').focus(), 100);
+}
+function genMdp() {
+  const chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789@#!';
+  let pwd = '';
+  for (let i = 0; i < 10; i++) pwd += chars[Math.floor(Math.random() * chars.length)];
+  document.getElementById('cc-password').value = pwd;
 }
 </script>
 
