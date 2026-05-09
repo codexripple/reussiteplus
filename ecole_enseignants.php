@@ -206,6 +206,9 @@ include __DIR__ . '/includes/header_app.php';
                   onmouseover="this.style.borderColor='#7C3AED';this.style.color='#7C3AED'" onmouseout="this.style.borderColor='var(--gris-200)';this.style.color='var(--gris-600)'">
             <i data-lucide="link" style="width:12px;height:12px;vertical-align:-1px"></i>
           </button>
+          <a href="/reussiteplus/enseignant/dashboard.php?ens=<?= e($ens['id']) ?>" title="Voir espace enseignant" style="display:inline-flex;align-items:center;background:none;border:1px solid var(--gris-200);border-radius:var(--radius);padding:5px 10px;font-size:12px;color:var(--gris-700);cursor:pointer;text-decoration:none;transition:.15s;margin-right:4px" onmouseover="this.style.background='var(--primary-subtle)';this.style.color='var(--primary)'" onmouseout="this.style.background='none';this.style.color='var(--gris-700)'">
+            <i data-lucide="layout-dashboard" style="width:12px;height:12px;vertical-align:-1px"></i>
+          </a>
           <form method="POST" style="display:inline" onsubmit="return confirm('Désactiver cet enseignant ?')">
             <?= csrf_field() ?>
             <input type="hidden" name="action" value="supprimer_enseignant">

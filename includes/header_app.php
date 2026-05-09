@@ -71,6 +71,12 @@ if (is_admin()) {
       <div class="nav-icon"><i data-lucide="layout-dashboard"></i></div>
       <span class="nav-label">Tableau de bord</span>
     </a>
+    <?php if (($user['plan'] ?? 'GRATUIT') !== 'GRATUIT'): ?>
+    <a href="/reussiteplus/agenda.php" class="nav-item <?= $pageActive === 'agenda' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="calendar-check"></i></div>
+      <span class="nav-label">Mon Agenda</span>
+    </a>
+    <?php endif; ?>
     <a href="/reussiteplus/archives.php" class="nav-item <?= $pageActive === 'archives' ? 'active' : '' ?>">
       <div class="nav-icon"><i data-lucide="folder-open"></i></div>
       <span class="nav-label">Archives</span>
