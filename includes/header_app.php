@@ -183,6 +183,10 @@ if (is_admin()) {
       <div class="nav-icon"><i data-lucide="sparkles"></i></div>
       <span class="nav-label">IA Pédagogique</span>
     </a>
+    <a href="/reussiteplus/ecole_ia_enseignants.php" class="nav-item <?= $pageActive === 'ecole_ia_enseignants' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="users"></i></div>
+      <span class="nav-label">Corps enseignant IA</span>
+    </a>
     <?php endif; ?>
     <?php endif; /* end !$isAdminPage */ ?>
 

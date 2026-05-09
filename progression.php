@@ -1047,4 +1047,74 @@ document.getElementById('ia-messages')?.scrollTo(0, 999999);
 </script>
 <?php endif; ?>
 
+<?php if ($hasIA): ?>
+<!-- ── Évaluer un enseignant IA ── -->
+<div class="card" style="margin-top:24px">
+  <div class="card-header">
+    <div class="card-title">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px;margin-right:6px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Évaluer un professeur IA
+    </div>
+    <span style="font-size:11.5px;color:var(--gris-400)">Ton avis améliore la qualité pédagogique</span>
+  </div>
+  <form method="POST" action="/reussiteplus/api/ia_rating_submit.php" style="display:grid;grid-template-columns:1fr 1fr;gap:14px;padding-top:4px">
+    <?= csrf_field() ?>
+    <div>
+      <label class="form-label">Professeur</label>
+      <select name="teacher_code" class="form-control" required>
+        <option value="">Choisir un professeur…</option>
+        <?php
+        require_once __DIR__ . '/includes/ia_teachers.php';
+        foreach (IA_TEACHERS as $key => $t): ?>
+        <option value="<?= e($t['id']) ?>"><?= $t['avatar_emoji'] ?> <?= e($t['titre']) ?></option>
+        <?php endforeach; ?>
+      </select>
+    </div>
+    <div>
+      <label class="form-label">Note globale</label>
+      <select name="note" class="form-control" required>
+        <option value="">Choisir…</option>
+        <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+        <option value="4">⭐⭐⭐⭐ Bien</option>
+        <option value="3">⭐⭐⭐ Correct</option>
+        <option value="2">⭐⭐ Moyen</option>
+        <option value="1">⭐ Insuffisant</option>
+      </select>
+    </div>
+    <div>
+      <label class="form-label">Clarté des explications</label>
+      <select name="clarte" class="form-control">
+        <option value="">Optionnel</option>
+        <option value="5">⭐⭐⭐⭐⭐ Très claire</option>
+        <option value="4">⭐⭐⭐⭐</option>
+        <option value="3">⭐⭐⭐</option>
+        <option value="2">⭐⭐</option>
+        <option value="1">⭐ Confuse</option>
+      </select>
+    </div>
+    <div>
+      <label class="form-label">Aide apportée</label>
+      <select name="aide" class="form-control">
+        <option value="">Optionnel</option>
+        <option value="5">⭐⭐⭐⭐⭐ Très utile</option>
+        <option value="4">⭐⭐⭐⭐</option>
+        <option value="3">⭐⭐⭐</option>
+        <option value="2">⭐⭐</option>
+        <option value="1">⭐ Peu utile</option>
+      </select>
+    </div>
+    <div style="grid-column:1/-1">
+      <label class="form-label">Commentaire (optionnel)</label>
+      <textarea name="commentaire" class="form-control" rows="2" placeholder="Qu'est-ce que tu as aimé ou moins aimé ?"></textarea>
+    </div>
+    <div style="grid-column:1/-1">
+      <button type="submit" class="btn btn-primary">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-1px;margin-right:5px"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Envoyer mon évaluation
+      </button>
+    </div>
+  </form>
+</div>
+<?php endif; ?>
+
 <?php include __DIR__ . '/includes/footer_app.php'; ?>
