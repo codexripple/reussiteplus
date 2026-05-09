@@ -375,7 +375,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['start_exam'])) {
     $matiereId = $_POST['matiere_id'] ?? null;
     $nbQ       = max(5, min(50, (int)($_POST['nb_questions'] ?? 10)));
     $examType  = $_POST['exam_type'] ?? 'ENTRAINEMENT';
-    $tempsLimite = (int)($_POST['temps_limite'] ?? 3600);
+    // 1 minute par question (calculé automatiquement)
+    $tempsLimite = $nbQ * 60;
 
     $matiere = $matiereId ? dbRow("SELECT * FROM matieres WHERE id=?", [$matiereId]) : null;
 
@@ -452,23 +453,27 @@ include __DIR__ . '/includes/header_app.php';
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
         <div class="form-group">
           <label class="form-label"><i data-lucide="hash" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"></i> Nombre de questions</label>
-          <select class="form-control" name="nb_questions">
-            <option value="5">5 questions (rapide)</option>
-            <option value="10" selected>10 questions</option>
-            <option value="20">20 questions</option>
-            <option value="30">30 questions</option>
-            <option value="50">50 questions (complet)</option>
+          <select class="form-control" name="nb_questions" id="nb_questions_select" onchange="majTemps(this.value)">
+            <option value="5">5 questions — 5 minutes</option>
+            <option value="10" selected>10 questions — 10 minutes</option>
+            <option value="15">15 questions — 15 minutes</option>
+            <option value="20">20 questions — 20 minutes</option>
+            <option value="30">30 questions — 30 minutes</option>
+            <option value="50">50 questions — 50 minutes</option>
           </select>
         </div>
+        <!-- Temps calculé automatiquement : 1 min / question -->
+        <input type="hidden" name="temps_limite" id="temps_limite_input" value="600">
         <div class="form-group">
-          <label class="form-label"><i data-lucide="timer" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"></i> Limite de temps</label>
-          <select class="form-control" name="temps_limite">
-            <option value="900">15 minutes</option>
-            <option value="1800">30 minutes</option>
-            <option value="3600" selected>1 heure</option>
-            <option value="7200">2 heures</option>
-            <option value="0">Sans limite</option>
-          </select>
+          <label class="form-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Durée calculée automatiquement
+          </label>
+          <div style="background:var(--primary-subtle);border:1px solid rgba(0,122,94,.2);border-radius:9px;padding:11px 14px;display:flex;align-items:center;gap:10px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span id="temps_display" style="font-size:14px;font-weight:700;color:var(--primary-dark)">10 minutes</span>
+            <span style="font-size:12px;color:var(--gris-500)">· 1 minute par question</span>
+          </div>
         </div>
       </div>
 
@@ -484,7 +489,8 @@ include __DIR__ . '/includes/header_app.php';
       </div>
 
       <button type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top:8px">
-        <i data-lucide="play" style="width:16px;height:16px;vertical-align:-2px;margin-right:6px"></i> Commencer l'examen
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;margin-right:6px"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Commencer — <span id="btn_resume">10 questions · 10 min</span>
       </button>
     </form>
   </div>
@@ -507,4 +513,20 @@ include __DIR__ . '/includes/header_app.php';
 .matiere-card.selected::after { content:'✓'; position:absolute; top:6px; right:8px; color:var(--primary); font-weight:700; font-size:14px; }
 </style>
 
+<script>
+function majTemps(nb) {
+  nb = parseInt(nb) || 10;
+  const sec = nb * 60;
+  const label = nb === 1 ? '1 minute' : nb + ' minutes';
+  document.getElementById('temps_limite_input').value = sec;
+  document.getElementById('temps_display').textContent  = label;
+  const resume = document.getElementById('btn_resume');
+  if (resume) resume.textContent = nb + ' question' + (nb > 1 ? 's' : '') + ' · ' + label;
+}
+// Initialisation au chargement
+document.addEventListener('DOMContentLoaded', () => {
+  const sel = document.getElementById('nb_questions_select');
+  if (sel) majTemps(sel.value);
+});
+</script>
 <?php include __DIR__ . '/includes/footer_app.php'; ?>
