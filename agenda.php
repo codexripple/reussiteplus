@@ -269,7 +269,7 @@ function genererAgenda(string $userId, string $today, array $user): void {
   </div>
 </div>
 
-<?php if (isset($_GET['regenerer'])): <?php
+<?php if (isset($_GET['regenerer'])):
     dbQuery("DELETE FROM agenda_quotidien WHERE user_id=? AND date_jour=?", [$userId, $today]);
     redirect('/reussiteplus/agenda.php', 'success', 'Agenda régénéré.');
 endif; ?>
