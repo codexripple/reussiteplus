@@ -16,7 +16,7 @@ $filtreClasse = $_GET['classe'] ?? ($classes[0]['id'] ?? '');
 $classeActive = null;
 foreach ($classes as $cl) { if ($cl['id'] === $filtreClasse) { $classeActive = $cl; break; } }
 
-$stats = [
+$ecoleStats = [
     'nb_classes'     => count($classes),
     'nb_enseignants' => (int)dbScalar("SELECT COUNT(*) FROM enseignants_ecole WHERE ecole_admin_id=? AND statut='ACTIF'", [$user['id']]),
     'nb_eleves'      => (int)dbScalar("SELECT COUNT(DISTINCT cm.eleve_id) FROM classe_membres cm JOIN classes_ecole c ON c.id=cm.classe_id WHERE c.admin_id=?", [$user['id']]),
@@ -70,7 +70,7 @@ if (isset($_GET['generate'])) {
         $iaError = "Clé API Groq non configurée. Vérifiez le fichier .env.";
     } else {
         // Construire le contexte
-        $ctx = "École avec {$stats['nb_classes']} classes, {$stats['nb_enseignants']} enseignants, {$stats['nb_eleves']} élèves.";
+        $ctx = "École avec {$ecoleStats['nb_classes']} classes, {$ecoleStats['nb_enseignants']} enseignants, {$ecoleStats['nb_eleves']} élèves.";
         if ($classeActive) {
             $top3    = array_slice($classeStats, 0, 3);
             $bottom3 = array_slice($classeStats, -3);
@@ -78,7 +78,7 @@ if (isset($_GET['generate'])) {
             $ctx .= "\n\nClasse analysée : {$classeActive['nom']}.";
             $ctx .= "\nNombre d'élèves : ".count($classeStats).".";
             $ctx .= "\nScore moyen de classe : {$scoreMoyen}%.";
-            $ctx .= "\nAbsences injustifiées ce mois : {$stats['nb_absences']}.";
+            $ctx .= "\nAbsences injustifiées ce mois : {$ecoleStats['nb_absences']}.";
             $top3names = implode(', ', array_map(fn($e)=>($e['prenom']??'').' '.($e['nom']??'').' ('.$e['score_moyen'].'%)', $top3));
             $ctx .= "\nTop 3 élèves : {$top3names}.";
             $bottom3names = implode(', ', array_map(fn($e)=>($e['prenom']??'').' '.($e['nom']??'').' ('.$e['score_moyen'].'%)', $bottom3));
@@ -171,9 +171,9 @@ include __DIR__ . '/includes/header_app.php';
         <div style="font-size:13px;color:rgba(255,255,255,.5)">Analyse intelligente de votre école — Propulsée par Groq Llama 3.1</div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
-        <div class="ia-stat-card"><div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#fff"><?= $stats['nb_eleves'] ?></div><div style="font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase">Élèves</div></div>
-        <div class="ia-stat-card"><div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#fff"><?= $stats['nb_classes'] ?></div><div style="font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase">Classes</div></div>
-        <div class="ia-stat-card"><div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:<?= $stats['nb_absences']>5?'#FCA5A5':'#86EFAC' ?>"><?= $stats['nb_absences'] ?></div><div style="font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase">Absences injust.</div></div>
+        <div class="ia-stat-card"><div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#fff"><?= $ecoleStats['nb_eleves'] ?></div><div style="font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase">Élèves</div></div>
+        <div class="ia-stat-card"><div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:#fff"><?= $ecoleStats['nb_classes'] ?></div><div style="font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase">Classes</div></div>
+        <div class="ia-stat-card"><div style="font-family:var(--font-display);font-size:20px;font-weight:900;color:<?= $ecoleStats['nb_absences']>5?'#FCA5A5':'#86EFAC' ?>"><?= $ecoleStats['nb_absences'] ?></div><div style="font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase">Absences injust.</div></div>
       </div>
     </div>
 
