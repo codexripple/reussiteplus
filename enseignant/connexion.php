@@ -17,6 +17,20 @@ $errors    = [];
 $html_error= '';
 $email_val = '';
 
+// Compteur de tentatives non-enseignant en session
+if (!isset($_SESSION['ens_portail_tentatives'])) {
+    $_SESSION['ens_portail_tentatives'] = 0;
+}
+$MAX_TENTATIVES = 3;
+
+// Si déjà trop de tentatives → rediriger immédiatement
+if ($_SESSION['ens_portail_tentatives'] >= $MAX_TENTATIVES) {
+    $_SESSION['ens_portail_tentatives'] = 0;
+    session_unset(); session_destroy(); session_start();
+    header('Location: /reussiteplus/index.php?alerte=portail_enseignant');
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
     if (!rate_limit_check('ens_login', $ip, 5, 600)) {
@@ -31,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result['ok']) {
             $role = $result['user']['role'] ?? '';
             if ($role === 'ENSEIGNANT') {
-                // Vérifier que le compte enseignant est validé
+                $_SESSION['ens_portail_tentatives'] = 0; // reset
                 $ens = dbRow("SELECT statut_compte FROM enseignants_ecole WHERE user_id=?", [$result['user']['id']]);
                 if ($ens && ($ens['statut_compte'] ?? 'EN_ATTENTE') !== 'VALIDE') {
                     session_unset(); session_destroy(); session_start();
@@ -41,11 +55,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     redirect('/reussiteplus/enseignant/dashboard.php');
                 }
             } elseif (in_array($role, ['SUPER_ADMIN','ADMIN','MODERATEUR'])) {
+                $_SESSION['ens_portail_tentatives'] = 0;
                 redirect('/reussiteplus/admin/index.php');
             } else {
-                // Élève ou autre rôle — accès interdit
+                // Élève — incrémenter le compteur
                 session_unset(); session_destroy(); session_start();
-                $html_error = 'Accès refusé. Ce portail est <strong>exclusivement réservé aux enseignants</strong>. Si vous êtes un élève, connectez-vous sur le <a href="/reussiteplus/connexion.php" style="color:#1E5FAD;font-weight:700;text-decoration:underline">portail élève</a>.';
+                $_SESSION['ens_portail_tentatives'] = ($_SESSION['ens_portail_tentatives'] ?? 0) + 1;
+                $restantes = $MAX_TENTATIVES - $_SESSION['ens_portail_tentatives'];
+
+                if ($_SESSION['ens_portail_tentatives'] >= $MAX_TENTATIVES) {
+                    // Dernière tentative — rediriger à la prochaine requête
+                    $html_error = 'Accès définitivement refusé. Vous serez redirigé automatiquement.';
+                    header('Refresh: 2; url=/reussiteplus/index.php?alerte=portail_enseignant');
+                } else {
+                    $html_error = 'Accès refusé. Ce portail est <strong>exclusivement réservé aux enseignants</strong>. '
+                        . '<br>Tentatives restantes : <strong style="color:#C9342A">' . $restantes . '</strong>. '
+                        . 'Au-delà, votre compte sera signalé et pourra être <strong>supprimé</strong>. '
+                        . '<br><a href="/reussiteplus/connexion.php" style="color:#1E5FAD;font-weight:700">Aller au portail élève</a>';
+                }
                 $errors[] = '';
             }
         } else {
