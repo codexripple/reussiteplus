@@ -48,11 +48,11 @@ $nbSessions = (int)(dbScalar("SELECT COUNT(*) FROM exam_sessions es JOIN classe_
 $scoreMoyGlobal = (float)(dbScalar("SELECT ROUND(AVG(u.score_moyen),1) FROM classe_membres cm JOIN classes_ecole c ON c.id=cm.classe_id JOIN utilisateurs u ON u.id=cm.eleve_id WHERE c.admin_id=? AND cm.statut='ACTIF'", [$user['id']]) ?? 0);
 
 // Masse salariale totale
-$totalSalaire = 0;
+
 foreach (IA_TEACHERS as $teacher) {
     $stats = $matStatsMap[$teacher['matiere']] ?? [];
-    $sal = calculer_salaire_virtuel($teacher, $stats);
-    $totalSalaire += $sal['total'];
+
+
 }
 
 include __DIR__ . '/includes/header_app.php';
@@ -136,8 +136,8 @@ include __DIR__ . '/includes/header_app.php';
         <div style="font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase">Cours dispensés</div>
       </div>
       <div style="text-align:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 16px">
-        <div style="font-size:20px;font-weight:900;color:#A78BFA"><?= number_format($totalSalaire/1000) ?>k</div>
-        <div style="font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase">Masse salariale CDF</div>
+        <div style="font-size:20px;font-weight:900;color:#A78BFA"><?= $nbSessions ?></div>
+        <div style="font-size:9px;color:rgba(255,255,255,.4);text-transform:uppercase">Sessions IA</div>
       </div>
     </div>
   </div>
@@ -158,8 +158,8 @@ include __DIR__ . '/includes/header_app.php';
     <div style="font-size:10.5px;color:var(--gris-500);text-transform:uppercase;letter-spacing:.4px;margin-top:3px">Performance école</div>
   </div>
   <div class="card" style="text-align:center;padding:16px">
-    <div style="font-size:26px;font-weight:900;color:#7C3AED"><?= number_format($totalSalaire) ?></div>
-    <div style="font-size:10.5px;color:var(--gris-500);text-transform:uppercase;letter-spacing:.4px;margin-top:3px">Masse salariale (CDF)</div>
+    <div style="font-size:26px;font-weight:900;color:#7C3AED"><?= $nbSessions ?></div>
+    <div style="font-size:10.5px;color:var(--gris-500);text-transform:uppercase;letter-spacing:.4px;margin-top:3px">Sessions IA</div>
   </div>
 </div>
 
@@ -175,7 +175,6 @@ include __DIR__ . '/includes/header_app.php';
 <div class="teacher-grid">
 <?php foreach (IA_TEACHERS as $key => $teacher):
     $stats    = $matStatsMap[$teacher['matiere']] ?? ['nb_eleves'=>0,'nb_sessions'=>0,'score_moyen'=>0];
-    $sal      = calculer_salaire_virtuel($teacher, $stats);
     $rating   = $ratingsMap[$teacher['id']] ?? ['note_moyenne'=>null,'nb_avis'=>0,'clarte_moyenne'=>null];
     $scorePct = min(100, (float)$stats['score_moyen']);
 ?>
@@ -239,25 +238,16 @@ include __DIR__ . '/includes/header_app.php';
   </div>
   <?php endif; ?>
 
-  <!-- Footer : salaire + action -->
+  <!-- Footer : action seulement -->
   <div class="teacher-footer">
-    <div class="salaire-badge">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-      <?= number_format($sal['total']) ?> CDF
-    </div>
-    <a href="/reussiteplus/ecole_ia.php?prof=<?= e($key) ?>" class="btn btn-primary btn-sm">
+    <a href="/reussiteplus/ecole_ia.php?prof=<?= e($key) ?>" class="btn btn-primary btn-sm" style="width:100%;justify-content:center">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-1px;margin-right:4px"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      Consulter
+      Consulter ce professeur
     </a>
   </div>
 </div>
 <?php endforeach; ?>
 </div>
 
-<!-- Info salaires -->
-<div style="background:var(--gris-50);border:1px solid var(--gris-200);border-radius:12px;padding:16px 20px;font-size:12.5px;color:var(--gris-600);display:flex;align-items:flex-start;gap:10px">
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--gris-400)" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-  <span>Les salaires sont <strong>virtuels et simulés</strong> — ils reflètent l'activité pédagogique de chaque enseignant IA (nombre d'élèves suivis, sessions, performance). Aucun vrai versement n'est effectué. Ce système crée une logique institutionnelle réaliste.</span>
-</div>
 
 <?php include __DIR__ . '/includes/footer_app.php'; ?>

@@ -24,8 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
         if ($result['ok']) {
             $role = $result['user']['role'] ?? '';
-            if (in_array($role, ['SUPER_ADMIN', 'ADMIN', 'MODERATEUR'])) {
-                // Déconnecter l'admin et lui indiquer le bon portail
+            if ($role === 'ENSEIGNANT') {
+                // Rediriger vers portail enseignant
+                header('Location: /reussiteplus/enseignant/dashboard.php');
+                exit;
+            } elseif (in_array($role, ['SUPER_ADMIN', 'ADMIN', 'MODERATEUR'])) {
                 session_unset();
                 session_destroy();
                 session_start();

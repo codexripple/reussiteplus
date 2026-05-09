@@ -3,6 +3,7 @@ require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/helpers.php';
+require_once __DIR__ . '/../includes/ia_teachers.php';
 
 $pageTitle  = 'Espace Enseignant';
 $pageActive = 'enseignant';
@@ -120,6 +121,28 @@ if ($classeIds) {
 $matieresJson = is_string($enseignant['matieres_json'])
     ? json_decode($enseignant['matieres_json'], true) : ($enseignant['matieres_json'] ?? []);
 
+// Calcul salaire virtuel pour cet enseignant (visible uniquement dans son espace)
+$teacherPersona = null;
+foreach (IA_TEACHERS as $key => $t) {
+    if (!empty($matieresNoms) && in_array($t['matiere'], $matieresNoms)) {
+        $teacherPersona = $t; break;
+    }
+}
+$matiereStatEns = [];
+if ($teacherPersona) {
+    $matStatRow = dbRow(
+        "SELECT COUNT(DISTINCT es.user_id) as nb_eleves, COUNT(DISTINCT es.id) as nb_sessions,
+                ROUND(AVG(es.pourcentage),1) as score_moyen
+         FROM exam_sessions es
+         JOIN matieres m ON m.id=es.matiere_id
+         JOIN classe_membres cm ON cm.eleve_id=es.user_id
+         JOIN classes_ecole c ON c.id=cm.classe_id
+         WHERE c.admin_id=? AND m.nom=? AND es.statut='TERMINE'",
+        [$adminId, $teacherPersona['matiere']]
+    ) ?? [];
+    $salaire = calculer_salaire_virtuel($teacherPersona, $matStatRow);
+}
+
 $matieresNoms = [];
 if (!empty($matieresJson)) {
     $in = implode(',', array_fill(0, count($matieresJson), '?'));
@@ -219,6 +242,31 @@ include __DIR__ . '/../includes/header_app.php';
     <div class="ens-kpi-lbl">Élèves en difficulté</div>
   </div>
 </div>
+
+<?php if (!empty($salaire)): ?>
+<!-- Salaire virtuel — visible uniquement dans l'espace enseignant -->
+<div style="background:linear-gradient(135deg,#0d1120,#111827);border:1px solid rgba(201,151,42,.2);border-radius:14px;padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+  <div>
+    <div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px">Rémunération mensuelle virtuelle</div>
+    <div style="font-size:22px;font-weight:900;color:#F5D78E"><?= number_format($salaire['total']) ?> <span style="font-size:13px;color:rgba(255,255,255,.35)">CDF</span></div>
+    <div style="font-size:11.5px;color:rgba(255,255,255,.35);margin-top:3px">Performance : <strong style="color:<?= $salaire['color_perf'] ?>"><?= $salaire['note_perf'] ?></strong></div>
+  </div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap">
+    <?php foreach ([
+      ['Base',          number_format($salaire['base']),           'rgba(255,255,255,.4)'],
+      ['Élèves',        '+'.number_format($salaire['bonus_eleves']), '#6EE7B7'],
+      ['Activité',      '+'.number_format($salaire['bonus_activite']),'#93C5FD'],
+      ['Performance',   '+'.number_format($salaire['bonus_perf']),   '#FCD34D'],
+    ] as [$lbl, $val, $col]): ?>
+    <div style="text-align:center;background:rgba(255,255,255,.05);border-radius:9px;padding:8px 12px">
+      <div style="font-size:12.5px;font-weight:800;color:<?= $col ?>"><?= $val ?></div>
+      <div style="font-size:9.5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-top:2px"><?= $lbl ?></div>
+    </div>
+    <?php endforeach; ?>
+  </div>
+  <div style="font-size:10px;color:rgba(255,255,255,.2);font-style:italic;width:100%">Salaire simulé à titre indicatif — calculé sur l'activité pédagogique réelle.</div>
+</div>
+<?php endif; ?>
 
 <div class="ens-grid">
 
