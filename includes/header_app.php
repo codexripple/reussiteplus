@@ -226,6 +226,10 @@ if (is_admin()) {
     </a>
 
     <div class="nav-section-title" style="margin-top:8px">Gestion</div>
+    <a href="/reussiteplus/admin/enseignants.php" class="nav-item adm-nav <?= $pageActive === 'admin_enseignants' ? 'active adm-active' : '' ?>">
+      <div class="nav-icon adm-icon"><i data-lucide="user-check"></i></div>
+      <span class="nav-label">Enseignants</span>
+    </a>
     <a href="/reussiteplus/admin/users.php" class="nav-item adm-nav <?= $pageActive === 'admin_users' ? 'active adm-active' : '' ?>">
       <div class="nav-icon adm-icon"><i data-lucide="users"></i></div>
       <span class="nav-label">Utilisateurs</span>
