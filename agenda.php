@@ -14,6 +14,7 @@ if ($user['plan'] === 'GRATUIT') {
 
 $today     = date('Y-m-d');
 $userId    = $user['id'];
+$prenom    = e($user['prenom'] ?? '');
 $scoreM    = (float)($user['score_moyen'] ?? 0);
 
 // ── Générer l'agenda du jour si absent ────────────────────────
