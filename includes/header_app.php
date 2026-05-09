@@ -85,10 +85,23 @@ if (is_admin()) {
       <div class="nav-icon"><i data-lucide="pencil-line"></i></div>
       <span class="nav-label">Passer un examen</span>
     </a>
+    <?php if (($user['plan'] ?? 'GRATUIT') !== 'GRATUIT'): ?>
     <a href="/reussiteplus/questions.php" class="nav-item <?= $pageActive === 'questions' ? 'active' : '' ?>">
       <div class="nav-icon"><i data-lucide="brain"></i></div>
       <span class="nav-label">Banque de questions</span>
     </a>
+    <?php else: ?>
+    <a href="/reussiteplus/tarifs.php" class="nav-item" style="opacity:.55" title="Disponible à partir du plan Basique">
+      <div class="nav-icon"><i data-lucide="lock"></i></div>
+      <span class="nav-label">Banque de questions</span>
+    </a>
+    <?php endif; ?>
+    <?php if (in_array($user['plan'] ?? 'GRATUIT', ['BASIQUE','PREMIUM','ECOLE'])): ?>
+    <a href="/reussiteplus/ecole_examens.php" class="nav-item <?= $pageActive === 'ecole_examens' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="library"></i></div>
+      <span class="nav-label">Bibliothèque examens</span>
+    </a>
+    <?php endif; ?>
 
     <div class="nav-section-title" style="margin-top:12px">Progression</div>
     <a href="/reussiteplus/progression.php" class="nav-item <?= $pageActive === 'progression' ? 'active' : '' ?>">

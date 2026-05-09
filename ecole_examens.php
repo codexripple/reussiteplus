@@ -8,9 +8,14 @@ $pageTitle  = 'Bibliothèque d\'examens';
 $pageActive = 'ecole_examens';
 $user       = require_login();
 
-if ($user['plan'] !== 'ECOLE') {
-    redirect('/reussiteplus/tarifs.php', 'warning', 'La bibliothèque d\'examens est réservée au plan École.');
+$plan = $user['plan'] ?? 'GRATUIT';
+if (!in_array($plan, ['BASIQUE','PREMIUM','ECOLE'])) {
+    redirect('/reussiteplus/tarifs.php', 'warning', 'La bibliothèque d\'examens est accessible à partir du plan Basique.');
 }
+// Capacités par plan dans la bibliothèque
+$examCanSeeAll  = in_array($plan, ['PREMIUM','ECOLE']);  // Basique voit seulement les matières standard
+$examCanUseIA   = (bool)(PLANS[$plan]['ia'] ?? false);
+$examIsEcole    = ($plan === 'ECOLE');
 
 // ── Filtres ───────────────────────────────────────────────────
 $filtreCateg  = $_GET['cat']   ?? '';
@@ -20,14 +25,18 @@ $page         = max(1, (int)($_GET['p'] ?? 1));
 $limit        = 20;
 
 // ── Matières avec stats ───────────────────────────────────────
+// Basique : seulement matières de base (8 premières)
+$matiereWhere = $examCanSeeAll ? 'WHERE m.actif=1' : "WHERE m.actif=1 AND m.code IN ('maths','francais','sciences','histgeo','chimie','physique','biologie','anglais')";
+
 $matieres = dbAll(
     "SELECT m.id, m.code, m.nom, m.nom_court, m.couleur, m.ordre,
             COUNT(DISTINCT qb.id) as nb_questions,
             COALESCE(ROUND(AVG(es.pourcentage),1),0) as score_moyen_ecole
      FROM matieres m
      LEFT JOIN question_bank qb ON qb.matiere_id=m.id AND qb.status='PUBLIE' AND qb.type_question='QCM'
+       " . (!$examCanSeeAll ? "AND qb.premium_only=0" : "") . "
      LEFT JOIN exam_sessions es ON es.matiere_id=m.id AND es.statut='TERMINE'
-     WHERE m.actif=1
+     $matiereWhere
      GROUP BY m.id ORDER BY m.ordre ASC, m.nom ASC"
 ) ?? [];
 
@@ -170,7 +179,9 @@ include __DIR__ . '/includes/header_app.php';
 <div class="exam-lib-hero">
   <div style="position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
     <div>
-      <div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px">École Premium</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px">
+        <?= ['BASIQUE'=>'Plan Basique','PREMIUM'=>'Plan Premium','ECOLE'=>'École Premium'][$plan] ?? '' ?>
+      </div>
       <div style="font-size:22px;font-weight:900;color:#fff;margin-bottom:4px">Bibliothèque d'examens</div>
       <div style="font-size:13px;color:rgba(255,255,255,.5)"><?= $totalQuestions ?> questions · <?= $totalMatieres ?> matières · <?= $totalSessions ?> examens passés</div>
     </div>
@@ -184,6 +195,22 @@ include __DIR__ . '/includes/header_app.php';
     </div>
   </div>
 </div>
+
+<!-- Bannière accès plan -->
+<?php if ($plan === 'BASIQUE'): ?>
+<div style="background:#EEF4FD;border:1px solid rgba(30,95,173,.2);border-radius:12px;padding:13px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+  <div style="display:flex;align-items:center;gap:9px">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E5FAD" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span style="font-size:13px;color:#1E3A5F"><strong>Plan Basique</strong> — Accès aux 8 matières principales · Questions standard uniquement · Passez à Premium pour toutes les matières et questions avancées.</span>
+  </div>
+  <a href="/reussiteplus/tarifs.php" style="font-size:12px;font-weight:700;color:#C9972A;background:#FEF3C7;border:1px solid rgba(201,151,42,.25);border-radius:8px;padding:6px 13px;text-decoration:none;white-space:nowrap">Passer à Premium</a>
+</div>
+<?php elseif ($plan === 'PREMIUM'): ?>
+<div style="background:#F5F3FF;border:1px solid rgba(124,58,237,.15);border-radius:12px;padding:13px 18px;margin-bottom:18px;display:flex;align-items:center;gap:9px">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="#7C3AED" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+  <span style="font-size:13px;color:#4B1D9B"><strong>Plan Premium</strong> — Toutes les matières · Toutes les questions · Analyse IA incluse.</span>
+</div>
+<?php endif; ?>
 
 <!-- Générateur IA (admin) -->
 <?php if (is_admin()): ?>

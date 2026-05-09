@@ -8,14 +8,37 @@ $pageTitle  = 'Banque de questions';
 $pageActive = 'questions';
 $user = require_login();
 
+// ── Logique d'accès par plan ──────────────────────────────────
+$plan = $user['plan'] ?? 'GRATUIT';
+
+// Plan GRATUIT → redirigé
+if ($plan === 'GRATUIT') {
+    redirect('/reussiteplus/tarifs.php', 'warning', 'La banque de questions est accessible à partir du plan Basique.');
+}
+
+// Capacités par plan
+$canSeeAdvanced = in_array($plan, ['PREMIUM', 'ECOLE']);   // Basique : questions standard seulement
+$canUseIA       = (bool)(PLANS[$plan]['ia'] ?? false);      // IA : Premium et École
+$limitQuestions = match($plan) {
+    'BASIQUE'  => 6,    // 6 questions par page
+    'PREMIUM'  => 15,   // 15 questions par page
+    'ECOLE'    => 20,   // 20 questions par page
+    default    => 6,
+};
+
 $search   = trim($_GET['q'] ?? '');
 $matiereF = trim($_GET['matiere'] ?? '');
 $diffF    = trim($_GET['diff'] ?? '');
 $page     = max(1, (int)($_GET['page'] ?? 1));
-$limit    = 12;
+$limit    = $limitQuestions;
 
 $conditions = ["qb.status = 'PUBLIE'"];
 $params     = [];
+
+// Basique : uniquement les questions standard (premium_only = 0)
+if (!$canSeeAdvanced) {
+    $conditions[] = "qb.premium_only = 0";
+}
 
 if ($search !== '') {
     $conditions[] = "qb.enonce LIKE ?";
@@ -78,6 +101,35 @@ include __DIR__ . '/includes/header_app.php';
 .q-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 14px;gap:8px;flex-wrap:wrap}
 .pagination{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;padding:28px 0 8px}
 </style>
+
+<!-- Bannière accès plan -->
+<?php
+$planColor = ['BASIQUE'=>'#1E5FAD','PREMIUM'=>'#C9972A','ECOLE'=>'#007A5E'][$plan] ?? '#6B7280';
+$planBg    = ['BASIQUE'=>'#EEF4FD','PREMIUM'=>'#FEF3C7','ECOLE'=>'#E8F5F1'][$plan] ?? '#F3F4F6';
+$planDesc  = match($plan) {
+    'BASIQUE'  => 'Questions standard uniquement · Explications incluses · Passez à Premium pour les questions avancées et l\'analyse IA.',
+    'PREMIUM'  => 'Toutes les questions · Explications détaillées · Analyse IA disponible.',
+    'ECOLE'    => 'Accès complet · Toutes questions · IA pédagogique · Rapports avancés.',
+    default    => '',
+};
+?>
+<div style="background:<?= $planBg ?>;border:1px solid <?= $planColor ?>22;border-radius:12px;padding:12px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div style="width:30px;height:30px;border-radius:8px;background:<?= $planColor ?>;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+    </div>
+    <div>
+      <div style="font-size:12px;font-weight:800;color:<?= $planColor ?>;text-transform:uppercase;letter-spacing:.5px">Plan <?= $plan ?></div>
+      <div style="font-size:12px;color:var(--gris-600)"><?= $planDesc ?></div>
+    </div>
+  </div>
+  <?php if ($plan === 'BASIQUE'): ?>
+  <a href="/reussiteplus/tarifs.php" style="font-size:12px;font-weight:700;color:#C9972A;background:#FEF3C7;border:1px solid rgba(201,151,42,.25);border-radius:8px;padding:6px 13px;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:5px">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="#C9972A" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    Passer à Premium
+  </a>
+  <?php endif; ?>
+</div>
 
 <form method="GET" class="filter-bar">
   <div style="flex:2;min-width:180px">
@@ -172,12 +224,18 @@ include __DIR__ . '/includes/header_app.php';
     <?php endforeach; ?>
   </div>
   <?php endif; ?>
-  <?php if ($user['plan'] === 'GRATUIT'): ?>
-  <div class="q-expl-lock" id="expl-<?= $qid ?>">
-    <i data-lucide="lock" style="width:13px;height:13px;vertical-align:-2px;stroke:#D97706"></i>
-    <a href="/reussiteplus/tarifs.php" style="color:#92640A;font-weight:600">Passez à Basique ou Premium</a> pour débloquer les explications détaillées.
+  <?php if ($canUseIA): ?>
+  <div style="margin:0 16px 8px;display:flex;gap:6px">
+    <button type="button" onclick="analyserIA('<?= $qid ?>','<?= e(addslashes($q['enonce'])) ?>')"
+      style="background:linear-gradient(135deg,#7C3AED,#4F46E5);color:#fff;border:none;border-radius:7px;padding:5px 12px;font-size:11.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-family:inherit;transition:.15s"
+      onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      Explication IA
+    </button>
   </div>
-  <?php elseif ($explication): ?>
+  <div id="ia-expl-<?= $qid ?>" style="margin:0 16px 10px;padding:10px 14px;background:#F5F3FF;border-left:3px solid #7C3AED;border-radius:0 8px 8px 0;font-size:13px;line-height:1.6;color:#4B1D9B;display:none"></div>
+  <?php endif; ?>
+  <?php if ($explication): ?>
   <div class="q-expl" id="expl-<?= $qid ?>">
     <i data-lucide="lightbulb" style="width:14px;height:14px;vertical-align:-2px;stroke:var(--primary)"></i>
     <strong>Explication :</strong> <?= e($explication) ?>
@@ -259,6 +317,23 @@ function resetQuestion(qid) {
   if (expl) expl.style.display = 'none';
   const rb = document.getElementById('reset-' + qid);
   if (rb) rb.style.display = 'none';
+}
+async function analyserIA(qid, enonce) {
+  const box = document.getElementById('ia-expl-' + qid);
+  if (!box) return;
+  if (box.style.display !== 'none') { box.style.display = 'none'; return; }
+  box.style.display = 'block';
+  box.textContent = 'Analyse en cours…';
+  try {
+    const fd = new FormData();
+    fd.append('message', 'Explique cette question EXETAT de façon pédagogique et donne des astuces pour ne pas se tromper : ' + enonce);
+    fd.append('history', '[]');
+    fd.append('tone', 'motivant');
+    fd.append('csrf_token', document.querySelector('[name=csrf_token]')?.value || '');
+    const r = await fetch('/reussiteplus/api/ia_chat.php', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({message:'Explique cette question EXETAT : '+enonce,history:[],tone:'motivant'})});
+    const d = await r.json();
+    box.textContent = d.reply || 'Analyse indisponible.';
+  } catch(e) { box.textContent = 'Erreur de connexion.'; }
 }
 async function toggleSignet(btn, questionId) {
   const fd = new FormData();
