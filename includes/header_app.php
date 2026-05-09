@@ -193,6 +193,10 @@ if (is_admin()) {
       <div class="nav-icon"><i data-lucide="users"></i></div>
       <span class="nav-label">Corps enseignant IA</span>
     </a>
+    <a href="/reussiteplus/ecole_examens.php" class="nav-item <?= $pageActive === 'ecole_examens' ? 'active' : '' ?>">
+      <div class="nav-icon"><i data-lucide="library"></i></div>
+      <span class="nav-label">Bibliothèque examens</span>
+    </a>
     <?php endif; ?>
     <?php endif; /* end !$isAdminPage */ ?>
 
