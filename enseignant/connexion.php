@@ -43,8 +43,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } elseif (in_array($role, ['SUPER_ADMIN','ADMIN','MODERATEUR'])) {
                 redirect('/reussiteplus/admin/index.php');
             } else {
+                // Élève ou autre rôle — accès interdit
                 session_unset(); session_destroy(); session_start();
-                $html_error = 'Ce compte n\'est pas un compte enseignant. Utilisez le <a href="/reussiteplus/connexion.php" style="color:var(--primary);text-decoration:underline">portail élève</a>.';
+                $html_error = 'Accès refusé. Ce portail est <strong>exclusivement réservé aux enseignants</strong>. Si vous êtes un élève, connectez-vous sur le <a href="/reussiteplus/connexion.php" style="color:#1E5FAD;font-weight:700;text-decoration:underline">portail élève</a>.';
                 $errors[] = '';
             }
         } else {
@@ -184,8 +185,14 @@ a{text-decoration:none;color:inherit;}
   <!-- Droite -->
   <div class="right">
     <div class="form-eyebrow">Portail enseignant</div>
-    <h1 class="form-title">Connexion</h1>
-    <p class="form-desc">Connectez-vous avec les identifiants fournis par votre directeur d'école.</p>
+    <h1 class="form-title">Connexion Enseignant</h1>
+    <p class="form-desc">Accès réservé aux enseignants. Vos identifiants vous ont été fournis par votre directeur d'école.</p>
+
+    <!-- Badge accès restreint -->
+    <div style="display:flex;align-items:center;gap:8px;background:#EEF4FD;border:1px solid rgba(30,95,173,.2);border-radius:9px;padding:10px 13px;margin-bottom:20px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E5FAD" stroke-width="2.5" stroke-linecap="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <span style="font-size:12.5px;color:#1E3A5F;font-weight:600">Espace enseignants uniquement — les élèves ne peuvent pas se connecter ici</span>
+    </div>
 
     <?php if ($errors): ?>
     <div class="error-box">
