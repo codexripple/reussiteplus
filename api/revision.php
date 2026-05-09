@@ -291,7 +291,7 @@ if ($action === 'analyse_erreurs') {
         [$user['id']]
     );
     if (!$erreurs) {
-        echo json_encode(['ok' => true, 'content' => "Bravo ! Pas encore suffisamment de données pour analyser vos erreurs. Passez quelques examens et revenez ici pour une analyse personnalisée. 🎯"]);
+        echo json_encode(['ok' => true, 'content' => "Bravo ! Pas encore suffisamment de données pour analyser vos erreurs. Passez quelques examens et revenez ici pour une analyse personnalisée."]);
         exit;
     }
     $erreursTxt = "Questions les plus souvent ratées :\n";

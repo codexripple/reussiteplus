@@ -102,11 +102,11 @@ $devoirsStats = [
 ];
 
 $typeConfig = [
-    'DEVOIR'   => ['color'=>'#1E5FAD','bg'=>'#DBEAFE','icon'=>'📝'],
-    'CONTROLE' => ['color'=>'#DC2626','bg'=>'#FEE2E2','icon'=>'⚡'],
-    'EXAM'     => ['color'=>'#7C3AED','bg'=>'#EDE9FE','icon'=>'🎯'],
-    'PROJET'   => ['color'=>'#059669','bg'=>'#D1FAE5','icon'=>'🔬'],
-    'EXPOSE'   => ['color'=>'#B45309','bg'=>'#FEF3C7','icon'=>'🎤'],
+    'DEVOIR'   => ['color'=>'#1E5FAD','bg'=>'#DBEAFE','icon'=>'file-text'],
+    'CONTROLE' => ['color'=>'#DC2626','bg'=>'#FEE2E2','icon'=>'zap'],
+    'EXAM'     => ['color'=>'#7C3AED','bg'=>'#EDE9FE','icon'=>'target'],
+    'PROJET'   => ['color'=>'#059669','bg'=>'#D1FAE5','icon'=>'microscope'],
+    'EXPOSE'   => ['color'=>'#B45309','bg'=>'#FEF3C7','icon'=>'mic'],
 ];
 
 include __DIR__ . '/includes/header_app.php';
@@ -150,7 +150,7 @@ include __DIR__ . '/includes/header_app.php';
 // Barre de progression gamification
 $tauxCompletion = ($devoirsStats['total'] > 0)
     ? round($devoirsStats['soumis'] / $devoirsStats['total'] * 100) : 0;
-$niveauLabel = $tauxCompletion >= 100 ? '🏆 Tout soumis !' : ($tauxCompletion >= 75 ? '⭐ Excellent' : ($tauxCompletion >= 50 ? '📈 Bien' : '🎯 En cours'));
+$niveauLabel = $tauxCompletion >= 100 ? 'Tout soumis !' : ($tauxCompletion >= 75 ? 'Excellent' : ($tauxCompletion >= 50 ? 'Bien' : 'En cours'));
 ?>
 <?php if ($devoirsStats['total'] > 0): ?>
 <div style="background:var(--blanc);border:1px solid var(--gris-200);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
@@ -172,7 +172,7 @@ $niveauLabel = $tauxCompletion >= 100 ? '🏆 Tout soumis !' : ($tauxCompletion 
 
 <?php if (!$mesClasses): ?>
 <div class="card" style="text-align:center;padding:60px 30px">
-  <div style="font-size:48px;margin-bottom:16px">🏫</div>
+  <div style="width:56px;height:56px;background:var(--gris-100);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gris-400)" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></div>
   <div style="font-family:var(--font-display);font-size:20px;font-weight:800;margin-bottom:8px">Vous n'êtes dans aucune classe</div>
   <p style="color:var(--gris-500);font-size:13px;max-width:400px;margin:0 auto 24px;line-height:1.6">
     Rejoignez une classe avec un code d'invitation pour accéder aux devoirs et exercices.
@@ -181,7 +181,7 @@ $niveauLabel = $tauxCompletion >= 100 ? '🏆 Tout soumis !' : ($tauxCompletion 
 </div>
 <?php elseif (!$devoirs): ?>
 <div class="card" style="text-align:center;padding:60px 30px">
-  <div style="font-size:56px;margin-bottom:16px">😊</div>
+  <div style="width:56px;height:56px;background:var(--gris-100);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--gris-400)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><path d="M9 9h.01"></path><path d="M15 9h.01"></path></svg></div>
   <div style="font-family:var(--font-display);font-size:20px;font-weight:800;margin-bottom:8px">Aucun devoir pour le moment</div>
   <p style="color:var(--gris-500);font-size:13px">Vos enseignants n'ont pas encore publié de devoirs.</p>
 </div>

@@ -47,14 +47,14 @@ if ($classeActive) {
 
 // Scores par matière (exam_sessions)
 $matiereStats = dbAll(
-    "SELECT q.matiere as matiere, COUNT(DISTINCT es.id) as nb_sessions, ROUND(AVG(er.score_pct),1) as avg_score
+    "SELECT m.nom as matiere, COUNT(DISTINCT es.id) as nb_sessions,
+            ROUND(AVG(es.pourcentage), 1) as avg_score
      FROM exam_sessions es
-     JOIN exam_results er ON er.session_id=es.id
-     JOIN classe_membres cm ON cm.eleve_id=es.user_id
-     JOIN questions q ON q.session_id=es.id
-     JOIN classes_ecole c ON c.id=cm.classe_id
-     WHERE c.admin_id=? AND es.statut='COMPLETE'
-     GROUP BY q.matiere ORDER BY avg_score ASC LIMIT 8",
+     JOIN matieres m ON m.id = es.matiere_id
+     JOIN classe_membres cm ON cm.eleve_id = es.user_id
+     JOIN classes_ecole c ON c.id = cm.classe_id
+     WHERE c.admin_id = ? AND es.statut = 'TERMINE'
+     GROUP BY m.id ORDER BY avg_score ASC LIMIT 8",
     [$user['id']]
 ) ?? [];
 

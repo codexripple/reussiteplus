@@ -186,7 +186,7 @@ include __DIR__ . '/includes/header_app.php';
   </div>
 
   <div class="teacher-card-top">
-    <div class="teacher-av" style="background:<?= $teacher['avatar_bg'] ?>"><?= $teacher['avatar_emoji'] ?></div>
+    <div class="teacher-av" style="background:<?= $teacher['avatar_bg'] ?>;color:#fff;font-size:18px;font-weight:900;font-family:var(--font-display)"><?= $teacher['avatar_initial'] ?? strtoupper(substr($teacher['prenom'],0,1)) ?></div>
     <div style="flex:1;min-width:0">
       <div class="teacher-name">Prof. <?= e($teacher['prenom'] . ' ' . $teacher['nom']) ?></div>
       <div class="teacher-titre"><?= e($teacher['titre']) ?></div>

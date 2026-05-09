@@ -53,11 +53,11 @@ $prenom  = e($user['prenom']);
 $initials = strtoupper(substr($user['prenom'], 0, 1));
 
 // Détermination du niveau
-$niveau = $scoreM >= 85 ? ['label'=>'Expert',       'color'=>'#007A5E', 'bg'=>'rgba(0,122,94,.12)',    'icon'=>'🏆']
-       : ($scoreM >= 70 ? ['label'=>'Avancé',        'color'=>'#1E5FAD', 'bg'=>'rgba(30,95,173,.12)',   'icon'=>'⭐']
-       : ($scoreM >= 55 ? ['label'=>'Intermédiaire', 'color'=>'#C9972A', 'bg'=>'rgba(201,151,42,.12)',  'icon'=>'📈']
-       : ($scoreM >= 40 ? ['label'=>'Débutant',      'color'=>'#C9342A', 'bg'=>'rgba(201,52,42,.12)',   'icon'=>'🎯']
-       :                  ['label'=>'Démarrage',     'color'=>'#9CA3AF', 'bg'=>'rgba(156,163,175,.12)', 'icon'=>'🚀'])));
+$niveau = $scoreM >= 85 ? ['label'=>'Expert',       'color'=>'#007A5E', 'bg'=>'rgba(0,122,94,.12)',    'icon'=>'trophy']
+       : ($scoreM >= 70 ? ['label'=>'Avancé',        'color'=>'#1E5FAD', 'bg'=>'rgba(30,95,173,.12)',   'icon'=>'star']
+       : ($scoreM >= 55 ? ['label'=>'Intermédiaire', 'color'=>'#C9972A', 'bg'=>'rgba(201,151,42,.12)',  'icon'=>'trending-up']
+       : ($scoreM >= 40 ? ['label'=>'Débutant',      'color'=>'#C9342A', 'bg'=>'rgba(201,52,42,.12)',   'icon'=>'target']
+       :                  ['label'=>'Démarrage',     'color'=>'#9CA3AF', 'bg'=>'rgba(156,163,175,.12)', 'icon'=>'zap'])));
 
 $streak  = (int)($stats['streak_actuel'] ?? 0);
 $jours   = floor((time() - strtotime($user['created_at'])) / 86400);
@@ -1074,33 +1074,33 @@ document.getElementById('ia-messages')?.scrollTo(0, 999999);
       <label class="form-label">Note globale</label>
       <select name="note" class="form-control" required>
         <option value="">Choisir…</option>
-        <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
-        <option value="4">⭐⭐⭐⭐ Bien</option>
-        <option value="3">⭐⭐⭐ Correct</option>
-        <option value="2">⭐⭐ Moyen</option>
-        <option value="1">⭐ Insuffisant</option>
+        <option value="5">5 — Excellent</option>
+        <option value="4">4 — Bien</option>
+        <option value="3">3 — Correct</option>
+        <option value="2">2 — Moyen</option>
+        <option value="1">1 — Insuffisant</option>
       </select>
     </div>
     <div>
       <label class="form-label">Clarté des explications</label>
       <select name="clarte" class="form-control">
         <option value="">Optionnel</option>
-        <option value="5">⭐⭐⭐⭐⭐ Très claire</option>
+        <option value="5">5 — Très claire</option>
         <option value="4">⭐⭐⭐⭐</option>
         <option value="3">⭐⭐⭐</option>
         <option value="2">⭐⭐</option>
-        <option value="1">⭐ Confuse</option>
+        <option value="1">1 — Confuse</option>
       </select>
     </div>
     <div>
       <label class="form-label">Aide apportée</label>
       <select name="aide" class="form-control">
         <option value="">Optionnel</option>
-        <option value="5">⭐⭐⭐⭐⭐ Très utile</option>
+        <option value="5">5 — Très utile</option>
         <option value="4">⭐⭐⭐⭐</option>
         <option value="3">⭐⭐⭐</option>
         <option value="2">⭐⭐</option>
-        <option value="1">⭐ Peu utile</option>
+        <option value="1">1 — Peu utile</option>
       </select>
     </div>
     <div style="grid-column:1/-1">

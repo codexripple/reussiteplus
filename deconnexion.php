@@ -167,7 +167,7 @@ session_destroy();
     </svg>
   </div>
 
-  <div class="title">À bientôt, <?= htmlspecialchars($prenom, ENT_QUOTES, 'UTF-8') ?> ! 👋</div>
+  <div class="title">À bientôt, <?= htmlspecialchars($prenom, ENT_QUOTES, 'UTF-8') ?> ! </div>
   <div class="subtitle">
     Vous êtes bien déconnecté(e).<br>
     Votre session a été fermée en toute sécurité.<br>
