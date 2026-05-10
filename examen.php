@@ -190,8 +190,8 @@ if ($sessionId) {
           </div>
           <div style="display:flex;align-items:center;gap:20px">
             <div style="text-align:center">
-              <div id="timer" style="font-family:var(--font-display);font-size:24px;font-weight:800;color:var(--primary)">00:00</div>
-              <div style="font-size:10px;color:var(--gris-500);text-transform:uppercase;letter-spacing:.5px">Temps écoulé</div>
+              <div id="timer" style="font-family:var(--font-display);font-size:24px;font-weight:800;color:var(--primary)">--:--</div>
+              <div id="timer-label" style="font-size:10px;color:var(--gris-500);text-transform:uppercase;letter-spacing:.5px">Temps restant</div>
             </div>
             <div style="text-align:center">
               <div id="counter" style="font-family:var(--font-display);font-size:24px;font-weight:800">1/<?= count($questions) ?></div>
@@ -262,19 +262,74 @@ if ($sessionId) {
     <script>
     const TOTAL = <?= count($questions) ?>;
     const SESSION_ID = '<?= e($sessionId) ?>';
-    const CSRF = '<?= e(csrf_token()) ?>';
-    let current = 0;
-    let answers = {};
+    const CSRF       = '<?= e(csrf_token()) ?>';
+    const TEMPS_LIMITE = <?= (int)($sessionActive['temps_limite'] ?? 600) ?>;
+    const EXTRA_SEC    = 120; // 2 minutes supplémentaires
+    let current   = 0;
+    let answers   = {};
     let timeStart = Date.now();
     let timerInterval;
+    let overtimeStarted = false;
+    let autoSubmitCountdown = null;
 
-    // Timer
+    function fmtSec(s) {
+      const m = String(Math.floor(Math.abs(s) / 60)).padStart(2,'0');
+      const sc= String(Math.abs(s) % 60).padStart(2,'0');
+      return m + ':' + sc;
+    }
+
+    // Bannière overtime (créée dynamiquement)
+    function showOvertimeBanner(secondsLeft) {
+      let banner = document.getElementById('overtime-banner');
+      if (!banner) {
+        banner = document.createElement('div');
+        banner.id = 'overtime-banner';
+        banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#C9342A;color:#fff;text-align:center;padding:12px 20px;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 4px 12px rgba(0,0,0,.3)';
+        banner.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+          + '<span>Temps écoulé ! Vous avez <strong id="overtime-count">2:00</strong> supplémentaires pour terminer — soumission automatique ensuite.</span>';
+        document.body.prepend(banner);
+      }
+      document.getElementById('overtime-count').textContent = fmtSec(secondsLeft);
+    }
+
+    // Timer principal (compte à rebours)
     timerInterval = setInterval(() => {
-      const sec = Math.floor((Date.now() - timeStart) / 1000);
-      const m = String(Math.floor(sec / 60)).padStart(2, '0');
-      const s = String(sec % 60).padStart(2, '0');
-      document.getElementById('timer').textContent = m + ':' + s;
-      // Alarme à 5min avant limite si applicable
+      const elapsed  = Math.floor((Date.now() - timeStart) / 1000);
+      const remaining = TEMPS_LIMITE - elapsed;
+      const timerEl   = document.getElementById('timer');
+      const labelEl   = document.getElementById('timer-label');
+
+      if (remaining > 0) {
+        // Phase normale
+        timerEl.textContent = fmtSec(remaining);
+        timerEl.style.color = remaining <= 60 ? '#C9342A' : (remaining <= 120 ? '#C9972A' : 'var(--primary)');
+        if (remaining <= 60 && labelEl) labelEl.style.color = '#C9342A';
+
+      } else if (!overtimeStarted) {
+        // Transition vers overtime
+        overtimeStarted = true;
+        timerEl.textContent = '00:00';
+        timerEl.style.color = '#C9342A';
+        if (labelEl) { labelEl.textContent = 'TEMPS SUP.'; labelEl.style.color = '#C9342A'; }
+
+        // Démarrer le décompte overtime 2 min
+        let extraLeft = EXTRA_SEC;
+        showOvertimeBanner(extraLeft);
+        autoSubmitCountdown = setInterval(() => {
+          extraLeft--;
+          showOvertimeBanner(extraLeft);
+          timerEl.textContent = fmtSec(extraLeft);
+          if (extraLeft <= 0) {
+            clearInterval(autoSubmitCountdown);
+            clearInterval(timerInterval);
+            // Soumission automatique sans confirmation
+            const banner = document.getElementById('overtime-banner');
+            if (banner) banner.innerHTML = '<span>Temps écoulé — soumission automatique en cours…</span>';
+            submitExamAuto();
+          }
+        }, 1000);
+
+      }
     }, 1000);
 
     function goToQuestion(idx) {
@@ -332,14 +387,36 @@ if ($sessionId) {
       updateDots();
     });
 
+    // Soumission automatique (fin overtime — sans confirmation)
+    function submitExamAuto() {
+      clearInterval(timerInterval);
+      if (autoSubmitCountdown) clearInterval(autoSubmitCountdown);
+      const btn = document.getElementById('submitBtn');
+      if (btn) { btn.disabled = true; btn.textContent = 'Soumission automatique…'; }
+      const temps = Math.floor((Date.now() - timeStart) / 1000);
+      const fd = new FormData();
+      fd.append('action', 'submit_session');
+      fd.append('session_id', SESSION_ID);
+      fd.append('csrf_token', CSRF);
+      fd.append('temps_passe', temps);
+      for (const [qId, oId] of Object.entries(answers)) fd.append('answers[' + qId + ']', oId);
+      fetch(window.location.href, {method:'POST', body:fd})
+        .then(r => r.json())
+        .then(data => { if (data.redirect) window.location = data.redirect; })
+        .catch(() => {});
+    }
+
     function submitExam() {
       const unanswered = TOTAL - Object.keys(answers).length;
       if (unanswered > 0) {
         if (!confirm('Il reste ' + unanswered + ' question(s) sans réponse. Soumettre quand même ?')) return;
       }
-      const btn = document.getElementById('submitBtn');
-      btn.disabled = true; btn.innerHTML = '<i data-lucide="loader" style="width:14px;height:14px;vertical-align:-2px"></i> Envoi en cours...';
       clearInterval(timerInterval);
+      if (autoSubmitCountdown) clearInterval(autoSubmitCountdown);
+      const banner = document.getElementById('overtime-banner');
+      if (banner) banner.remove();
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true; btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10" style="animation:spin .7s linear infinite"/><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Envoi en cours...';
 
       const temps = Math.floor((Date.now() - timeStart) / 1000);
       const fd = new FormData();
