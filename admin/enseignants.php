@@ -110,7 +110,7 @@ $enseignants = dbAll(
     $params
 ) ?? [];
 
-$stats = [
+$ensStats = [
     'total'   => (int)(dbScalar("SELECT COUNT(*) FROM utilisateurs WHERE role='ENSEIGNANT'") ?? 0),
     'actifs'  => (int)(dbScalar("SELECT COUNT(*) FROM utilisateurs WHERE role='ENSEIGNANT' AND is_active=1") ?? 0),
     'suspens' => (int)(dbScalar("SELECT COUNT(*) FROM utilisateurs WHERE role='ENSEIGNANT' AND is_active=0") ?? 0),
@@ -142,7 +142,7 @@ include __DIR__ . '/../includes/header_app.php';
 <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:22px">
   <div>
     <h1 style="font-size:20px;font-weight:800;color:var(--gris-900);margin-bottom:3px">Gestion des enseignants</h1>
-    <div style="font-size:12.5px;color:var(--gris-500)"><?= $stats['total'] ?> compte<?= $stats['total']!=1?'s':'' ?> enseignant enregistré<?= $stats['total']!=1?'s':'' ?></div>
+    <div style="font-size:12.5px;color:var(--gris-500)"><?= $ensStats['total'] ?> compte<?= $ensStats['total']!=1?'s':'' ?> enseignant enregistré<?= $ensStats['total']!=1?'s':'' ?></div>
   </div>
   <button onclick="document.getElementById('modal-creer').style.display='flex'" class="btn btn-primary">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="vertical-align:-2px;margin-right:5px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -179,10 +179,10 @@ include __DIR__ . '/../includes/header_app.php';
 <!-- KPI -->
 <div class="adm-ens-kpi">
   <?php foreach ([
-    ['Total',          $stats['total'],    '#007A5E', '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>'],
-    ['Actifs',         $stats['actifs'],   '#1E5FAD', '<polyline points="20 6 9 17 4 12"/>'],
-    ['Suspendus',      $stats['suspens'],  '#C9342A', '<circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>'],
-    ['Avec école',     $stats['avecEcole'],'#C9972A', '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'],
+    ['Total',          $ensStats['total'],    '#007A5E', '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>'],
+    ['Actifs',         $ensStats['actifs'],   '#1E5FAD', '<polyline points="20 6 9 17 4 12"/>'],
+    ['Suspendus',      $ensStats['suspens'],  '#C9342A', '<circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>'],
+    ['Avec école',     $ensStats['avecEcole'],'#C9972A', '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>'],
   ] as [$lbl, $val, $col, $ic]): ?>
   <div class="db-kpi-card" style="border-top:2px solid <?= $col ?>;padding:16px">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
