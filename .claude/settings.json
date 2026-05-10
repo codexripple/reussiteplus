@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"C:\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe\" -u root reussiteplus)",
+      "Bash(\"C:\\\\xampp\\\\php\\\\php.exe\" -l admin/enseignants.php)",
+      "Bash(\"C:\\\\xampp\\\\php\\\\php.exe\" -l agenda.php)",
+      "Bash(\"C:\\\\xampp\\\\php\\\\php.exe\" -l questions.php)",
+      "Bash(\"C:\\\\xampp\\\\php\\\\php.exe\" -l ecole_examens.php)",
+      "Bash(\"C:\\\\xampp\\\\php\\\\php.exe\" -l examen.php)",
+      "Bash('C:\\\\xampp\\\\php\\\\php.exe' -r ' *)"
+    ]
+  }
+}
