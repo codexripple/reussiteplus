@@ -2,13 +2,18 @@
 // Composant Coach IA — réutilisable (inline ou flottant)
 // Passer $iaInline = true pour affichage en page dédiée
 ?>
-<?php if (empty($iaInline)): ?>
+<?php
+$_iaUser = current_user();
+$_iaHasAccess = $_iaUser && in_array($_iaUser['plan'] ?? 'GRATUIT', ['PREMIUM','ECOLE']);
+?>
+<?php if (empty($iaInline) && $_iaHasAccess): ?>
 <button id="ia-fab" class="ia-fab" title="Coach IA">
   <span class="ia-fab-avatar">
     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></svg>
   </span>
 </button>
 <?php endif; ?>
+<?php if (!$_iaHasAccess && empty($iaInline)) return; // Masquer toute la modale pour Gratuit/Basique ?>
 <div id="ia-modal" class="ia-modal<?= !empty($iaInline) ? ' ia-inline' : '' ?>">
   <div class="ia-modal-card">
     <div class="ia-modal-header">
