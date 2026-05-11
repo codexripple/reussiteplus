@@ -8,6 +8,11 @@ $pageTitle  = 'Archives officielles';
 $pageActive = 'archives';
 $user = require_login();
 
+// Archives réservées aux plans payants
+if (($user['plan'] ?? 'GRATUIT') === 'GRATUIT') {
+    redirect('/reussiteplus/tarifs.php', 'warning', 'Les archives officielles sont disponibles à partir du plan Basique. Passez à un plan payant pour y accéder.');
+}
+
 // Filtres
 $filterType    = $_GET['type'] ?? 'all';
 $filterAnnee   = (int)($_GET['annee'] ?? 0);

@@ -77,10 +77,17 @@ if (is_admin()) {
       <span class="nav-label">Mon Agenda</span>
     </a>
     <?php endif; ?>
+    <?php if (($user['plan'] ?? 'GRATUIT') !== 'GRATUIT'): ?>
     <a href="/reussiteplus/archives.php" class="nav-item <?= $pageActive === 'archives' ? 'active' : '' ?>">
       <div class="nav-icon"><i data-lucide="folder-open"></i></div>
       <span class="nav-label">Archives</span>
     </a>
+    <?php else: ?>
+    <a href="/reussiteplus/tarifs.php" class="nav-item" style="opacity:.5" title="Disponible à partir du plan Basique">
+      <div class="nav-icon"><i data-lucide="lock"></i></div>
+      <span class="nav-label">Archives</span>
+    </a>
+    <?php endif; ?>
     <a href="/reussiteplus/examen.php" class="nav-item <?= $pageActive === 'examen' ? 'active' : '' ?>">
       <div class="nav-icon"><i data-lucide="pencil-line"></i></div>
       <span class="nav-label">Passer un examen</span>
