@@ -500,6 +500,7 @@ include __DIR__ . '/includes/header_app.php';
 
 
 
+<?php if (in_array($user['plan'] ?? 'GRATUIT', ['PREMIUM','ECOLE'])): ?>
 <!-- IA FLOTANT MODERNE -->
 <button id="ia-fab" class="ia-fab" title="Coach IA">
   <span class="ia-fab-avatar">
@@ -881,6 +882,7 @@ document.getElementById('ia-chat-form').onsubmit = async function(e) {
   iaLoading = false;
 };
 </script>
+<?php endif; // fin bloc IA Premium ?>
 
 <?php
 // Afficher une publicité pour les utilisateurs Gratuit
