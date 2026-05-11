@@ -247,6 +247,10 @@ if (is_admin()) {
       <div class="nav-icon adm-icon"><i data-lucide="users"></i></div>
       <span class="nav-label">Utilisateurs</span>
     </a>
+    <a href="/reussiteplus/admin/publicite.php" class="nav-item adm-nav <?= $pageActive === 'admin_publicite' ? 'active adm-active' : '' ?>">
+      <div class="nav-icon adm-icon"><i data-lucide="megaphone"></i></div>
+      <span class="nav-label">Ad Manager</span>
+    </a>
     <a href="/reussiteplus/admin/paiements.php" class="nav-item adm-nav <?= $pageActive === 'admin_paiements' ? 'active adm-active' : '' ?>">
       <div class="nav-icon adm-icon"><i data-lucide="credit-card"></i></div>
       <span class="nav-label">Paiements</span>

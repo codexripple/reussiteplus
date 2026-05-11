@@ -882,5 +882,12 @@ document.getElementById('ia-chat-form').onsubmit = async function(e) {
 };
 </script>
 
+<?php
+// Afficher une publicité pour les utilisateurs Gratuit
+if ($user['plan'] === 'GRATUIT') {
+    require_once __DIR__ . '/includes/ads.php';
+    echo render_ad('FEED', 'dashboard');
+}
+?>
 <?php include __DIR__ . '/includes/footer_app.php'; ?>
 
